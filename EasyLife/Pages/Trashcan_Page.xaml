@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:cells="clr-namespace:EasyLife.Cells"
+    xmlns:fontAwesome="clr-namespace:FontAwesome" 
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:Class="EasyLife.Pages.Trashcan_Page"    
+    xmlns:pagemodels="clr-namespace:EasyLife.PageModels" 
+    Title="Papierkorb"
+    BackgroundColor="{DynamicResource Page_Backgroundcolor}"
+    x:DataType="pagemodels:Trashcan_PageModel">
+
+    <ContentPage.BindingContext>
+        <pagemodels:Trashcan_PageModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding View_Appering_Command}"/>
+        <xct:EventToCommandBehavior
+                EventName="Disappearing"
+                Command="{Binding ViewIsDisappearing_Command}"/>
+    </ContentPage.Behaviors>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="Einnamen" x:DataType="{x:Null}">
+                <ViewCell>
+                    <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5">
+                        <SwipeView BackgroundColor="Transparent" Grid.Row="1" Grid.Column="1">
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.ReviveCommand}" CommandParameter="{Binding .}">
+                                        <Frame Margin="5,0,0,0" BackgroundColor="{DynamicResource Revive_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Revive_Bordercolor}">
+                                            <Label Text="Wiederherstellen" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Revive_Textcolor}" FontAttributes="Bold" FontSize="Medium"/>
+                                        </Frame>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <SwipeView.LeftItems>
+                                <SwipeItems>
+                                    <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.RemoveCommand}" CommandParameter="{Binding .}">
+                                        <Frame Margin="0,0,5,0" BackgroundColor="{DynamicResource Delete_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Delete_Bordercolor}">
+                                            <Label Text="Löschen" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Delete_Textcolor}" FontAttributes="Bold" FontSize="Medium"/>
+                                        </Frame>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.LeftItems>
+                            <cells:Income_Cell Grid.Row="1" Grid.Column="1"/>
+                        </SwipeView>
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:Key="Ausgaben" x:DataType="{x:Null}">
+                <ViewCell>
+                    <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5">
+                        <SwipeView BackgroundColor="Transparent" Grid.Row="1" Grid.Column="1">
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.ReviveCommand}" CommandParameter="{Binding .}">
+                                        <Frame Margin="5,0,0,0" BackgroundColor="{DynamicResource Revive_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Revive_Bordercolor}">
+                                            <Label Text="Wiederherstellen" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Revive_Textcolor}" FontAttributes="Bold" FontSize="Medium"/>
+                                        </Frame>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <SwipeView.LeftItems>
+                                <SwipeItems>
+                                    <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.RemoveCommand}" CommandParameter="{Binding .}">
+                                        <Frame Margin="0,0,5,0" BackgroundColor="{DynamicResource Delete_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Delete_Bordercolor}">
+                                            <Label Text="Löschen" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Delete_Textcolor}" FontAttributes="Bold" FontSize="Medium"/>
+                                        </Frame>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.LeftItems>
+                            <cells:Outcome_Cell Grid.Row="1" Grid.Column="1"/>
+                        </SwipeView>
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+            <cells:Transaktions_Template_Selector x:Key="Transaktions_Selector" Einnahmen="{StaticResource Einnamen}" Ausgaben="{StaticResource Ausgaben}"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Papierkorb leeren" Priority="0" Order="Primary" Command="{Binding Empty_Command}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.TrashCan}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <StackLayout>
+            <ListView
+                CachingStrategy = "RecycleElement"
+                IsEnabled="True"
+                RefreshCommand="{Binding RefreshCommand}"
+                IsRefreshing="{Binding IsBusy, Mode =OneWay}"
+                IsPullToRefreshEnabled="True"
+                RefreshControlColor="{DynamicResource Refresh_Color}"  
+                HasUnevenRows="True"
+                x:Name="ContextSwipeView"
+                ItemsSource="{Binding transaktionGroups}"
+                IsGroupingEnabled="True"
+                GroupDisplayBinding="{Binding Key}"
+                SelectionMode="None"
+                SeparatorVisibility="None"
+                IsVisible="{Binding List_of_Transaktion_Status}"
+                ItemTemplate="{StaticResource Transaktions_Selector}">
+                <ListView.GroupHeaderTemplate>
+                    <DataTemplate x:DataType="{x:Null}">
+                        <ViewCell Height = "30" >
+                            <StackLayout VerticalOptions="Start" Padding="1">
+                                <Label Text = "{Binding Key}" TextColor="{DynamicResource Grouping_Textcolor}" VerticalOptions="Center" HorizontalOptions="Center" FontSize="15" FontAttributes="Bold"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.GroupHeaderTemplate>
+            </ListView>
+
+            <Grid RowDefinitions="300,100,*" IsVisible="{Binding Kein_Ergebnis_Transaktion_Status}" VerticalOptions="FillAndExpand">
+                <Label Grid.Row="1" Text="Keine Transaktionen vorhanden!" TextColor="Black" FontSize="20" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="Center"/>
+            </Grid>
+        </StackLayout>
+
+    </ContentPage.Content>
+</ContentPage>

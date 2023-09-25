@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xct:Popup
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="EasyLife.Pages.Grouping_Popup"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:Name="GroupIng_Popup"
+    Color="Transparent"
+    IsLightDismissEnabled="False"
+    Size="300,250">
+
+    <StackLayout>
+        <Button Clicked="CancelButton_Clicked" HorizontalOptions="End" VerticalOptions="Start" Text="X" FontSize="20" FontAttributes="Bold" BackgroundColor="Red" BorderColor="DarkRed" Padding="5" CornerRadius="100" WidthRequest="50" Margin="0,0,0,5"/>
+        <Frame VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Transparent">
+            <StackLayout>
+                <Label Text="Ansicht nach:" TextColor="White" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Button x:Name="DateButton" Text="Datum" Padding="5" BackgroundColor="DarkGray" Clicked="DateButton_Clicked" CornerRadius="10" xct:ShadowEffect.Color="Blue" BorderColor="DarkBlue" FontAttributes="Bold" 
+                    HorizontalOptions="CenterAndExpand" VerticalOptions="Center"/>
+                <Button x:Name="ReasonButton" Text="Zweck" Padding="5" BackgroundColor="DarkGray" Clicked="ReasonButton_Clicked" CornerRadius="10" xct:ShadowEffect.Color="Blue" BorderColor="DarkBlue" FontAttributes="Bold"
+                    HorizontalOptions="CenterAndExpand" VerticalOptions="Center"/>
+            </StackLayout>
+        </Frame>
+    </StackLayout>
+</xct:Popup>

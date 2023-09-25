@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:local="clr-namespace:EasyLife.Pages"
+       xmlns:fontAwesome="clr-namespace:FontAwesome" 
+       x:Class="EasyLife.Pages.Master_Page"
+       BackgroundColor="{DynamicResource App_Backgroundcolor}"
+       Shell.TabBarIsVisible="False"
+       FlyoutBackgroundColor="{DynamicResource Flyout_Backgroundcolor}"
+       FlyoutWidth="300">
+
+    <Shell.FlyoutHeader>
+        <Frame BackgroundColor="#1d0e21">
+            <Image Source="@drawable/ic_launcher"/>
+        </Frame>
+    </Shell.FlyoutHeader>
+
+
+
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid ColumnDefinitions="10,50,*" Padding="10">
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{DynamicResource Flyout_Backgroundcolor}"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="LightGray"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </VisualStateManager.VisualStateGroups>
+                <Label Grid.Column="1" Text="{Binding FlyoutIcon.Glyph}" HeightRequest="40" TextColor="{DynamicResource Flyout_Iconcolor}" FontFamily="FAS" FontSize="30" VerticalTextAlignment="Center"/>
+                <Label Grid.Column="2" Text="{Binding Title}" TextColor="{DynamicResource Flyout_Textcolor}" FontSize="Large" FontAttributes="Bold" VerticalTextAlignment="Center"/>
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+    
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
+        <Tab Title="Home">
+            <Tab.FlyoutIcon>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.House}" />
+            </Tab.FlyoutIcon>
+            <ShellContent IsTabStop="False" ContentTemplate="{DataTemplate local:Home_Page}" />
+        </Tab>
+        <Tab Title="Hinzufügen">
+            <Tab.FlyoutIcon>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.SquarePlus}" />
+            </Tab.FlyoutIcon>
+            <ShellContent IsTabStop="True" ContentTemplate="{DataTemplate local:Add_Item_Page}" />
+        </Tab>
+        <Tab Title="Bilanz">
+            <Tab.FlyoutIcon>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.ScaleBalanced}" />
+            </Tab.FlyoutIcon>
+            <ShellContent IsTabStop="True" ContentTemplate="{DataTemplate local:Balance_Page}" />
+        </Tab>
+        <Tab Title="Papierkorb">
+            <Tab.FlyoutIcon>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.TrashCan}" />
+            </Tab.FlyoutIcon>
+            <ShellContent IsTabStop="True" ContentTemplate="{DataTemplate local:Trashcan_Page}" />
+        </Tab>
+        <Tab Title="Einstellungen">
+            <Tab.FlyoutIcon>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Gear}" />
+            </Tab.FlyoutIcon>
+            <ShellContent IsTabStop="True" ContentTemplate="{DataTemplate local:Settings_Page}" />
+        </Tab>
+    </FlyoutItem>
+
+    <Shell.FlyoutFooter>
+        <Frame BackgroundColor="{DynamicResource App_Backgroundcolor}" Padding="10">
+            <StackLayout>
+                <Label Text="Created by Marc Putscher" TextColor="Gray" FontSize="Medium" FontAttributes="Italic" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+            </StackLayout>
+        </Frame>
+    </Shell.FlyoutFooter>
+</Shell>

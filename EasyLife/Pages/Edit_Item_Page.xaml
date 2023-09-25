@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pagemodels="clr-namespace:EasyLife.PageModels" 
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             x:Class="EasyLife.Pages.Edit_Item_Page"
+             Title="Transaktion bearbeiten"
+             BackgroundColor="{DynamicResource Page_Backgroundcolor}"
+             x:DataType="pagemodels:Edit_Item_PageModel">
+
+    <ContentPage.BindingContext>
+        <pagemodels:Edit_Item_PageModel />
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="FrameA" TargetType="Frame">
+                <Setter Property="BackgroundColor" Value="{DynamicResource EntryFrame_Backgroundcolor}"/>
+                <Setter Property="CornerRadius" Value="20"/>
+                <Setter Property="HasShadow" Value="True"/>
+                <Setter Property="Padding" Value="5"/>
+                <Setter Property="BorderColor" Value="{DynamicResource EntryFrame_Bordercolor}"/>
+            </Style>
+            <Style x:Key="LabelA" TargetType="Label">
+                <Setter Property="TextColor" Value="{DynamicResource Label_Textcolor}"/>
+                <Setter Property="Padding" Value="5"/>
+                <Setter Property ="FontAttributes" Value="Bold"/>
+                <Setter Property="HorizontalOptions" Value="Start"/>
+                <Setter Property="FontSize" Value="Medium"/>
+            </Style>
+            <Style x:Key="ButtonA" TargetType="Button">
+                <Setter Property="TextColor" Value="{DynamicResource Button_Textcolor}"/>
+                <Setter Property="Padding" Value="20"/>
+                <Setter Property ="FontAttributes" Value="Bold"/>
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
+                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="BorderColor" Value="{DynamicResource Button_Bordercolor}"/>
+                <Setter Property="BorderWidth" Value="2"/>
+                <Setter Property="CornerRadius" Value="10"/>
+                <Setter Property="BackgroundColor" Value="{DynamicResource Button_Backgroundcolor}"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding ViewIsAppearing_Command}" />
+    </ContentPage.Behaviors>
+    
+    <ScrollView Margin="20,0,20,0">
+        <FlexLayout Direction="Column" 
+                    JustifyContent="SpaceEvenly">
+            <Label Text="Zweck" Style="{StaticResource LabelA}"/>
+            <Frame Style="{StaticResource FrameA}">
+                <Picker
+                    Title="Zweck"
+                    TextColor="{DynamicResource EntryFrame_Textcolor}"
+                    HorizontalTextAlignment="Center"
+                    HorizontalOptions="Fill"
+                    ItemsSource="{Binding Zweck_Liste}"
+                    SelectedItem="{Binding Zweck}">
+                </Picker>
+            </Frame>
+            <Label Text="Betrag" Style="{StaticResource LabelA}"/>
+            <Frame Style="{StaticResource FrameA}">
+                <Entry Placeholder="Betrag hier eingeben" Keyboard="Telephone" Text="{Binding Betrag}" TextColor="{DynamicResource EntryFrame_Textcolor}" HorizontalTextAlignment="Center" BackgroundColor="Transparent" IsTextPredictionEnabled="False"/>
+            </Frame>
+            <Label Text="Datum" Style="{StaticResource LabelA}"/>
+            <Frame Style="{StaticResource FrameA}">
+                <DatePicker
+                    Format="dddd,  dd.M.yyyy"
+                    TextColor="{DynamicResource EntryFrame_Textcolor}"
+                    Date="{Binding Datum}"
+                    HorizontalOptions="CenterAndExpand"               
+                    VerticalOptions="Center"
+                    WidthRequest="200"/>
+            </Frame>
+            <Label Text="Notiz" Style="{StaticResource LabelA}"/>
+            <Frame Style="{StaticResource FrameA}">
+                <Entry Placeholder="Notiz hier eingeben" Text="{Binding Notiz}" TextColor="{DynamicResource EntryFrame_Textcolor}" HorizontalTextAlignment="Center" VerticalOptions="Start"/>
+            </Frame>
+            <Frame Style="{StaticResource FrameA}" Margin="0,20,0,0" VerticalOptions="Center">
+                <Grid ColumnDefinitions="Auto,*" HorizontalOptions="Fill" VerticalOptions="Center">
+                    <Label Text="Transaktion in der Bilanz anzeigen :" FontSize="Medium" TextColor="{DynamicResource EntryFrame_Textcolor}" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="0" Margin="10,0,0,0"/>
+                    <Switch IsToggled="{Binding Show_Hide_Balance}" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1" Margin="0,0,10,0"/>
+                </Grid>
+            </Frame>
+            <Button Text="Bearbeitung speichern" Style="{StaticResource ButtonA}" Command="{Binding Edit_Item_Command}" xct:ShadowEffect.Color="{DynamicResource Button_Bordercolor}" Margin="0,40,0,0"/>
+        </FlexLayout>
+    </ScrollView>
+</ContentPage>

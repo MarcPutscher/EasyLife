@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EasyLife.App">
+    <Application.Resources>
+        <ResourceDictionary x:Name="dictionary">
+            <Color x:Key="App_Backgroundcolor">#1d0e21</Color>
+            
+            <Color x:Key="Page_Backgroundcolor">DarkSlateGray</Color>
+
+            <Color x:Key="Transaktion_Backgroundcolor">Gray</Color>
+            <Color x:Key="Transaktion_Bordercolor">DarkGray</Color>
+            <Color x:Key="Transaktion_Textcolor">Black</Color>
+            
+            <Color x:Key="EntryFrame_Backgroundcolor">Orange</Color>
+            <Color x:Key="EntryFrame_Bordercolor">Coral</Color>
+            <Color x:Key="EntryFrame_Textcolor">Black</Color>
+            
+            <Color x:Key="Button_Backgroundcolor">SkyBlue</Color>
+            <Color x:Key="Button_Bordercolor">Blue</Color>
+            <Color x:Key="Button_Textcolor">OrangeRed</Color>
+            
+            <Color x:Key="Label_Textcolor">White</Color>
+            
+            <Color x:Key="Grouping_Textcolor">White</Color>
+            
+            <Color x:Key="Refresh_Color">Blue</Color>
+            
+            <Color x:Key="Edit_Backgroundcolor">Green</Color>
+            <Color x:Key="Edit_Bordercolor">DarkGreen</Color>
+            <Color x:Key="Edit_Textcolor">White</Color>
+
+            <Color x:Key="Remove_Backgroundcolor">Red</Color>
+            <Color x:Key="Remove_Bordercolor">DarkRed</Color>
+            <Color x:Key="Remove_Textcolor">White</Color>
+            
+            <Color x:Key="Delete_Backgroundcolor">Red</Color>
+            <Color x:Key="Delete_Bordercolor">DarkRed</Color>
+            <Color x:Key="Delete_Textcolor">White</Color>
+
+            <Color x:Key="Revive_Backgroundcolor">Blue</Color>
+            <Color x:Key="Revive_Bordercolor">DarkBlue</Color>
+            <Color x:Key="Revive_Textcolor">White</Color>
+
+            <Color x:Key="Order_Backgroundcolor">Blue</Color>
+            <Color x:Key="Order_Bordercolor">DarkBlue</Color>
+            <Color x:Key="Order_Textcolor">White</Color>
+
+            <Color x:Key="Saldo_Backgroundcolor">Black</Color>
+            <Color x:Key="Saldo_Textcolor">White</Color>
+
+            <Color x:Key="Flyout_Backgroundcolor">DarkGray</Color>
+            <Color x:Key="Flyout_Selectcolor">LightGray</Color>
+            <Color x:Key="Flyout_Textcolor">Black</Color>
+            <Color x:Key="Flyout_Iconcolor">Black</Color>
+        </ResourceDictionary>    
+    </Application.Resources>
+</Application>

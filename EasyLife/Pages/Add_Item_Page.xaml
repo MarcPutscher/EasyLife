@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    x:Class="EasyLife.Pages.Add_Item_Page"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+    xmlns:pagemodels="clr-namespace:EasyLife.PageModels"
+    xmlns:fontAwesome="clr-namespace:FontAwesome" 
+    x:DataType="pagemodels:Add_Item_PageModel"
+    Title="Transaktion hinzufügen"
+    BackgroundColor="{DynamicResource Page_Backgroundcolor}">
+
+    <ContentPage.BindingContext>
+        <pagemodels:Add_Item_PageModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding ViewIsAppearing_Command}" />
+    </ContentPage.Behaviors>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="FrameA" TargetType="Frame">
+                <Setter Property="BackgroundColor" Value="{DynamicResource EntryFrame_Backgroundcolor}"/>
+                <Setter Property="CornerRadius" Value="20"/>
+                <Setter Property="HasShadow" Value="True"/>
+                <Setter Property="Padding" Value="5"/>
+                <Setter Property="BorderColor" Value="{DynamicResource EntryFrame_Bordercolor}"/>
+            </Style>
+            <Style x:Key="LabelA" TargetType="Label">
+                <Setter Property="TextColor" Value="{DynamicResource Label_Textcolor}"/>
+                <Setter Property="Padding" Value="2"/>
+                <Setter Property ="FontAttributes" Value="Bold"/>
+                <Setter Property="HorizontalOptions" Value="Start"/>
+                <Setter Property="FontSize" Value="Medium"/>
+            </Style>
+            <Style x:Key="ButtonA" TargetType="Button">
+                <Setter Property="TextColor" Value="{DynamicResource Button_Textcolor}"/>
+                <Setter Property="Padding" Value="20"/>
+                <Setter Property ="FontAttributes" Value="Bold"/>
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
+                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="BorderColor" Value="{DynamicResource Button_Bordercolor}"/>
+                <Setter Property="BorderWidth" Value="2"/>
+                <Setter Property="CornerRadius" Value="10"/>
+                <Setter Property="BackgroundColor" Value="{DynamicResource Button_Backgroundcolor}"/>
+            </Style>
+            <Style x:Key="ButtonB" TargetType="Button">
+                <Setter Property="TextColor" Value="{DynamicResource Button_Textcolor}"/>
+                <Setter Property="Padding" Value="5"/>
+                <Setter Property ="FontAttributes" Value="Bold"/>
+                <Setter Property="HorizontalOptions" Value="Fill"/>
+                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="BorderColor" Value="{DynamicResource Button_Bordercolor}"/>
+                <Setter Property="BorderWidth" Value="2"/>
+                <Setter Property="CornerRadius" Value="10"/>
+                <Setter Property="BackgroundColor" Value="{DynamicResource Button_Backgroundcolor}"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Order="Primary" Text="Zweckeinstellungen"  Command="{Binding Reasons_Settings_Command}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Wrench}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+    <ScrollView Margin="20,0,20,0" VerticalScrollBarVisibility="Never">
+        <FlexLayout Direction="Column" 
+                    JustifyContent="SpaceEvenly">
+            <ActivityIndicator Color="{DynamicResource Refresh_Color}" IsRunning="{Binding ActivityIndicator_IsRunning}" IsVisible="{Binding ActivityIndicator_IsRunning}"/>
+            <Label Text="Zweck" Style="{StaticResource LabelA}"/>
+            <Frame Style="{StaticResource FrameA}">
+                <Picker
+                    Title="Zweck"
+                    TextColor="{DynamicResource EntryFrame_Textcolor}"
+                    SelectedItem="{Binding Zweck}"
+                    HorizontalTextAlignment="Center"
+                    HorizontalOptions="Fill"
+                    FontSize="Medium"
+                    IsEnabled="{Binding Zweck_IsEnable}"
+                    ItemsSource="{Binding Zweck_Liste}">
+                </Picker>
+            </Frame>
+            <Label Text="Betrag" Style="{StaticResource LabelA}"/>
+            <Frame Style="{StaticResource FrameA}">
+                <Entry Placeholder="Betrag hier eingeben" Keyboard="Telephone" TextColor="{DynamicResource EntryFrame_Textcolor}" Text="{Binding Betrag}" HorizontalTextAlignment="Center" BackgroundColor="Transparent" IsTextPredictionEnabled="False" FontSize="Medium"/>
+            </Frame>
+            <Label Text="Datum"  Style="{StaticResource LabelA}"/>
+            <Frame Style="{StaticResource FrameA}">
+                <StackLayout HorizontalOptions="CenterAndExpand" WidthRequest="200">
+                    <DatePicker
+                        Format="dddd,  dd.M.yyyy"
+                        TextColor="{DynamicResource EntryFrame_Textcolor}"
+                        Date="{Binding Datum}"
+                        FontSize="Medium"
+                        HorizontalOptions="FillAndExpand"                
+                        VerticalOptions="CenterAndExpand"/>
+                </StackLayout>
+            </Frame>
+            <Label Text="Notiz" Style="{StaticResource LabelA}"/>
+            <Frame Style="{StaticResource FrameA}">
+                <Entry Placeholder="Notiz hier eingeben" Text="{Binding Notiz}" TextColor="{DynamicResource EntryFrame_Textcolor}" HorizontalTextAlignment="Center" VerticalOptions="Start" FontSize="Medium"/>
+            </Frame>
+            <Frame Style="{StaticResource FrameA}" Margin="0,20,0,0" VerticalOptions="Center">
+                <Grid ColumnDefinitions="Auto,*" HorizontalOptions="Fill" VerticalOptions="Center">
+                    <Label Text="Transaktion in der Bilanz anzeigen :" FontSize="Medium" TextColor="{DynamicResource EntryFrame_Textcolor}" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="0" Margin="10,0,0,0"/>
+                    <Switch IsToggled="{Binding Show_Hide_Balance}" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1" Margin="0,0,10,0"/>
+                </Grid>
+            </Frame>
+            <xct:Expander BackgroundColor="{DynamicResource EntryFrame_Backgroundcolor}" xct:CornerRadiusEffect.CornerRadius="10" IsExpanded="{Binding Is_Expended}" HorizontalOptions="Fill" Margin="0,20,0,20" Padding="10">
+                <xct:Expander.Header>
+                    <Grid ColumnDefinitions="5,Auto,*,5" RowDefinitions="50,*" VerticalOptions="Center" HeightRequest="{Binding Height}">
+                        <Label Text="{Binding Wiederholungs_Header}" Grid.Column="1" Grid.Row="0" TextColor="{DynamicResource EntryFrame_Textcolor}" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center"/>
+                        <Label Text="{Binding Wiederholungs_Text}" Grid.Row="0" Grid.Column="2" VerticalOptions="Center" TextColor="{DynamicResource EntryFrame_Textcolor}" IsVisible="{Binding Wiederholungs_Text_Visibility}" HorizontalTextAlignment="{Binding HorizontalTextAlignment}"/>
+                        <Label Text="{Binding Wiederholungs_Text}" Grid.Column="1" Grid.Row="1" Margin="0,-20,0,0" VerticalOptions="Center" TextColor="{DynamicResource EntryFrame_Textcolor}" HorizontalTextAlignment="{Binding HorizontalTextAlignment}" IsVisible="{Binding Wiederholungs_Text_Visibility_2}"/>
+                    </Grid>
+                </xct:Expander.Header>
+                <StackLayout Spacing="2">
+                    <Button Text="Keine Wiederholung" Style="{StaticResource ButtonB}" Command="{Binding Repeat_Never_Command}" FontSize="Medium" HeightRequest="50" />
+                    <Button Text="Jeden Tag" Style="{StaticResource ButtonB}" Command="{Binding Repeat_Every_Day_Command}" FontSize="Medium" HeightRequest="50" />
+                    <Button Text="Jede Woche" Style="{StaticResource ButtonB}" Command="{Binding Repeat_Every_Week_Command}" FontSize="Medium" HeightRequest="50" />
+                    <Button Text="Jeden Monat" Style="{StaticResource ButtonB}" Command="{Binding Repeat_Every_Month_Command}" FontSize="Medium" HeightRequest="50" />
+                    <Button Text="Jedes Jahr" Style="{StaticResource ButtonB}" Command="{Binding Repeat_Every_Year_Command}" FontSize="Medium" HeightRequest="50" />
+                    <Button Text="Benutzerdefiniert" Style="{StaticResource ButtonB}" Command="{Binding Repeat_Customised_Command}" FontSize="Medium" HeightRequest="50" />
+                </StackLayout>
+            </xct:Expander>
+            <Button Text="Transaktion hinzufügen" Style="{StaticResource ButtonA}" Command="{Binding Add_Item}" xct:ShadowEffect.Color="{DynamicResource Button_Bordercolor}"/>
+        </FlexLayout>
+    </ScrollView>
+</ContentPage>

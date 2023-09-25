@@ -1,0 +1,441 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pagemodels="clr-namespace:EasyLife.PageModels" 
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             x:Class="EasyLife.Pages.Styling_Color_Page"
+             BackgroundColor="Black"
+             Title="Benutzerdefinierte Farben">
+
+    <ContentPage.BindingContext>
+        <pagemodels:Styling_Color_PageModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding View_IsAppering_Command}" />
+    </ContentPage.Behaviors>
+    
+    <ContentPage.Content>
+        <Grid RowDefinitions="*,Auto">
+            <Frame BackgroundColor="Transparent" Padding="0" Margin="20,0,20,0" Grid.Row="0">
+                <ScrollView VerticalScrollBarVisibility="Never" >
+                    <StackLayout Spacing="20" VerticalOptions="Center" HorizontalOptions="Fill">
+                        <Label Text="Seite" TextDecorations="Underline" TextColor="White" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,20,0,5"/>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Page_Backgroundcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Hintergrundfarbe der Seiten:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Page_BackgroundColor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" HorizontalTextAlignment="Center" FontSize="Medium" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Page_BackgroundColor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <Label Text="App" TextDecorations="Underline" TextColor="White" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,20,0,5"/>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding App_Backgroundcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Hintergrundfarbe der App:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding App_BackgroundColor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding App_BackgroundColor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <Label Text="Transaktion" TextDecorations="Underline" TextColor="White" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,20,0,5"/>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Transaktion_Backgroundcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Hintergrundfarbe der Transaktion:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Transaktion_Backgroundcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Transaktion_Backgroundcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Transaktion_Bordercolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Randfarbe der Transaktion:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Transaktion_Bordercolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Transaktion_Bordercolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Transaktion_Textcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Textfarbe der Transaktion:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Transaktion_Textcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Transaktion_Textcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <Label Text="Eingabefeld" TextDecorations="Underline" TextColor="White" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,20,0,5"/>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding EntryFrame_Backgroundcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Hintergrundfarbe des Eingabefeld:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding EntryFrame_Backgroundcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding EntryFrame_Backgroundcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding EntryFrame_Bordercolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Randfarbe des Eingabefeld:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding EntryFrame_Bordercolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding EntryFrame_Bordercolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding EntryFrame_Textcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Textfarbe des Eingabefeld:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding EntryFrame_Textcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding EntryFrame_Textcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <Label Text="Taste" TextDecorations="Underline" TextColor="White" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,20,0,5"/>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Button_Backgroundcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Hintergrundfarbe der Taste:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Button_Backgroundcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Button_Backgroundcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Button_Bordercolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Randfarbe der Taste:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Button_Bordercolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Button_Bordercolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Button_Textcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Textfarbe der Taste:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Button_Textcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Button_Textcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <Label Text="Bearbeiten" TextDecorations="Underline" TextColor="White" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,20,0,5"/>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Edit_Backgroundcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Hintergrundfarbe von Bearbeiten:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Edit_Backgroundcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Edit_Backgroundcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Edit_Bordercolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Randfarbe von Bearbeiten:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Edit_Bordercolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Edit_Bordercolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Edit_Textcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Textfarbe von Bearbeiten:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Edit_Textcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Edit_Textcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <Label Text="Entfernen" TextDecorations="Underline" TextColor="White" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,20,0,5"/>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Remove_Backgroundcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Hintergrundfarbe von Entfernen:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Remove_Backgroundcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Remove_Backgroundcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Remove_Bordercolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Randfarbe von Entfernen:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Remove_Bordercolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Remove_Bordercolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Remove_Textcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Textfarbe von Entfenen:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Remove_Textcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Remove_Textcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <Label Text="Wiederherstellen" TextDecorations="Underline" TextColor="White" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,20,0,5"/>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Revive_Backgroundcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Hintergrundfarbe von Wiederherstellen:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Revive_Backgroundcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Revive_Backgroundcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Revive_Bordercolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Randfarbe von Wiederherstellen:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Revive_Bordercolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Revive_Bordercolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Revive_Textcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Textfarbe von Wiederherstellen:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Revive_Textcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Revive_Textcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <Label Text="Löschen" TextDecorations="Underline" TextColor="White" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,20,0,5"/>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Delete_Backgroundcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Hintergrundfarbe von Löschen:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Delete_Backgroundcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Delete_Backgroundcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Delete_Bordercolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Randfarbe von Löschen:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Delete_Bordercolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Delete_Bordercolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Delete_Textcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Textfarbe von Löschen:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Delete_Textcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Delete_Textcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <Label Text="Auftrag" TextDecorations="Underline" TextColor="White" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,20,0,5"/>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Order_Backgroundcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Hintergrundfarbe von Auftragoption:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Order_Backgroundcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Order_Backgroundcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Order_Bordercolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Randfarbe von Auftragoption:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Order_Bordercolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Order_Bordercolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Order_Textcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Textfarbe von Auftragoption:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Order_Textcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Order_Textcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <Label Text="Stand" TextDecorations="Underline" TextColor="White" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,20,0,5"/>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Saldo_Backgroundcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Hintergrundfarbe vom Stand" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Saldo_Backgroundcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Saldo_Backgroundcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Saldo_Textcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Textfarbe vom Stand:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Saldo_Textcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Saldo_Textcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <Label Text="Beschriftung" TextDecorations="Underline" TextColor="White" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,20,0,5"/>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Label_Textcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Textfarbe der Beschriftung:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Label_Textcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Label_Textcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <Label Text="Gruppierung" TextDecorations="Underline" TextColor="White" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,20,0,5"/>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Grouping_Textcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Textfarbe der Gruppennamen:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Grouping_Textcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Grouping_Textcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <Label Text="Ladekreis" TextDecorations="Underline" TextColor="White" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,20,0,5"/>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Refresh_Color}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Farbe des Ladekreises:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Refresh_Color_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Refresh_Color_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <Label Text="Menu" TextDecorations="Underline" TextColor="White" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,20,0,5"/>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Flyout_Backgroundcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Hintergrundfarbe des Menu:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Flyout_Backgroundcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Flyout_Backgroundcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Flyout_Selectcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Ausgewählte Seitenfarbe im Menu:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Flyout_Selectcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Flyout_Selectcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Flyout_Textcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="Textfarbe des Menu:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Flyout_Textcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Flyout_Textcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="50" BorderColor="White" BackgroundColor="{Binding Flyout_Iconcolor}" VerticalOptions="Center"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="SeitenIcon im Menu:" TextColor="White" FontSize="Medium" HorizontalTextAlignment="Start"/>
+                                <Picker SelectedItem="{Binding Flyout_Iconcolor_String}" ItemsSource="{Binding Color_List}" TextColor="White" Title="Farbe auswählen" TitleColor="Gray" FontSize="Medium" HorizontalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <Picker.Behaviors>
+                                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Flyout_Iconcolor_Changed_Command}" />
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </StackLayout>
+                        </StackLayout>
+                    </StackLayout>
+                </ScrollView>
+            </Frame>
+            <StackLayout Grid.Row="1">
+                <StackLayout Orientation="Horizontal" Spacing="10" HorizontalOptions="Center" VerticalOptions="Center" Margin="10">
+                    <Button Text="Anwenden" Command="{Binding Apply_Command}" HorizontalOptions="Center" CornerRadius="30" xct:ShadowEffect.Color="White" VerticalOptions="Center" BorderWidth="2" BorderColor="White" BackgroundColor="Gray" Padding="20"/>
+                    <Button Text="Zurücksetzen" Command="{Binding Default_Command}" HorizontalOptions="Center" CornerRadius="30" xct:ShadowEffect.Color="White" VerticalOptions="Center" BorderWidth="2" BorderColor="White" BackgroundColor="Gray" Padding="20"/>
+                </StackLayout>
+                <Grid IsVisible="{Binding IsNotificater_Visibel}" IsEnabled="{Binding IsNotificater_Visibel}">
+                    <Frame BackgroundColor="Gray" BorderColor="DarkGray" CornerRadius="30" HasShadow="True" HorizontalOptions="EndAndExpand" Padding="5">
+                        <Label Text="{Binding Notificater_Text}" FontSize="Small" TextColor="White" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Margin="10,0,10,0"/>
+                    </Frame>
+                </Grid>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:models="clr-namespace:EasyLife.Models" 
+    xmlns:pagemodels="clr-namespace:EasyLife.PageModels" 
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:fontAwesome="clr-namespace:FontAwesome"
+    xmlns:helper="clr-namespace:EasyLife.Helpers"
+    x:Class="EasyLife.Pages.Balance_Page"
+    xmlns:cells="clr-namespace:EasyLife.Cells"
+    Title="{Binding Title}"
+    BackgroundColor="{DynamicResource Page_Backgroundcolor}"
+    Padding="0">
+
+    <ContentPage.BindingContext>
+        <pagemodels:Balance_PageModel/>
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding Load_Command}" />
+    </ContentPage.Behaviors>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Order="Primary" Text="Zeitraum"  Command="{Binding Period_Command}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Clock}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <ToolbarItem Order="Primary" Text="Bilanzprofil"  Command="{Binding Edit_Blanceprofile_Command}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Wrench}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <ToolbarItem Order="Primary" Text="Create_PDF"  Command="{Binding Create_PDF_Command}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.FilePdf}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="Stackholder">
+                <ViewCell >
+                    <cells:Stackholder_Cell />
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:Key="Total">
+                <ViewCell >
+                    <cells:Total_Cell/>
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:Key="GroupeTotal">
+                <ViewCell >
+                    <cells:GroupeTotal_Cell />
+                </ViewCell>
+            </DataTemplate>
+            <cells:Stackholder_Template_Selecter x:Key="Stackholder_Selector" Stackholder="{StaticResource Stackholder}" Total="{StaticResource Total}" GroupeTotal="{StaticResource GroupeTotal}"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ContentPage.Content>
+        <Grid  Padding="0" RowDefinitions="Auto,*,Auto">
+
+            <Grid ColumnDefinitions="10,125,*,80,*,100,10" Padding="10" HorizontalOptions="Fill" VerticalOptions="Center" BackgroundColor="DarkGray" IsVisible="{Binding Stackholder_Bundle_Visibility}" Grid.Row="0">
+                <Label Text="Zweck" TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="1"/>
+                <Label Text="Anzahl" TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="3"/>
+                <Label Text="Summe" TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="5"/>
+            </Grid>
+
+            <ScrollView
+                IsVisible="{Binding Stackholder_Bundle_Visibility}"
+                Grid.Row="1"
+                VerticalOptions="Fill"
+                HorizontalOptions="Fill"
+                BackgroundColor="Transparent"
+                Padding="0"
+                VerticalScrollBarVisibility="Never">
+                <ListView
+                    SelectionMode="None"
+                    CachingStrategy = "RecycleElement"
+                    IsPullToRefreshEnabled="False"     
+                    HasUnevenRows="True"
+                    ItemsSource="{Binding Bundles}"
+                    SeparatorVisibility="None"
+                    BackgroundColor="Transparent"
+                    VerticalScrollBarVisibility="Never"
+                    ItemTemplate="{StaticResource Stackholder_Selector}">
+                </ListView>
+            </ScrollView>
+
+            <Grid ColumnDefinitions="*,Auto" Padding="10" HorizontalOptions="Fill" VerticalOptions="Center" BackgroundColor="DarkGray" IsVisible="{Binding Stackholder_Bundle_Visibility}" Grid.Row="2">
+                <Label Text="Restgeld : " TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
+                <Grid ColumnDefinitions="*,10,20" HorizontalOptions="Fill" VerticalOptions="Center" Grid.Column="1" ColumnSpacing="3">
+                    <Label Text="{Binding Total}" TextColor="{Binding Evaluating_of_Totoal}" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
+                    <Label Text="€" TextColor="{Binding Evaluating_of_Totoal}" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="1"/>
+                </Grid>
+            </Grid>
+
+            <Grid RowDefinitions="300,100,*" IsVisible="{Binding Kein_Ergebnis_Stackholder_Status}" VerticalOptions="FillAndExpand" Grid.RowSpan="3">
+                <Label Grid.Row="1" Text="Keine Bilanz vorhanden!" TextColor="Black" FontSize="20" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="Center"/>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

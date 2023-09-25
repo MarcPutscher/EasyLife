@@ -1,0 +1,402 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Frame 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="EasyLife.Cells.Outcome_Cell"
+    xmlns:models="clr-namespace:EasyLife.Models"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+    xmlns:customrenderer="clr-namespace:EasyLife.CustomRenderer" xmlns:cells="clr-namespace:EasyLife.Cells"
+    x:DataType="models:Transaktion"
+    CornerRadius="20" 
+    HasShadow="True" 
+    BackgroundColor="{DynamicResource Transaktion_Backgroundcolor}" 
+    BorderColor="{DynamicResource Transaktion_Bordercolor}"
+    Padding="10">
+
+    <Frame.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="Option_1" x:DataType="{x:Null}">
+                <Grid Margin="0,20,0,0">
+                    <StackLayout BackgroundColor="LightGray" xct:ShadowEffect.Opacity="0.7" xct:CornerRadiusEffect.CornerRadius="5" Padding="5">
+                        <Label Text="Transaktionsdetails" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" TextDecorations="Underline"/>
+                        <StackLayout Orientation="Horizontal">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Transaktionsbetrag = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Betrag}"
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="€"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Transaktionsdatum = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Datumanzeige}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Transaktionszweck = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Zweck}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Transaktionsnotiz = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Notiz}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Wird in Bilanz angezeigt = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Balance_Visibility_String}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Transaktions-ID = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Id}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <Label Text="Auftragsdetails" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" TextDecorations="Underline"  IsVisible="{Binding Order_Visibility}"/>
+                        <StackLayout Orientation="Horizontal" IsVisible="{Binding Order_Visibility}">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Art der Wiederholung = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Art_an_Wiederholungen}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" IsVisible="{Binding Order_Visibility}">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Anzahl = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Anzahl_an_Wiederholungen}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" IsVisible="{Binding Order_Visibility}">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Speziell = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Speziell}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" IsVisible="{Binding Order_Visibility}">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Auftrags-ID = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Auftrags_id}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                    </StackLayout>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="Option_2" x:DataType="{x:Null}">
+                <Grid Margin="0,20,0,0">
+                    <StackLayout BackgroundColor="LightGray" xct:ShadowEffect.Opacity="0.7" xct:CornerRadiusEffect.CornerRadius="5" Padding="5">
+                        <Label Text="Transaktionsdetails" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" TextDecorations="Underline"/>
+                        <StackLayout Orientation="Horizontal">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Transaktionsbetrag = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Betrag}"
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="€"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Transaktionsdatum = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Datumanzeige}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Transaktionszweck = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Zweck}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Transaktionsnotiz = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Notiz}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Wird in Bilanz angezeigt = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Balance_Visibility_String}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Transaktions-ID = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Id}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <Label Text="Auftragsdetails" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" TextDecorations="Underline"/>
+                        <StackLayout Orientation="Horizontal" IsVisible="{Binding Order_Visibility}">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Art der Wiederholung = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Art_an_Wiederholungen}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" IsVisible="{Binding Order_Visibility}">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Anzahl an Wiederholungen = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Anzahl_an_Wiederholungen}"
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            HorizontalOptions="Start"
+                            Text= " Mal"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" IsVisible="{Binding Order_Visibility}">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Speziell = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Speziell}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" IsVisible="{Binding Order_Visibility}">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Auftrags-ID = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Auftrags_id}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                    </StackLayout>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="Option_3" x:DataType="{x:Null}">
+                <Grid Margin="0,20,0,0">
+                    <StackLayout BackgroundColor="LightGray" xct:ShadowEffect.Opacity="0.7" xct:CornerRadiusEffect.CornerRadius="5" Padding="5">
+                        <Label Text="Transaktionsdetails" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" TextDecorations="Underline"/>
+                        <StackLayout Orientation="Horizontal">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Transaktionsbetrag = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Betrag}"
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="€"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Transaktionsdatum = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Datumanzeige}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Transaktionszweck = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Zweck}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Transaktionsnotiz = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Notiz}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Wird in Bilanz angezeigt = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Balance_Visibility_String}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Transaktions-ID = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Id}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <Label Text="Auftragsdetails" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" TextDecorations="Underline"/>
+                        <StackLayout Orientation="Horizontal" IsVisible="{Binding Order_Visibility}">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Art der Wiederholung = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Art_an_Wiederholungen}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" IsVisible="{Binding Order_Visibility}">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Enddatum = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Anzahl_an_Wiederholungen}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" IsVisible="{Binding Order_Visibility}">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Speziell = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Speziell}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" IsVisible="{Binding Order_Visibility}">
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="Auftrags-ID = "
+                            TextColor="Black"/>
+                            <Label VerticalOptions="Center"
+                            FontSize="Small"
+                            Text="{Binding Auftrags_id}"
+                            TextColor="Black"/>
+                        </StackLayout>
+                    </StackLayout>
+                </Grid>
+            </DataTemplate>
+            <cells:Transaktions_Detail_Selector x:Key="Transaktions_Detail_Selector" Order_Option_1="{StaticResource Option_1}" Order_Option_2="{StaticResource Option_2}" Order_Option_3="{StaticResource Option_3}"/>
+        </ResourceDictionary>
+    </Frame.Resources>
+
+    <xct:Expander ContentTemplate="{StaticResource Transaktions_Detail_Selector}">
+        <xct:Expander.Header>
+            <Grid ColumnDefinitions="10,*,Auto,10" RowDefinitions="*">
+                <Grid Grid.Column="2" ColumnDefinitions="*,Auto" HorizontalOptions="Fill">
+                    <Frame BackgroundColor="Salmon" HorizontalOptions="End" CornerRadius="30" MinimumWidthRequest="200" Padding="10" VerticalOptions="Center" BorderColor="Red">
+                        <Grid ColumnDefinitions="5,Auto,Auto,5" HorizontalOptions="Center" VerticalOptions="Center">
+                            <Label VerticalOptions="Center"
+                                        FontSize="Large"
+                                        Grid.Column="1"
+                                        Text="{Binding Betrag}"
+                                        TextColor="Black"
+                                        FontAttributes="Bold"/>
+                            <Label VerticalOptions="Center"
+                                        FontSize="Large"
+                                        Grid.Column="2"
+                                        Text="€"
+                                        TextColor="Black"
+                                        FontAttributes="Bold"/>
+                        </Grid>
+                    </Frame>
+                </Grid>
+                <customrenderer:AutoFontSizeLabel 
+                        AutoSizeMaxTextSize="30"
+                        AutoSizeMinTextSize="8"
+                        AutoSizeStepGranularity="1"
+                        HeightRequest="40"
+                        WidthRequest="100"
+                        HorizontalTextAlignment="Start"
+                        VerticalTextAlignment="Center"
+                        HorizontalOptions="Fill"
+                        VerticalOptions="Center"
+                        Grid.Column="1"
+                        MaxLines="1"
+                        Text="{Binding Pseudotext}" 
+                        TextColor="{DynamicResource Transaktion_Textcolor}"
+                        FontAttributes="Bold"/>
+            </Grid>
+        </xct:Expander.Header>
+    </xct:Expander>
+</Frame>

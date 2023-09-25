@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xct:Popup
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="EasyLife.Pages.Viewtime_Popup"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    IsLightDismissEnabled="False"
+    x:Name="ViewTime_Popup"
+    Color="Transparent">
+
+    <StackLayout>
+        <Button Clicked="CancelButton_Clicked" HorizontalOptions="End" VerticalOptions="Start" Text="X" FontSize="20" FontAttributes="Bold" BackgroundColor="Red" BorderColor="DarkRed" Padding="5" CornerRadius="100" WidthRequest="50" Margin="0,0,0,5"/>
+        <Frame Padding="20" CornerRadius="20" BackgroundColor="Gray" BorderColor="Black" VerticalOptions="Center" HorizontalOptions="Center" xct:ShadowEffect.Color="Blue">
+            <StackLayout>
+                <StackLayout Orientation="Horizontal" Spacing="10">
+                    <Label Text="Jahr :" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" TextColor="White" FontSize="Medium" FontAttributes="Bold" />
+                    <Picker x:Name="YearPicker" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" Title="Jahre" 
+                        TextColor="White" FontAttributes="Bold" TitleColor="Red" SelectedIndexChanged="Year_Changed_Methode">
+                    </Picker>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Spacing="10">
+                    <Label Text="Gesamtes Jahr " FontAttributes="Bold" FontSize="Body" HorizontalTextAlignment="Start" VerticalOptions="Center" HorizontalOptions="Center"/>
+                    <Switch x:Name="OptionSwitch" PropertyChanged="OptionSwitch_PropertyChanged" />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Spacing="10">
+                    <Label  x:Name="MonthLabel" Text="Monat :"  VerticalTextAlignment="Center" HorizontalTextAlignment="Start" TextColor="White" FontSize="Medium" FontAttributes="Bold"/>
+                    <Picker x:Name="MonthPicker" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" Title="Monate" 
+                     TextColor="White" FontAttributes="Bold" TitleColor="Red" SelectedIndexChanged="Month_Changed_Methode"/>
+                </StackLayout>
+                <Button x:Name="ReturnButton" Text="Anwenden" BackgroundColor="SkyBlue" Clicked="Return_Methode" CornerRadius="10" xct:ShadowEffect.Color="Blue" BorderColor="DarkBlue" FontAttributes="Bold" />
+            </StackLayout>
+        </Frame>
+    </StackLayout>
+</xct:Popup>

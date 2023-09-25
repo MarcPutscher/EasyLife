@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Frame 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:models="clr-namespace:EasyLife.Models"
+    x:Class="EasyLife.Cells.GroupeTotal_Cell"
+    x:DataType="models:StackholderBundle"
+    IsVisible="{Binding Visibility}"
+    BackgroundColor="Transparent"
+    Padding="0">
+
+    <StackLayout Margin="0,0,0,10">
+        <BoxView WidthRequest="300" HorizontalOptions="End" Color="Black" HeightRequest="2" Margin="0,0,30,0"/>
+        <Grid ColumnDefinitions="*,Auto,3" Padding="1" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="Transparent">
+            <Label Text="{Binding Total_Text}" TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
+            <Grid ColumnDefinitions="*,10,20" HorizontalOptions="Fill" VerticalOptions="Center" Grid.Column="1" ColumnSpacing="3">
+                <Label Text="{Binding Total_Sum}" TextColor="{Binding Evaluation}" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
+                <Label Text="€" TextColor="{Binding Evaluation}" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="1"/>
+            </Grid>
+        </Grid>
+    </StackLayout>
+
+</Frame>

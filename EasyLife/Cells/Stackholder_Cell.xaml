@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Frame 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:models="clr-namespace:EasyLife.Models"
+    x:Class="EasyLife.Cells.Stackholder_Cell"
+    x:DataType="models:StackholderBundle"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+    xmlns:customrenderer="clr-namespace:EasyLife.CustomRenderer"
+    BackgroundColor="Transparent"
+    Padding="0"
+    HeightRequest="{Binding Height}"
+    IsVisible="{Binding Visibility}"
+    Margin="0,10,0,0">
+
+    <ListView
+        CachingStrategy = "RecycleElement"
+        IsPullToRefreshEnabled="False"     
+        HasUnevenRows="True"
+        VerticalOptions="Fill"
+        ItemsSource="{Binding StackholderSource}"
+        SeparatorVisibility="None"
+        BackgroundColor="Transparent"
+        VerticalScrollBarVisibility="Never"
+        SelectionMode="None"
+        HeightRequest="{Binding Height}">
+        <ListView.ItemTemplate>
+            <DataTemplate x:DataType="models:Stackholder">
+                <ViewCell>
+                    <Grid ColumnDefinitions="10,*,Auto,150" Padding="4" HorizontalOptions="Fill" Margin="0,0,6,0">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" CommandParameter="{Binding Detail}">
+                                
+                            </TapGestureRecognizer>
+                        </Grid.GestureRecognizers>
+                        <customrenderer:AutoFontSizeLabel 
+                            AutoSizeMaxTextSize="30"
+                            AutoSizeMinTextSize="8"
+                            AutoSizeStepGranularity="1"
+                            HeightRequest="30"
+                            HorizontalTextAlignment="Start"
+                            VerticalTextAlignment="Center"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Fill"
+                            Grid.Column="1"                                
+                            MaxLines="1"
+                            Padding="0"
+                            Text="{Binding Reason}" 
+                            TextColor="White"
+                            FontAttributes="None"/>
+                        <StackLayout HorizontalOptions="Fill" VerticalOptions="Center" Grid.Column="2">
+                            <Label Text="{Binding Count}" TextColor="White" FontSize="Medium" FontAttributes="None" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                        </StackLayout>
+                        <Grid ColumnDefinitions="*,10,20" HorizontalOptions="Fill" VerticalOptions="Center" Grid.Column="3" ColumnSpacing="3">
+                            <Label Text="{Binding Value}" TextColor="{Binding Evaluating}" FontSize="Medium" FontAttributes="None" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
+                            <Label Text="€" TextColor="{Binding Evaluating}" FontSize="Medium" FontAttributes="None" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="1"/>
+                        </Grid>
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+
+</Frame>
