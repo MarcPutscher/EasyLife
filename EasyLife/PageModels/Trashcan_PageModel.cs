@@ -574,50 +574,54 @@ namespace EasyLife.PageModels
                 /// Geht die Liste durch und erstellt die Pseudotexte der Transaktionen, 
                 /// sowie fügt jede einzelne Transaktion zu einer anderen Liste hinzu und 
                 /// gruppiert Tranaktionen mit dem selbem Auftrag und gibt die erste Transaktion von diesem Auftrag in die andere Liste hinzu
-                foreach (var trans in transaktionscontent)
+                
+                if(transaktionscontent.Count() != 0)
                 {
-                    if (trans.Auftrags_id == null)
+                    foreach (var trans in transaktionscontent)
                     {
-                        trans.Pseudotext = trans.Zweck;
-                        sorted_transaktionscontent.Add(trans);
-                    }
-                    else
-                    {
-                        List<bool> indikator_list = new List<bool>();
-
-                        foreach(Auftrag order in auftrag_liste)
+                        if (trans.Auftrags_id == null)
                         {
-                            bool indikator = true;
-
-                            if(order.Id != int.Parse(trans.Auftrags_id.Substring(0, trans.Auftrags_id.IndexOf("."))))
-                            {
-                                indikator = false;
-                            }
-                            if (order.Anzahl_an_Wiederholungen != trans.Anzahl_an_Wiederholungen)
-                            {
-                                indikator = false;
-                            }
-                            if (order.Art_an_Wiederholungen != trans.Art_an_Wiederholungen)
-                            {
-                                indikator = false;
-                            }
-                            if (order.Option != trans.Auftrags_Option)
-                            {
-                                indikator = false;
-                            }
-                            if (order.Speziell != trans.Speziell)
-                            {
-                                indikator = false;
-                            }
-
-                            indikator_list.Add(indikator);
-                        }
-
-                        if (indikator_list.Contains(true) == false)
-                        {
-                            auftrag_liste.Add(new Auftrag { Id = int.Parse(trans.Auftrags_id.Substring(0, trans.Auftrags_id.IndexOf("."))), Anzahl_an_Wiederholungen = trans.Anzahl_an_Wiederholungen, Art_an_Wiederholungen = trans.Art_an_Wiederholungen, Speziell = trans.Speziell, Option = trans.Auftrags_Option });
                             trans.Pseudotext = trans.Zweck;
                             sorted_transaktionscontent.Add(trans);
+                        }
+                        else
+                        {
+                            List<bool> indikator_list = new List<bool>();
+
+                            foreach (Auftrag order in auftrag_liste)
+                            {
+                                bool indikator = true;
+
+                                if (order.Id != int.Parse(trans.Auftrags_id.Substring(0, trans.Auftrags_id.IndexOf("."))))
+                                {
+                                    indikator = false;
+                                }
+                                if (order.Anzahl_an_Wiederholungen != trans.Anzahl_an_Wiederholungen)
+                                {
+                                    indikator = false;
+                                }
+                                if (order.Art_an_Wiederholungen != trans.Art_an_Wiederholungen)
+                                {
+                                    indikator = false;
+                                }
+                                if (order.Option != trans.Auftrags_Option)
+                                {
+                                    indikator = false;
+                                }
+                                if (order.Speziell != trans.Speziell)
+                                {
+                                    indikator = false;
+                                }
+
+                                indikator_list.Add(indikator);
+                            }
+
+                            if (indikator_list.Contains(true) == false)
+                            {
+                                auftrag_liste.Add(new Auftrag { Id = int.Parse(trans.Auftrags_id.Substring(0, trans.Auftrags_id.IndexOf("."))), Anzahl_an_Wiederholungen = trans.Anzahl_an_Wiederholungen, Art_an_Wiederholungen = trans.Art_an_Wiederholungen, Speziell = trans.Speziell, Option = trans.Auftrags_Option });
+                                trans.Pseudotext = trans.Zweck;
+                                sorted_transaktionscontent.Add(trans);
+                            }
                         }
                     }
                 }
@@ -698,56 +702,60 @@ namespace EasyLife.PageModels
                 /// sowie überprüft es die Transaktionen nach deren Auftragsid und schait ob sie auch in der Liste mit den Transaktionsauftragsids die nicht in den Papierkorb gehören und wenn es eine übereinstimmung gibt wird sie gelöscht,
                 /// sowie fügt jede einzelne Transaktion zu einer anderen Liste hinzu und 
                 /// gruppiert Tranaktionen mit dem selbem Auftrag und gibt die erste Transaktion von diesem Auftrag in die andere Liste hinzu
-                foreach (var trans in transaktionscontent)
+                
+                if(transaktionscontent.Count() != 0)
                 {
-                    if (trans.Auftrags_id == null)
+                    foreach (var trans in transaktionscontent)
                     {
-                        trans.Pseudotext = trans.Zweck;
-                        sorted_transaktionscontent.Add(trans);
-                    }
-                    else
-                    {
-                        if(transaktion_auftragid_list.Contains(trans.Auftrags_id) == true)
+                        if (trans.Auftrags_id == null)
                         {
-                            await ContentService.Remove_Transaktion(trans);
+                            trans.Pseudotext = trans.Zweck;
+                            sorted_transaktionscontent.Add(trans);
                         }
                         else
                         {
-                            List<bool> indikator_list = new List<bool>();
-
-                            foreach (Auftrag order in auftrag_liste)
+                            if(transaktion_auftragid_list.Contains(trans.Auftrags_id) == true)
                             {
-                                bool indikator = true;
-
-                                if (order.Id != int.Parse(trans.Auftrags_id.Substring(0, trans.Auftrags_id.IndexOf("."))))
-                                {
-                                    indikator = false;
-                                }
-                                if (order.Anzahl_an_Wiederholungen != trans.Anzahl_an_Wiederholungen)
-                                {
-                                    indikator = false;
-                                }
-                                if (order.Art_an_Wiederholungen != trans.Art_an_Wiederholungen)
-                                {
-                                    indikator = false;
-                                }
-                                if (order.Option != trans.Auftrags_Option)
-                                {
-                                    indikator = false;
-                                }
-                                if (order.Speziell != trans.Speziell)
-                                {
-                                    indikator = false;
-                                }
-
-                                indikator_list.Add(indikator);
+                                await ContentService.Remove_Transaktion(trans);
                             }
-
-                            if (indikator_list.Contains(true) == false)
+                            else
                             {
-                                auftrag_liste.Add(new Auftrag { Id = int.Parse(trans.Auftrags_id.Substring(0, trans.Auftrags_id.IndexOf("."))), Anzahl_an_Wiederholungen = trans.Anzahl_an_Wiederholungen, Art_an_Wiederholungen = trans.Art_an_Wiederholungen, Speziell = trans.Speziell, Option = trans.Auftrags_Option });
-                                trans.Pseudotext = trans.Zweck;
-                                sorted_transaktionscontent.Add(trans);
+                                List<bool> indikator_list = new List<bool>();
+
+                                foreach (Auftrag order in auftrag_liste)
+                                {
+                                    bool indikator = true;
+
+                                    if (order.Id != int.Parse(trans.Auftrags_id.Substring(0, trans.Auftrags_id.IndexOf("."))))
+                                    {
+                                        indikator = false;
+                                    }
+                                    if (order.Anzahl_an_Wiederholungen != trans.Anzahl_an_Wiederholungen)
+                                    {
+                                        indikator = false;
+                                    }
+                                    if (order.Art_an_Wiederholungen != trans.Art_an_Wiederholungen)
+                                    {
+                                        indikator = false;
+                                    }
+                                    if (order.Option != trans.Auftrags_Option)
+                                    {
+                                        indikator = false;
+                                    }
+                                    if (order.Speziell != trans.Speziell)
+                                    {
+                                        indikator = false;
+                                    }
+
+                                    indikator_list.Add(indikator);
+                                }
+
+                                if (indikator_list.Contains(true) == false)
+                                {
+                                    auftrag_liste.Add(new Auftrag { Id = int.Parse(trans.Auftrags_id.Substring(0, trans.Auftrags_id.IndexOf("."))), Anzahl_an_Wiederholungen = trans.Anzahl_an_Wiederholungen, Art_an_Wiederholungen = trans.Art_an_Wiederholungen, Speziell = trans.Speziell, Option = trans.Auftrags_Option });
+                                    trans.Pseudotext = trans.Zweck;
+                                    sorted_transaktionscontent.Add(trans);
+                                }
                             }
                         }
                     }

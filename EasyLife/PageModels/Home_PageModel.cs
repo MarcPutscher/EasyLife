@@ -1294,14 +1294,6 @@ namespace EasyLife.PageModels
                     Is_Aktiv = true;
                 }
 
-                if(Preferences.Get("Get_Backup", false) == false)
-                {
-                    while(Preferences.Get("Get_Backup", false) == false)
-                    {
-                        await Task.Delay(1000);
-                    }
-                }
-
                 if (string.IsNullOrEmpty(Search_Text) == false)
                 {
                     await Search_Methode();
@@ -1344,39 +1336,42 @@ namespace EasyLife.PageModels
 
                 double saldo = 0;
 
-                foreach (var trans in transaktionscontent)
+                if(transaktionscontent.Count() != 0)
                 {
-                    if (DateTime.Compare(trans.Datum, DateTime.Today.AddDays(1).AddSeconds(-1)) <= 0)
+                    foreach (var trans in transaktionscontent)
                     {
-                        saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
-                    }
-
-                    if (trans.Datum.Year == Current_Viewtime.Year)
-                    {
-                        if (trans.Datum.ToString("MMMM", new CultureInfo("de-DE")) == Current_Viewtime.Month)
+                        if (DateTime.Compare(trans.Datum, DateTime.Today.AddDays(1).AddSeconds(-1)) <= 0)
                         {
-                            if (GroupingOption == 0)
-                            {
-                                trans.Pseudotext = trans.Zweck;
-                                sorted_after_month_transaktionscontent.Add(trans);
-                            }
-                            else
-                            {
-                                trans.Pseudotext = trans.Datumanzeige;
-                                sorted_after_month_transaktionscontent.Add(trans);
-                            }
+                            saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
                         }
-                        if (Current_Viewtime.Month == "")
+
+                        if (trans.Datum.Year == Current_Viewtime.Year)
                         {
-                            if (GroupingOption == 0)
+                            if (trans.Datum.ToString("MMMM", new CultureInfo("de-DE")) == Current_Viewtime.Month)
                             {
-                                trans.Pseudotext = trans.Zweck;
-                                sorted_after_month_transaktionscontent.Add(trans);
+                                if (GroupingOption == 0)
+                                {
+                                    trans.Pseudotext = trans.Zweck;
+                                    sorted_after_month_transaktionscontent.Add(trans);
+                                }
+                                else
+                                {
+                                    trans.Pseudotext = trans.Datumanzeige;
+                                    sorted_after_month_transaktionscontent.Add(trans);
+                                }
                             }
-                            else
+                            if (Current_Viewtime.Month == "")
                             {
-                                trans.Pseudotext = trans.Datumanzeige;
-                                sorted_after_month_transaktionscontent.Add(trans);
+                                if (GroupingOption == 0)
+                                {
+                                    trans.Pseudotext = trans.Zweck;
+                                    sorted_after_month_transaktionscontent.Add(trans);
+                                }
+                                else
+                                {
+                                    trans.Pseudotext = trans.Datumanzeige;
+                                    sorted_after_month_transaktionscontent.Add(trans);
+                                }
                             }
                         }
                     }
@@ -1505,7 +1500,7 @@ namespace EasyLife.PageModels
 
         private async Task Notificater(string v)
         {
-            await Shell.Current.DisplayToastAsync(v, 5000);
+            await ToastHelper.ShowToast(v);
         }
     }
 }
