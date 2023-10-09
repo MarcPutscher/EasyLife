@@ -979,7 +979,49 @@ namespace EasyLife.PageModels
 
                 await Search_Methode2();
 
-                List<Transaktion> search_transaktionscontent = transaktionscontent.Where(s => s.Search_Indicator().ToUpper().Contains(Search_Text.ToUpper())).ToList();
+                List<Transaktion> search_transaktionscontent = new List<Transaktion>();
+
+                search_transaktionscontent.Clear();
+
+                if (Search_Text.Contains("-") == true)
+                {
+                    string New_Search_Text = Search_Text;
+
+                    string Tag = null;
+
+                    List<Transaktion> new_search_transaktioncontent = new List<Transaktion>();
+
+                    new_search_transaktioncontent.Clear();
+
+                    search_transaktionscontent = transaktionscontent.ToList();
+
+                    while (New_Search_Text.Count() > 0)
+                    {
+                        if(New_Search_Text.IndexOf("-") == -1)
+                        {
+                            Tag = New_Search_Text;
+
+                            New_Search_Text = "";
+                        }
+                        else
+                        {
+                            Tag = New_Search_Text.Substring(0, New_Search_Text.IndexOf("-"));
+
+                            New_Search_Text = New_Search_Text.Substring(New_Search_Text.IndexOf("-") + 1);
+                        }
+
+                        if (String.IsNullOrEmpty(Tag) == false)
+                        {
+                            new_search_transaktioncontent = search_transaktionscontent.Where(s => s.Search_Indicator().ToUpper().Contains(Tag.ToUpper())).ToList();
+
+                            search_transaktionscontent = new_search_transaktioncontent;
+                        }
+                    }
+                }
+                else
+                {
+                    search_transaktionscontent = transaktionscontent.Where(s => s.Search_Indicator().ToUpper().Contains(Search_Text.ToUpper())).ToList();
+                }
 
                 search_transaktionscontent = (from p in search_transaktionscontent orderby DateTime.ParseExact(p.Datumanzeige, "dddd, d.M.yyyy", new CultureInfo("de-DE")) descending select p).ToList();
 
