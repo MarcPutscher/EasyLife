@@ -1,5 +1,6 @@
 ﻿using SQLite;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 
@@ -224,10 +225,44 @@ namespace EasyLife.Models
 
         void OnPropertyChanged(string name) => PropertyChanging?.Invoke(this,new PropertyChangingEventArgs(name));
 
-        public string Search_Indicator()
-        {
+        public Dictionary<string, string> Dicfilter = new Dictionary<string, string>();
 
-            return ""+Zweck+""+Notiz+""+Betrag+""+Id+ ""+Auftrags_id+""+Datumanzeige+""+Anzahl_an_Wiederholungen+""+Art_an_Wiederholungen+""+Speziell+"";
+        public string Search_Indicator( List<Filter> filters)
+        {
+            Dicfilter.Clear();
+
+            Dicfilter.Add("Betrag", betrag+"€");
+
+            Dicfilter.Add("Datum", datumanzeige);
+
+            Dicfilter.Add("Zweck", zweck);
+
+            Dicfilter.Add("Notiz", notiz);
+
+            Dicfilter.Add("Transaktions_ID", id.ToString());
+
+            Dicfilter.Add("Auftrags_ID", auftrags_id);
+
+            List<bool> nofilter = new List<bool>();
+
+            string search_indicator = "";
+
+            foreach (Filter filter in filters)
+            {
+                nofilter.Add(filter.State);
+
+                if(filter.State == true)
+                {
+                    search_indicator += Dicfilter[filter.Name];  
+                }
+            }
+
+            if(nofilter.Contains(true) == false)
+            {
+                search_indicator = ""+Betrag+"€"+Zweck+""+Notiz+""+Datumanzeige+""+id.ToString()+"" + auftrags_id + "";
+            }
+
+            return search_indicator;
         }
     }
 }

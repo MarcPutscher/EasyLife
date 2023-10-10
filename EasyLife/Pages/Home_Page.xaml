@@ -5,6 +5,7 @@
     xmlns:model="clr-namespace:EasyLife.Models"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     xmlns:pagemodels="clr-namespace:EasyLife.PageModels" 
+    xmlns:fontAwesome="clr-namespace:FontAwesome" 
     xmlns:cells="clr-namespace:EasyLife.Cells"
     x:Class="EasyLife.Pages.Home_Page"
     Title="{Binding Title}"
@@ -92,15 +93,22 @@
     </ContentPage.ToolbarItems>
 
     <StackLayout>
-        <StackLayout>
+        <StackLayout Orientation="Vertical">
             <xct:Expander>
                 <xct:Expander.Header>
-                    <SearchBar Placeholder="Suchen" Text="{Binding Search_Text}" BackgroundColor="DimGray" IsVisible="{Binding Serchbar_Visibility}">
-                        <SearchBar.Behaviors>
-                            <xct:EventToCommandBehavior EventName="SearchButtonPressed" Command="{Binding Search_Command}"/>
-                            <xct:EventToCommandBehavior EventName="TextChanged" Command="{Binding Search_Command2}"/>
-                        </SearchBar.Behaviors>
-                    </SearchBar>
+                    <Grid Padding="0">
+                        <SearchBar Placeholder="Suchen" Text="{Binding Search_Text}" BackgroundColor="DimGray" IsVisible="{Binding Serchbar_Visibility}">
+                            <SearchBar.Behaviors>
+                                <xct:EventToCommandBehavior EventName="SearchButtonPressed" Command="{Binding Search_Command}"/>
+                                <xct:EventToCommandBehavior EventName="TextChanged" Command="{Binding Search_Command2}"/>
+                            </SearchBar.Behaviors>
+                        </SearchBar>
+                        <ImageButton BackgroundColor="DimGray" Padding="10" IsVisible="{Binding Serchbar_Visibility}" HorizontalOptions="End" Command="{Binding Filter_Command}">
+                            <ImageButton.Source>
+                                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Filter}" Color="{Binding Filter_ActivityColor}"/>
+                            </ImageButton.Source>
+                        </ImageButton>
+                    </Grid>
                 </xct:Expander.Header>
                 <xct:Expander.Behaviors>
                     <xct:EventToCommandBehavior EventName="Tapped" Command="{Binding The_Searchbar_is_Tapped}"/>

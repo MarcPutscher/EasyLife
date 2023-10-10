@@ -80,6 +80,8 @@ namespace EasyLife.PageModels
 
         public AsyncCommand Period_Command { get; }
 
+        public AsyncCommand Filter_Command {  get; }
+
         public bool serchbar_visibility = false;
         public bool Serchbar_Visibility
         {
@@ -271,6 +273,22 @@ namespace EasyLife.PageModels
             }
         }
 
+        public Color filter_activitycolor = Color.White;
+
+        public Color Filter_ActivityColor
+        {
+            get { return filter_activitycolor; }
+            set
+            {
+                if (Filter_ActivityColor == value)
+                {
+                    return;
+                }
+
+                filter_activitycolor = value; RaisePropertyChanged();
+            }
+        }
+
         public bool activityindicator_isrunning = false;
         public bool ActivityIndicator_IsRunning
         {
@@ -371,6 +389,8 @@ namespace EasyLife.PageModels
             }
         }
 
+
+
         public Home_PageModel()
         {
             Transaktion = new ObservableRangeCollection<Transaktion>();
@@ -390,10 +410,20 @@ namespace EasyLife.PageModels
             Set_Searchbar_Visibility_Command = new AsyncCommand(Set_Searchbar_Visibility_MethodeAsync);
             The_Searchbar_is_Tapped = new AsyncCommand(The_Searchbar_is_Tapped_Methode);
             Add_Command = new AsyncCommand(Add_Methode);
+            Filter_Command = new AsyncCommand(Filter_Methode);
 
             Period_Command = new AsyncCommand(Period_Popup);
 
             title = "Haushaltsbuch " + Current_Viewtime.Year + " " + Current_Viewtime.Month + "";
+
+            if (Preferences.Get("Filter_Activity", false) == true)
+            {
+                Filter_ActivityColor = Color.Green;
+            }
+            else
+            {
+                Filter_ActivityColor = Color.White;
+            }
         }
 
         private async Task Add_Methode()
@@ -957,6 +987,16 @@ namespace EasyLife.PageModels
         {
             try
             {
+                List<Filter> filters = new List<Filter>()
+                    {
+                        new Filter(){Name="Transaktions_ID" , State = Preferences.Get("Search_For_Transaktion_ID", false) },
+                        new Filter(){Name="Auftrags_ID" , State = Preferences.Get("Search_For_Auftrags_ID", false) },
+                        new Filter(){Name="Datum" , State = Preferences.Get("Search_For_Datum", false) },
+                        new Filter(){Name="Zweck" , State = Preferences.Get("Search_For_Zweck", false) },
+                        new Filter(){Name="Notiz" , State = Preferences.Get("Search_For_Notiz", false) },
+                        new Filter(){Name="Betrag" , State = Preferences.Get("Search_For_Betrag", false) },
+                    };
+
                 ActivityIndicator_IsVisible = true;
 
                 ActivityIndicator_IsRunning = true;
@@ -1012,7 +1052,7 @@ namespace EasyLife.PageModels
 
                         if (String.IsNullOrEmpty(Tag) == false)
                         {
-                            new_search_transaktioncontent = search_transaktionscontent.Where(s => s.Search_Indicator().ToUpper().Contains(Tag.ToUpper())).ToList();
+                            new_search_transaktioncontent = search_transaktionscontent.Where(s => s.Search_Indicator(filters).ToUpper().Contains(Tag.ToUpper())).ToList();
 
                             search_transaktionscontent = new_search_transaktioncontent;
                         }
@@ -1020,7 +1060,7 @@ namespace EasyLife.PageModels
                 }
                 else
                 {
-                    search_transaktionscontent = transaktionscontent.Where(s => s.Search_Indicator().ToUpper().Contains(Search_Text.ToUpper())).ToList();
+                    search_transaktionscontent = transaktionscontent.Where(s => s.Search_Indicator(filters).ToUpper().Contains(Search_Text.ToUpper())).ToList();
                 }
 
                 search_transaktionscontent = (from p in search_transaktionscontent orderby DateTime.ParseExact(p.Datumanzeige, "dddd, d.M.yyyy", new CultureInfo("de-DE")) descending select p).ToList();
@@ -1537,6 +1577,29 @@ namespace EasyLife.PageModels
                 Current_Viewtime = new Viewtime() { Year = DateTime.Now.Year, Month = DateTime.Now.ToString("MMMM", new CultureInfo("de-DE")) };
 
                 await Refresh();
+            }
+        }
+
+        public async Task Filter_Methode()
+        {
+            try
+            {
+                await Shell.Current.ShowPopupAsync(new Filter_Popup());
+
+                if (Preferences.Get("Filter_Activity", true) == true)
+                {
+                    Filter_ActivityColor = Color.Green;
+                }
+                else
+                {
+                    Filter_ActivityColor = Color.White;
+                }
+
+                await Refresh();
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
             }
         }
 
