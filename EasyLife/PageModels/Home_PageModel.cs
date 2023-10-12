@@ -19,6 +19,7 @@ using Xamarin.Essentials;
 using EasyLife.Interfaces;
 using System.IO;
 using PermissionStatus = Xamarin.Essentials.PermissionStatus;
+using Xamarin.Forms.Internals;
 
 namespace EasyLife.PageModels
 {
@@ -81,6 +82,18 @@ namespace EasyLife.PageModels
         public AsyncCommand Period_Command { get; }
 
         public AsyncCommand Filter_Command {  get; }
+
+        public AsyncCommand<Transaktion> Calculator_Addition_Command {  get; }
+
+        public AsyncCommand<Transaktion> Calculator_Substraction_Command { get; }
+
+        public Command ShowCalculator_Command { get; }
+
+        public AsyncCommand Calculator_RemoveLast_Command { get; }
+
+        public AsyncCommand Calculator_RemoveAll_Command { get; }
+
+        public AsyncCommand ShowCalculator_List_Command { get; }
 
         public bool serchbar_visibility = false;
         public bool Serchbar_Visibility
@@ -258,6 +271,36 @@ namespace EasyLife.PageModels
             }
         }
 
+        public string calculator_value = null;
+        public string Calculator_Value
+        {
+            get { return calculator_value; }
+            set
+            {
+                if (Calculator_Value == value)
+                {
+                    return;
+                }
+
+                calculator_value = value; RaisePropertyChanged();
+            }
+        }
+
+        public Color calculator_evaluate = Color.White;
+        public Color Calculator_Evaluate
+        {
+            get { return calculator_evaluate; }
+            set
+            {
+                if (Calculator_Evaluate == value)
+                {
+                    return;
+                }
+
+                calculator_evaluate = value; RaisePropertyChanged();
+            }
+        }
+
         public Color saldo_evaluate = Color.White;
         public Color Saldo_Evaluate
         {
@@ -389,6 +432,31 @@ namespace EasyLife.PageModels
             }
         }
 
+        public bool calculator_state = false;
+        public bool Calculator_State
+        {
+            get { return calculator_state; }
+            set
+            {
+                if (Calculator_State == value)
+                    return;
+                calculator_state = value; RaisePropertyChanged();
+            }
+        }
+
+        public bool normal_state = true;
+        public bool Normal_State
+        {
+            get { return normal_state; }
+            set
+            {
+                if (Normal_State == value)
+                    return;
+                normal_state = value; RaisePropertyChanged();
+            }
+        }
+
+        public List<Transaktion> Calculator_List = new List<Transaktion>();
 
 
         public Home_PageModel()
@@ -411,6 +479,12 @@ namespace EasyLife.PageModels
             The_Searchbar_is_Tapped = new AsyncCommand(The_Searchbar_is_Tapped_Methode);
             Add_Command = new AsyncCommand(Add_Methode);
             Filter_Command = new AsyncCommand(Filter_Methode);
+            Calculator_Addition_Command = new AsyncCommand<Transaktion>(Calculator_Addition_Methode);
+            Calculator_Substraction_Command = new AsyncCommand<Transaktion>(Calculator_Substraction_Methode);
+            ShowCalculator_Command = new Command(ShowCalculator_Methode);
+            Calculator_RemoveLast_Command = new AsyncCommand(Calculator_RemoveLast_Methode);
+            Calculator_RemoveAll_Command = new AsyncCommand(Calculator_RemoveAll_Methode);
+            ShowCalculator_List_Command = new AsyncCommand(ShowCalculator_List_Methode);
 
             Period_Command = new AsyncCommand(Period_Popup);
 
@@ -1596,6 +1670,278 @@ namespace EasyLife.PageModels
                 }
 
                 await Refresh();
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
+        public void ShowCalculator_Methode()
+        {
+            if (Normal_State == true)
+            {
+                Normal_State = false;
+
+                Calculator_State = true;
+
+                Calculator_Value = "0";
+
+                Calculator_Evaluate = Color.Gray;
+            }
+            else
+            {
+                Normal_State = true;
+
+                Calculator_State = false;
+            }
+
+            Calculator_List.Clear();
+        }
+
+        public async Task ShowCalculator_List_Methode()
+        {
+            try
+            {
+                List<Transaktion> result = (List<Transaktion>)await Shell.Current.ShowPopupAsync(new CalculateListe_Popup(Calculator_List));
+
+                Calculator_List = result;
+
+                if (Calculator_List.Count() != 0)
+                {
+                    double sum = 0;
+
+                    foreach (Transaktion trans in Calculator_List)
+                    {
+                        sum += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                    }
+
+                    sum = Math.Round(sum, 2);
+
+                    Calculator_Value = sum.ToString().Replace(".", ",");
+
+                    if (sum < 0)
+                    {
+                        Calculator_Evaluate = Color.Red;
+                    }
+                    if (sum == 0)
+                    {
+                        Calculator_Evaluate = Color.White;
+                    }
+                    if (sum > 0)
+                    {
+                        Calculator_Evaluate = Color.Green;
+                    }
+                }
+                else
+                {
+                    Calculator_Value = "0";
+
+                    Calculator_Evaluate = Color.Gray;
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
+        public async Task Calculator_Addition_Methode(Transaktion input)
+        {
+            try
+            {
+                if(input != null)
+                {
+                    bool indicator = true;
+
+                    if(Calculator_List.Count() != 0)
+                    {
+                        foreach(Transaktion trans in Calculator_List)
+                        {
+                            if(trans.Id == input.Id)
+                            {
+                                indicator = false;
+                            }
+                        }
+                    }
+
+
+                    if (indicator == true)
+                    {
+                        Calculator_List.Add(input);
+
+                        if(Calculator_List.Count() != 0)
+                        {
+                            double sum = 0;
+
+                            foreach (Transaktion trans in Calculator_List)
+                            {
+                                sum += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                            }
+
+                            sum = Math.Round(sum,2);
+
+                            Calculator_Value = sum.ToString().Replace(".", ",");
+
+                            if (sum < 0)
+                            {
+                                Calculator_Evaluate = Color.Red;
+                            }
+                            if (sum == 0)
+                            {
+                                Calculator_Evaluate = Color.White;
+                            }
+                            if (sum > 0)
+                            {
+                                Calculator_Evaluate = Color.Green;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
+        public async Task Calculator_Substraction_Methode(Transaktion input)
+        {
+            try
+            {
+                if (input != null)
+                {
+                    bool indicator = false;
+
+                    if (Calculator_List.Count() != 0)
+                    {
+                        foreach (Transaktion trans in Calculator_List)
+                        {
+                            if (trans.Id == input.Id)
+                            {
+                                indicator = true;
+                            }
+                        }
+                    }
+
+                    if (indicator == true)
+                    {
+                        List<Transaktion> placeholder = new List<Transaktion>();
+
+                        placeholder.Clear();
+
+                        foreach (Transaktion trans in Calculator_List)
+                        {
+                            if (trans.Id != input.Id)
+                            {
+                                placeholder.Add(trans);
+                            }
+                        }
+
+                        Calculator_List = placeholder;
+
+                        if (Calculator_List.Count() != 0)
+                        {
+                            double sum = 0;
+
+                            foreach (Transaktion trans in Calculator_List)
+                            {
+                                sum += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                            }
+
+                            sum = Math.Round(sum, 2);
+
+                            Calculator_Value = sum.ToString().Replace(".", ",");
+
+                            if (sum < 0)
+                            {
+                                Calculator_Evaluate = Color.Red;
+                            }
+                            if (sum == 0)
+                            {
+                                Calculator_Evaluate = Color.White;
+                            }
+                            if (sum > 0)
+                            {
+                                Calculator_Evaluate = Color.Green;
+                            }
+                        }
+                        else
+                        {
+                            Calculator_Value = "0";
+
+                            Calculator_Evaluate = Color.Gray;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
+        public async Task Calculator_RemoveLast_Methode()
+        {
+            try
+            {
+                if(Calculator_List.Count() != 0)
+                {
+                    Calculator_List.RemoveAt(Calculator_List.Count()-1);
+
+                    if (Calculator_List.Count() != 0)
+                    {
+                        double sum = 0;
+
+                        foreach (Transaktion trans in Calculator_List)
+                        {
+                            sum += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                        }
+
+                        sum = Math.Round(sum, 2);
+
+                        Calculator_Value = sum.ToString().Replace(".", ",");
+
+                        if (sum < 0)
+                        {
+                            Calculator_Evaluate = Color.Red;
+                        }
+                        if (sum == 0)
+                        {
+                            Calculator_Evaluate = Color.White;
+                        }
+                        if (sum > 0)
+                        {
+                            Calculator_Evaluate = Color.Green;
+                        }
+                    }
+                    else
+                    {
+                        Calculator_Value = "0";
+
+                        Calculator_Evaluate = Color.Gray;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
+        public async Task Calculator_RemoveAll_Methode()
+        {
+            try
+            {
+                if (Calculator_List.Count() != 0)
+                {
+                    Calculator_List.Clear();
+
+                    Calculator_Value = "0";
+
+                    Calculator_Evaluate = Color.Gray;
+                }
             }
             catch (Exception ex)
             {
