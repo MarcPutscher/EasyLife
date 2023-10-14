@@ -6,7 +6,7 @@
     x:Class="EasyLife.Pages.Filter_Popup"
     IsLightDismissEnabled="False"
     Color="Transparent"
-    Size="320,360">
+    Size="320,390">
 
     <StackLayout>
         <Button Clicked="CancelButton_Clicked" HorizontalOptions="End" VerticalOptions="Start" Text="X" FontSize="20" FontAttributes="Bold" BackgroundColor="Red" BorderColor="DarkRed" Padding="5" CornerRadius="100" WidthRequest="50" Margin="0,0,0,5"/>
@@ -38,6 +38,11 @@
                     <StackLayout Orientation="Horizontal">
                         <Label Text="Auftrags-ID" TextColor="White" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start"/>
                         <Switch x:Name="AuftragsIDSwitch" HorizontalOptions="End"/>
+                    </StackLayout>
+                    <Frame BackgroundColor="Black" HorizontalOptions="Fill" HeightRequest="1" Padding="0" VerticalOptions="Center"/>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Quersuche" TextColor="White" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start"/>
+                        <Switch x:Name="QuersucheSwitch" HorizontalOptions="End"/>
                     </StackLayout>
                 </StackLayout>
             </Frame>

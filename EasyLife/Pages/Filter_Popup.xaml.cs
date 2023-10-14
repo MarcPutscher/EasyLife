@@ -37,6 +37,8 @@ namespace EasyLife.Pages
             NotizSwitch.IsToggled = Preferences.Get("Search_For_Notiz", false);
 
             BetragSwitch.IsToggled = Preferences.Get("Search_For_Betrag", false);
+
+            QuersucheSwitch.IsToggled = Preferences.Get("Quersuche", false);
         }
         private void CancelButton_Clicked(object sender, EventArgs e)
         {
@@ -48,6 +50,8 @@ namespace EasyLife.Pages
                 Preferences.Set("Search_For_Zweck", ZweckSwitch.IsToggled);
                 Preferences.Set("Search_For_Notiz", NotizSwitch.IsToggled);
                 Preferences.Set("Search_For_Betrag", BetragSwitch.IsToggled);
+                Preferences.Set("Quersuche", QuersucheSwitch.IsToggled);
+
 
                 List<bool> toggled = new List<bool>()
                 {
@@ -56,7 +60,8 @@ namespace EasyLife.Pages
                     DatumSwitch.IsToggled,
                     ZweckSwitch.IsToggled,
                     NotizSwitch.IsToggled,
-                    BetragSwitch.IsToggled
+                    BetragSwitch.IsToggled,
+                    QuersucheSwitch.IsToggled
                 };
 
                 if(toggled.Contains(true) == true)

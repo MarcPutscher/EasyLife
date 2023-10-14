@@ -20,6 +20,7 @@ using EasyLife.Interfaces;
 using System.IO;
 using PermissionStatus = Xamarin.Essentials.PermissionStatus;
 using Xamarin.Forms.Internals;
+using System.ComponentModel;
 
 namespace EasyLife.PageModels
 {
@@ -1069,6 +1070,7 @@ namespace EasyLife.PageModels
                         new Filter(){Name="Zweck" , State = Preferences.Get("Search_For_Zweck", false) },
                         new Filter(){Name="Notiz" , State = Preferences.Get("Search_For_Notiz", false) },
                         new Filter(){Name="Betrag" , State = Preferences.Get("Search_For_Betrag", false) },
+                        new Filter(){Name="Quersuche" , State = Preferences.Get("Quersuche", false) }
                     };
 
                 ActivityIndicator_IsVisible = true;
@@ -1126,15 +1128,68 @@ namespace EasyLife.PageModels
 
                         if (String.IsNullOrEmpty(Tag) == false)
                         {
-                            new_search_transaktioncontent = search_transaktionscontent.Where(s => s.Search_Indicator(filters).ToUpper().Contains(Tag.ToUpper())).ToList();
+                            if(filters.Last().State == true)
+                            {
+                                new_search_transaktioncontent = search_transaktionscontent.Where(s => s.CrossSearch_Indicator(filters).ToUpper().Contains(Tag.ToUpper())).ToList();
 
-                            search_transaktionscontent = new_search_transaktioncontent;
+                                search_transaktionscontent = new_search_transaktioncontent;
+                            }
+                            else
+                            {
+                                foreach (Transaktion trans in search_transaktionscontent)
+                                {
+                                    bool contains = false;
+
+                                    if (trans.Search_Indicator(filters).Count() != 0)
+                                    {
+                                        foreach (string word in trans.Search_Indicator(filters))
+                                        {
+                                            if (Search_Text.ToUpper() == word.ToUpper())
+                                            {
+                                                contains = true;
+                                            }
+                                        }
+                                    }
+
+                                    if (contains == true)
+                                    {
+                                        new_search_transaktioncontent.Add(trans);
+                                    }
+                                }
+                            }
                         }
                     }
                 }
                 else
                 {
-                    search_transaktionscontent = transaktionscontent.Where(s => s.Search_Indicator(filters).ToUpper().Contains(Search_Text.ToUpper())).ToList();
+                    if(filters.Last().State == true)
+                    {
+                        search_transaktionscontent = transaktionscontent.Where(s => s.CrossSearch_Indicator(filters).ToUpper().Contains(Search_Text.ToUpper())).ToList();
+                    }
+                    else
+                    {
+                        foreach(Transaktion trans in transaktionscontent)
+                        {
+                            bool contains = false;
+
+                            if(trans.Search_Indicator(filters).Count() != 0)
+                            {
+                                foreach(string word in trans.Search_Indicator(filters))
+                                {
+                                    if(Search_Text.ToUpper() == word.ToUpper())
+                                    {
+                                        contains = true;
+                                    }
+                                }
+                            }
+
+
+                            if(contains == true)
+                            {
+                                search_transaktionscontent.Add(trans);
+                            }
+                        }
+                    }
                 }
 
                 search_transaktionscontent = (from p in search_transaktionscontent orderby DateTime.ParseExact(p.Datumanzeige, "dddd, d.M.yyyy", new CultureInfo("de-DE")) descending select p).ToList();
