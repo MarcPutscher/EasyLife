@@ -5,14 +5,16 @@
     x:Class="EasyLife.Cells.Outcome_Cell"
     xmlns:models="clr-namespace:EasyLife.Models"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
-    xmlns:customrenderer="clr-namespace:EasyLife.CustomRenderer" xmlns:cells="clr-namespace:EasyLife.Cells"
+    xmlns:customrenderer="clr-namespace:EasyLife.CustomRenderer" 
+    xmlns:cells="clr-namespace:EasyLife.Cells"
     x:DataType="models:Transaktion"
+    x:Name="Outcome"
     CornerRadius="20" 
     HasShadow="True" 
     BackgroundColor="{DynamicResource Transaktion_Backgroundcolor}" 
     BorderColor="{DynamicResource Transaktion_Bordercolor}"
     Padding="10">
-
+   
     <Frame.Resources>
         <ResourceDictionary>
             <DataTemplate x:Key="Option_1" x:DataType="{x:Null}">

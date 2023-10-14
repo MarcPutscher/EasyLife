@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xct:Popup
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="EasyLife.Pages.CalculateListe_Popup"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+    xmlns:model="clr-namespace:EasyLife.Models"
+    IsLightDismissEnabled="False"
+    Color="Transparent"
+    Size="400,500">
+
+    <StackLayout>
+        <Button Clicked="CancelButton_Clicked" HorizontalOptions="End" VerticalOptions="Start" Text="X" FontSize="20" FontAttributes="Bold" BackgroundColor="Red" BorderColor="DarkRed" Padding="5" CornerRadius="100" WidthRequest="50" Margin="0,0,0,5"/>
+        <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+            <Label Text="Summanden" TextColor="White" FontSize="30" FontAttributes="Bold" HorizontalTextAlignment="Center" TextDecorations="Underline"/>
+            <Frame Padding="20" CornerRadius="20" BackgroundColor="Gray" BorderColor="Black" VerticalOptions="Center" HorizontalOptions="Center" xct:ShadowEffect.Color="Blue">
+                <StackLayout>
+                        <ListView
+                        CachingStrategy="RecycleElement"
+                        IsPullToRefreshEnabled="false"
+                        IsRefreshing="False"
+                        HasUnevenRows="True"
+                        x:Name="SumList"
+                        IsGroupingEnabled="false"
+                        SeparatorVisibility="Default"
+                        VerticalOptions="FillAndExpand">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="model:Transaktion">
+                                <ViewCell>
+                                    <SwipeView BackgroundColor="Transparent">
+                                        <SwipeView.LeftItems>
+                                            <SwipeItems>
+                                                <SwipeItem Invoked="SwipeItem_Invoked" CommandParameter="{Binding .}" Text="Entfernen" BackgroundColor="Red" />
+                                            </SwipeItems>
+                                        </SwipeView.LeftItems>
+                                        <Grid ColumnDefinitions="100,170,*" Padding="5">
+                                            <Label Text="{Binding Zweck}" FontSize="Body" TextColor="White" VerticalTextAlignment="Center" Grid.Column="0" HorizontalOptions="Start"/>
+                                            <Label Text="{Binding Datumanzeige}" FontSize="Body" TextColor="White" VerticalTextAlignment="Center" Grid.Column="1"  HorizontalOptions="Start"/>
+                                            <StackLayout Grid.Column="2" Orientation="Horizontal" HorizontalOptions="End">
+                                                <Label Text="{Binding Betrag}" FontSize="Body" TextColor="White" VerticalTextAlignment="Center" />
+                                                <Label Text="€" FontSize="Body" TextColor="White" VerticalTextAlignment="Center" />
+                                            </StackLayout>
+                                        </Grid>
+                                    </SwipeView>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Label x:Name="Empty" Text="Keine Summanden vorhanden." FontSize="Body" TextColor="White" VerticalTextAlignment="Center"/>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+    </StackLayout>
+</xct:Popup>

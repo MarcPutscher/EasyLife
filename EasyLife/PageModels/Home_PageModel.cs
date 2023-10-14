@@ -19,6 +19,8 @@ using Xamarin.Essentials;
 using EasyLife.Interfaces;
 using System.IO;
 using PermissionStatus = Xamarin.Essentials.PermissionStatus;
+using Xamarin.Forms.Internals;
+using System.ComponentModel;
 
 namespace EasyLife.PageModels
 {
@@ -79,6 +81,20 @@ namespace EasyLife.PageModels
         public AsyncCommand<Suggestion> Delet_Suggestion { get; }
 
         public AsyncCommand Period_Command { get; }
+
+        public AsyncCommand Filter_Command {  get; }
+
+        public AsyncCommand<Transaktion> Calculator_Addition_Command {  get; }
+
+        public AsyncCommand<Transaktion> Calculator_Substraction_Command { get; }
+
+        public Command ShowCalculator_Command { get; }
+
+        public AsyncCommand Calculator_RemoveLast_Command { get; }
+
+        public AsyncCommand Calculator_RemoveAll_Command { get; }
+
+        public AsyncCommand ShowCalculator_List_Command { get; }
 
         public bool serchbar_visibility = false;
         public bool Serchbar_Visibility
@@ -256,6 +272,36 @@ namespace EasyLife.PageModels
             }
         }
 
+        public string calculator_value = null;
+        public string Calculator_Value
+        {
+            get { return calculator_value; }
+            set
+            {
+                if (Calculator_Value == value)
+                {
+                    return;
+                }
+
+                calculator_value = value; RaisePropertyChanged();
+            }
+        }
+
+        public Color calculator_evaluate = Color.White;
+        public Color Calculator_Evaluate
+        {
+            get { return calculator_evaluate; }
+            set
+            {
+                if (Calculator_Evaluate == value)
+                {
+                    return;
+                }
+
+                calculator_evaluate = value; RaisePropertyChanged();
+            }
+        }
+
         public Color saldo_evaluate = Color.White;
         public Color Saldo_Evaluate
         {
@@ -268,6 +314,22 @@ namespace EasyLife.PageModels
                 }
 
                 saldo_evaluate = value; RaisePropertyChanged();
+            }
+        }
+
+        public Color filter_activitycolor = Color.White;
+
+        public Color Filter_ActivityColor
+        {
+            get { return filter_activitycolor; }
+            set
+            {
+                if (Filter_ActivityColor == value)
+                {
+                    return;
+                }
+
+                filter_activitycolor = value; RaisePropertyChanged();
             }
         }
 
@@ -371,6 +433,33 @@ namespace EasyLife.PageModels
             }
         }
 
+        public bool calculator_state = false;
+        public bool Calculator_State
+        {
+            get { return calculator_state; }
+            set
+            {
+                if (Calculator_State == value)
+                    return;
+                calculator_state = value; RaisePropertyChanged();
+            }
+        }
+
+        public bool normal_state = true;
+        public bool Normal_State
+        {
+            get { return normal_state; }
+            set
+            {
+                if (Normal_State == value)
+                    return;
+                normal_state = value; RaisePropertyChanged();
+            }
+        }
+
+        public List<Transaktion> Calculator_List = new List<Transaktion>();
+
+
         public Home_PageModel()
         {
             Transaktion = new ObservableRangeCollection<Transaktion>();
@@ -390,10 +479,26 @@ namespace EasyLife.PageModels
             Set_Searchbar_Visibility_Command = new AsyncCommand(Set_Searchbar_Visibility_MethodeAsync);
             The_Searchbar_is_Tapped = new AsyncCommand(The_Searchbar_is_Tapped_Methode);
             Add_Command = new AsyncCommand(Add_Methode);
+            Filter_Command = new AsyncCommand(Filter_Methode);
+            Calculator_Addition_Command = new AsyncCommand<Transaktion>(Calculator_Addition_Methode);
+            Calculator_Substraction_Command = new AsyncCommand<Transaktion>(Calculator_Substraction_Methode);
+            ShowCalculator_Command = new Command(ShowCalculator_Methode);
+            Calculator_RemoveLast_Command = new AsyncCommand(Calculator_RemoveLast_Methode);
+            Calculator_RemoveAll_Command = new AsyncCommand(Calculator_RemoveAll_Methode);
+            ShowCalculator_List_Command = new AsyncCommand(ShowCalculator_List_Methode);
 
             Period_Command = new AsyncCommand(Period_Popup);
 
             title = "Haushaltsbuch " + Current_Viewtime.Year + " " + Current_Viewtime.Month + "";
+
+            if (Preferences.Get("Filter_Activity", false) == true)
+            {
+                Filter_ActivityColor = Color.Green;
+            }
+            else
+            {
+                Filter_ActivityColor = Color.White;
+            }
         }
 
         private async Task Add_Methode()
@@ -957,6 +1062,17 @@ namespace EasyLife.PageModels
         {
             try
             {
+                List<Filter> filters = new List<Filter>()
+                    {
+                        new Filter(){Name="Transaktions_ID" , State = Preferences.Get("Search_For_Transaktion_ID", false) },
+                        new Filter(){Name="Auftrags_ID" , State = Preferences.Get("Search_For_Auftrags_ID", false) },
+                        new Filter(){Name="Datum" , State = Preferences.Get("Search_For_Datum", false) },
+                        new Filter(){Name="Zweck" , State = Preferences.Get("Search_For_Zweck", false) },
+                        new Filter(){Name="Notiz" , State = Preferences.Get("Search_For_Notiz", false) },
+                        new Filter(){Name="Betrag" , State = Preferences.Get("Search_For_Betrag", false) },
+                        new Filter(){Name="Quersuche" , State = Preferences.Get("Quersuche", false) }
+                    };
+
                 ActivityIndicator_IsVisible = true;
 
                 ActivityIndicator_IsRunning = true;
@@ -1012,15 +1128,68 @@ namespace EasyLife.PageModels
 
                         if (String.IsNullOrEmpty(Tag) == false)
                         {
-                            new_search_transaktioncontent = search_transaktionscontent.Where(s => s.Search_Indicator().ToUpper().Contains(Tag.ToUpper())).ToList();
+                            if(filters.Last().State == true)
+                            {
+                                new_search_transaktioncontent = search_transaktionscontent.Where(s => s.CrossSearch_Indicator(filters).ToUpper().Contains(Tag.ToUpper())).ToList();
 
-                            search_transaktionscontent = new_search_transaktioncontent;
+                                search_transaktionscontent = new_search_transaktioncontent;
+                            }
+                            else
+                            {
+                                foreach (Transaktion trans in search_transaktionscontent)
+                                {
+                                    bool contains = false;
+
+                                    if (trans.Search_Indicator(filters).Count() != 0)
+                                    {
+                                        foreach (string word in trans.Search_Indicator(filters))
+                                        {
+                                            if (Search_Text.ToUpper() == word.ToUpper())
+                                            {
+                                                contains = true;
+                                            }
+                                        }
+                                    }
+
+                                    if (contains == true)
+                                    {
+                                        new_search_transaktioncontent.Add(trans);
+                                    }
+                                }
+                            }
                         }
                     }
                 }
                 else
                 {
-                    search_transaktionscontent = transaktionscontent.Where(s => s.Search_Indicator().ToUpper().Contains(Search_Text.ToUpper())).ToList();
+                    if(filters.Last().State == true)
+                    {
+                        search_transaktionscontent = transaktionscontent.Where(s => s.CrossSearch_Indicator(filters).ToUpper().Contains(Search_Text.ToUpper())).ToList();
+                    }
+                    else
+                    {
+                        foreach(Transaktion trans in transaktionscontent)
+                        {
+                            bool contains = false;
+
+                            if(trans.Search_Indicator(filters).Count() != 0)
+                            {
+                                foreach(string word in trans.Search_Indicator(filters))
+                                {
+                                    if(Search_Text.ToUpper() == word.ToUpper())
+                                    {
+                                        contains = true;
+                                    }
+                                }
+                            }
+
+
+                            if(contains == true)
+                            {
+                                search_transaktionscontent.Add(trans);
+                            }
+                        }
+                    }
                 }
 
                 search_transaktionscontent = (from p in search_transaktionscontent orderby DateTime.ParseExact(p.Datumanzeige, "dddd, d.M.yyyy", new CultureInfo("de-DE")) descending select p).ToList();
@@ -1537,6 +1706,301 @@ namespace EasyLife.PageModels
                 Current_Viewtime = new Viewtime() { Year = DateTime.Now.Year, Month = DateTime.Now.ToString("MMMM", new CultureInfo("de-DE")) };
 
                 await Refresh();
+            }
+        }
+
+        public async Task Filter_Methode()
+        {
+            try
+            {
+                await Shell.Current.ShowPopupAsync(new Filter_Popup());
+
+                if (Preferences.Get("Filter_Activity", true) == true)
+                {
+                    Filter_ActivityColor = Color.Green;
+                }
+                else
+                {
+                    Filter_ActivityColor = Color.White;
+                }
+
+                await Refresh();
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
+        public void ShowCalculator_Methode()
+        {
+            if (Normal_State == true)
+            {
+                Normal_State = false;
+
+                Calculator_State = true;
+
+                Calculator_Value = "0";
+
+                Calculator_Evaluate = Color.Gray;
+            }
+            else
+            {
+                Normal_State = true;
+
+                Calculator_State = false;
+            }
+
+            Calculator_List.Clear();
+        }
+
+        public async Task ShowCalculator_List_Methode()
+        {
+            try
+            {
+                List<Transaktion> result = (List<Transaktion>)await Shell.Current.ShowPopupAsync(new CalculateListe_Popup(Calculator_List));
+
+                Calculator_List = result;
+
+                if (Calculator_List.Count() != 0)
+                {
+                    double sum = 0;
+
+                    foreach (Transaktion trans in Calculator_List)
+                    {
+                        sum += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                    }
+
+                    sum = Math.Round(sum, 2);
+
+                    Calculator_Value = sum.ToString().Replace(".", ",");
+
+                    if (sum < 0)
+                    {
+                        Calculator_Evaluate = Color.Red;
+                    }
+                    if (sum == 0)
+                    {
+                        Calculator_Evaluate = Color.White;
+                    }
+                    if (sum > 0)
+                    {
+                        Calculator_Evaluate = Color.Green;
+                    }
+                }
+                else
+                {
+                    Calculator_Value = "0";
+
+                    Calculator_Evaluate = Color.Gray;
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
+        public async Task Calculator_Addition_Methode(Transaktion input)
+        {
+            try
+            {
+                if(input != null)
+                {
+                    bool indicator = true;
+
+                    if(Calculator_List.Count() != 0)
+                    {
+                        foreach(Transaktion trans in Calculator_List)
+                        {
+                            if(trans.Id == input.Id)
+                            {
+                                indicator = false;
+                            }
+                        }
+                    }
+
+
+                    if (indicator == true)
+                    {
+                        Calculator_List.Add(input);
+
+                        if(Calculator_List.Count() != 0)
+                        {
+                            double sum = 0;
+
+                            foreach (Transaktion trans in Calculator_List)
+                            {
+                                sum += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                            }
+
+                            sum = Math.Round(sum,2);
+
+                            Calculator_Value = sum.ToString().Replace(".", ",");
+
+                            if (sum < 0)
+                            {
+                                Calculator_Evaluate = Color.Red;
+                            }
+                            if (sum == 0)
+                            {
+                                Calculator_Evaluate = Color.White;
+                            }
+                            if (sum > 0)
+                            {
+                                Calculator_Evaluate = Color.Green;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
+        public async Task Calculator_Substraction_Methode(Transaktion input)
+        {
+            try
+            {
+                if (input != null)
+                {
+                    bool indicator = false;
+
+                    if (Calculator_List.Count() != 0)
+                    {
+                        foreach (Transaktion trans in Calculator_List)
+                        {
+                            if (trans.Id == input.Id)
+                            {
+                                indicator = true;
+                            }
+                        }
+                    }
+
+                    if (indicator == true)
+                    {
+                        List<Transaktion> placeholder = new List<Transaktion>();
+
+                        placeholder.Clear();
+
+                        foreach (Transaktion trans in Calculator_List)
+                        {
+                            if (trans.Id != input.Id)
+                            {
+                                placeholder.Add(trans);
+                            }
+                        }
+
+                        Calculator_List = placeholder;
+
+                        if (Calculator_List.Count() != 0)
+                        {
+                            double sum = 0;
+
+                            foreach (Transaktion trans in Calculator_List)
+                            {
+                                sum += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                            }
+
+                            sum = Math.Round(sum, 2);
+
+                            Calculator_Value = sum.ToString().Replace(".", ",");
+
+                            if (sum < 0)
+                            {
+                                Calculator_Evaluate = Color.Red;
+                            }
+                            if (sum == 0)
+                            {
+                                Calculator_Evaluate = Color.White;
+                            }
+                            if (sum > 0)
+                            {
+                                Calculator_Evaluate = Color.Green;
+                            }
+                        }
+                        else
+                        {
+                            Calculator_Value = "0";
+
+                            Calculator_Evaluate = Color.Gray;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
+        public async Task Calculator_RemoveLast_Methode()
+        {
+            try
+            {
+                if(Calculator_List.Count() != 0)
+                {
+                    Calculator_List.RemoveAt(Calculator_List.Count()-1);
+
+                    if (Calculator_List.Count() != 0)
+                    {
+                        double sum = 0;
+
+                        foreach (Transaktion trans in Calculator_List)
+                        {
+                            sum += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                        }
+
+                        sum = Math.Round(sum, 2);
+
+                        Calculator_Value = sum.ToString().Replace(".", ",");
+
+                        if (sum < 0)
+                        {
+                            Calculator_Evaluate = Color.Red;
+                        }
+                        if (sum == 0)
+                        {
+                            Calculator_Evaluate = Color.White;
+                        }
+                        if (sum > 0)
+                        {
+                            Calculator_Evaluate = Color.Green;
+                        }
+                    }
+                    else
+                    {
+                        Calculator_Value = "0";
+
+                        Calculator_Evaluate = Color.Gray;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
+        public async Task Calculator_RemoveAll_Methode()
+        {
+            try
+            {
+                if (Calculator_List.Count() != 0)
+                {
+                    Calculator_List.Clear();
+
+                    Calculator_Value = "0";
+
+                    Calculator_Evaluate = Color.Gray;
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
             }
         }
 
