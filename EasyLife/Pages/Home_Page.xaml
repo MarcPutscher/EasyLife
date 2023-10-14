@@ -317,7 +317,7 @@
                             </ImageButton>
                             <ImageButton Command="{Binding Calculator_RemoveAll_Command}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent" Padding="5">
                                 <ImageButton.Source>
-                                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.ReplyAll}" Color="Orange"/>
+                                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.TrashCan}" Color="Orange"/>
                                 </ImageButton.Source>
                             </ImageButton>
                         </StackLayout>

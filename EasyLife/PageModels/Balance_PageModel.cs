@@ -752,6 +752,11 @@ namespace EasyLife.PageModels
             {
                 var result = await Shell.Current.ShowPopupAsync(new Viewtime_Popup(Current_Viewtime));
 
+                if(result == null)
+                {
+                    return;
+                }
+
                 Current_Viewtime = (Viewtime)result;
 
                 await Load();
