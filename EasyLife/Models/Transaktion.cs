@@ -1,7 +1,10 @@
 ﻿using SQLite;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
+using Xamarin.Essentials;
 
 namespace EasyLife.Models
 {
@@ -224,10 +227,125 @@ namespace EasyLife.Models
 
         void OnPropertyChanged(string name) => PropertyChanging?.Invoke(this,new PropertyChangingEventArgs(name));
 
-        public string Search_Indicator()
-        {
+        public Dictionary<string, string> Dicfilter = new Dictionary<string, string>();
 
-            return ""+Zweck+""+Notiz+""+Betrag+""+Id+ ""+Auftrags_id+""+Datumanzeige+""+Anzahl_an_Wiederholungen+""+Art_an_Wiederholungen+""+Speziell+"";
+        public string CrossSearch_Indicator( List<Filter> filters)
+        {
+            if (filters.Where(fil => fil.Name == "Quersuche").Count() != 0)
+            {
+                filters.RemoveAt(6);
+            }
+
+            Dicfilter.Clear();
+
+            Dicfilter.Add("Betrag", betrag + " €");
+
+            Dicfilter.Add("Datum", datum.ToString("dddd, d.MMMM.yyyy", new CultureInfo("de-DE")));
+
+            Dicfilter.Add("Zweck", zweck);
+
+            Dicfilter.Add("Notiz", notiz);
+
+            Dicfilter.Add("Transaktions_ID", id.ToString());
+
+            Dicfilter.Add("Auftrags_ID", auftrags_id);
+
+            List<bool> nofilter = new List<bool>();
+
+            string search_indicator = "";
+
+            foreach (Filter filter in filters)
+            {
+                nofilter.Add(filter.State);
+
+                if (filter.State == true)
+                {
+                    search_indicator += Dicfilter[filter.Name];
+                }
+            }
+
+            if (nofilter.Contains(true) == false)
+            {
+                search_indicator = "" + Betrag + "€" + Zweck + "" + Notiz + "" + Datumanzeige + "" + id.ToString() + "" + auftrags_id + "";
+            }
+
+            return search_indicator;
+        }
+
+        public List<string> Search_Indicator(List<Filter> filters)
+        {
+            if (filters.Where(fil => fil.Name == "Quersuche").Count() != 0)
+            {
+                filters.RemoveAt(6);
+            }
+
+            Dicfilter.Clear();
+
+            Dicfilter.Add("Betrag", betrag + " €");
+
+            Dicfilter.Add("Datum", datum.ToString("dddd, d.MMMM.yyyy", new CultureInfo("de-DE")));
+
+            Dicfilter.Add("Zweck", zweck);
+
+            Dicfilter.Add("Notiz", notiz);
+
+            Dicfilter.Add("Transaktions_ID", id.ToString());
+
+            Dicfilter.Add("Auftrags_ID", auftrags_id);
+
+            List<bool> nofilter = new List<bool>();
+
+            List<string> search_indicator = new List<string>();
+
+            char[] delimiterChars = { ' ', '-', '.', ':', '?','!','+','=','/','&','<','>','|' };
+
+            foreach (Filter filter in filters)
+            {
+                nofilter.Add(filter.State);
+
+                if (filter.State == true)
+                {
+                    if(Dicfilter[filter.Name] != null)
+                    {
+                        string[] placeholder = Dicfilter[filter.Name].Split(delimiterChars);
+
+                        if (placeholder.Length != 0)
+                        {
+                            foreach (string placeholderChar in placeholder)
+                            {
+                                if (placeholderChar != "")
+                                {
+                                    search_indicator.Add(placeholderChar);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (nofilter.Contains(true) == false)
+            {
+                foreach (Filter filter in filters)
+                {
+                    if (Dicfilter[filter.Name] != null)
+                    {
+                        string[] placeholder = Dicfilter[filter.Name].Split(delimiterChars);
+
+                        if (placeholder.Length != 0)
+                        {
+                            foreach (string placeholderChar in placeholder)
+                            {
+                                if (placeholderChar != "")
+                                {
+                                    search_indicator.Add(placeholderChar);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return search_indicator;
         }
     }
 }

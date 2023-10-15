@@ -47,8 +47,9 @@ namespace EasyLife.Services
 
             await Init();
 
+            string pseudoinput = input;
 
-            var result = await Get_specific_Suggestion(input.ToUpper());
+            var result = await Get_specific_Suggestion(pseudoinput.ToUpper());
 
             if(result!=null)
             {

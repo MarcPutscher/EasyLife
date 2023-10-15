@@ -460,36 +460,37 @@ namespace EasyLife.PageModels
 
                         foreach (Transaktion trans in all)
                         {
-                            bool validate = true;
+                            if(trans.Auftrags_id != null)
+                            {
+                                bool validate = true;
 
-                            if (int.Parse(item.Auftrags_id.Substring(0, item.Auftrags_id.IndexOf("."))) != int.Parse(trans.Auftrags_id.Substring(0, trans.Auftrags_id.IndexOf("."))))
-                            {
-                                validate = false;
-                            }
-                            if (item.Anzahl_an_Wiederholungen != trans.Anzahl_an_Wiederholungen)
-                            {
-                                validate = false;
-                            }
-                            if (item.Art_an_Wiederholungen != trans.Art_an_Wiederholungen)
-                            {
-                                validate = false;
-                            }
-                            if (item.Auftrags_Option != trans.Auftrags_Option)
-                            {
-                                validate = false;
-                            }
-                            if (item.Speziell != trans.Speziell)
-                            {
-                                validate = false;
-                            }
+                                if (int.Parse(item.Auftrags_id.Substring(0, item.Auftrags_id.IndexOf("."))) != int.Parse(trans.Auftrags_id.Substring(0, trans.Auftrags_id.IndexOf("."))))
+                                {
+                                    validate = false;
+                                }
+                                if (item.Anzahl_an_Wiederholungen != trans.Anzahl_an_Wiederholungen)
+                                {
+                                    validate = false;
+                                }
+                                if (item.Art_an_Wiederholungen != trans.Art_an_Wiederholungen)
+                                {
+                                    validate = false;
+                                }
+                                if (item.Auftrags_Option != trans.Auftrags_Option)
+                                {
+                                    validate = false;
+                                }
+                                if (item.Speziell != trans.Speziell)
+                                {
+                                    validate = false;
+                                }
 
-                            if (validate == true)
-                            {
-                                trans.Content_Visibility = true;
+                                if (validate == true)
+                                {
+                                    trans.Content_Visibility = true;
 
-                                await ContentService.Edit_Transaktion(trans);
-
-                                continue;
+                                    await ContentService.Edit_Transaktion(trans);
+                                }
                             }
                         }
 

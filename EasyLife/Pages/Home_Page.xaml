@@ -6,13 +6,14 @@
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     xmlns:pagemodels="clr-namespace:EasyLife.PageModels" 
     xmlns:cells="clr-namespace:EasyLife.Cells"
+    xmlns:fontAwesome="clr-namespace:FontAwesome" 
     x:Class="EasyLife.Pages.Home_Page"
     Title="{Binding Title}"
     BackgroundColor="{DynamicResource Page_Backgroundcolor}"
     x:DataType="pagemodels:Home_PageModel">
 
     <ContentPage.BindingContext>
-        <pagemodels:Home_PageModel />
+        <pagemodels:Home_PageModel/>
     </ContentPage.BindingContext>
 
     <ContentPage.Behaviors>
@@ -28,29 +29,29 @@
         <ResourceDictionary>
             <DataTemplate x:Key="Einnamen" x:DataType="{x:Null}">
                 <ViewCell>
-                    <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5">
-                        <SwipeView BackgroundColor="Transparent" Grid.Row="1" Grid.Column="1">
-                            <SwipeView.RightItems>
-                                <SwipeItems>
-                                    <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.EditCommand}" CommandParameter="{Binding .}">
-                                        <Frame Margin="5,0,0,0" BackgroundColor="{DynamicResource Edit_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Edit_Bordercolor}">
-                                            <Label Text="Bearbeiten" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Edit_Textcolor}" FontAttributes="Bold" FontSize="Medium"/>
-                                        </Frame>
-                                    </SwipeItemView>
-                                </SwipeItems>
-                            </SwipeView.RightItems>
-                            <SwipeView.LeftItems>
-                                <SwipeItems>
-                                    <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.RemoveCommand}" CommandParameter="{Binding .}">
-                                        <Frame Margin="0,0,5,0" BackgroundColor="{DynamicResource Remove_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Remove_Bordercolor}">
-                                            <Label Text="Löschen" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Remove_Textcolor}" FontAttributes="Bold" FontSize="Medium"/>
-                                        </Frame>
-                                    </SwipeItemView>
-                                </SwipeItems>
-                            </SwipeView.LeftItems>
-                            <cells:Income_Cell Grid.Row="1" Grid.Column="1"/>
-                        </SwipeView>
-                    </Grid>
+                        <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5">
+                            <SwipeView BackgroundColor="Transparent" Grid.Row="1" Grid.Column="1">
+                                <SwipeView.RightItems>
+                                    <SwipeItems>
+                                        <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.EditCommand}" CommandParameter="{Binding .}">
+                                            <Frame Margin="5,0,0,0" BackgroundColor="{DynamicResource Edit_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Edit_Bordercolor}">
+                                                <Label Text="Bearbeiten" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Edit_Textcolor}" FontAttributes="Bold" FontSize="Medium"/>
+                                            </Frame>
+                                        </SwipeItemView>
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
+                                <SwipeView.LeftItems>
+                                    <SwipeItems>
+                                        <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.RemoveCommand}" CommandParameter="{Binding .}">
+                                            <Frame Margin="0,0,5,0" BackgroundColor="{DynamicResource Remove_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Remove_Bordercolor}">
+                                                <Label Text="Löschen" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Remove_Textcolor}" FontAttributes="Bold" FontSize="Medium"/>
+                                            </Frame>
+                                        </SwipeItemView>
+                                    </SwipeItems>
+                                </SwipeView.LeftItems>
+                                <cells:Income_Cell Grid.Row="1" Grid.Column="1"/>
+                            </SwipeView>
+                        </Grid>
                 </ViewCell>
             </DataTemplate>
             <DataTemplate x:Key="Ausgaben" x:DataType="{x:Null}">
@@ -81,6 +82,77 @@
                 </ViewCell>
             </DataTemplate>
             <cells:Transaktions_Template_Selector x:Key="Transaktions_Selector" Einnahmen="{StaticResource Einnamen}" Ausgaben="{StaticResource Ausgaben}"/>
+            <DataTemplate x:Key="Rechnung_Einnamen" x:DataType="{x:Null}">
+                <ViewCell>
+                    <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5" IsVisible="{Binding Normal_State}">
+                        <SwipeView BackgroundColor="Transparent" Grid.Row="1" Grid.Column="1">
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Calculator_Addition_Command}" CommandParameter="{Binding .}">
+                                        <Frame Margin="5,0,0,0" BackgroundColor="{DynamicResource Edit_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Edit_Bordercolor}">
+                                            <Image VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                                                <Image.Source>
+                                                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.SquarePlus}" Color="{DynamicResource Edit_Textcolor}"/>
+                                                </Image.Source>
+                                            </Image>                                        
+                                        </Frame>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <SwipeView.LeftItems>
+                                <SwipeItems>
+                                    <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Calculator_Substraction_Command}" CommandParameter="{Binding .}">
+                                        <Frame Margin="0,0,5,0" BackgroundColor="{DynamicResource Remove_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Remove_Bordercolor}">
+                                            <Image VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                                                <Image.Source>
+                                                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.SquareMinus}" Color="{DynamicResource Remove_Textcolor}"/>
+                                                </Image.Source>
+                                            </Image>
+                                        </Frame>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.LeftItems>
+                            <cells:Income_Cell Grid.Row="1" Grid.Column="1"/>
+                        </SwipeView>
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:Key="Rechnung_Ausgaben" x:DataType="{x:Null}">
+                <ViewCell >
+                    <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5">
+                        <SwipeView BackgroundColor="Transparent" Grid.Row="1" Grid.Column="1">
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Calculator_Addition_Command}" CommandParameter="{Binding .}">
+                                        <Frame Margin="5,0,0,0" BackgroundColor="{DynamicResource Edit_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Edit_Bordercolor}">
+                                            <Image VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                                                <Image.Source>
+                                                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.SquarePlus}" Color="{DynamicResource Edit_Textcolor}"/>
+                                                </Image.Source>
+                                            </Image>
+                                        </Frame>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <SwipeView.LeftItems>
+                                <SwipeItems>
+                                    <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Calculator_Substraction_Command}" CommandParameter="{Binding .}">
+                                        <Frame Margin="0,0,5,0" BackgroundColor="{DynamicResource Remove_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Remove_Bordercolor}">
+                                            <Image VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                                                <Image.Source>
+                                                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.SquareMinus}" Color="{DynamicResource Remove_Textcolor}"/>
+                                                </Image.Source>
+                                            </Image>
+                                        </Frame>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.LeftItems>
+                            <cells:Outcome_Cell Grid.Row="1" Grid.Column="1"/>
+                        </SwipeView>
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+            <cells:Transaktions_Template_Selector x:Key="Transaktions_Selector_for_Calculator" Einnahmen="{StaticResource Rechnung_Einnamen}" Ausgaben="{StaticResource Rechnung_Ausgaben}"/>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -89,18 +161,26 @@
         <ToolbarItem Order="Secondary" Text="Zeitraum"  Command="{Binding Period_Command}"/>
         <ToolbarItem Order="Secondary" Text="Ansicht"  Command="{Binding GroupingOption_Command}"/>
         <ToolbarItem Order="Secondary" Text="Suchen"  Command="{Binding Set_Searchbar_Visibility_Command}"/>
+        <ToolbarItem Order="Secondary" Text="Rechnen" Command="{Binding ShowCalculator_Command}"/>
     </ContentPage.ToolbarItems>
 
     <StackLayout>
-        <StackLayout>
+        <StackLayout Orientation="Vertical">
             <xct:Expander>
                 <xct:Expander.Header>
-                    <SearchBar Placeholder="Suchen" Text="{Binding Search_Text}" BackgroundColor="DimGray" IsVisible="{Binding Serchbar_Visibility}">
-                        <SearchBar.Behaviors>
-                            <xct:EventToCommandBehavior EventName="SearchButtonPressed" Command="{Binding Search_Command}"/>
-                            <xct:EventToCommandBehavior EventName="TextChanged" Command="{Binding Search_Command2}"/>
-                        </SearchBar.Behaviors>
-                    </SearchBar>
+                    <Grid Padding="0">
+                        <SearchBar Placeholder="Suchen" Text="{Binding Search_Text}" BackgroundColor="DimGray" IsVisible="{Binding Serchbar_Visibility}">
+                            <SearchBar.Behaviors>
+                                <xct:EventToCommandBehavior EventName="SearchButtonPressed" Command="{Binding Search_Command}"/>
+                                <xct:EventToCommandBehavior EventName="TextChanged" Command="{Binding Search_Command2}"/>
+                            </SearchBar.Behaviors>
+                        </SearchBar>
+                        <ImageButton BackgroundColor="DimGray" Padding="10" IsVisible="{Binding Serchbar_Visibility}" HorizontalOptions="End" Command="{Binding Filter_Command}">
+                            <ImageButton.Source>
+                                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Filter}" Color="{Binding Filter_ActivityColor}"/>
+                            </ImageButton.Source>
+                        </ImageButton>
+                    </Grid>
                 </xct:Expander.Header>
                 <xct:Expander.Behaviors>
                     <xct:EventToCommandBehavior EventName="Tapped" Command="{Binding The_Searchbar_is_Tapped}"/>
@@ -118,8 +198,7 @@
             x:Name="SuggestionSwipeView"
             ItemsSource="{Binding SuggestionCollection}"
             IsGroupingEnabled="false"
-            SelectionMode="{Binding Suggestion_SelectedMode}"
-            SelectedItem="{Binding Selected_Suggestion}"
+            SelectionMode="None"
             SeparatorVisibility="None"
             IsVisible="{Binding List_of_Suggestion_Status}"
             BackgroundColor="{DynamicResource Page_Backgroundcolor}"
@@ -131,17 +210,18 @@
                             <Grid ColumnDefinitions="50,20" Padding="0" Grid.Column="2">
                                 <Button Grid.Column="0" BackgroundColor="{DynamicResource Page_Backgroundcolor}" Text="X" TextColor="Black" HorizontalOptions="Fill" Command="{Binding Source={x:Reference SuggestionSwipeView}, Path=BindingContext.Delet_Suggestion}" CommandParameter="{Binding .}"/>
                             </Grid>
-                            <Label Text="{Binding Suggestion_value}" FontSize="Body" TextColor="White" HeightRequest="10" VerticalTextAlignment="Center" Grid.Column="1" BackgroundColor="{DynamicResource Page_Backgroundcolor}"/>
+                            <Button Text="{Binding Suggestion_value}" TextColor="White" FontSize="Body" TextTransform="None" HeightRequest="10" Padding="0" HorizontalOptions= "StartAndExpand" Grid.Column="1" BackgroundColor="{DynamicResource Page_Backgroundcolor}" Command="{Binding Source={x:Reference SuggestionSwipeView}, Path=BindingContext.Select_Suggestion}" CommandParameter="{Binding .}"/>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
 
-        <StackLayout
+        <StackLayout IsVisible="{Binding Normal_State}">
+            <StackLayout
             IsVisible="{Binding List_of_Transaktion_Status}"
             Padding="0">
-            <ListView
+                <ListView
             CachingStrategy = "RecycleElement"
             IsEnabled="True"
             RefreshCommand="{Binding RefreshCommand}"
@@ -156,35 +236,108 @@
             SelectionMode="None"
             SeparatorVisibility="None"
             ItemTemplate="{StaticResource Transaktions_Selector}">
-                <ListView.GroupHeaderTemplate>
-                    <DataTemplate x:DataType="{x:Null}">
-                        <ViewCell Height = "30" >
-                            <StackLayout VerticalOptions="Start" Padding="1">
-                                <Label Text = "{Binding Key}" TextColor="{DynamicResource Grouping_Textcolor}" VerticalOptions="Center" HorizontalOptions="Center" FontSize="15" FontAttributes="Bold"/>
+                    <ListView.GroupHeaderTemplate>
+                        <DataTemplate x:DataType="{x:Null}">
+                            <ViewCell Height = "30" >
+                                <StackLayout VerticalOptions="Start" Padding="1">
+                                    <Label Text = "{Binding Key}" TextColor="{DynamicResource Grouping_Textcolor}" VerticalOptions="Center" HorizontalOptions="Center" FontSize="15" FontAttributes="Bold"/>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.GroupHeaderTemplate>
+                </ListView>
+                <Grid ColumnDefinitions="*,Auto,*" HeightRequest="80" Padding="0" Margin="0,-7,0,5">
+                    <StackLayout Grid.Column="1" Margin="0,0,0,10">
+                        <Frame IsVisible="{Binding IsSaldoVisibility}" CornerRadius="50"  Padding="5" BackgroundColor="{DynamicResource Saldo_Backgroundcolor}" HorizontalOptions="Center" HasShadow="True" xct:ShadowEffect.Color="{Binding Saldo_Evaluate}">
+                            <StackLayout>
+                                <StackLayout Orientation="Horizontal" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Label Text="Stand : " TextColor="{DynamicResource Saldo_Textcolor}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    <Label Text="{Binding Saldo_Value}" TextColor="{Binding Saldo_Evaluate}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    <Label Text="€" TextColor="{Binding Saldo_Evaluate}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center" Margin="20,0,20,0">
+                                    <Label Text="{Binding Saldo_Date}" TextColor="{DynamicResource Saldo_Textcolor}" FontSize="Subtitle" FontAttributes="None" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center" />
+                                </StackLayout>
                             </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.GroupHeaderTemplate>
-            </ListView>
-            <Grid ColumnDefinitions="*,Auto,*" HeightRequest="80" Padding="0" Margin="0,-7,0,5">
-                <Frame IsVisible="{Binding IsSaldoVisibility}" CornerRadius="50"  Padding="10" Grid.Column="1" HeightRequest="50" BackgroundColor="{DynamicResource Saldo_Backgroundcolor}" HorizontalOptions="Center" HasShadow="True" xct:ShadowEffect.Color="{Binding Saldo_Evaluate}">
-                    <StackLayout>
-                        <StackLayout Orientation="Horizontal" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
-                            <Label Text="Stand : " TextColor="{DynamicResource Saldo_Textcolor}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
-                            <Label Text="{Binding Saldo_Value}" TextColor="{Binding Saldo_Evaluate}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
-                            <Label Text="€" TextColor="{Binding Saldo_Evaluate}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
-                        </StackLayout>
-                        <StackLayout Orientation="Horizontal" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center" Margin="20,0,20,0">
-                            <Label Text="{Binding Saldo_Date}" TextColor="{DynamicResource Saldo_Textcolor}" FontSize="Subtitle" FontAttributes="None" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center" />
-                        </StackLayout>
+                        </Frame>
                     </StackLayout>
-                </Frame>
-                <Grid ColumnDefinitions="*,Auto,10" Grid.Column="2" Padding="0" VerticalOptions="Center" HeightRequest="80" Margin="0,5,0,0">
-                    <Button Command="{Binding Add_Command}" Grid.Column="1" FontSize="30" Text="+" TextColor="Orange" VerticalOptions="Center" HorizontalOptions="Center" CornerRadius="60" WidthRequest="55" HeightRequest="54" Padding="0"/>
+                    <Grid ColumnDefinitions="*,Auto,10" Grid.Column="2" Padding="0" VerticalOptions="Center" HeightRequest="80" Margin="0,5,0,0">
+                        <Button Command="{Binding Add_Command}" Grid.Column="1" FontSize="30" Text="+" TextColor="Orange" VerticalOptions="Center" HorizontalOptions="Center" CornerRadius="60" WidthRequest="55" HeightRequest="54" Padding="0"/>
+                    </Grid>
                 </Grid>
-            </Grid>
+            </StackLayout>
         </StackLayout>
-
+        
+        <StackLayout IsVisible="{Binding Calculator_State}">
+            <StackLayout
+            IsVisible="{Binding List_of_Transaktion_Status}"
+            Padding="0">
+                <ListView
+            CachingStrategy = "RecycleElement"
+            IsEnabled="True"
+            RefreshCommand="{Binding RefreshCommand}"
+            IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+            IsPullToRefreshEnabled="True"
+            RefreshControlColor="{DynamicResource Refresh_Color}"    
+            HasUnevenRows="True"
+            x:Name="ContextSwipeView_Calculator"
+            ItemsSource="{Binding transaktionGroups}"
+            IsGroupingEnabled="True"
+            GroupDisplayBinding="{Binding Key}"
+            SelectionMode="None"
+            SeparatorVisibility="None"
+            ItemTemplate="{StaticResource Transaktions_Selector_for_Calculator}">
+                    <ListView.GroupHeaderTemplate>
+                        <DataTemplate x:DataType="{x:Null}">
+                            <ViewCell Height = "30" >
+                                <StackLayout VerticalOptions="Start" Padding="1">
+                                    <Label Text = "{Binding Key}" TextColor="{DynamicResource Grouping_Textcolor}" VerticalOptions="Center" HorizontalOptions="Center" FontSize="15" FontAttributes="Bold"/>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.GroupHeaderTemplate>
+                </ListView>
+                <Grid ColumnDefinitions="*,Auto,*" HeightRequest="80" Padding="0" Margin="0,-7,0,5">
+                    <Frame CornerRadius="50"  Padding="10" Margin="0,0,0,5" Grid.Column="1" BackgroundColor="{DynamicResource Saldo_Backgroundcolor}" HorizontalOptions="Center" HasShadow="True" xct:ShadowEffect.Color="{Binding Saldo_Evaluate}">
+                        <StackLayout IsVisible="{Binding Calculator_State}" VerticalOptions="Center">
+                            <StackLayout Orientation="Horizontal" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                                <Label Text="Summe : " TextColor="{DynamicResource Saldo_Textcolor}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Label Text="{Binding Calculator_Value}" TextColor="{Binding Calculator_Evaluate}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Label Text="€" TextColor="{Binding Calculator_Evaluate}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </Frame>
+                    <Grid ColumnDefinitions="*,Auto,10" Grid.Column="2" Padding="0" VerticalOptions="Center" HeightRequest="80" Margin="0,5,0,0">
+                        <StackLayout Orientation="Horizontal" Spacing="20" Grid.Column="1">
+                            <ImageButton Command="{Binding Calculator_RemoveLast_Command}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent" Padding="5">
+                                <ImageButton.Source>
+                                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Reply}" Color="Orange"/>
+                                </ImageButton.Source>
+                            </ImageButton>
+                            <ImageButton Command="{Binding Calculator_RemoveAll_Command}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent" Padding="5">
+                                <ImageButton.Source>
+                                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.TrashCan}" Color="Orange"/>
+                                </ImageButton.Source>
+                            </ImageButton>
+                        </StackLayout>
+                    </Grid>
+                    <Grid Grid.Column="0" ColumnDefinitions="10,Auto,*" Padding="0" VerticalOptions="Center" HeightRequest="80" Margin="0,5,0,0">
+                        <StackLayout Orientation="Horizontal" Spacing="20" Grid.Column="1">
+                            <ImageButton Command="{Binding ShowCalculator_Command}" Grid.Column="1" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent" Padding="5">
+                                <ImageButton.Source>
+                                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.CircleXmark}" Color="Red"/>
+                                </ImageButton.Source>
+                            </ImageButton>
+                            <ImageButton Command="{Binding ShowCalculator_List_Command}" Grid.Column="1" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent" Padding="5">
+                                <ImageButton.Source>
+                                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.TableList}" Color="Gray"/>
+                                </ImageButton.Source>
+                            </ImageButton>
+                        </StackLayout>
+                    </Grid>
+                </Grid>
+            </StackLayout>
+        </StackLayout>
 
         <Grid RowDefinitions="300,100,*" IsVisible="{Binding Kein_Ergebnis_Suggestion_Status}" BackgroundColor="{DynamicResource Page_Backgroundcolor}" VerticalOptions="FillAndExpand">
             <Label Grid.Row="1" Text="Keine Suchbegriff vorhanden!" TextColor="Black" FontSize="20" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="Center"/>
