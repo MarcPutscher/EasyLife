@@ -198,8 +198,7 @@
             x:Name="SuggestionSwipeView"
             ItemsSource="{Binding SuggestionCollection}"
             IsGroupingEnabled="false"
-            SelectionMode="{Binding Suggestion_SelectedMode}"
-            SelectedItem="{Binding Selected_Suggestion}"
+            SelectionMode="None"
             SeparatorVisibility="None"
             IsVisible="{Binding List_of_Suggestion_Status}"
             BackgroundColor="{DynamicResource Page_Backgroundcolor}"
@@ -211,7 +210,7 @@
                             <Grid ColumnDefinitions="50,20" Padding="0" Grid.Column="2">
                                 <Button Grid.Column="0" BackgroundColor="{DynamicResource Page_Backgroundcolor}" Text="X" TextColor="Black" HorizontalOptions="Fill" Command="{Binding Source={x:Reference SuggestionSwipeView}, Path=BindingContext.Delet_Suggestion}" CommandParameter="{Binding .}"/>
                             </Grid>
-                            <Label Text="{Binding Suggestion_value}" FontSize="Body" TextColor="White" HeightRequest="10" VerticalTextAlignment="Center" Grid.Column="1" BackgroundColor="{DynamicResource Page_Backgroundcolor}"/>
+                            <Button Text="{Binding Suggestion_value}" TextColor="White" FontSize="Body" TextTransform="None" HeightRequest="10" Padding="0" HorizontalOptions= "StartAndExpand" Grid.Column="1" BackgroundColor="{DynamicResource Page_Backgroundcolor}" Command="{Binding Source={x:Reference SuggestionSwipeView}, Path=BindingContext.Select_Suggestion}" CommandParameter="{Binding .}"/>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>
