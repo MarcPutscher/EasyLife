@@ -14,37 +14,30 @@
         <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
             <Label Text="Suchfilter" TextColor="White" FontSize="30" FontAttributes="Bold" HorizontalTextAlignment="Center" TextDecorations="Underline"/>
             <Frame Padding="20" CornerRadius="20" BackgroundColor="Gray" BorderColor="Black" VerticalOptions="Center" HorizontalOptions="Center" xct:ShadowEffect.Color="Blue">
-                <StackLayout>
-                    <StackLayout Orientation="Horizontal">
-                        <Label Text="Betrag" TextColor="White" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start"/>
-                        <Switch x:Name="BetragSwitch" HorizontalOptions="End"/>
-                    </StackLayout>
-                    <StackLayout Orientation="Horizontal">
-                        <Label Text="Notiz" TextColor="White" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start"/>
-                        <Switch x:Name="NotizSwitch" HorizontalOptions="End"/>
-                    </StackLayout>
-                    <StackLayout Orientation="Horizontal">
-                        <Label Text="Zweck" TextColor="White" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start"/>
-                        <Switch x:Name="ZweckSwitch" HorizontalOptions="End"/>
-                    </StackLayout>
-                    <StackLayout Orientation="Horizontal">
-                        <Label Text="Datum" TextColor="White" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start"/>
-                        <Switch x:Name="DatumSwitch" HorizontalOptions="End"/>
-                    </StackLayout>
-                    <StackLayout Orientation="Horizontal">
-                        <Label Text="Transaktions-ID" TextColor="White" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start"/>
-                        <Switch x:Name="TransaktionsIDSwitch" HorizontalOptions="End"/>
-                    </StackLayout>
-                    <StackLayout Orientation="Horizontal">
-                        <Label Text="Auftrags-ID" TextColor="White" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start"/>
-                        <Switch x:Name="AuftragsIDSwitch" HorizontalOptions="End"/>
-                    </StackLayout>
-                    <Frame BackgroundColor="Black" HorizontalOptions="Fill" HeightRequest="1" Padding="0" VerticalOptions="Center"/>
-                    <StackLayout Orientation="Horizontal">
-                        <Label Text="Quersuche" TextColor="White" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start"/>
-                        <Switch x:Name="QuersucheSwitch" HorizontalOptions="End"/>
-                    </StackLayout>
-                </StackLayout>
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="Betrag" TextColor="White" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start" Grid.Column="0" Grid.Row="0"/>
+                    <Switch x:Name="BetragSwitch" Grid.Column="1" Grid.Row="0"/>
+                    
+                    <Label Text="Notiz" TextColor="White" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start" Grid.Column="0" Grid.Row="1"/>
+                    <Switch x:Name="NotizSwitch" HorizontalOptions="End" Grid.Column="1" Grid.Row="1"/>
+                    
+                    <Label Text="Zweck" TextColor="White" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start" Grid.Column="0" Grid.Row="2"/>
+                    <Switch x:Name="ZweckSwitch" HorizontalOptions="End" Grid.Column="1" Grid.Row="2"/>
+                    
+                    <Label Text="Datum" TextColor="White" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start" Grid.Column="0" Grid.Row="3"/>
+                    <Switch x:Name="DatumSwitch" HorizontalOptions="End" Grid.Column="1" Grid.Row="3"/>
+                    
+                    <Label Text="Transaktions-ID" TextColor="White" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start" Grid.Column="0" Grid.Row="4"/>
+                    <Switch x:Name="TransaktionsIDSwitch" HorizontalOptions="End" Grid.Column="1" Grid.Row="4"/>
+                    
+                    <Label Text="Auftrags-ID" TextColor="White" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start" Grid.Column="0" Grid.Row="5"/>
+                    <Switch x:Name="AuftragsIDSwitch" HorizontalOptions="End" Grid.Column="1" Grid.Row="5"/>
+                    
+                    <Frame BackgroundColor="Black" HorizontalOptions="Fill" HeightRequest="1" Padding="0" VerticalOptions="Center" Grid.Row="6"/>
+                    
+                    <Label Text="Quersuche" TextColor="White" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start" Grid.Column="0" Grid.Row="7"/>
+                    <Switch x:Name="QuersucheSwitch" HorizontalOptions="End" Grid.Column="1" Grid.Row="7"/>
+                </Grid>
             </Frame>
         </StackLayout>
     </StackLayout>
