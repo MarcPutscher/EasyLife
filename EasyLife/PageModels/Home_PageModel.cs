@@ -80,6 +80,8 @@ namespace EasyLife.PageModels
 
         public AsyncCommand<Suggestion> Delet_Suggestion { get; }
 
+        public AsyncCommand<Suggestion> Select_Suggestion { get; }
+
         public AsyncCommand Period_Command { get; }
 
         public AsyncCommand Filter_Command {  get; }
@@ -111,46 +113,6 @@ namespace EasyLife.PageModels
                 serchbar_visibility = value; RaisePropertyChanged();
             }
         }
-
-        public Suggestion selected_suggestion;
-        public Suggestion Selected_Suggestion
-        {
-            get { return selected_suggestion; }
-            set
-            {
-                if (selected_suggestion == value)
-                {
-                    return;
-                }
-
-                selected_suggestion = value;
-
-                if (selected_suggestion != null)
-                {
-                    Search_Text = selected_suggestion.Suggestion_value;
-                    Selected_Suggestion = null;
-                    Suggestion_SelectedMode = ListViewSelectionMode.None;
-                }
-            }
-        }
-
-        public ListViewSelectionMode suggestion_selectedMode = ListViewSelectionMode.Single;
-        public ListViewSelectionMode Suggestion_SelectedMode
-        {
-            get { return suggestion_selectedMode; }
-            set
-            {
-
-                if (suggestion_selectedMode == value)
-                {
-                    return;
-                }
-
-                suggestion_selectedMode = value; RaisePropertyChanged();
-                Suggestion_SelectedMode = ListViewSelectionMode.Single;
-            }
-        }
-
 
         public Viewtime current_viewtime = new Viewtime() { Year = DateTime.Now.Year, Month = DateTime.Now.ToString("MMMM", new CultureInfo("de-DE")) };
         public Viewtime Current_Viewtime
@@ -476,6 +438,7 @@ namespace EasyLife.PageModels
             Search_Command = new AsyncCommand(Search_Methode);
             Search_Command2 = new AsyncCommand(Search_Methode2);
             Delet_Suggestion = new AsyncCommand<Suggestion>(Delet_Suggestion_Methode);
+            Select_Suggestion = new AsyncCommand<Suggestion>(Select_Suggestion_Methode);
             Set_Searchbar_Visibility_Command = new AsyncCommand(Set_Searchbar_Visibility_MethodeAsync);
             The_Searchbar_is_Tapped = new AsyncCommand(The_Searchbar_is_Tapped_Methode);
             Add_Command = new AsyncCommand(Add_Methode);
@@ -1062,6 +1025,8 @@ namespace EasyLife.PageModels
         {
             try
             {
+                string pseudosearchtext = Search_Text;
+
                 List<Filter> filters = new List<Filter>()
                     {
                         new Filter(){Name="Transaktions_ID" , State = Preferences.Get("Search_For_Transaktion_ID", false) },
@@ -1099,9 +1064,9 @@ namespace EasyLife.PageModels
 
                 search_transaktionscontent.Clear();
 
-                if (Search_Text.Contains("-") == true)
+                if (pseudosearchtext.Contains("-") == true)
                 {
-                    string New_Search_Text = Search_Text;
+                    string New_Search_Text = pseudosearchtext;
 
                     string Tag = null;
 
@@ -1121,7 +1086,7 @@ namespace EasyLife.PageModels
                         }
                         else
                         {
-                            Tag = New_Search_Text.Substring(0, New_Search_Text.IndexOf("-"));
+                            Tag = New_Search_Text.Substring(0, New_Search_Text.IndexOf("-")).Trim();
 
                             New_Search_Text = New_Search_Text.Substring(New_Search_Text.IndexOf("-") + 1);
                         }
@@ -1144,7 +1109,7 @@ namespace EasyLife.PageModels
                                     {
                                         foreach (string word in trans.Search_Indicator(filters))
                                         {
-                                            if (Search_Text.ToUpper() == word.ToUpper())
+                                            if (Tag.ToUpper() == word.ToUpper())
                                             {
                                                 contains = true;
                                             }
@@ -1164,7 +1129,7 @@ namespace EasyLife.PageModels
                 {
                     if(filters.Last().State == true)
                     {
-                        search_transaktionscontent = transaktionscontent.Where(s => s.CrossSearch_Indicator(filters).ToUpper().Contains(Search_Text.ToUpper())).ToList();
+                        search_transaktionscontent = transaktionscontent.Where(s => s.CrossSearch_Indicator(filters).ToUpper().Contains(pseudosearchtext.ToUpper().Trim())).ToList();
                     }
                     else
                     {
@@ -1176,7 +1141,7 @@ namespace EasyLife.PageModels
                             {
                                 foreach(string word in trans.Search_Indicator(filters))
                                 {
-                                    if(Search_Text.ToUpper() == word.ToUpper())
+                                    if(pseudosearchtext.ToUpper().Trim() == word.ToUpper())
                                     {
                                         contains = true;
                                     }
@@ -1388,6 +1353,23 @@ namespace EasyLife.PageModels
                         Kein_Ergebnis_Suggestion_Status = true;
                         List_of_Suggestion_Status = false;
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
+        public async Task Select_Suggestion_Methode(Suggestion input)
+        {
+            try
+            {
+                if (input != null)
+                {
+                    Search_Text = input.Suggestion_value;
+
+                    await Search_Methode();
                 }
             }
             catch (Exception ex)
