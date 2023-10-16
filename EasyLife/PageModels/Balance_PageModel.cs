@@ -649,7 +649,7 @@ namespace EasyLife.PageModels
                     return true;
                 }
 
-                List<Zweck> count = new List<Zweck>(await ReasonService.Get_all_Reason());
+                List<Zweck> count = new List<Zweck>(await ReasonService.Get_Enable_ReasonList());
 
                 if ((Bilanceprofile.Outcome_Account.Count + Bilanceprofile.Income_Account.Count + Bilanceprofile.Outcome_Cash.Count + Bilanceprofile.Income_Cash.Count + Bilanceprofile.Ignore.Count) != count.Count)
                 {
@@ -674,7 +674,16 @@ namespace EasyLife.PageModels
                 {
                     var zwecklist = await ReasonService.Get_all_Reason();
 
-                    Bilanceprofile = await BalanceService.Get_specific_Balanceprofile(1);
+                    var result0 = await Check_for_existing_Balanceprofile();
+
+                    if (result0 == -1)
+                    {
+                        return;
+                    }
+                    if (result0 == 2)
+                    {
+                        return;
+                    }
 
                     List<string> initreasons = new List<string>();
 
@@ -694,7 +703,40 @@ namespace EasyLife.PageModels
                     {
                         if (initreasons.Contains(zw.Benutzerdefinierter_Zweck) == false)
                         {
-                            openreason.Add(zw.Benutzerdefinierter_Zweck);
+                            if(zw.Reason_Visibility == true)
+                            {
+                                openreason.Add(zw.Benutzerdefinierter_Zweck);
+                            }
+                        }
+                        else
+                        {
+                            if (zw.Reason_Visibility == false)
+                            {
+                                if (Bilanceprofile.Outcome_Account.Contains(zw.Benutzerdefinierter_Zweck) == true)
+                                {
+                                    Bilanceprofile.Outcome_Account.Remove(zw.Benutzerdefinierter_Zweck);
+                                }
+
+                                if (Bilanceprofile.Income_Account.Contains(zw.Benutzerdefinierter_Zweck) == true)
+                                {
+                                    Bilanceprofile.Income_Account.Remove(zw.Benutzerdefinierter_Zweck);
+                                }
+
+                                if (Bilanceprofile.Outcome_Cash.Contains(zw.Benutzerdefinierter_Zweck) == true)
+                                {
+                                    Bilanceprofile.Outcome_Cash.Remove(zw.Benutzerdefinierter_Zweck);
+                                }
+
+                                if (Bilanceprofile.Income_Cash.Contains(zw.Benutzerdefinierter_Zweck) == true)
+                                {
+                                    Bilanceprofile.Income_Cash.Remove(zw.Benutzerdefinierter_Zweck);
+                                }
+
+                                if (Bilanceprofile.Ignore.Contains(zw.Benutzerdefinierter_Zweck) == true)
+                                {
+                                    Bilanceprofile.Ignore.Remove(zw.Benutzerdefinierter_Zweck);
+                                }
+                            }
                         }
                     }
 
@@ -852,7 +894,7 @@ namespace EasyLife.PageModels
 
                 foreach (Balanceprofile bp in Bilanceprofiles_List)
                 {
-                    balanceprofile_list.Add("Bilanzprofil "+bp.Id);
+                    balanceprofile_list.Add("Bilanzprofil "+bp.Id+"");
                 }
 
                 balanceprofile_list_string = balanceprofile_list.ToArray();
@@ -926,7 +968,7 @@ namespace EasyLife.PageModels
 
                         foreach (Stackholderhelper sh in sortetinitreasons)
                         {
-                            reason += sh.Substring+"\n";
+                            reason += sh.Substring+"\n\n";
                         }
 
                         var result1 = await Shell.Current.DisplayAlert("Bilanzprofil "+ ChoosenBilanceprofil.Id+"",reason, "Auswählen","Zurück");
@@ -941,7 +983,7 @@ namespace EasyLife.PageModels
                         }
                         else
                         {
-                            indikator = true;
+                            indikator = false;
                         }
                     }
                 }
