@@ -69,6 +69,17 @@ namespace EasyLife.Models
             }
         }
 
+        List<string> ignore = new List<string>();
+        public List<string> Ignore
+        {
+            get { return ignore; }
+            set
+            {
+                if (Ignore == value)
+                    return;
+                ignore = value; OnPropertyChanged(nameof(Ignore));
+            }
+        }
 
         public event PropertyChangingEventHandler PropertyChanging;
 

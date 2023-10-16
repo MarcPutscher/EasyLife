@@ -24,6 +24,8 @@ using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
+using static SQLite.SQLite3;
 using Cell = iText.Layout.Element.Cell;
 using Document = iText.Layout.Document;
 using TextAlignment = iText.Layout.Properties.TextAlignment;
@@ -44,7 +46,7 @@ namespace EasyLife.PageModels
 
             Load_Command = new AsyncCommand(Load);
             Period_Command = new AsyncCommand(Period_Popup);
-            Edit_Blanceprofile_Command = new AsyncCommand(Edit_Blanceprofile_Methode);
+            Settings_Command = new AsyncCommand(Settings_Methode);
             Create_PDF_Command = new AsyncCommand(Create_PDF_Methode);
         }
 
@@ -231,14 +233,25 @@ namespace EasyLife.PageModels
         {
             try
             {
-                if (await Check_Balanceprofile() == true)
+                int result0 = await Check_for_existing_Balanceprofile();
+
+                if(result0 == 0)
                 {
                     await Add_to_Balanceprofile();
                 }
-                else
+                if(result0 == -1)
+                {
+                    return;
+                }
+                if(result0 == 1)
+                {
+                    await Add_to_Balanceprofile();
+                }
+                if(result0 == 2)
                 {
                     await Create_Balanceprofile();
                 }
+
 
                 List<Stackholder> stackholderList = new List<Stackholder>();
 
@@ -266,10 +279,10 @@ namespace EasyLife.PageModels
 
                 List<List<string>> balanceprofile = new List<List<string>>
                 {
-                    Balanceprofile.Outcome_Account,
-                    Balanceprofile.Income_Account,
-                    Balanceprofile.Outcome_Cash,
-                    Balanceprofile.Income_Cash
+                    Bilanceprofile.Outcome_Account,
+                    Bilanceprofile.Income_Account,
+                    Bilanceprofile.Outcome_Cash,
+                    Bilanceprofile.Income_Cash
                 };
 
                 List<ObservableRangeCollection<Stackholder>> bundle = new List<ObservableRangeCollection<Stackholder>>
@@ -557,15 +570,88 @@ namespace EasyLife.PageModels
             }
         }
 
+        public async Task Get_BalanceprofileList()
+        {
+            try
+            {
+                Bilanceprofiles_List.Clear();
+
+                Bilanceprofiles_List.AddRange(await BalanceService.Get_all_Balanceprofile());
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
+        public async Task<int> Check_for_existing_Balanceprofile()
+        {
+            try
+            {
+                if(Bilanceprofile != null)
+                {
+                    return 0;
+                }
+                else
+                {
+                    Balanceprofile placeholder = new Balanceprofile();
+
+                    bool validate = false;
+
+                    try
+                    {
+                        placeholder = await BalanceService.Get_specific_Balanceprofile(Preferences.Get("Blanceprofile", 0));
+
+                        validate = true;
+                    }
+                    catch 
+                    {
+                        validate = false;
+                    }
+
+                    if(validate == false)
+                    {
+                        await Get_BalanceprofileList();
+
+                        placeholder = Bilanceprofiles_List.FirstOrDefault();
+
+                        if(placeholder == null)
+                        {
+                            return 2;
+                        }
+                    }
+
+                    Bilanceprofile = placeholder;
+
+                    return 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+
+                return -1;
+            }
+        }
+
         private async Task<bool> Check_for_Changes()
         {
             try
             {
-                Balanceprofile = await BalanceService.Get_specific_Balanceprofile(1);
+                var result0 = await Check_for_existing_Balanceprofile();
+
+                if (result0 == -1)
+                {
+                    return true;
+                }
+                if (result0 == 2)
+                {
+                    return true;
+                }
 
                 List<Zweck> count = new List<Zweck>(await ReasonService.Get_all_Reason());
 
-                if ((Balanceprofile.Outcome_Account.Count + Balanceprofile.Income_Account.Count + Balanceprofile.Outcome_Cash.Count + Balanceprofile.Income_Cash.Count) != count.Count)
+                if ((Bilanceprofile.Outcome_Account.Count + Bilanceprofile.Income_Account.Count + Bilanceprofile.Outcome_Cash.Count + Bilanceprofile.Income_Cash.Count + Bilanceprofile.Ignore.Count) != count.Count)
                 {
                     return false;
                 }
@@ -588,17 +674,19 @@ namespace EasyLife.PageModels
                 {
                     var zwecklist = await ReasonService.Get_all_Reason();
 
-                    Balanceprofile = await BalanceService.Get_specific_Balanceprofile(1);
+                    Bilanceprofile = await BalanceService.Get_specific_Balanceprofile(1);
 
                     List<string> initreasons = new List<string>();
 
-                    initreasons.AddRange(Balanceprofile.Income_Account);
+                    initreasons.AddRange(Bilanceprofile.Income_Account);
 
-                    initreasons.AddRange(Balanceprofile.Outcome_Account);
+                    initreasons.AddRange(Bilanceprofile.Outcome_Account);
 
-                    initreasons.AddRange(Balanceprofile.Income_Cash);
+                    initreasons.AddRange(Bilanceprofile.Income_Cash);
 
-                    initreasons.AddRange(Balanceprofile.Outcome_Cash);
+                    initreasons.AddRange(Bilanceprofile.Outcome_Cash);
+
+                    initreasons.AddRange(Bilanceprofile.Ignore);
 
                     List<string> openreason = new List<string>();
 
@@ -617,7 +705,7 @@ namespace EasyLife.PageModels
 
                         while (indikator == false)
                         {
-                            var result = await Shell.Current.DisplayActionSheet("" + reason + " zuordnen", "Verwerfen", null, new string[] { "Ausgaben Konto", "Einnahmen Konto", "Barausgaben", "Bareinnahmen" });
+                            var result = await Shell.Current.DisplayActionSheet("" + reason + " zuordnen", null, null, new string[] { "Ausgaben Konto", "Einnahmen Konto", "Barausgaben", "Bareinnahmen", "ignorieren" });
 
                             if(result == null)
                             {
@@ -626,40 +714,42 @@ namespace EasyLife.PageModels
 
                             if (result == "Ausgaben Konto")
                             {
-                                Balanceprofile.Outcome_Account.Add(reason);
+                                Bilanceprofile.Outcome_Account.Add(reason);
 
                                 indikator = true;
                             }
 
                             if (result == "Einnahmen Konto")
                             {
-                                Balanceprofile.Income_Account.Add(reason);
+                                Bilanceprofile.Income_Account.Add(reason);
 
                                 indikator = true;
                             }
 
                             if (result == "Barausgaben")
                             {
-                                Balanceprofile.Outcome_Cash.Add(reason);
+                                Bilanceprofile.Outcome_Cash.Add(reason);
 
                                 indikator = true;
                             }
 
                             if (result == "Bareinnahmen")
                             {
-                                Balanceprofile.Income_Cash.Add(reason);
+                                Bilanceprofile.Income_Cash.Add(reason);
 
                                 indikator = true;
                             }
 
-                            if (result == "Verwerfen")
+                            if(result == "ignorieren")
                             {
-                                continue;
+                                Bilanceprofile.Ignore.Add(reason);
+
+                                indikator = true;
                             }
                         }
                     }
 
-                    await BalanceService.Edit_Balanceprofile(Balanceprofile); 
+                    await BalanceService.Edit_Balanceprofile(Bilanceprofile); 
                 }
             }
             catch (Exception ex)
@@ -668,21 +758,197 @@ namespace EasyLife.PageModels
             }
         }
 
-        private async Task<bool> Check_Balanceprofile()
+        private async Task Settings_Methode()
         {
             try
             {
-                if (await BalanceService.Get_all_Balanceprofile() == 0)
+                bool indikator = false;
+
+                while(indikator == false)
                 {
-                    return false;
+                    var result = await Check_for_existing_Balanceprofile();
+
+                    if (result == -1)
+                    {
+                        return;
+                    }
+
+                    string reorder_string = "";
+
+                    if (result == 2)
+                    {
+                        reorder_string = "Es wurde kein Bilanzprofil ausgewählt, was neu geordnet werden kann.";
+                    }
+                    else
+                    {
+                        reorder_string = "Neuordnung des Bilanzprofiles " + Preferences.Get("Blanceprofile", 0) + "";
+                    }
+
+                    var result0 = await Shell.Current.DisplayActionSheet("Einstellungen", "Schließen", null, new string[] { "Bilanzprofil auswählen", "Neues Bilanzprofil erstellen", "Bilanzprofil löschen", reorder_string });
+
+                    if (result0 == null)
+                    {
+                        indikator = true;
+
+                        return;
+                    }
+
+                    if (result0 == "Schließen")
+                    {
+                        indikator = true;
+
+                        return;
+                    }
+
+                    if (result0 == "Neues Bilanzprofil erstellen")
+                    {
+                        await Create_Balanceprofile();
+                    }
+
+                    if (result0 == "Bilanzprofil auswählen")
+                    {
+                        await Choose_Balanceprofile_Methode();
+
+                        await Load();
+                    }
+
+                    if (result0 == "Bilanzprofil löschen")
+                    {
+                        await Delete_Balanceprofile_Methode();
+
+                        await Load();
+                    }
+
+                    if (result0 == "Neuordnung des Bilanzprofiles " + Preferences.Get("Blanceprofile", 0) + "")
+                    {
+                        await Reorder_Balanceprofile_Methode();
+
+                        await Load();
+                    }
                 }
-                return true;
             }
             catch (Exception ex)
             {
                 await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
 
-                return false;
+        private async Task Choose_Balanceprofile_Methode()
+        {
+            try
+            {
+                await Get_BalanceprofileList();
+
+                if(Bilanceprofiles_List.Count() == 0)
+                {
+                    await Create_Balanceprofile();
+
+                    return;
+                }
+
+                string[] balanceprofile_list_string = new string[] { };
+
+                List<string> balanceprofile_list = new List<string>();
+
+                foreach (Balanceprofile bp in Bilanceprofiles_List)
+                {
+                    balanceprofile_list.Add("Bilanzprofil "+bp.Id);
+                }
+
+                balanceprofile_list_string = balanceprofile_list.ToArray();
+
+                bool indikator = false;
+
+                Balanceprofile CurrentBilanceprofil = Bilanceprofile;
+
+                string current_balanceprofile_string = "Bilanzprofil auswählen\nAktuell : Bilanzprofil " + Bilanceprofile.Id + "";
+
+                if(CurrentBilanceprofil == null)
+                {
+                    current_balanceprofile_string = "Bilanzprofil auswählen\nAktuell kein Bilanzprofil ausgewählt";
+                }
+
+                while (indikator == false)
+                {
+                    var result = await Shell.Current.DisplayActionSheet(current_balanceprofile_string, "Zurück", null, balanceprofile_list_string);
+
+                    if (result == null)
+                    {
+                        if (Bilanceprofile != null)
+                        {
+                            return;
+                        }
+                    }
+                    if (result == "Zurück")
+                    {
+                        if(Bilanceprofile != null)
+                        {
+                            indikator = true;
+                        }
+                    }
+                    else
+                    {
+                        int id = int.Parse(result.ToString().Substring(12));
+
+                        Balanceprofile ChoosenBilanceprofil = await BalanceService.Get_specific_Balanceprofile(id);
+
+
+                        string reason = "";
+
+                        List<string> sortetinitreasons_substring = new List<string>();
+
+                        List<Stackholderhelper> sortetinitreasons = new List<Stackholderhelper>();
+
+                        foreach (string re in ChoosenBilanceprofil.Outcome_Account)
+                        {
+                            sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Ausgaben Konto" });
+                        }
+
+                        foreach (string re in ChoosenBilanceprofil.Income_Account)
+                        {
+                            sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Einnahmen Konto" });
+                        }
+
+                        foreach (string re in ChoosenBilanceprofil.Outcome_Cash)
+                        {
+                            sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Barausgaben" });
+                        }
+
+                        foreach (string re in ChoosenBilanceprofil.Income_Cash)
+                        {
+                            sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Bareinnahmen" });
+                        }
+
+                        foreach (string re in ChoosenBilanceprofil.Ignore)
+                        {
+                            sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "ignorieren" });
+                        }
+
+                        foreach (Stackholderhelper sh in sortetinitreasons)
+                        {
+                            reason += sh.Substring+"\n";
+                        }
+
+                        var result1 = await Shell.Current.DisplayAlert("Bilanzprofil "+ ChoosenBilanceprofil.Id+"",reason, "Auswählen","Zurück");
+
+                        Bilanceprofile = ChoosenBilanceprofil;
+
+                        if(result1 == true)
+                        {
+                            Preferences.Set("Blanceprofile", ChoosenBilanceprofil.Id);
+
+                            indikator = true;
+                        }
+                        else
+                        {
+                            indikator = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
             }
         }
 
@@ -690,8 +956,7 @@ namespace EasyLife.PageModels
         {
             try
             {
-                Balanceprofile = new Balanceprofile() { Id = 1 };
-
+                Balanceprofile ChoosenBilanceprofil = new Balanceprofile();
 
                 var zwecklist = await ReasonService.Get_all_Reason();
 
@@ -701,44 +966,64 @@ namespace EasyLife.PageModels
 
                     while (indikator == false)
                     {
-                        var result = await Shell.Current.DisplayActionSheet("" + reason.Benutzerdefinierter_Zweck + " zuordnen", "Verwerfen", null, new string[] { "Ausgaben Konto", "Einnahmen Konto", "Barausgaben", "Bareinnahmen" });
+                        var result = await Shell.Current.DisplayActionSheet("" + reason.Benutzerdefinierter_Zweck + " zuordnen","Verwerfen", null, new string[] { "Ausgaben Konto", "Einnahmen Konto", "Barausgaben", "Bareinnahmen", "ignorieren" });
 
                         if (result == "Ausgaben Konto")
                         {
-                            Balanceprofile.Outcome_Account.Add(reason.Benutzerdefinierter_Zweck);
+                            ChoosenBilanceprofil.Outcome_Account.Add(reason.Benutzerdefinierter_Zweck);
 
                             indikator = true;
                         }
 
                         if (result == "Einnahmen Konto")
                         {
-                            Balanceprofile.Income_Account.Add(reason.Benutzerdefinierter_Zweck);
+                            ChoosenBilanceprofil.Income_Account.Add(reason.Benutzerdefinierter_Zweck);
 
                             indikator = true;
                         }
 
                         if (result == "Barausgaben")
                         {
-                            Balanceprofile.Outcome_Cash.Add(reason.Benutzerdefinierter_Zweck);
+                            ChoosenBilanceprofil.Outcome_Cash.Add(reason.Benutzerdefinierter_Zweck);
 
                             indikator = true;
                         }
 
                         if (result == "Bareinnahmen")
                         {
-                            Balanceprofile.Income_Cash.Add(reason.Benutzerdefinierter_Zweck);
+                            ChoosenBilanceprofil.Income_Cash.Add(reason.Benutzerdefinierter_Zweck);
 
                             indikator = true;
                         }
 
-                        if (result == "Verwerfen")
+                        if (result == "ignorieren")
                         {
-                            continue;
+                            ChoosenBilanceprofil.Ignore.Add(reason.Benutzerdefinierter_Zweck);
+
+                            indikator = true;
+                        }
+
+                        if(result == "Verwerfen")
+                        {
+                            return;
                         }
                     }
+
                 }
 
-                await BalanceService.Add_Balanceprofile(Balanceprofile);
+                await BalanceService.Add_Balanceprofile(ChoosenBilanceprofil);
+
+
+                await Notificater("Das Bilanzprofil " + ChoosenBilanceprofil.Id + " wurde erfolgreich gespeichert");
+
+                await Get_BalanceprofileList();
+
+                if (Bilanceprofiles_List.Count() == 1)
+                {
+                    Bilanceprofile = ChoosenBilanceprofil;
+
+                    Preferences.Set("Blanceprofile", Bilanceprofile.Id);
+                }
             }
             catch (Exception ex)
             {
@@ -746,57 +1031,203 @@ namespace EasyLife.PageModels
             }
         }
 
-        public async Task Period_Popup()
+        private async Task Delete_Balanceprofile_Methode()
         {
             try
             {
-                var result = await Shell.Current.ShowPopupAsync(new Viewtime_Popup(Current_Viewtime));
+                if (Bilanceprofile != null)
+                {
+                    await Get_BalanceprofileList();
 
-                if(result == null)
+                    if (Bilanceprofiles_List.Count() == 0)
+                    {
+                        await Create_Balanceprofile();
+
+                        return;
+                    }
+
+                    string[] balanceprofile_list_string = new string[] { };
+
+                    List<string> balanceprofile_list = new List<string>();
+
+                    foreach (Balanceprofile bp in Bilanceprofiles_List)
+                    {
+                        balanceprofile_list.Add("Bilanzprofil " + bp.Id);
+                    }
+
+                    balanceprofile_list_string = balanceprofile_list.ToArray();
+
+                    bool indikator = false;
+
+                    Balanceprofile CurrentBilanceprofil = Bilanceprofile;
+
+                    while (indikator == false)
+                    {
+                        var result1 = await Shell.Current.DisplayActionSheet("Bilanzprofil löschen\nAktuell : Bilanzprofil "+Bilanceprofile.Id+"", "Zurück", null, balanceprofile_list_string);
+
+                        if (result1 == null)
+                        {
+                            return;
+                        }
+                        if (result1 == "Zurück")
+                        {
+                            indikator = true;
+                        }
+                        else
+                        {
+                            int id = int.Parse(result1.ToString().Substring(12));
+
+                            Balanceprofile ChoosenBilanceprofil = await BalanceService.Get_specific_Balanceprofile(id);
+
+                            string reason = "";
+
+                            List<string> sortetinitreasons_substring = new List<string>();
+
+                            List<Stackholderhelper> sortetinitreasons = new List<Stackholderhelper>();
+
+                            foreach (string re in ChoosenBilanceprofil.Outcome_Account)
+                            {
+                                sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Ausgaben Konto" });
+                            }
+
+                            foreach (string re in ChoosenBilanceprofil.Income_Account)
+                            {
+                                sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Einnahmen Konto" });
+                            }
+
+                            foreach (string re in ChoosenBilanceprofil.Outcome_Cash)
+                            {
+                                sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Barausgaben" });
+                            }
+
+                            foreach (string re in ChoosenBilanceprofil.Income_Cash)
+                            {
+                                sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Bareinnahmen" });
+                            }
+
+                            foreach (string re in ChoosenBilanceprofil.Ignore)
+                            {
+                                sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "ignorieren" });
+                            }
+
+                            foreach (Stackholderhelper sh in sortetinitreasons)
+                            {
+                                reason += sh.Substring + "\n\n";
+                            }
+
+                            var result2 = await Shell.Current.DisplayAlert("Bilanzprofil " + ChoosenBilanceprofil.Id + "", reason,"Löschen","Zurück");
+
+                            Bilanceprofile = ChoosenBilanceprofil;
+
+                            if (result2 == true)
+                            {
+                                var result = await BalanceService.Remove_Balanceprofile(Bilanceprofile.Id);
+
+                                if (result == true)
+                                {
+                                    await Notificater("Das Bilanzprofil " + Bilanceprofile.Id + " wurde erfolgreich gelöscht");
+
+                                    Bilanceprofile = null;
+                                }
+                                else
+                                {
+                                    await Notificater("Es ist beim löschen des Bilanzprofiles " + Bilanceprofile.Id + " ist ein Fehler aufgetretten.");
+                                }
+
+                                await Get_BalanceprofileList();
+
+                                if (Bilanceprofiles_List.Count() == 0)
+                                {
+                                    await Create_Balanceprofile();
+                                }
+                                else
+                                {
+                                    balanceprofile_list_string = null;
+
+                                    balanceprofile_list.Clear();
+
+                                    foreach (Balanceprofile bp in Bilanceprofiles_List)
+                                    {
+                                        balanceprofile_list.Add("Bilanzprofil " + bp.Id);
+                                    }
+
+                                    balanceprofile_list_string = balanceprofile_list.ToArray();
+                                }
+
+                                if (CurrentBilanceprofil != null)
+                                {
+                                    if (id != CurrentBilanceprofil.Id)
+                                    {
+                                        Bilanceprofile = CurrentBilanceprofil;
+                                    }
+                                    else
+                                    {
+                                        await Choose_Balanceprofile_Methode();
+
+                                        return;
+                                    }
+                                }
+
+                                indikator = false;
+                            }
+                            else
+                            {
+                                indikator = false;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    await Notificater("Es wurde kein Bilanzprofil gefunden was gelöscht werden kann");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
+        private async Task Reorder_Balanceprofile_Methode()
+        {
+            try
+            {
+                var result0 = await Check_for_existing_Balanceprofile();
+
+                if (result0 == -1)
+                {
+                    return;
+                }
+                if(result0 == 2)
                 {
                     return;
                 }
 
-                Current_Viewtime = (Viewtime)result;
-
-                await Load();
-            }
-            catch (Exception ex)
-            {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
-
-                Current_Viewtime = new Viewtime() { Year = DateTime.Now.Year, Month = DateTime.Now.ToString("MMMM", new CultureInfo("de-DE")) };
-
-                await Load();
-            }
-        }
-
-        private async Task Edit_Blanceprofile_Methode()
-        {
-            try
-            {
-                Balanceprofile = await BalanceService.Get_specific_Balanceprofile(1);
-
                 List<Stackholderhelper> sortetinitreasons = new List<Stackholderhelper>();
 
-                foreach (string re in Balanceprofile.Outcome_Account)
+                foreach (string re in Bilanceprofile.Outcome_Account)
                 {
                     sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Ausgaben Konto" });
                 }
 
-                foreach (string re in Balanceprofile.Income_Account)
+                foreach (string re in Bilanceprofile.Income_Account)
                 {
                     sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Einnahmen Konto" });
                 }
 
-                foreach (string re in Balanceprofile.Outcome_Cash)
+                foreach (string re in Bilanceprofile.Outcome_Cash)
                 {
                     sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Barausgaben" });
                 }
 
-                foreach (string re in Balanceprofile.Income_Cash)
+                foreach (string re in Bilanceprofile.Income_Cash)
                 {
                     sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Bareinnahmen" });
+                }
+
+                foreach (string re in Bilanceprofile.Ignore)
+                {
+                    sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "ignorieren" });
                 }
 
                 Balanceprofile newbalanceprofile = new Balanceprofile();
@@ -832,7 +1263,7 @@ namespace EasyLife.PageModels
                         }
                         else
                         {
-                            var result = await Shell.Current.DisplayActionSheet("" + result1 + " neu zuordnen", "Zurück", null, new string[] { "Ausgaben Konto", "Einnahmen Konto", "Barausgaben", "Bareinnahmen" });
+                            var result = await Shell.Current.DisplayActionSheet("" + result1 + " neu zuordnen", "Zurück", null, new string[] { "Ausgaben Konto", "Einnahmen Konto", "Barausgaben", "Bareinnahmen" , "ignorieren" });
 
                             if (result == null)
                             {
@@ -860,6 +1291,11 @@ namespace EasyLife.PageModels
                                 sortetinitreasons[sortetinitreasons_substring.IndexOf(result1)].Option = "Bareinnahmen";
                             }
 
+                            if(result == "ignorieren")
+                            {
+                                sortetinitreasons[sortetinitreasons_substring.IndexOf(result1)].Option = "ignorieren";
+                            }
+
                             sortetinitreasons_substring.Clear();
 
                             foreach (Stackholderhelper sh in sortetinitreasons)
@@ -873,7 +1309,7 @@ namespace EasyLife.PageModels
                         }
                     }
 
-                    newbalanceprofile.Id = Balanceprofile.Id;
+                    newbalanceprofile.Id = Bilanceprofile.Id;
 
                     foreach (Stackholderhelper sh in sortetinitreasons)
                     {
@@ -896,20 +1332,48 @@ namespace EasyLife.PageModels
                         {
                             newbalanceprofile.Income_Cash.Add(sh.Reason);
                         }
+
+                        if (sh.Option == "ignorieren")
+                        {
+                            newbalanceprofile.Ignore.Add(sh.Reason);
+                        }
                     }
 
-                    Balanceprofile = newbalanceprofile;
+                    Bilanceprofile = newbalanceprofile;
 
-                    await BalanceService.Edit_Balanceprofile(Balanceprofile);
+                    await BalanceService.Edit_Balanceprofile(Bilanceprofile);
 
-                    await Notificater("Das Bilanzprofil wurde erfolgreich gespeichert");
-
-                    await Load();
+                    await Notificater("Das Bilanzprofil " + Preferences.Get("Blanceprofile", 0) + " wurde erfolgreich gespeichert");
                 }
             }
             catch (Exception ex)
             {
                 await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
+        public async Task Period_Popup()
+        {
+            try
+            {
+                var result = await Shell.Current.ShowPopupAsync(new Viewtime_Popup(Current_Viewtime));
+
+                if (result == null)
+                {
+                    return;
+                }
+
+                Current_Viewtime = (Viewtime)result;
+
+                await Load();
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+
+                Current_Viewtime = new Viewtime() { Year = DateTime.Now.Year, Month = DateTime.Now.ToString("MMMM", new CultureInfo("de-DE")) };
+
+                await Load();
             }
         }
 
@@ -978,7 +1442,7 @@ namespace EasyLife.PageModels
         }
 
         public Balanceprofile balanceprofile;
-        public Balanceprofile Balanceprofile
+        public Balanceprofile Bilanceprofile
         {
             get { return balanceprofile; }
             set
@@ -990,6 +1454,8 @@ namespace EasyLife.PageModels
                 balanceprofile = value; RaisePropertyChanged();
             }
         }
+
+        public List<Balanceprofile> Bilanceprofiles_List = new List<Balanceprofile>();
 
         public bool stackholder_bundle_visibility = false;
         public bool Stackholder_Bundle_Visibility
@@ -1121,7 +1587,7 @@ namespace EasyLife.PageModels
 
         public AsyncCommand Period_Command { get; }
 
-        public AsyncCommand Edit_Blanceprofile_Command { get; }
+        public AsyncCommand Settings_Command { get; }
         public AsyncCommand Create_PDF_Command { get; }
 
         public Xamarin.Forms.Color evaluating_of_totoal_outcome_account;

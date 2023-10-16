@@ -29,7 +29,7 @@
                 <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Clock}" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
-        <ToolbarItem Order="Primary" Text="Bilanzprofil"  Command="{Binding Edit_Blanceprofile_Command}">
+        <ToolbarItem Order="Primary" Text="Bilanzprofil"  Command="{Binding Settings_Command}">
             <ToolbarItem.IconImageSource>
                 <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Wrench}" />
             </ToolbarItem.IconImageSource>

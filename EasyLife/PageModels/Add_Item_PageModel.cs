@@ -416,13 +416,34 @@ namespace EasyLife.PageModels
                         }
                         Zweck item = await ReasonService.Get_specific_Reason(result);
 
-                        item.Reason_Visibility = false;
+                        bool in_use = false;
 
-                        await ReasonService.Edit_Reason(item);
+                        var transaktion_list = await ContentService.Get_all_Transaktion();
 
-                        await Get_Reasons_Liste();
+                        foreach (var trans in transaktion_list)
+                        {
+                            if(trans.Zweck == item.zweck.Substring(0,item.zweck.IndexOf(":")))
+                            {
+                                in_use = true;
+                            }
+                        }
 
-                        await Notificater("Der Zweck wurde erfolgreich entfernt.");
+                        if (in_use == false)
+                        {
+                            item.Reason_Visibility = false;
+
+                            await ReasonService.Edit_Reason(item);
+
+                            await Get_Reasons_Liste();
+
+                            await Notificater("Der Zweck wurde erfolgreich entfernt.");
+                        }
+                        else
+                        {
+                            await Get_Reasons_Liste();
+
+                            await Notificater("Der Zweck kann nicht entfernt werden, da er noch benutzt wird.");
+                        }
                     }
                 }
                 else
