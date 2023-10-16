@@ -82,6 +82,8 @@ namespace EasyLife.PageModels
 
         public AsyncCommand<Suggestion> Select_Suggestion { get; }
 
+        public AsyncCommand Clear_SearchText_Command { get; }
+
         public AsyncCommand Period_Command { get; }
 
         public AsyncCommand Filter_Command {  get; }
@@ -439,6 +441,7 @@ namespace EasyLife.PageModels
             Search_Command2 = new AsyncCommand(Search_Methode2);
             Delet_Suggestion = new AsyncCommand<Suggestion>(Delet_Suggestion_Methode);
             Select_Suggestion = new AsyncCommand<Suggestion>(Select_Suggestion_Methode);
+            Clear_SearchText_Command = new AsyncCommand(Clear_SearchText_Methode);
             Set_Searchbar_Visibility_Command = new AsyncCommand(Set_Searchbar_Visibility_MethodeAsync);
             The_Searchbar_is_Tapped = new AsyncCommand(The_Searchbar_is_Tapped_Methode);
             Add_Command = new AsyncCommand(Add_Methode);
@@ -1376,6 +1379,24 @@ namespace EasyLife.PageModels
             {
                 await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
             }
+        }
+
+        public async Task Clear_SearchText_Methode()
+        {
+            try
+            {
+                if (Search_Text != null)
+                {
+                    Search_Text = null;
+
+                    await Refresh();
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+
         }
 
         public async Task Set_Searchbar_Visibility_MethodeAsync()

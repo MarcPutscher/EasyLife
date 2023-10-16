@@ -252,7 +252,7 @@ namespace EasyLife.PageModels
             {
                 Zweck_IsEnable = false;
 
-                Entscheider_ob_Einnahme_oder_Ausgabe = (Dictionary<string, string>)await ReasonService.Get_Enable_ReasonList();
+                Entscheider_ob_Einnahme_oder_Ausgabe = (Dictionary<string, string>)await ReasonService.Get_Enable_ReasonDictionary();
 
                 Zweck_Liste.Clear();
 

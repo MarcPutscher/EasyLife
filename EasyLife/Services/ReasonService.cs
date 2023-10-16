@@ -139,7 +139,28 @@ namespace EasyLife.Services
         /// Gibt alle aktiven Zwecke in der Datenbank zurück. 
         /// </summary>
         /// <returns></returns>
-        public static async Task<IDictionary<string, string>> Get_Enable_ReasonList()
+        public static async Task<List<Zweck>> Get_Enable_ReasonList()
+        {
+            List<Zweck> zweckList1 = new List<Zweck>(await Get_all_Reason());
+
+            List<Zweck> zweckList = new List<Zweck>();
+
+            foreach (var re in zweckList1)
+            {
+                if (re.Reason_Visibility == true)
+                {
+                    zweckList.Add(re);
+                }
+            }
+
+            return zweckList;
+        }
+
+        /// <summary>
+        /// Gibt alle aktiven Zwecke in der Datenbank zurück. 
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<IDictionary<string, string>> Get_Enable_ReasonDictionary()
         {
             List<Zweck> zweckList1 = new List<Zweck>(await Get_all_Reason());
 
@@ -188,7 +209,7 @@ namespace EasyLife.Services
         /// Gibt alle deaktiven Zwecke in der Datenbank zurück.
         /// </summary>
         /// <returns></returns>
-        public static async Task<IDictionary<string, string>> Get_Disable_ReasonList()
+        public static async Task<IDictionary<string, string>> Get_Disable_ReasonDictionary()
         {
             List<Zweck> zweckList1 = new List<Zweck>(await Get_all_Reason());
 

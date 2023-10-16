@@ -168,14 +168,19 @@
         <StackLayout Orientation="Vertical">
             <xct:Expander>
                 <xct:Expander.Header>
-                    <Grid Padding="0">
-                        <SearchBar Placeholder="Suchen" Text="{Binding Search_Text}" BackgroundColor="DimGray" IsVisible="{Binding Serchbar_Visibility}">
+                    <Grid Padding="0" ColumnDefinitions="*,30,30" BackgroundColor="White" HorizontalOptions="Fill">
+                        <SearchBar Placeholder="Suchen" Text="{Binding Search_Text}" Grid.ColumnSpan="3" BackgroundColor="DimGray" IsVisible="{Binding Serchbar_Visibility}" HorizontalOptions="Fill" >
                             <SearchBar.Behaviors>
                                 <xct:EventToCommandBehavior EventName="SearchButtonPressed" Command="{Binding Search_Command}"/>
                                 <xct:EventToCommandBehavior EventName="TextChanged" Command="{Binding Search_Command2}"/>
                             </SearchBar.Behaviors>
                         </SearchBar>
-                        <ImageButton BackgroundColor="DimGray" Padding="10" IsVisible="{Binding Serchbar_Visibility}" HorizontalOptions="End" Command="{Binding Filter_Command}">
+                        <ImageButton BackgroundColor="DimGray" Padding="5" Grid.Column="1" IsVisible="{Binding Serchbar_Visibility}" HorizontalOptions="EndAndExpand" Margin="-5,0,0,0" Command="{Binding Clear_SearchText_Command}">
+                            <ImageButton.Source>
+                                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.CircleXmark}" Color="Red"/>
+                            </ImageButton.Source>
+                        </ImageButton>
+                        <ImageButton BackgroundColor="DimGray" Padding="5" Grid.Column="2" IsVisible="{Binding Serchbar_Visibility}" HorizontalOptions="EndAndExpand" Margin="-5,0,0,0" Command="{Binding Filter_Command}">
                             <ImageButton.Source>
                                 <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Filter}" Color="{Binding Filter_ActivityColor}"/>
                             </ImageButton.Source>
@@ -210,7 +215,11 @@
                             <Grid ColumnDefinitions="50,20" Padding="0" Grid.Column="2">
                                 <Button Grid.Column="0" BackgroundColor="{DynamicResource Page_Backgroundcolor}" Text="X" TextColor="Black" HorizontalOptions="Fill" Command="{Binding Source={x:Reference SuggestionSwipeView}, Path=BindingContext.Delet_Suggestion}" CommandParameter="{Binding .}"/>
                             </Grid>
-                            <Button Text="{Binding Suggestion_value}" TextColor="White" FontSize="Body" TextTransform="None" HeightRequest="10" Padding="0" HorizontalOptions= "StartAndExpand" Grid.Column="1" BackgroundColor="{DynamicResource Page_Backgroundcolor}" Command="{Binding Source={x:Reference SuggestionSwipeView}, Path=BindingContext.Select_Suggestion}" CommandParameter="{Binding .}"/>
+                            <Label Text="{Binding Suggestion_value}" TextColor="White" FontSize="Body" TextTransform="None" HeightRequest="10" VerticalTextAlignment="Center" Padding="0" HorizontalOptions= "Start" Grid.Column="1" BackgroundColor="{DynamicResource Page_Backgroundcolor}">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={x:Reference SuggestionSwipeView}, Path=BindingContext.Select_Suggestion}" CommandParameter="{Binding .}" />
+                                </Label.GestureRecognizers>
+                            </Label>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

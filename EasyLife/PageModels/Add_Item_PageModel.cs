@@ -391,7 +391,7 @@ namespace EasyLife.PageModels
         {
             try
             {
-                Dictionary<string, string> zwecke = (Dictionary<string, string>)await ReasonService.Get_Enable_ReasonList();
+                Dictionary<string, string> zwecke = (Dictionary<string, string>)await ReasonService.Get_Enable_ReasonDictionary();
 
                 List<string> zwecke2 = new List<string>();
 
@@ -416,13 +416,34 @@ namespace EasyLife.PageModels
                         }
                         Zweck item = await ReasonService.Get_specific_Reason(result);
 
-                        item.Reason_Visibility = false;
+                        bool in_use = false;
 
-                        await ReasonService.Edit_Reason(item);
+                        var transaktion_list = await ContentService.Get_all_Transaktion();
 
-                        await Get_Reasons_Liste();
+                        foreach (var trans in transaktion_list)
+                        {
+                            if(trans.Zweck == item.zweck.Substring(0,item.zweck.IndexOf(":")))
+                            {
+                                in_use = true;
+                            }
+                        }
 
-                        await Notificater("Der Zweck wurde erfolgreich entfernt.");
+                        if (in_use == false)
+                        {
+                            item.Reason_Visibility = false;
+
+                            await ReasonService.Edit_Reason(item);
+
+                            await Get_Reasons_Liste();
+
+                            await Notificater("Der Zweck wurde erfolgreich entfernt.");
+                        }
+                        else
+                        {
+                            await Get_Reasons_Liste();
+
+                            await Notificater("Der Zweck kann nicht entfernt werden, da er noch benutzt wird.");
+                        }
                     }
                 }
                 else
@@ -440,7 +461,7 @@ namespace EasyLife.PageModels
         {
             try
             {
-                Dictionary<string, string> zwecke = (Dictionary<string, string>)await ReasonService.Get_Disable_ReasonList();
+                Dictionary<string, string> zwecke = (Dictionary<string, string>)await ReasonService.Get_Disable_ReasonDictionary();
 
                 List<string> zwecke2 = new List<string>();
 
@@ -503,7 +524,7 @@ namespace EasyLife.PageModels
                     }
                 }
 
-                Entscheider_ob_Einnahme_oder_Ausgabe = (Dictionary<string, string>)await ReasonService.Get_Enable_ReasonList();
+                Entscheider_ob_Einnahme_oder_Ausgabe = (Dictionary<string, string>)await ReasonService.Get_Enable_ReasonDictionary();
 
                 Zweck_Liste.Clear();
 

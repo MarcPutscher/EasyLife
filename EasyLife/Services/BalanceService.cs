@@ -93,22 +93,57 @@ namespace EasyLife.Services
         }
 
         /// <summary>
-        /// Gibt alle Bilanzprofile die in der Datenbank sind zurück.
+        /// Löscht ein Bilanzprofil.
         /// </summary>
+        /// <param name="input">Die Id zu dem Bilanzprofil das in der Datenbank gelöscht werden soll.</param>
         /// <returns></returns>
-        public static async Task<int> Get_all_Balanceprofile()
+        public static async Task<bool> Remove_Balanceprofile(int input)
         {
             await Init();
 
             try
             {
-                var reson = await db.Table<HelperBalanceprofile>().ToListAsync();
+                await db.DeleteAsync<HelperBalanceprofile>(input);
 
-                return reson.Reverse<HelperBalanceprofile>().Count();
+                return true;
             }
             catch
             {
-                return 0;
+                return false;
+            }
+        }
+        /// <summary>
+        /// Gibt alle Bilanzprofile die in der Datenbank sind zurück.
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<List<Balanceprofile>> Get_all_Balanceprofile()
+        {
+            await Init();
+
+            try
+            {
+                List<Balanceprofile> balanceprofilesList = new List<Balanceprofile>();
+
+                var result = await db.Table<HelperBalanceprofile>().ToListAsync();
+
+                if(result == null)
+                {
+                    return new List<Balanceprofile>();
+                }
+
+                foreach (HelperBalanceprofile helperBalanceprofile in result)
+                {
+                    if(helperBalanceprofile != null)
+                    {
+                        balanceprofilesList.Add(Konverter.Deserilize(helperBalanceprofile));
+                    }
+                }
+
+                return balanceprofilesList;
+            }
+            catch
+            {
+                return new List<Balanceprofile>();
             }
         }
 
@@ -139,6 +174,8 @@ namespace EasyLife.Services
         public string Outcome_Cash { get; set; }
 
         public string Income_Cash { get; set; }
+
+        public string Ignore {  get; set; }
     }
 
     /// <summary>
@@ -172,6 +209,12 @@ namespace EasyLife.Services
             {
                 output.Income_Cash += zw;
                 output.Income_Cash += "#";
+            }
+
+            foreach (string zw in input.Ignore)
+            {
+                output.Ignore += zw;
+                output.Ignore += "#";
             }
 
             return output;
@@ -231,6 +274,19 @@ namespace EasyLife.Services
             else
             {
                 output.Income_Cash = new List<string>();
+            }
+
+            if (String.IsNullOrEmpty(input.Ignore) == false)
+            {
+                while (input.Ignore.Count() > 0)
+                {
+                    output.Ignore.Add(input.Ignore.Substring(0, input.Ignore.IndexOf("#")));
+                    input.Ignore = input.Ignore.Remove(0, input.Ignore.IndexOf("#") + 1);
+                }
+            }
+            else
+            {
+                output.Ignore = new List<string>();
             }
 
             output.Id = input.Id;
