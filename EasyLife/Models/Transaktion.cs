@@ -211,6 +211,44 @@ namespace EasyLife.Models
             }
         }
 
+        bool saldo_visibility = true;
+        public bool Saldo_Visibility
+        {
+            get { return saldo_visibility; }
+            set
+            {
+                if (Saldo_Visibility == value)
+                    return;
+                saldo_visibility = value; OnPropertyChanged(nameof(Saldo_Visibility));
+
+                if (saldo_visibility == true)
+                {
+                    Saldo_Visibility_String = "Ja";
+                }
+                if (saldo_visibility == false)
+                {
+                    Saldo_Visibility_String = "Nein";
+                }
+            }
+        }
+
+        public string saldo_visibility_string = "Ja";
+        public string Saldo_Visibility_String
+        {
+            get
+            {
+                return saldo_visibility_string;
+            }
+
+            set
+            {
+                if (saldo_visibility_string == value)
+                    return;
+
+                saldo_visibility_string = value; OnPropertyChanged(nameof(Saldo_Visibility_String));
+            }
+        }
+
         string pseudotext = null;
         public string Pseudotext
         {

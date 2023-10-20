@@ -291,6 +291,18 @@ namespace EasyLife.PageModels
             }
         }
 
+        public bool show_hide_saldo = true;
+        public bool Show_Hide_Saldo
+        {
+            get { return show_hide_saldo; }
+            set
+            {
+                if (Show_Hide_Saldo == value)
+                    return;
+                show_hide_saldo = value; RaisePropertyChanged();
+            }
+        }
+
 
 
         public Add_Item_PageModel()
@@ -596,7 +608,7 @@ namespace EasyLife.PageModels
 
                     if (Virtueller_Auftrag == null)
                     {
-                        Transaktion transaktion = new Transaktion() { Betrag = result.ToString(), Datum = Datum.Date, Zweck = Zweck, Notiz = Notiz, Auftrags_id = null, Anzahl_an_Wiederholungen = null, Art_an_Wiederholungen = null, Speziell = null, Order_Visibility = false, Content_Visibility = true , Balance_Visibility = Show_Hide_Balance};
+                        Transaktion transaktion = new Transaktion() { Betrag = result.ToString(), Datum = Datum.Date, Zweck = Zweck, Notiz = Notiz, Auftrags_id = null, Anzahl_an_Wiederholungen = null, Art_an_Wiederholungen = null, Speziell = null, Order_Visibility = false, Content_Visibility = true , Balance_Visibility = Show_Hide_Balance , Saldo_Visibility = Show_Hide_Saldo};
 
                         await ContentService.Add_Transaktion(transaktion);
 
@@ -608,7 +620,7 @@ namespace EasyLife.PageModels
 
                         Virtueller_Auftrag.Id = 0;
 
-                        Transaktion transaktion = new Transaktion() { Betrag = result.ToString(), Datum = Datum.Date, Zweck = Zweck, Notiz = Notiz, Auftrags_id = Virtueller_Auftrag.Id.ToString() , Anzahl_an_Wiederholungen = Virtueller_Auftrag.Anzahl_an_Wiederholungen , Art_an_Wiederholungen = Virtueller_Auftrag.Art_an_Wiederholungen, Speziell = Virtueller_Auftrag.Speziell, Order_Visibility = true, Content_Visibility = true , Balance_Visibility = Show_Hide_Balance };
+                        Transaktion transaktion = new Transaktion() { Betrag = result.ToString(), Datum = Datum.Date, Zweck = Zweck, Notiz = Notiz, Auftrags_id = Virtueller_Auftrag.Id.ToString() , Anzahl_an_Wiederholungen = Virtueller_Auftrag.Anzahl_an_Wiederholungen , Art_an_Wiederholungen = Virtueller_Auftrag.Art_an_Wiederholungen, Speziell = Virtueller_Auftrag.Speziell, Order_Visibility = true, Content_Visibility = true , Balance_Visibility = Show_Hide_Balance , Saldo_Visibility = Show_Hide_Saldo};
 
                         await OrderService.Add_Order(Virtueller_Auftrag);
 
@@ -654,6 +666,8 @@ namespace EasyLife.PageModels
                     Wiederholungs_Text = null;
 
                     Show_Hide_Balance = true;
+
+                    Show_Hide_Saldo = true;
 
                     OrderID = null;
 
@@ -1420,7 +1434,7 @@ namespace EasyLife.PageModels
                     Betrag = null;
                 }
 
-                Transaktion = new Transaktion() { Betrag = Betrag, Datum = Datum, Zweck = Zweck, Notiz = Notiz , Balance_Visibility = Show_Hide_Balance};
+                Transaktion = new Transaktion() { Betrag = Betrag, Datum = Datum, Zweck = Zweck, Notiz = Notiz , Balance_Visibility = Show_Hide_Balance , Saldo_Visibility = Show_Hide_Saldo};
 
                 if (Transaktion.Zweck == null && Transaktion.Notiz == null && Transaktion.Betrag == null)
                 {
@@ -1607,6 +1621,8 @@ namespace EasyLife.PageModels
 
             Show_Hide_Balance = true;
 
+            Show_Hide_Saldo = true;
+
             Virtueller_Auftrag = null;
         }
 
@@ -1786,6 +1802,8 @@ namespace EasyLife.PageModels
                     Wiederholungs_Text_Visibility_2 = false;
 
                     Virtueller_Auftrag = null;
+
+                    Show_Hide_Saldo = true;
 
                     Show_Hide_Balance = true;
                 }

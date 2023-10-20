@@ -69,6 +69,30 @@ namespace EasyLife.Models
             }
         }
 
+        List<string> letter_income = new List<string>();
+        public List<string> Letter_Income
+        {
+            get { return letter_income; }
+            set
+            {
+                if (Letter_Income == value)
+                    return;
+                letter_income = value; OnPropertyChanged(nameof(Letter_Income));
+            }
+        }
+
+        List<string> letter_outcome = new List<string>();
+        public List<string> Letter_Outcome
+        {
+            get { return letter_outcome; }
+            set
+            {
+                if (Letter_Outcome == value)
+                    return;
+                letter_outcome = value; OnPropertyChanged(nameof(Letter_Outcome));
+            }
+        }
+
         List<string> ignore = new List<string>();
         public List<string> Ignore
         {

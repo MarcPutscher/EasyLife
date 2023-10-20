@@ -282,11 +282,15 @@ namespace EasyLife.PageModels
                     Bilanceprofile.Outcome_Account,
                     Bilanceprofile.Income_Account,
                     Bilanceprofile.Outcome_Cash,
-                    Bilanceprofile.Income_Cash
+                    Bilanceprofile.Income_Cash,
+                    Bilanceprofile.Letter_Outcome,
+                    Bilanceprofile.Letter_Income
                 };
 
                 List<ObservableRangeCollection<Stackholder>> bundle = new List<ObservableRangeCollection<Stackholder>>
                 {
+                    new ObservableRangeCollection<Stackholder>(),
+                    new ObservableRangeCollection<Stackholder>(),
                     new ObservableRangeCollection<Stackholder>(),
                     new ObservableRangeCollection<Stackholder>(),
                     new ObservableRangeCollection<Stackholder>(),
@@ -298,11 +302,15 @@ namespace EasyLife.PageModels
                    null,
                    null,
                    null,
+                   null,
+                   null,
                    null
                 };
 
                 List<Xamarin.Forms.Color> evaluating_of_total_bundle = new List<Xamarin.Forms.Color>
                 {
+                    new Xamarin.Forms.Color(),
+                    new Xamarin.Forms.Color(),
                     new Xamarin.Forms.Color(),
                     new Xamarin.Forms.Color(),
                     new Xamarin.Forms.Color(),
@@ -314,6 +322,8 @@ namespace EasyLife.PageModels
                     false,
                     false,
                     false,
+                    false,
+                    false,
                     false
                 };
 
@@ -322,7 +332,9 @@ namespace EasyLife.PageModels
                     "Ausgaben Konto Gesamt : ",
                     "Einnahmen Konto Gesamt : ",
                     "Barausgaben Gesamt : ",
-                    "Bareinnahmen Gesamt : "
+                    "Bareinnahmen Gesamt : ",
+                    "Ausgaben Briefumschlag Gesamt : ",
+                    "Einnahmen Briefumschlag Gesamt : "
                 };
 
                 List<StackholderBundle> bundles = new List<StackholderBundle>();
@@ -514,6 +526,52 @@ namespace EasyLife.PageModels
                         });
                     }
 
+                    if (h == 5)
+                    {
+                        bool total_visibility = false;
+
+                        Xamarin.Forms.Color total_color = Xamarin.Forms.Color.White;
+
+                        double totalsum = 0;
+
+                        if (String.IsNullOrEmpty(bundles[11].Sum) == false)
+                        {
+                            totalsum += double.Parse(bundles[11].Sum, NumberStyles.Any, new CultureInfo("de-DE"));
+                        }
+
+                        if (String.IsNullOrEmpty(bundles[13].Sum) == false)
+                        {
+                            totalsum += double.Parse(bundles[13].Sum, NumberStyles.Any, new CultureInfo("de-DE"));
+                        }
+
+                        if (bundles[11].Visibility == true && bundles[13].Visibility == true)
+                        {
+                            total_visibility = true;
+                        }
+
+                        if (totalsum < 0)
+                        {
+                            total_color = Xamarin.Forms.Color.Red;
+                        }
+                        if (totalsum > 0)
+                        {
+                            total_color = Xamarin.Forms.Color.Green;
+                        }
+                        if (totalsum == 0)
+                        {
+                            total_color = Xamarin.Forms.Color.DarkGray;
+                        }
+
+                        bundles.Add(new StackholderBundle()
+                        {
+                            Visibility = total_visibility,
+                            Evaluation = total_color,
+                            Total_Sum = Math.Round(totalsum, 2).ToString().Replace(".", ","),
+                            Total_Text = "Rest Briefumschlag : ",
+                            Definition = 2
+                        });
+                    }
+
                     h++;
                 }
 
@@ -536,12 +594,19 @@ namespace EasyLife.PageModels
 
                     double total_value = 0;
 
+                    int g = 0;
+
                     foreach (string st in total_value_bundle)
                     {
                         if (double.TryParse(st, NumberStyles.Any, new CultureInfo("de-DE"), out double result) == true)
                         {
-                            total_value += result;
+                            if(g != 4 && g != 5)
+                            {
+                                total_value += result;
+                            }
                         }
+
+                        g++;
                     }
 
                     Total = Math.Round(total_value, 2).ToString().Replace(".", ",");
@@ -651,7 +716,7 @@ namespace EasyLife.PageModels
 
                 List<Zweck> count = new List<Zweck>(await ReasonService.Get_Enable_ReasonList());
 
-                if ((Bilanceprofile.Outcome_Account.Count + Bilanceprofile.Income_Account.Count + Bilanceprofile.Outcome_Cash.Count + Bilanceprofile.Income_Cash.Count + Bilanceprofile.Ignore.Count) != count.Count)
+                if ((Bilanceprofile.Outcome_Account.Count + Bilanceprofile.Income_Account.Count + Bilanceprofile.Outcome_Cash.Count + Bilanceprofile.Income_Cash.Count + Bilanceprofile.Ignore.Count + Bilanceprofile.Letter_Outcome.Count + Bilanceprofile.Letter_Income.Count) != count.Count)
                 {
                     return false;
                 }
@@ -695,6 +760,10 @@ namespace EasyLife.PageModels
 
                     initreasons.AddRange(Bilanceprofile.Outcome_Cash);
 
+                    initreasons.AddRange(Bilanceprofile.Letter_Outcome);
+
+                    initreasons.AddRange(Bilanceprofile.Letter_Income);
+
                     initreasons.AddRange(Bilanceprofile.Ignore);
 
                     List<string> openreason = new List<string>();
@@ -732,6 +801,16 @@ namespace EasyLife.PageModels
                                     Bilanceprofile.Income_Cash.Remove(zw.Benutzerdefinierter_Zweck);
                                 }
 
+                                if (Bilanceprofile.Letter_Outcome.Contains(zw.Benutzerdefinierter_Zweck) == true)
+                                {
+                                    Bilanceprofile.Letter_Outcome.Remove(zw.Benutzerdefinierter_Zweck);
+                                }
+
+                                if (Bilanceprofile.Letter_Income.Contains(zw.Benutzerdefinierter_Zweck) == true)
+                                {
+                                    Bilanceprofile.Letter_Income.Remove(zw.Benutzerdefinierter_Zweck);
+                                }
+
                                 if (Bilanceprofile.Ignore.Contains(zw.Benutzerdefinierter_Zweck) == true)
                                 {
                                     Bilanceprofile.Ignore.Remove(zw.Benutzerdefinierter_Zweck);
@@ -747,7 +826,7 @@ namespace EasyLife.PageModels
 
                         while (indikator == false)
                         {
-                            var result = await Shell.Current.DisplayActionSheet("" + reason + " zuordnen", null, null, new string[] { "Ausgaben Konto", "Einnahmen Konto", "Barausgaben", "Bareinnahmen", "ignorieren" });
+                            var result = await Shell.Current.DisplayActionSheet("" + reason + " zuordnen", null, null, new string[] { "Ausgaben Konto", "Einnahmen Konto", "Barausgaben", "Bareinnahmen", "Ausgaben Briefumschlag" , "Einnahmen Briefumschlag", "ignorieren" });
 
                             if(result == null)
                             {
@@ -782,7 +861,21 @@ namespace EasyLife.PageModels
                                 indikator = true;
                             }
 
-                            if(result == "ignorieren")
+                            if (result == "Ausgaben Briefumschlag")
+                            {
+                                Bilanceprofile.Letter_Outcome.Add(reason);
+
+                                indikator = true;
+                            }
+
+                            if (result == "Einnahmen Briefumschlag")
+                            {
+                                Bilanceprofile.Letter_Income.Add(reason);
+
+                                indikator = true;
+                            }
+
+                            if (result == "ignorieren")
                             {
                                 Bilanceprofile.Ignore.Add(reason);
 
@@ -961,6 +1054,16 @@ namespace EasyLife.PageModels
                             sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Bareinnahmen" });
                         }
 
+                        foreach (string re in ChoosenBilanceprofil.Letter_Outcome)
+                        {
+                            sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Ausgaben Briefumschlag" });
+                        }
+
+                        foreach (string re in ChoosenBilanceprofil.Letter_Income)
+                        {
+                            sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Einnahmen Briefumschlag" });
+                        }
+
                         foreach (string re in ChoosenBilanceprofil.Ignore)
                         {
                             sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "ignorieren" });
@@ -1008,7 +1111,7 @@ namespace EasyLife.PageModels
 
                     while (indikator == false)
                     {
-                        var result = await Shell.Current.DisplayActionSheet("" + reason.Benutzerdefinierter_Zweck + " zuordnen","Verwerfen", null, new string[] { "Ausgaben Konto", "Einnahmen Konto", "Barausgaben", "Bareinnahmen", "ignorieren" });
+                        var result = await Shell.Current.DisplayActionSheet("" + reason.Benutzerdefinierter_Zweck + " zuordnen","Verwerfen", null, new string[] { "Ausgaben Konto", "Einnahmen Konto", "Barausgaben", "Bareinnahmen", "Ausgaben Briefumschlag", "Einnahmen Briefumschlag", "ignorieren" });
 
                         if (result == "Ausgaben Konto")
                         {
@@ -1034,6 +1137,20 @@ namespace EasyLife.PageModels
                         if (result == "Bareinnahmen")
                         {
                             ChoosenBilanceprofil.Income_Cash.Add(reason.Benutzerdefinierter_Zweck);
+
+                            indikator = true;
+                        }
+
+                        if (result == "Ausgaben Briefumschlag")
+                        {
+                            ChoosenBilanceprofil.Letter_Outcome.Add(reason.Benutzerdefinierter_Zweck);
+
+                            indikator = true;
+                        }
+
+                        if (result == "Einnahmen Briefumschlag")
+                        {
+                            ChoosenBilanceprofil.Letter_Income.Add(reason.Benutzerdefinierter_Zweck);
 
                             indikator = true;
                         }
@@ -1145,6 +1262,16 @@ namespace EasyLife.PageModels
                             foreach (string re in ChoosenBilanceprofil.Income_Cash)
                             {
                                 sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Bareinnahmen" });
+                            }
+
+                            foreach (string re in ChoosenBilanceprofil.Letter_Outcome)
+                            {
+                                sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Ausgaben Briefumschlag" });
+                            }
+
+                            foreach (string re in ChoosenBilanceprofil.Letter_Income)
+                            {
+                                sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Einnahmen Briefumschlag" });
                             }
 
                             foreach (string re in ChoosenBilanceprofil.Ignore)
@@ -1267,6 +1394,16 @@ namespace EasyLife.PageModels
                     sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Bareinnahmen" });
                 }
 
+                foreach (string re in Bilanceprofile.Letter_Outcome)
+                {
+                    sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Ausgaben Briefumschlag" });
+                }
+
+                foreach (string re in Bilanceprofile.Letter_Income)
+                {
+                    sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Einnahmen Briefumschlag" });
+                }
+
                 foreach (string re in Bilanceprofile.Ignore)
                 {
                     sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "ignorieren" });
@@ -1305,7 +1442,7 @@ namespace EasyLife.PageModels
                         }
                         else
                         {
-                            var result = await Shell.Current.DisplayActionSheet("" + result1 + " neu zuordnen", "Zurück", null, new string[] { "Ausgaben Konto", "Einnahmen Konto", "Barausgaben", "Bareinnahmen" , "ignorieren" });
+                            var result = await Shell.Current.DisplayActionSheet("" + result1 + " neu zuordnen", "Zurück", null, new string[] { "Ausgaben Konto", "Einnahmen Konto", "Barausgaben", "Bareinnahmen", "Ausgaben Briefumschlag", "Einnahmen Briefumschlag", "ignorieren" });
 
                             if (result == null)
                             {
@@ -1333,7 +1470,17 @@ namespace EasyLife.PageModels
                                 sortetinitreasons[sortetinitreasons_substring.IndexOf(result1)].Option = "Bareinnahmen";
                             }
 
-                            if(result == "ignorieren")
+                            if (result == "Ausgaben Briefumschlag")
+                            {
+                                sortetinitreasons[sortetinitreasons_substring.IndexOf(result1)].Option = "Ausgaben Briefumschlag";
+                            }
+
+                            if (result == "Einnahmen Briefumschlag")
+                            {
+                                sortetinitreasons[sortetinitreasons_substring.IndexOf(result1)].Option = "Einnahmen Briefumschlag";
+                            }
+
+                            if (result == "ignorieren")
                             {
                                 sortetinitreasons[sortetinitreasons_substring.IndexOf(result1)].Option = "ignorieren";
                             }

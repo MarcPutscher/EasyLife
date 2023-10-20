@@ -100,6 +100,8 @@ namespace EasyLife.PageModels
 
         public AsyncCommand ShowCalculator_List_Command { get; }
 
+        public Command Show_Letter_Saldo_Command { get; }
+
         public bool serchbar_visibility = false;
         public bool Serchbar_Visibility
         {
@@ -221,6 +223,21 @@ namespace EasyLife.PageModels
             }
         }
 
+        public string letter_saldo_value = null;
+        public string Letter_Saldo_Value
+        {
+            get { return letter_saldo_value; }
+            set
+            {
+                if (Letter_Saldo_Value == value)
+                {
+                    return;
+                }
+
+                letter_saldo_value = value; RaisePropertyChanged();
+            }
+        }
+
         public string saldo_date = DateTime.Now.ToString("dddd, d.M.yyyy", new CultureInfo("de-DE"));
         public string Saldo_Date
         {
@@ -278,6 +295,21 @@ namespace EasyLife.PageModels
                 }
 
                 saldo_evaluate = value; RaisePropertyChanged();
+            }
+        }
+
+        public Color letter_saldo_evaluate = Color.White;
+        public Color Letter_Saldo_Evaluate
+        {
+            get { return letter_saldo_evaluate; }
+            set
+            {
+                if (Letter_Saldo_Evaluate == value)
+                {
+                    return;
+                }
+
+                letter_saldo_evaluate = value; RaisePropertyChanged();
             }
         }
 
@@ -397,6 +429,18 @@ namespace EasyLife.PageModels
             }
         }
 
+        public bool islettersaldovisibility = false;
+        public bool IsLetterSaldoVisibility
+        {
+            get { return islettersaldovisibility; }
+            set
+            {
+                if (IsLetterSaldoVisibility == value)
+                    return;
+                islettersaldovisibility = value; RaisePropertyChanged();
+            }
+        }
+
         public bool calculator_state = false;
         public bool Calculator_State
         {
@@ -418,6 +462,18 @@ namespace EasyLife.PageModels
                 if (Normal_State == value)
                     return;
                 normal_state = value; RaisePropertyChanged();
+            }
+        }
+
+        public int height = 80;
+        public int Height
+        {
+            get { return height; }
+            set
+            {
+                if (Height == value)
+                    return;
+                height = value; RaisePropertyChanged();
             }
         }
 
@@ -452,6 +508,7 @@ namespace EasyLife.PageModels
             Calculator_RemoveLast_Command = new AsyncCommand(Calculator_RemoveLast_Methode);
             Calculator_RemoveAll_Command = new AsyncCommand(Calculator_RemoveAll_Methode);
             ShowCalculator_List_Command = new AsyncCommand(ShowCalculator_List_Methode);
+            Show_Letter_Saldo_Command = new Command(Show_Letter_Saldo_Methode);
 
             Period_Command = new AsyncCommand(Period_Popup);
 
@@ -603,7 +660,7 @@ namespace EasyLife.PageModels
 
                         if (result == "Diese Transaktion entfernen")
                         {
-                            bool value = await Shell.Current.DisplayAlert("Entfernen", "Wollen Sie diese Transaktion wirklich entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "", "Ja", "Nein");
+                            bool value = await Shell.Current.DisplayAlert("Entfernen", "Wollen Sie diese Transaktion wirklich entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\nID: " + item.Id + "", "Ja", "Nein");
                             if (value == true)
                             {
                                 item.Content_Visibility = false;
@@ -648,15 +705,15 @@ namespace EasyLife.PageModels
                         {
                             if(item.Auftrags_Option == 1)
                             {
-                                message = "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
+                                message = "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
                             }
                             if (item.Auftrags_Option == 2)
                             {
-                                message = "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + "";
+                                message = "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + "";
                             }
                             if (item.Auftrags_Option == 3)
                             {
-                                message = "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
+                                message = "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:  " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
                             }
 
                             bool value = await Shell.Current.DisplayAlert("Entfernen", message , "Ja", "Nein");
@@ -703,7 +760,7 @@ namespace EasyLife.PageModels
 
                         if (result == "Diese Transaktion entfernen")
                         {
-                            bool value = await Shell.Current.DisplayAlert("Entfernen", "Wollen Sie diese Transaktion wirklich entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "", "Ja", "Nein");
+                            bool value = await Shell.Current.DisplayAlert("Entfernen", "Wollen Sie diese Transaktion wirklich entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\nID: " + item.Id + "", "Ja", "Nein");
                             if (value == true)
                             {
                                 item.Content_Visibility = false;
@@ -744,15 +801,15 @@ namespace EasyLife.PageModels
                         {
                             if (item.Auftrags_Option == 1)
                             {
-                                message = "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
+                                message = "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
                             }
                             if (item.Auftrags_Option == 2)
                             {
-                                message = "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + "";
+                                message = "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + "";
                             }
                             if (item.Auftrags_Option == 3)
                             {
-                                message = "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
+                                message = "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
                             }
 
                             bool value = await Shell.Current.DisplayAlert("Entfernen", message, "Ja", "Nein");
@@ -792,15 +849,15 @@ namespace EasyLife.PageModels
                         {
                             if (item.Auftrags_Option == 1)
                             {
-                                message = "Wollen Sie wirklich alle folgenden Transaktionen mit dieser Auftrag-Id entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
+                                message = "Wollen Sie wirklich alle folgenden Transaktionen mit dieser Auftrag-Id entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
                             }
                             if (item.Auftrags_Option == 2)
                             {
-                                message = "Wollen Sie wirklich alle folgenden Transaktionen mit dieser Auftrag-Id entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + "";
+                                message = "Wollen Sie wirklich alle folgenden Transaktionen mit dieser Auftrag-Id entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + "";
                             }
                             if (item.Auftrags_Option == 3)
                             {
-                                message = "Wollen Sie wirklich alle folgenden Transaktionen mit dieser Auftrag-Id entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
+                                message = "Wollen Sie wirklich alle folgenden Transaktionen mit dieser Auftrag-Id entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:  " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
                             }
 
                             bool value = await Shell.Current.DisplayAlert("Entfernen", message , "Ja", "Nein");
@@ -846,7 +903,7 @@ namespace EasyLife.PageModels
                 }
                 else
                 {
-                    bool value = await Shell.Current.DisplayAlert("Entfernen", "Wollen Sie diese Transaktion wirklich entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "", "Ja", "Nein");
+                    bool value = await Shell.Current.DisplayAlert("Entfernen", "Wollen Sie diese Transaktion wirklich entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\nID: " + item.Id + "", "Ja", "Nein");
                     if (value == true)
                     {
                         item.Content_Visibility = false;
@@ -997,7 +1054,7 @@ namespace EasyLife.PageModels
                 }
                 else
                 {
-                    bool value = await Application.Current.MainPage.DisplayAlert("Bearbeiten", "Wollen Sie wirklich diese Transaktionen bearbeiten?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "", "Ja", "Nein");
+                    bool value = await Application.Current.MainPage.DisplayAlert("Bearbeiten", "Wollen Sie wirklich diese Transaktionen bearbeiten?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\nID: " + item.Id + "", "Ja", "Nein");
 
                     if (value == true && item != null)
                     {
@@ -1550,13 +1607,22 @@ namespace EasyLife.PageModels
 
                 double saldo = 0;
 
+                double letter_saldo = 0;
+
                 if(transaktionscontent.Count() != 0)
                 {
                     foreach (var trans in transaktionscontent)
                     {
                         if (DateTime.Compare(trans.Datum, DateTime.Today.AddDays(1).AddSeconds(-1)) <= 0)
                         {
-                            saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                            if(trans.Saldo_Visibility == true)
+                            {
+                                saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                            }
+                            else
+                            {
+                                letter_saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                            }
                         }
 
                         if (trans.Datum.Year == Current_Viewtime.Year)
@@ -1618,6 +1684,30 @@ namespace EasyLife.PageModels
                 {
                     Saldo_Value = null;
                     IsSaldoVisibility = false;
+                }
+
+                if (letter_saldo != 0)
+                {
+                    letter_saldo = Math.Round(letter_saldo, 2);
+
+                    Letter_Saldo_Value = letter_saldo.ToString().Replace(".", ",");
+
+                    if (letter_saldo < 0)
+                    {
+                        Letter_Saldo_Evaluate = Color.Red;
+                    }
+                    if (letter_saldo == 0)
+                    {
+                        Letter_Saldo_Evaluate = Color.White;
+                    }
+                    if (letter_saldo > 0)
+                    {
+                        Letter_Saldo_Evaluate = Color.Green;
+                    }
+                }
+                else
+                {
+                    Letter_Saldo_Value = "0";
                 }
 
                 sorted_after_month_transaktionscontent = (from p in sorted_after_month_transaktionscontent orderby DateTime.ParseExact(p.Datumanzeige, "dddd, d.M.yyyy", new CultureInfo("de-DE")) descending select p).ToList();
@@ -2004,6 +2094,20 @@ namespace EasyLife.PageModels
             catch (Exception ex)
             {
                 await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
+        private void Show_Letter_Saldo_Methode()
+        {
+            IsLetterSaldoVisibility = !IsLetterSaldoVisibility;
+
+            if(IsLetterSaldoVisibility == true)
+            {
+                Height = 120;
+            }
+            else
+            {
+                Height = 80;
             }
         }
 

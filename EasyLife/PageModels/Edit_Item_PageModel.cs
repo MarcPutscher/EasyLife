@@ -122,6 +122,18 @@ namespace EasyLife.PageModels
             }
         }
 
+        public bool show_hide_saldo;
+        public bool Show_Hide_Saldo
+        {
+            get { return show_hide_saldo; }
+            set
+            {
+                if (Show_Hide_Saldo == value)
+                    return;
+                show_hide_saldo = value; RaisePropertyChanged();
+            }
+        }
+
         Transaktion placeholder = new Transaktion();
 
         public Edit_Item_PageModel()
@@ -181,6 +193,7 @@ namespace EasyLife.PageModels
                     Transaktion.Datum = Datum;
                     Transaktion.Notiz = Notiz;
                     Transaktion.Balance_Visibility = Show_Hide_Balance;
+                    Transaktion.Saldo_Visibility = Show_Hide_Saldo;
 
                     await ContentService.Edit_Transaktion(Transaktion);
 
@@ -231,6 +244,7 @@ namespace EasyLife.PageModels
                     Notiz = Transaktion.Notiz;
                     Zweck = Transaktion.Zweck;
                     Show_Hide_Balance = Transaktion.Balance_Visibility;
+                    Show_Hide_Saldo = Transaktion.Saldo_Visibility;
 
                     placeholder = Transaktion;
                 }

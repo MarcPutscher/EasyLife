@@ -71,6 +71,7 @@ namespace EasyLife.PageModels
                         Datum = Transaktion.Datum;
                         Notiz = Transaktion.Notiz;
                         Show_Hide_Balance = Transaktion.Balance_Visibility;
+                        Show_Hide_Saldo = Transaktion.Saldo_Visibility;
 
                         Anzahl_an_Wiederholungen = Transaktion.Anzahl_an_Wiederholungen;
                         Art_an_Wiederholungen = Transaktion.Art_an_Wiederholungen;
@@ -94,6 +95,7 @@ namespace EasyLife.PageModels
                     Virtuelle_Transaktion.Art_an_Wiederholungen = Art_an_Wiederholungen;
                     Virtuelle_Transaktion.Speziell = Speziell;
                     Virtuelle_Transaktion.Balance_Visibility = Show_Hide_Balance;
+                    Virtuelle_Transaktion.Saldo_Visibility = Show_Hide_Saldo;
 
                     List<Transaktion> transaktion_list = new List<Transaktion>(await ContentService.Get_all_enabeled_Transaktion());
 
@@ -106,6 +108,7 @@ namespace EasyLife.PageModels
                             Transaktion.Datum = Datum;
                             Transaktion.Notiz = Notiz;
                             Transaktion.Balance_Visibility = Show_Hide_Balance;
+                            Transaktion.Saldo_Visibility= Show_Hide_Saldo;
 
                             await ContentService.Edit_Transaktion(Transaktion);
                         }
@@ -184,6 +187,7 @@ namespace EasyLife.PageModels
                     Datum = Transaktion.Datum;
                     Notiz = Transaktion.Notiz;
                     Show_Hide_Balance = Transaktion.Balance_Visibility;
+                    Show_Hide_Saldo = Transaktion.Saldo_Visibility;
 
                     Anzahl_an_Wiederholungen = Transaktion.Anzahl_an_Wiederholungen;
                     Art_an_Wiederholungen = Transaktion.Art_an_Wiederholungen;
@@ -203,6 +207,7 @@ namespace EasyLife.PageModels
                 Datum = Transaktion.Datum;
                 Notiz = Transaktion.Notiz;
                 Show_Hide_Balance = Transaktion.Balance_Visibility;
+                Show_Hide_Saldo= Transaktion.Saldo_Visibility;
 
                 Anzahl_an_Wiederholungen = Transaktion.Anzahl_an_Wiederholungen;
                 Art_an_Wiederholungen = Transaktion.Art_an_Wiederholungen;
@@ -222,6 +227,7 @@ namespace EasyLife.PageModels
                 Virtuelle_Transaktion.Art_an_Wiederholungen = Art_an_Wiederholungen;
                 Virtuelle_Transaktion.Speziell = Speziell;
                 Virtuelle_Transaktion.Balance_Visibility = Show_Hide_Balance;
+                Virtuelle_Transaktion.Saldo_Visibility = Show_Hide_Saldo;
                 Virtuelle_Transaktion.Id = 0;
 
                 await PassingTransaktionService.Add_Transaktion(Virtuelle_Transaktion);
@@ -317,6 +323,8 @@ namespace EasyLife.PageModels
                     Zweck = Virtuelle_Transaktion.Zweck;
 
                     Show_Hide_Balance = Virtuelle_Transaktion.Balance_Visibility;
+
+                    Show_Hide_Saldo = Virtuelle_Transaktion.Saldo_Visibility;
                 }
 
                 if (int.TryParse(OrderID, out var result2) == true)
@@ -875,6 +883,7 @@ namespace EasyLife.PageModels
                 Art_an_Wiederholungen = Virtuelle_Transaktion.Art_an_Wiederholungen;
                 Speziell = Virtuelle_Transaktion.Speziell;
                 Show_Hide_Balance = Virtuelle_Transaktion.Balance_Visibility;
+                Show_Hide_Saldo = Virtuelle_Transaktion.Saldo_Visibility;
             }
             catch (Exception ex)
             {
@@ -1180,6 +1189,18 @@ namespace EasyLife.PageModels
                 if (show_hide_balance == value)
                     return;
                 show_hide_balance = value; RaisePropertyChanged();
+            }
+        }
+
+        public bool show_hide_saldo;
+        public bool Show_Hide_Saldo
+        {
+            get { return show_hide_saldo; }
+            set
+            {
+                if (Show_Hide_Saldo == value)
+                    return;
+                show_hide_saldo = value; RaisePropertyChanged();
             }
         }
 

@@ -527,6 +527,7 @@ namespace EasyLife.PageModels.Edit_Item_With_Order_Submethods
                     trans.Notiz = Virtuelle_Transaktion.Notiz;
                     trans.Zweck = Virtuelle_Transaktion.Zweck;
                     trans.Balance_Visibility = Virtuelle_Transaktion.Balance_Visibility;
+                    trans.Saldo_Visibility = Virtuelle_Transaktion.Saldo_Visibility;
                     transaktion_list3.Add(trans);
                 }
 
@@ -1532,6 +1533,7 @@ namespace EasyLife.PageModels.Edit_Item_With_Order_Submethods
                         trans.Notiz = Virtuelle_Transaktion.Notiz;
                         trans.Zweck = Virtuelle_Transaktion.Zweck;
                         trans.Balance_Visibility = Virtuelle_Transaktion.Balance_Visibility;
+                        trans.Saldo_Visibility = Virtuelle_Transaktion.Saldo_Visibility;
                         transaktion_list3.Add(trans);
                     }
 
@@ -2533,6 +2535,7 @@ namespace EasyLife.PageModels.Edit_Item_With_Order_Submethods
                         trans.Notiz = Virtuelle_Transaktion.Notiz;
                         trans.Zweck = Virtuelle_Transaktion.Zweck;
                         trans.Balance_Visibility = Virtuelle_Transaktion.Balance_Visibility;
+                        trans.Saldo_Visibility = Virtuelle_Transaktion.Saldo_Visibility;
                         transaktion_list3.Add(trans);
                     }
 

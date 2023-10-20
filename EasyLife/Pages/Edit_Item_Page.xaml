@@ -81,10 +81,12 @@
                 <Entry Placeholder="Notiz hier eingeben" Text="{Binding Notiz}" TextColor="{DynamicResource EntryFrame_Textcolor}" HorizontalTextAlignment="Center" VerticalOptions="Start"/>
             </Frame>
             <Frame Style="{StaticResource FrameA}" Margin="0,20,0,0" VerticalOptions="Center">
-                <Grid ColumnDefinitions="Auto,*" HorizontalOptions="Fill" VerticalOptions="Center">
-                    <Label Text="Transaktion in der Bilanz anzeigen :" FontSize="Medium" TextColor="{DynamicResource EntryFrame_Textcolor}" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="0" Margin="10,0,0,0"/>
-                    <Switch IsToggled="{Binding Show_Hide_Balance}" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1" Margin="0,0,10,0"/>
-                </Grid>
+                <Grid ColumnDefinitions="Auto,*" RowSpacing="5" HorizontalOptions="Fill" VerticalOptions="Center">
+                    <Label Text="Transaktion in der Bilanz anzeigen :" FontSize="Medium" TextColor="{DynamicResource EntryFrame_Textcolor}" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="0" Grid.Row="0" Margin="10,0,0,0"/>
+                    <Switch IsToggled="{Binding Show_Hide_Balance}" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1" Grid.Row="0" Margin="0,0,10,0"/>
+                    <Label Text="Betrag zum Stand hinzufügen :" FontSize="Medium" TextColor="{DynamicResource EntryFrame_Textcolor}" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="0" Grid.Row="1" Margin="10,0,0,0"/>
+                    <Switch IsToggled="{Binding Show_Hide_Saldo}" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1" Grid.Row="1" Margin="0,0,10,0"/>
+                </Grid>            
             </Frame>
             <Button Text="Bearbeitung speichern" Style="{StaticResource ButtonA}" Command="{Binding Edit_Item_Command}" xct:ShadowEffect.Color="{DynamicResource Button_Bordercolor}" Margin="0,40,0,0"/>
         </FlexLayout>

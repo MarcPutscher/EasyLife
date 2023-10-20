@@ -175,6 +175,10 @@ namespace EasyLife.Services
 
         public string Income_Cash { get; set; }
 
+        public string Letter_Outcome { get; set; }
+
+        public string Letter_Income { get; set; }
+
         public string Ignore {  get; set; }
     }
 
@@ -209,6 +213,18 @@ namespace EasyLife.Services
             {
                 output.Income_Cash += zw;
                 output.Income_Cash += "#";
+            }
+
+            foreach (string zw in input.Letter_Outcome)
+            {
+                output.Letter_Outcome += zw;
+                output.Letter_Outcome += "#";
+            }
+
+            foreach (string zw in input.Letter_Income)
+            {
+                output.Letter_Income += zw;
+                output.Letter_Income += "#";
             }
 
             foreach (string zw in input.Ignore)
@@ -274,6 +290,32 @@ namespace EasyLife.Services
             else
             {
                 output.Income_Cash = new List<string>();
+            }
+
+            if (String.IsNullOrEmpty(input.Letter_Outcome) == false)
+            {
+                while (input.Letter_Outcome.Count() > 0)
+                {
+                    output.Letter_Outcome.Add(input.Letter_Outcome.Substring(0, input.Letter_Outcome.IndexOf("#")));
+                    input.Letter_Outcome = input.Letter_Outcome.Remove(0, input.Letter_Outcome.IndexOf("#") + 1);
+                }
+            }
+            else
+            {
+                output.Letter_Outcome = new List<string>();
+            }
+
+            if (String.IsNullOrEmpty(input.Letter_Income) == false)
+            {
+                while (input.Letter_Income.Count() > 0)
+                {
+                    output.Letter_Income.Add(input.Letter_Income.Substring(0, input.Letter_Income.IndexOf("#")));
+                    input.Letter_Income = input.Letter_Income.Remove(0, input.Letter_Income.IndexOf("#") + 1);
+                }
+            }
+            else
+            {
+                output.Letter_Income = new List<string>();
             }
 
             if (String.IsNullOrEmpty(input.Ignore) == false)

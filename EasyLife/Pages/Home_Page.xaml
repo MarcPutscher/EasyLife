@@ -255,14 +255,22 @@
                         </DataTemplate>
                     </ListView.GroupHeaderTemplate>
                 </ListView>
-                <Grid ColumnDefinitions="*,Auto,*" HeightRequest="80" Padding="0" Margin="0,-7,0,5">
+                <Grid ColumnDefinitions="*,Auto,*" HeightRequest="{Binding Height}" Padding="0" Margin="0,-7,0,5">
                     <StackLayout Grid.Column="1" Margin="0,0,0,10">
                         <Frame IsVisible="{Binding IsSaldoVisibility}" CornerRadius="50"  Padding="5" BackgroundColor="{DynamicResource Saldo_Backgroundcolor}" HorizontalOptions="Center" HasShadow="True" xct:ShadowEffect.Color="{Binding Saldo_Evaluate}">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Show_Letter_Saldo_Command}"/>
+                            </Frame.GestureRecognizers>
                             <StackLayout>
                                 <StackLayout Orientation="Horizontal" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
                                     <Label Text="Stand : " TextColor="{DynamicResource Saldo_Textcolor}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
                                     <Label Text="{Binding Saldo_Value}" TextColor="{Binding Saldo_Evaluate}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
                                     <Label Text="€" TextColor="{Binding Saldo_Evaluate}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center" IsVisible="{Binding IsLetterSaldoVisibility}">
+                                    <Label Text="Stand der Briefumschläge: " TextColor="{DynamicResource Saldo_Textcolor}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    <Label Text="{Binding Letter_Saldo_Value}" TextColor="{Binding Letter_Saldo_Evaluate}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    <Label Text="€" TextColor="{Binding Letter_Saldo_Evaluate}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </StackLayout>
                                 <StackLayout Orientation="Horizontal" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center" Margin="20,0,20,0">
                                     <Label Text="{Binding Saldo_Date}" TextColor="{DynamicResource Saldo_Textcolor}" FontSize="Subtitle" FontAttributes="None" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center" />
