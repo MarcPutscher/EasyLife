@@ -13,6 +13,7 @@ using Xamarin.Essentials;
 using EasyLife.Interfaces;
 using Xamarin.CommunityToolkit.Extensions;
 using System.IO;
+using EasyLife.Models;
 
 namespace EasyLife.PageModels
 {
@@ -209,10 +210,201 @@ namespace EasyLife.PageModels
                 {
                     Is_Write_Storage_Enable = "Unbekannt";
                 }
+
+                await Load_Metadata();
             }
             catch (Exception ex)
             {
                 await Shell.Current.DisplayAlert("Fehler", "Es ist bei der Wiederherstellung der Daten ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
+        private async Task Load_Metadata()
+        {
+            try
+            {
+                var transaktionscontent = await ContentService.Get_all_Transaktion();
+
+                int amount_of_generated_transaktion = 0;
+
+                int amount_of_delete_transaktion = 0;
+
+                int amount_of_use_transaktion = 0;
+
+                int amount_of_unuse_transaktion = 0;
+
+                int amount_of_transaktion_in_orders = 0;
+
+                if (transaktionscontent.Count() != 0)
+                {
+                    amount_of_generated_transaktion = transaktionscontent.Last().Id;
+
+                    amount_of_delete_transaktion = amount_of_generated_transaktion - transaktionscontent.Count();
+
+                    foreach (var trans in transaktionscontent)
+                    {
+                        if(trans.Auftrags_id != null)
+                        {
+                            amount_of_transaktion_in_orders++;
+                        }
+
+                        if(trans.Content_Visibility == true)
+                        {
+                            amount_of_use_transaktion++;
+                        }
+                        else
+                        {
+                            amount_of_unuse_transaktion++;
+                        }
+                    }
+                }
+
+                Amount_of_generated_Transaktion = amount_of_generated_transaktion;
+
+                Amount_of_deleted_Transaktion = amount_of_delete_transaktion;
+
+                Amount_of_use_Transaktion = amount_of_use_transaktion;
+
+                Amount_of_unuse_Transaktion = amount_of_unuse_transaktion;
+
+                Amount_of_Transaktion_in_Orders = amount_of_transaktion_in_orders;
+
+
+                var ordercontent = await OrderService.Get_all_Order();
+
+                int amount_of_generated_order = 0;
+
+                int amount_of_delete_order = 0;
+
+                int amount_of_use_order = 0;
+
+                int amount_of_unuse_order = 0;
+
+                if (ordercontent.Count() != 0)
+                {
+                    amount_of_generated_order = ordercontent.Last().Id;
+
+                    amount_of_delete_order = amount_of_generated_order - ordercontent.Count();
+
+                    foreach (var order in ordercontent)
+                    {
+                        bool inuse = false;
+
+                        foreach (var trans in transaktionscontent)
+                        {
+                            if(trans.Auftrags_id != null)
+                            { 
+                                if (trans.Auftrags_id.Substring(0, trans.Auftrags_id.IndexOf(".")) == order.Id.ToString())
+                                {
+                                   inuse = true;
+                                }
+                            }
+                        }
+
+                        if(inuse == true)
+                        {
+                            amount_of_use_order ++;
+                        }
+                        else
+                        {
+                            amount_of_unuse_order ++;
+                        }
+                    }
+                }
+
+                Amount_of_generated_Order = amount_of_generated_order;
+
+                Amount_of_deleted_Order = amount_of_delete_order;
+
+                Amount_of_use_Order = amount_of_use_order;
+
+                Amount_of_unuse_Order = amount_of_unuse_order;
+
+
+                var reasoncontent = await ReasonService.Get_all_Reason();
+
+                int amount_of_generated_reason = 0;
+
+                int amount_of_use_reason = 0;
+
+                int amount_of_unuse_reason = 0;
+
+                if (reasoncontent.Count() != 0)
+                {
+                    amount_of_generated_reason = reasoncontent.First().Id;
+
+                    foreach (var reason in reasoncontent)
+                    {
+                        if(reason.Reason_Visibility == true)
+                        {
+                            amount_of_use_reason ++;
+                        }
+                        else
+                        { 
+                            amount_of_unuse_reason ++;
+                        }
+                    }
+                }
+
+                Amount_of_generated_Reason = amount_of_generated_reason;
+
+                Amount_of_use_Reason = amount_of_use_reason;
+
+                Amount_of_unuse_Reason = amount_of_unuse_reason;
+
+
+                var notificationcontent = await NotificationService.Get_all_Notification();
+
+                List<NotificationRequest> list_of_delivered_notification = (List<NotificationRequest>)await LocalNotificationCenter.Current.GetDeliveredNotificationList();
+
+                List<NotificationRequest> list_of_pending_notification = (List<NotificationRequest>)await LocalNotificationCenter.Current.GetPendingNotificationList();
+
+                int amount_of_generated_notification = 0;
+
+                int amount_of_delete_notification = 0;
+
+                int amount_of_use_notification = 0;
+
+                int amount_of_unuse_notification = 0;
+
+                if (notificationcontent.Count() != 0)
+                {
+                    amount_of_generated_notification = notificationcontent.First().Id;
+
+                    foreach (var notification in notificationcontent)
+                    {
+                        bool isused = false;
+
+                        foreach (Auftrag order in ordercontent)
+                        {
+                            if (order.Id == notification.Auftrags_ID)
+                            {
+                                isused = true;
+                            }
+                        }
+
+                        if(isused == false)
+                        {
+                            amount_of_delete_notification ++;
+                        }
+                    }
+
+                    amount_of_unuse_notification = amount_of_generated_notification - list_of_pending_notification.Count() - amount_of_delete_notification;
+
+                    amount_of_use_notification = list_of_pending_notification.Count();
+                }
+
+                Amount_of_generated_Notification = amount_of_generated_notification;
+
+                Amount_of_deleted_Notification = amount_of_delete_notification;
+
+                Amount_of_use_Notification = amount_of_use_notification;
+
+                Amount_of_unuse_Notification = amount_of_unuse_notification;
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist beim Erstellen der Metadaten ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
             }
         }
 
@@ -362,6 +554,246 @@ namespace EasyLife.PageModels
                 }
 
                 restored_backup_date = value; RaisePropertyChanged();
+            }
+        }
+
+        public int amount_of_generated_transaktion = 0;
+        public int Amount_of_generated_Transaktion
+        {
+            get { return amount_of_generated_transaktion; }
+            set
+            {
+                if (Amount_of_generated_Transaktion == value)
+                {
+                    return;
+                }
+
+                amount_of_generated_transaktion = value; RaisePropertyChanged();
+            }
+        }
+
+        public int amount_of_use_transaktion = 0;
+        public int Amount_of_use_Transaktion
+        {
+            get { return amount_of_use_transaktion; }
+            set
+            {
+                if (Amount_of_use_Transaktion == value)
+                {
+                    return;
+                }
+
+                amount_of_use_transaktion = value; RaisePropertyChanged();
+            }
+        }
+
+        public int amount_of_unuse_transaktion = 0;
+        public int Amount_of_unuse_Transaktion
+        {
+            get { return amount_of_unuse_transaktion; }
+            set
+            {
+                if (Amount_of_unuse_Transaktion == value)
+                {
+                    return;
+                }
+
+                amount_of_unuse_transaktion = value; RaisePropertyChanged();
+            }
+        }
+
+        public int amount_of_transaktion_in_orders = 0;
+        public int Amount_of_Transaktion_in_Orders
+        {
+            get { return amount_of_transaktion_in_orders; }
+            set
+            {
+                if (Amount_of_Transaktion_in_Orders == value)
+                {
+                    return;
+                }
+
+                amount_of_transaktion_in_orders = value; RaisePropertyChanged();
+            }
+        }
+
+        public int amount_of_deleted_transaktion = 0;
+        public int Amount_of_deleted_Transaktion
+        {
+            get { return amount_of_deleted_transaktion; }
+            set
+            {
+                if (Amount_of_deleted_Transaktion == value)
+                {
+                    return;
+                }
+
+                amount_of_deleted_transaktion = value; RaisePropertyChanged();
+            }
+        }
+
+        public int amount_of_generated_order = 0;
+        public int Amount_of_generated_Order
+        {
+            get { return amount_of_generated_order; }
+            set
+            {
+                if (Amount_of_generated_Order == value)
+                {
+                    return;
+                }
+
+                amount_of_generated_order = value; RaisePropertyChanged();
+            }
+        }
+
+        public int amount_of_use_order = 0;
+        public int Amount_of_use_Order
+        {
+            get { return amount_of_use_order; }
+            set
+            {
+                if (Amount_of_use_Order == value)
+                {
+                    return;
+                }
+
+                amount_of_use_order = value; RaisePropertyChanged();
+            }
+        }
+
+        public int amount_of_unuse_order = 0;
+        public int Amount_of_unuse_Order
+        {
+            get { return amount_of_unuse_order; }
+            set
+            {
+                if (Amount_of_unuse_Order == value)
+                {
+                    return;
+                }
+
+                amount_of_unuse_order = value; RaisePropertyChanged();
+            }
+        }
+
+        public int amount_of_deleted_order = 0;
+        public int Amount_of_deleted_Order
+        {
+            get { return amount_of_deleted_order; }
+            set
+            {
+                if (Amount_of_deleted_Order == value)
+                {
+                    return;
+                }
+
+                amount_of_deleted_order = value; RaisePropertyChanged();
+            }
+        }
+
+        public int amount_of_generated_reason = 0;
+        public int Amount_of_generated_Reason
+        {
+            get { return amount_of_generated_reason; }
+            set
+            {
+                if (Amount_of_generated_Reason == value)
+                {
+                    return;
+                }
+
+                amount_of_generated_reason = value; RaisePropertyChanged();
+            }
+        }
+
+        public int amount_of_use_reason = 0;
+        public int Amount_of_use_Reason
+        {
+            get { return amount_of_use_reason; }
+            set
+            {
+                if (Amount_of_use_Reason == value)
+                {
+                    return;
+                }
+
+                amount_of_use_reason = value; RaisePropertyChanged();
+            }
+        }
+
+        public int amount_of_unuse_reason = 0;
+        public int Amount_of_unuse_Reason
+        {
+            get { return amount_of_unuse_reason; }
+            set
+            {
+                if (Amount_of_unuse_Reason == value)
+                {
+                    return;
+                }
+
+                amount_of_unuse_reason = value; RaisePropertyChanged();
+            }
+        }
+
+        public int amount_of_generated_notification = 0;
+        public int Amount_of_generated_Notification
+        {
+            get { return amount_of_generated_notification; }
+            set
+            {
+                if (Amount_of_generated_Notification == value)
+                {
+                    return;
+                }
+
+                amount_of_generated_notification = value; RaisePropertyChanged();
+            }
+        }
+
+        public int amount_of_deleted_notification = 0;
+        public int Amount_of_deleted_Notification
+        {
+            get { return amount_of_deleted_notification; }
+            set
+            {
+                if (Amount_of_deleted_Notification == value)
+                {
+                    return;
+                }
+
+                amount_of_deleted_notification = value; RaisePropertyChanged();
+            }
+        }
+
+        public int amount_of_use_notification = 0;
+        public int Amount_of_use_Notification
+        {
+            get { return amount_of_use_notification; }
+            set
+            {
+                if (Amount_of_use_Notification == value)
+                {
+                    return;
+                }
+
+                amount_of_use_notification = value; RaisePropertyChanged();
+            }
+        }
+
+        public int amount_of_unuse_notification = 0;
+        public int Amount_of_unuse_Notification
+        {
+            get { return amount_of_unuse_notification; }
+            set
+            {
+                if (Amount_of_unuse_Notification == value)
+                {
+                    return;
+                }
+
+                amount_of_unuse_notification = value; RaisePropertyChanged();
             }
         }
     }

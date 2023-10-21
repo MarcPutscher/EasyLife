@@ -58,7 +58,7 @@ namespace EasyLife.Droid
             }
         }
 
-        protected override async void OnStart()
+        protected override void OnStart()
         {
             base.OnStart();
 
@@ -75,42 +75,42 @@ namespace EasyLife.Droid
                 this.RequestPermissions(notiPermission, requestLocationId);
             }
 
-            if (Preferences.Get("Get_Backup", false) == false)
-            {
-                try
-                {
-                    string[] files = Directory.GetFiles(DependencyService.Get<IAccessFile>().CreateFile(null), "EasyLife-Backup-*");
+            //if (Preferences.Get("Get_Backup", false) == false)
+            //{
+            //    try
+            //    {
+            //        string[] files = Directory.GetFiles(DependencyService.Get<IAccessFile>().CreateFile(null), "EasyLife-Backup-*");
 
-                    if (files.Count() != 0)
-                    {
-                        var result = await Shell.Current.DisplayAlert("Daten wiederherstellen", "Wollen Sie die Daten aus einem Backup wiederhererstellen?", "Ja", "Nein");
+            //        if (files.Count() != 0)
+            //        {
+            //            var result = await Shell.Current.DisplayAlert("Daten wiederherstellen", "Wollen Sie die Daten aus einem Backup wiederhererstellen?", "Ja", "Nein");
 
-                        if (result == true)
-                        {
-                            var result1 = await BackupService.Restore_Backup();
+            //            if (result == true)
+            //            {
+            //                var result1 = await BackupService.Restore_Backup();
 
-                            if (result1 == 1)
-                            {
-                                Preferences.Set("Restored_Backup_Date", Preferences.Get("Restored_Backup_Path", "").Substring(Preferences.Get("Restored_Backup_Path", "").LastIndexOf("-") + 1).Substring(0, Preferences.Get("Restored_Backup_Path", "").Substring(Preferences.Get("Restored_Backup_Path", "").LastIndexOf("-")).LastIndexOf(".") - 1));
-                            }
-                        }
-                    }
+            //                if (result1 == 1)
+            //                {
+            //                    Preferences.Set("Restored_Backup_Date", Preferences.Get("Restored_Backup_Path", "").Substring(Preferences.Get("Restored_Backup_Path", "").LastIndexOf("-") + 1).Substring(0, Preferences.Get("Restored_Backup_Path", "").Substring(Preferences.Get("Restored_Backup_Path", "").LastIndexOf("-")).LastIndexOf(".") - 1));
+            //                }
+            //            }
+            //        }
 
-                    Preferences.Set("Get_Backup", true);
-                }
-                catch (Exception ex)
-                {
-                    await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            //        Preferences.Set("Get_Backup", true);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
 
-                    Preferences.Set("Last_Backup_Date", "");
+            //        Preferences.Set("Last_Backup_Date", "");
 
-                    Preferences.Set("Last_Backup_Path", "");
+            //        Preferences.Set("Last_Backup_Path", "");
 
-                    Preferences.Set("Restored_Backup_Date", "");
+            //        Preferences.Set("Restored_Backup_Date", "");
 
-                    Preferences.Set("Get_Backup", true);
-                }
-            }
+            //        Preferences.Set("Get_Backup", true);
+            //    }
+            //}
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)

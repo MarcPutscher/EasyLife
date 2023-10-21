@@ -30,7 +30,7 @@ namespace EasyLife.Helpers
             }
             if (transaktion.Auftrags_Option == 2)
             {
-                description = "Zweck: " + transaktion.Zweck + "\nBetrag: " + transaktion.Betrag + "€\nArt des Auftrages: " + transaktion.Art_an_Wiederholungen + "\nAnzahl der Wiederhilungen: " + transaktion.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + transaktion.Speziell + "";
+                description = "Zweck: " + transaktion.Zweck + "\nBetrag: " + transaktion.Betrag + "€\nArt des Auftrages: " + transaktion.Art_an_Wiederholungen + "\nAnzahl der Wiederholungen: " + transaktion.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + transaktion.Speziell + "";
             }
             if (transaktion.Auftrags_Option == 3)
             {
