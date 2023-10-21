@@ -18,15 +18,338 @@
                 EventName="Appearing"
                 Command="{Binding View_Appering_Command}"/>
     </ContentPage.Behaviors>
-    
-    <Grid RowDefinitions="*,Auto">
-        <Frame BackgroundColor="Transparent" Padding="0" Margin="20,0,20,0" Grid.Row="0">
-            <ScrollView Orientation="Vertical" VerticalScrollBarVisibility="Never">
-                <StackLayout Spacing="20" VerticalOptions="Center" HorizontalOptions="Fill">
 
-                    <Label Text="Benachrichtigungen" TextDecorations="Underline" TextColor="Red" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,10,0,1"/>
-                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
-                        <customrenderer:AutoFontSizeLabel 
+    <SwipeView BackgroundColor="Black" Margin="20,0,20,0">
+        <SwipeView.TopItems>
+            <SwipeItems Mode="Reveal">
+                <SwipeItemView BackgroundColor="Black">
+                    <Grid RowDefinitions="*,Auto">
+                        <Frame BackgroundColor="Transparent" Padding="0" Margin="20,0,20,0" Grid.Row="0">
+                            <StackLayout Orientation="Vertical" Spacing="5">
+                                <Label Text="Metadaten" TextDecorations="Underline" TextColor="Red" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,10,0,1"/>
+
+                                <Label Text="Transaktionen :" TextDecorations="Underline" TextColor="Green" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" Margin="0,10,0,1"/>
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <customrenderer:AutoFontSizeLabel 
+                                                    AutoSizeMaxTextSize="20"
+                                                    AutoSizeMinTextSize="8"
+                                                    AutoSizeStepGranularity="1"
+                                                    HeightRequest="30"
+                                                    HorizontalTextAlignment="Start"
+                                                    VerticalTextAlignment="Center"
+                                                    VerticalOptions="Center"
+                                                    HorizontalOptions="Fill"
+                                                    Grid.Column="0"                                
+                                                    MaxLines="1"
+                                                    Padding="0"
+                                                    Text="Anzahl der erstellten Transaktionen :" 
+                                                    TextColor="White"
+                                                    FontAttributes="None"/>
+                                    <Label Text="{Binding Amount_of_generated_Transaktion}" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <customrenderer:AutoFontSizeLabel 
+                                                    AutoSizeMaxTextSize="20"
+                                                    AutoSizeMinTextSize="8"
+                                                    AutoSizeStepGranularity="1"
+                                                    HeightRequest="30"
+                                                    HorizontalTextAlignment="Start"
+                                                    VerticalTextAlignment="Center"
+                                                    VerticalOptions="Center"
+                                                    HorizontalOptions="Fill"
+                                                    Grid.Column="0"                                
+                                                    MaxLines="1"
+                                                    Padding="0"
+                                                    Text="Anzahl der gelöschten Transaktionen :" 
+                                                    TextColor="White"
+                                                    FontAttributes="None"/>
+                                    <Label Text="{Binding Amount_of_deleted_Transaktion}" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <customrenderer:AutoFontSizeLabel 
+                                                    AutoSizeMaxTextSize="20"
+                                                    AutoSizeMinTextSize="8"
+                                                    AutoSizeStepGranularity="1"
+                                                    HeightRequest="30"
+                                                    HorizontalTextAlignment="Start"
+                                                    VerticalTextAlignment="Center"
+                                                    VerticalOptions="Center"
+                                                    HorizontalOptions="Fill"
+                                                    Grid.Column="0"                                
+                                                    MaxLines="1"
+                                                    Padding="0"
+                                                    Text="Anzahl der benutzten Transaktionen :" 
+                                                    TextColor="White"
+                                                    FontAttributes="None"/>
+                                    <Label Text="{Binding Amount_of_use_Transaktion}" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <customrenderer:AutoFontSizeLabel 
+                                                    AutoSizeMaxTextSize="20"
+                                                    AutoSizeMinTextSize="8"
+                                                    AutoSizeStepGranularity="1"
+                                                    HeightRequest="30"
+                                                    HorizontalTextAlignment="Start"
+                                                    VerticalTextAlignment="Center"
+                                                    VerticalOptions="Center"
+                                                    HorizontalOptions="Fill"
+                                                    Grid.Column="0"                                
+                                                    MaxLines="1"
+                                                    Padding="0"
+                                                    Text="Anzahl der unbenutzten Transaktionen :" 
+                                                    TextColor="White"
+                                                    FontAttributes="None"/>
+                                    <Label Text="{Binding Amount_of_unuse_Transaktion}" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <customrenderer:AutoFontSizeLabel 
+                                                    AutoSizeMaxTextSize="20"
+                                                    AutoSizeMinTextSize="8"
+                                                    AutoSizeStepGranularity="1"
+                                                    HeightRequest="30"
+                                                    HorizontalTextAlignment="Start"
+                                                    VerticalTextAlignment="Center"
+                                                    VerticalOptions="Center"
+                                                    HorizontalOptions="Fill"
+                                                    Grid.Column="0"                                
+                                                    MaxLines="1"
+                                                    Padding="0"
+                                                    Text="Anzahl der Transaktionen in Aufträgen:" 
+                                                    TextColor="White"
+                                                    FontAttributes="None"/>
+                                    <Label Text="{Binding Amount_of_Transaktion_in_Orders}" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                                </Grid>
+
+                                <Label Text="Aufträge :" TextDecorations="Underline" TextColor="Green" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" Margin="0,10,0,1"/>
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <customrenderer:AutoFontSizeLabel 
+                                                    AutoSizeMaxTextSize="20"
+                                                    AutoSizeMinTextSize="8"
+                                                    AutoSizeStepGranularity="1"
+                                                    HeightRequest="30"
+                                                    HorizontalTextAlignment="Start"
+                                                    VerticalTextAlignment="Center"
+                                                    VerticalOptions="Center"
+                                                    HorizontalOptions="Fill"
+                                                    Grid.Column="0"                                
+                                                    MaxLines="1"
+                                                    Padding="0"
+                                                    Text="Anzahl der erstellten Aufträge :" 
+                                                    TextColor="White"
+                                                    FontAttributes="None"/>
+                                    <Label Text="{Binding Amount_of_generated_Order}" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <customrenderer:AutoFontSizeLabel 
+                                                    AutoSizeMaxTextSize="20"
+                                                    AutoSizeMinTextSize="8"
+                                                    AutoSizeStepGranularity="1"
+                                                    HeightRequest="30"
+                                                    HorizontalTextAlignment="Start"
+                                                    VerticalTextAlignment="Center"
+                                                    VerticalOptions="Center"
+                                                    HorizontalOptions="Fill"
+                                                    Grid.Column="0"                                
+                                                    MaxLines="1"
+                                                    Padding="0"
+                                                    Text="Anzahl der gelöschten Aufträge :" 
+                                                    TextColor="White"
+                                                    FontAttributes="None"/>
+                                    <Label Text="{Binding Amount_of_deleted_Order}" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <customrenderer:AutoFontSizeLabel 
+                                                    AutoSizeMaxTextSize="20"
+                                                    AutoSizeMinTextSize="8"
+                                                    AutoSizeStepGranularity="1"
+                                                    HeightRequest="30"
+                                                    HorizontalTextAlignment="Start"
+                                                    VerticalTextAlignment="Center"
+                                                    VerticalOptions="Center"
+                                                    HorizontalOptions="Fill"
+                                                    Grid.Column="0"                                
+                                                    MaxLines="1"
+                                                    Padding="0"
+                                                    Text="Anzahl der benutzten Aufträge :" 
+                                                    TextColor="White"
+                                                    FontAttributes="None"/>
+                                    <Label Text="{Binding Amount_of_use_Order}" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <customrenderer:AutoFontSizeLabel 
+                                                    AutoSizeMaxTextSize="20"
+                                                    AutoSizeMinTextSize="8"
+                                                    AutoSizeStepGranularity="1"
+                                                    HeightRequest="30"
+                                                    HorizontalTextAlignment="Start"
+                                                    VerticalTextAlignment="Center"
+                                                    VerticalOptions="Center"
+                                                    HorizontalOptions="Fill"
+                                                    Grid.Column="0"                                
+                                                    MaxLines="1"
+                                                    Padding="0"
+                                                    Text="Anzahl der unbenutzten Aufträge :" 
+                                                    TextColor="White"
+                                                    FontAttributes="None"/>
+                                    <Label Text="{Binding Amount_of_unuse_Order}" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                                </Grid>
+
+                                <Label Text="Zwecke :" TextDecorations="Underline" TextColor="Green" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" Margin="0,10,0,1"/>
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <customrenderer:AutoFontSizeLabel 
+                                                    AutoSizeMaxTextSize="20"
+                                                    AutoSizeMinTextSize="8"
+                                                    AutoSizeStepGranularity="1"
+                                                    HeightRequest="30"
+                                                    HorizontalTextAlignment="Start"
+                                                    VerticalTextAlignment="Center"
+                                                    VerticalOptions="Center"
+                                                    HorizontalOptions="Fill"
+                                                    Grid.Column="0"                                
+                                                    MaxLines="1"
+                                                    Padding="0"
+                                                    Text="Anzahl der erstellten Zwecke :" 
+                                                    TextColor="White"
+                                                    FontAttributes="None"/>
+                                    <Label Text="{Binding Amount_of_generated_Reason}" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <customrenderer:AutoFontSizeLabel 
+                                                    AutoSizeMaxTextSize="20"
+                                                    AutoSizeMinTextSize="8"
+                                                    AutoSizeStepGranularity="1"
+                                                    HeightRequest="30"
+                                                    HorizontalTextAlignment="Start"
+                                                    VerticalTextAlignment="Center"
+                                                    VerticalOptions="Center"
+                                                    HorizontalOptions="Fill"
+                                                    Grid.Column="0"                                
+                                                    MaxLines="1"
+                                                    Padding="0"
+                                                    Text="Anzahl der benutzten Zwecke :" 
+                                                    TextColor="White"
+                                                    FontAttributes="None"/>
+                                    <Label Text="{Binding Amount_of_use_Reason}" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <customrenderer:AutoFontSizeLabel 
+                                                    AutoSizeMaxTextSize="20"
+                                                    AutoSizeMinTextSize="8"
+                                                    AutoSizeStepGranularity="1"
+                                                    HeightRequest="30"
+                                                    HorizontalTextAlignment="Start"
+                                                    VerticalTextAlignment="Center"
+                                                    VerticalOptions="Center"
+                                                    HorizontalOptions="Fill"
+                                                    Grid.Column="0"                                
+                                                    MaxLines="1"
+                                                    Padding="0"
+                                                    Text="Anzahl der unbenutzten Zwecke :" 
+                                                    TextColor="White"
+                                                    FontAttributes="None"/>
+                                    <Label Text="{Binding Amount_of_unuse_Reason}" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                                </Grid>
+
+                                <Label Text="Benachrichtigungen :" TextDecorations="Underline" TextColor="Green" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" Margin="0,10,0,1"/>
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <customrenderer:AutoFontSizeLabel 
+                                                    AutoSizeMaxTextSize="20"
+                                                    AutoSizeMinTextSize="8"
+                                                    AutoSizeStepGranularity="1"
+                                                    HeightRequest="30"
+                                                    HorizontalTextAlignment="Start"
+                                                    VerticalTextAlignment="Center"
+                                                    VerticalOptions="Center"
+                                                    HorizontalOptions="Fill"
+                                                    Grid.Column="0"                                
+                                                    MaxLines="1"
+                                                    Padding="0"
+                                                    Text="Anzahl der erstellten Benachrichtigungen :" 
+                                                    TextColor="White"
+                                                    FontAttributes="None"/>
+                                    <Label Text="{Binding Amount_of_generated_Notification}" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <customrenderer:AutoFontSizeLabel 
+                                                    AutoSizeMaxTextSize="20"
+                                                    AutoSizeMinTextSize="8"
+                                                    AutoSizeStepGranularity="1"
+                                                    HeightRequest="30"
+                                                    HorizontalTextAlignment="Start"
+                                                    VerticalTextAlignment="Center"
+                                                    VerticalOptions="Center"
+                                                    HorizontalOptions="Fill"
+                                                    Grid.Column="0"                                
+                                                    MaxLines="1"
+                                                    Padding="0"
+                                                    Text="Anzahl der gelöschten Benachrichtigungen :" 
+                                                    TextColor="White"
+                                                    FontAttributes="None"/>
+                                    <Label Text="{Binding Amount_of_deleted_Notification}" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <customrenderer:AutoFontSizeLabel 
+                                                    AutoSizeMaxTextSize="20"
+                                                    AutoSizeMinTextSize="8"
+                                                    AutoSizeStepGranularity="1"
+                                                    HeightRequest="30"
+                                                    HorizontalTextAlignment="Start"
+                                                    VerticalTextAlignment="Center"
+                                                    VerticalOptions="Center"
+                                                    HorizontalOptions="Fill"
+                                                    Grid.Column="0"                                
+                                                    MaxLines="1"
+                                                    Padding="0"
+                                                    Text="Anzahl der kommenden Benachrichtigungen :" 
+                                                    TextColor="White"
+                                                    FontAttributes="None"/>
+                                    <Label Text="{Binding Amount_of_use_Notification}" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <customrenderer:AutoFontSizeLabel 
+                                                    AutoSizeMaxTextSize="20"
+                                                    AutoSizeMinTextSize="8"
+                                                    AutoSizeStepGranularity="1"
+                                                    HeightRequest="30"
+                                                    HorizontalTextAlignment="Start"
+                                                    VerticalTextAlignment="Center"
+                                                    VerticalOptions="Center"
+                                                    HorizontalOptions="Fill"
+                                                    Grid.Column="0"                                
+                                                    MaxLines="1"
+                                                    Padding="0"
+                                                    Text="Anzahl der eingetretenen Benachrichtigungen :" 
+                                                    TextColor="White"
+                                                    FontAttributes="None"/>
+                                    <Label Text="{Binding Amount_of_unuse_Notification}" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                                </Grid>
+                            </StackLayout>
+                        </Frame>
+                    </Grid>
+                </SwipeItemView>
+            </SwipeItems>
+        </SwipeView.TopItems>
+
+        <Grid RowDefinitions="*,Auto">
+            <Frame BackgroundColor="Transparent" Padding="0" Grid.Row="0">
+                <ScrollView Orientation="Vertical" VerticalScrollBarVisibility="Never">
+                    <StackLayout Spacing="20" VerticalOptions="Center" HorizontalOptions="Fill">
+
+                        <Label Text="Benachrichtigungen" TextDecorations="Underline" TextColor="Red" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,10,0,1"/>
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                            <customrenderer:AutoFontSizeLabel 
                             AutoSizeMaxTextSize="20"
                             AutoSizeMinTextSize="8"
                             AutoSizeStepGranularity="1"
@@ -41,13 +364,13 @@
                             Text="Benachrichtigung zugelassen :" 
                             TextColor="White"
                             FontAttributes="None"/>
-                        <Label Text="{Binding Is_Notification_Enable}" TextColor="Gold" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
-                    </Grid>
-                    <Button Text="Anstehende Benachrichtigungen" Padding="10" CornerRadius="30" Command="{Binding Notification_Command}" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Gray" TextColor="White" FontSize="Medium" BorderColor="White" BorderWidth="2"/>
+                            <Label Text="{Binding Is_Notification_Enable}" TextColor="Gold" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                        </Grid>
+                        <Button Text="Anstehende Benachrichtigungen" Padding="10" CornerRadius="30" Command="{Binding Notification_Command}" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Gray" TextColor="White" FontSize="Medium" BorderColor="White" BorderWidth="2"/>
 
-                    <Label Text="Datensicherung" TextDecorations="Underline" TextColor="Red" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,10,0,1"/>
-                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
-                        <customrenderer:AutoFontSizeLabel 
+                        <Label Text="Datensicherung" TextDecorations="Underline" TextColor="Red" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,10,0,1"/>
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                            <customrenderer:AutoFontSizeLabel 
                             AutoSizeMaxTextSize="20"
                             AutoSizeMinTextSize="8"
                             AutoSizeStepGranularity="1"
@@ -62,10 +385,10 @@
                             Text="EasyLife kann Daten im Speicher lesen :" 
                             TextColor="White"
                             FontAttributes="None"/>
-                        <Label Text="{Binding Is_Read_Storage_Enable}" TextColor="Gold" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
-                    </Grid>
-                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
-                        <customrenderer:AutoFontSizeLabel 
+                            <Label Text="{Binding Is_Read_Storage_Enable}" TextColor="Gold" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                            <customrenderer:AutoFontSizeLabel 
                             AutoSizeMaxTextSize="20"
                             AutoSizeMinTextSize="8"
                             AutoSizeStepGranularity="1"
@@ -80,10 +403,10 @@
                             Text="EasyLife kann Daten im Speicher schreiben :" 
                             TextColor="White"
                             FontAttributes="None"/>
-                        <Label Text="{Binding Is_Write_Storage_Enable}" TextColor="Gold" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
-                    </Grid>
-                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
-                        <customrenderer:AutoFontSizeLabel 
+                            <Label Text="{Binding Is_Write_Storage_Enable}" TextColor="Gold" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                            <customrenderer:AutoFontSizeLabel 
                             AutoSizeMaxTextSize="20"
                             AutoSizeMinTextSize="8"
                             AutoSizeStepGranularity="1"
@@ -98,10 +421,10 @@
                             Text="Stand der wiederhergestellten Daten :" 
                             TextColor="White"
                             FontAttributes="None"/>
-                        <Label Text="{Binding Restored_Backup_Date}" TextColor="Gold" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
-                    </Grid>
-                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
-                        <customrenderer:AutoFontSizeLabel 
+                            <Label Text="{Binding Restored_Backup_Date}" TextColor="Gold" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                            <customrenderer:AutoFontSizeLabel 
                             AutoSizeMaxTextSize="20"
                             AutoSizeMinTextSize="8"
                             AutoSizeStepGranularity="1"
@@ -116,10 +439,10 @@
                             Text="Datum des letzten Backups :" 
                             TextColor="White"
                             FontAttributes="None"/>
-                        <Label Text="{Binding Last_Backup_Date}" TextColor="Gold" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
-                    </Grid>
-                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
-                        <customrenderer:AutoFontSizeLabel 
+                            <Label Text="{Binding Last_Backup_Date}" TextColor="Gold" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                            <customrenderer:AutoFontSizeLabel 
                             AutoSizeMaxTextSize="20"
                             AutoSizeMinTextSize="8"
                             AutoSizeStepGranularity="1"
@@ -134,16 +457,17 @@
                             Text="Datum des nächsten Backups :" 
                             TextColor="White"
                             FontAttributes="None"/>
-                        <Label Text="{Binding Next_Backup_Date}" TextColor="Gold" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
-                    </Grid>
-                    <Button Text="Backup manuell erstellen" Padding="10" CornerRadius="30" Command="{Binding Create_Backup_Command}" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Gray" TextColor="White" FontSize="Medium" BorderColor="White" BorderWidth="2" Margin="0,10,0,5"/>
-                    <Button Text="Daten manuell wiederherstellen" Padding="10" CornerRadius="30" Command="{Binding Restore_Backup_Command}" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Gray" TextColor="White" FontSize="Medium" BorderColor="White" BorderWidth="2" Margin="0,5,0,0"/>
+                            <Label Text="{Binding Next_Backup_Date}" TextColor="Gold" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                        </Grid>
+                        <Button Text="Backup manuell erstellen" Padding="10" CornerRadius="30" Command="{Binding Create_Backup_Command}" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Gray" TextColor="White" FontSize="Medium" BorderColor="White" BorderWidth="2" Margin="0,10,0,5"/>
+                        <Button Text="Daten manuell wiederherstellen" Padding="10" CornerRadius="30" Command="{Binding Restore_Backup_Command}" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Gray" TextColor="White" FontSize="Medium" BorderColor="White" BorderWidth="2" Margin="0,5,0,0"/>
 
-                    <Label Text="Styling" TextDecorations="Underline" TextColor="Red" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,10,0,1"/>
-                    <Button Text="Benutzerdefinierte Farben" Padding="10" CornerRadius="30" Command="{Binding Styling_Color_Command}" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Gray" TextColor="White" FontSize="Medium" BorderColor="White" BorderWidth="2"/>
+                        <Label Text="Styling" TextDecorations="Underline" TextColor="Red" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,10,0,1"/>
+                        <Button Text="Benutzerdefinierte Farben" Padding="10" CornerRadius="30" Command="{Binding Styling_Color_Command}" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Gray" TextColor="White" FontSize="Medium" BorderColor="White" BorderWidth="2"/>
 
-                </StackLayout>
-            </ScrollView>
-        </Frame>
-    </Grid>
+                    </StackLayout>
+                </ScrollView>
+            </Frame>
+        </Grid>
+    </SwipeView>
 </ContentPage>

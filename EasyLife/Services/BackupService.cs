@@ -2,6 +2,7 @@
 using EasyLife.Interfaces;
 using EasyLife.Models;
 using Microsoft.Extensions.DependencyModel;
+using Plugin.LocalNotification;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -350,6 +351,8 @@ namespace EasyLife.Services
             Init_Source();
 
             await db_create.CreateTableAsync<Notification>();
+
+            LocalNotificationCenter.Current.CancelAll();
 
             List<Notification> notifications_list = await db_create.Table<Notification>().ToListAsync();
 

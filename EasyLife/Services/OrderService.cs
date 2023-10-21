@@ -68,6 +68,24 @@ namespace EasyLife.Services
             await dba.UpdateAsync(item);
         }
 
+
+        /// <summary>
+        /// Gibt alle Aufträge in der Datenbank zurück.
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<IEnumerable<Auftrag>> Get_all_Order()
+        {
+            await Init();
+            try
+            {
+                return await dba.Table<Auftrag>().ToListAsync();
+            }
+            catch
+            {
+                return Enumerable.Empty<Auftrag>();
+            }
+        }
+
         /// <summary>
         /// Gibt ein spezifischen Auftrag zurück.
         /// </summary>

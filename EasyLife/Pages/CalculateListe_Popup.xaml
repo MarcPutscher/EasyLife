@@ -29,7 +29,7 @@
                                 <ViewCell>
                                     <SwipeView BackgroundColor="Transparent">
                                         <SwipeView.LeftItems>
-                                            <SwipeItems>
+                                            <SwipeItems Mode="Execute">
                                                 <SwipeItem Invoked="SwipeItem_Invoked" CommandParameter="{Binding .}" Text="Entfernen" BackgroundColor="Red" />
                                             </SwipeItems>
                                         </SwipeView.LeftItems>
