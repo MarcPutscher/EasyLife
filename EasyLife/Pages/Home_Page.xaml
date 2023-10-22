@@ -96,15 +96,12 @@
                                                 <x:Double>50</x:Double>
                                             </x:Array>
                                         </Picker.ItemsSource>
-                                        <Picker.Behaviors>
-                                            <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.Amount_per_Load_Changed_Command}"/>
-                                        </Picker.Behaviors>
                                     </Picker>
                                     <Label Text="/ Laden" TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalTextAlignment="Center"/>
                                 </StackLayout>
                             </Frame>
-                            <Frame Grid.Column="1" Padding="5" BackgroundColor="Transparent">
-                                <Button Text="Mehr laden" TextColor="Black" FontSize="Large" Padding="5" FontAttributes="Bold" BorderColor="DarkBlue" BorderWidth="1" BackgroundColor="Gray" CornerRadius="20" HorizontalOptions="Center" VerticalOptions="Center" Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.Load_on_demand_Command}"/>
+                            <Frame Grid.Column="1" BackgroundColor="Transparent">
+                                <Button Text="Mehr laden" TextColor="Black" FontSize="Large" Padding="10" FontAttributes="Bold" BorderColor="DarkBlue" BorderWidth="1" BackgroundColor="Gray" CornerRadius="20" HorizontalOptions="Center" VerticalOptions="Center" Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.Load_on_demand_Command}"/>
                             </Frame>
                         </Grid>
                     </Grid>
@@ -196,15 +193,12 @@
                                                 <x:Double>50</x:Double>
                                             </x:Array>
                                         </Picker.ItemsSource>
-                                        <Picker.Behaviors>
-                                            <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Amount_per_Load_Changed_Command}"/>
-                                        </Picker.Behaviors>
                                     </Picker>
                                     <Label Text="/ Laden" TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalTextAlignment="Center"/>
                                 </StackLayout>
                             </Frame>
-                            <Frame Grid.Column="1" Padding="5" BackgroundColor="Transparent">
-                                <Button Text="Mehr laden" TextColor="Black" FontSize="Large" Padding="5" FontAttributes="Bold" BorderColor="DarkBlue" BorderWidth="1" BackgroundColor="Gray" CornerRadius="20" HorizontalOptions="Center" VerticalOptions="Center" Command="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Load_on_demand_Command}"/>
+                            <Frame Grid.Column="1" BackgroundColor="Transparent">
+                                <Button Text="Mehr laden" TextColor="Black" FontSize="Large" Padding="10" FontAttributes="Bold" BorderColor="DarkBlue" BorderWidth="1" BackgroundColor="Gray" CornerRadius="20" HorizontalOptions="Center" VerticalOptions="Center" Command="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Load_on_demand_Command}"/>
                             </Frame>
                         </Grid>
                     </Grid>

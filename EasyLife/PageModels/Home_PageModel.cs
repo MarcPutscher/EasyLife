@@ -102,10 +102,6 @@ namespace EasyLife.PageModels
 
         public AsyncCommand Load_on_demand_Command { get; }
 
-        public AsyncCommand Amount_per_Load_Changed_Command { get; }
-
-        public AsyncCommand Scrollto_Command { get; }
-
         public bool serchbar_visibility = false;
         public bool Serchbar_Visibility
         {
@@ -427,8 +423,6 @@ namespace EasyLife.PageModels
             }
         }
 
-        public bool Load_on_Demande_State = false;
-
         public double transaktion_per_load = Preferences.Get("Transaktion_per_load",20.0);
         public double Transaktion_per_Load
         {
@@ -444,6 +438,10 @@ namespace EasyLife.PageModels
         public List<Transaktion> Calculator_List = new List<Transaktion>();
 
         public List<double> Load_Progress = new List<double>() { -1, -1 };
+
+        public List<Transaktion> Transaktion_List_for_Load = new List<Transaktion>();
+
+        public List<Transaktion> Transaktion_List_from_Load = new List<Transaktion>();
 
 
         public Home_PageModel()
@@ -475,7 +473,6 @@ namespace EasyLife.PageModels
             Calculator_RemoveAll_Command = new AsyncCommand(Calculator_RemoveAll_Methode);
             ShowCalculator_List_Command = new AsyncCommand(ShowCalculator_List_Methode);
             Load_on_demand_Command = new AsyncCommand(Load_on_demand_Methode);
-            Amount_per_Load_Changed_Command = new AsyncCommand(Load_on_demand_Methode);
 
             Period_Command = new AsyncCommand(Period_Popup);
 
@@ -1658,44 +1655,40 @@ namespace EasyLife.PageModels
 
                 sorted_after_month_transaktionscontent = (from p in sorted_after_month_transaktionscontent orderby DateTime.ParseExact(p.Datumanzeige, "dddd, d.M.yyyy", new CultureInfo("de-DE")) descending select p).ToList();
 
-                List<Transaktion> new_sorted_after_month_transaktionscontent = new List<Transaktion>();
+                Transaktion_List_for_Load = sorted_after_month_transaktionscontent.ToList();
 
                 if (Load_Progress[0] != sorted_after_month_transaktionscontent.Count)
                 {
+
                     Load_Progress[0] = sorted_after_month_transaktionscontent.Count;
 
                     Load_Progress[1] = Preferences.Get("Transaktion_per_load", 20.0);
+
+                    if (Load_Progress[1] > Load_Progress[0])
+                    {
+                        Load_Progress[1] = Load_Progress[0];
+                    }
+
+                    List<Transaktion> new_sorted_after_month_transaktionscontent = sorted_after_month_transaktionscontent.GetRange(0, (int)Load_Progress[1]);
+
+                    if (Load_Progress[1] != Load_Progress[0])
+                    {
+                        new_sorted_after_month_transaktionscontent.Add(new Transaktion { Auftrags_id = "Load", Betrag = "0" });
+                    }
+
+                    sorted_after_month_transaktionscontent.Clear();
+
+                    sorted_after_month_transaktionscontent = new_sorted_after_month_transaktionscontent;
                 }
                 else
                 {
-                    if(Load_on_Demande_State == true)
+                    if (Load_Progress[1] < Load_Progress[0])
                     {
-                        if (Transaktion_per_Load != Preferences.Get("Transaktion_per_load", 20.0))
-                        {
-                            Preferences.Set("Transaktion_per_load", Transaktion_per_Load);
-
-                            Load_Progress[1] = Preferences.Get("Transaktion_per_load", 20.0);
-                        }
-                        else
-                        {
-                            Load_Progress[1] += Preferences.Get("Transaktion_per_load", 20.0);
-                        }
+                        sorted_after_month_transaktionscontent = Transaktion_List_from_Load;
                     }
                 }
 
-                if (Load_Progress[1] > Load_Progress[0])
-                {
-                    Load_Progress[1] = Load_Progress[0];
-                }
-
-                new_sorted_after_month_transaktionscontent = sorted_after_month_transaktionscontent.GetRange(0, (int)Load_Progress[1]);
-
-                if (Load_Progress[1] != Load_Progress[0])
-                {
-                    new_sorted_after_month_transaktionscontent.Add(new Transaktion { Auftrags_id = "Load", Betrag = "0" });
-                }
-
-                Transaktion.AddRange(new_sorted_after_month_transaktionscontent);
+                Transaktion.AddRange(sorted_after_month_transaktionscontent);
 
                 if (Transaktion.Count() == 0)
                 {
@@ -1758,6 +1751,14 @@ namespace EasyLife.PageModels
         private void ViewIsDisappearing_Methode()
         {
             Is_Aktiv = false;
+
+            Load_Progress[0] = -1;
+
+            Load_Progress[1] = -1;
+
+            Transaktion_List_for_Load.Clear();
+
+            Transaktion_List_from_Load.Clear();
         }
 
         public async Task Period_Popup()
@@ -2084,17 +2085,53 @@ namespace EasyLife.PageModels
         {
             try
             {
-                Load_on_Demande_State = true;
+                List<Transaktion> output = new List<Transaktion>();
 
-                await Refresh();
 
-                Load_on_Demande_State = false;
+                if (Load_Progress[0] != Transaktion_List_for_Load.Count)
+                {
+                    Load_Progress[0] = Transaktion_List_for_Load.Count;
+
+                    Load_Progress[1] = Preferences.Get("Transaktion_per_load", 20.0);
+                }
+                else
+                {
+                    if (Transaktion_per_Load != Preferences.Get("Transaktion_per_load", 20.0))
+                    {
+                        Preferences.Set("Transaktion_per_load", Transaktion_per_Load);
+
+                        Load_Progress[1] = Preferences.Get("Transaktion_per_load", 20.0);
+                    }
+                    else
+                    {
+                        Load_Progress[1] += Preferences.Get("Transaktion_per_load", 20.0);
+                    }
+                }
+
+                if (Load_Progress[1] > Load_Progress[0])
+                {
+                    Load_Progress[1] = Load_Progress[0];
+                }
+
+                output = Transaktion_List_for_Load.GetRange(0, (int)Load_Progress[1]);
+
+                if (Load_Progress[1] != Load_Progress[0])
+                {
+                    output.Add(new Transaktion { Auftrags_id = "Load", Betrag = "0" });
+                }
+
+                Transaktion.Clear();
+
+                Transaktion.AddRange(output);
+
+                await Add_to_Groups();
+
+                Transaktion_List_from_Load = output;
             }
             catch (Exception ex)
             {
                 await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
             }
-
         }
 
         private async Task Notificater(string v)
