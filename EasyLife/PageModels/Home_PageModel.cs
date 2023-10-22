@@ -1684,7 +1684,30 @@ namespace EasyLife.PageModels
                 {
                     if (Load_Progress[1] < Load_Progress[0])
                     {
-                        sorted_after_month_transaktionscontent = Transaktion_List_from_Load;
+                        if(Transaktion_List_from_Load.Count == 0)
+                        {
+                            Load_Progress[1] = Preferences.Get("Transaktion_per_load", 20.0);
+
+                            if (Load_Progress[1] > Load_Progress[0])
+                            {
+                                Load_Progress[1] = Load_Progress[0];
+                            }
+
+                            List<Transaktion> new_sorted_after_month_transaktionscontent = sorted_after_month_transaktionscontent.GetRange(0, (int)Load_Progress[1]);
+
+                            if (Load_Progress[1] != Load_Progress[0])
+                            {
+                                new_sorted_after_month_transaktionscontent.Add(new Transaktion { Auftrags_id = "Load", Betrag = "0" });
+                            }
+
+                            sorted_after_month_transaktionscontent.Clear();
+
+                            sorted_after_month_transaktionscontent = new_sorted_after_month_transaktionscontent;
+                        }
+                        else
+                        {
+                            sorted_after_month_transaktionscontent = Transaktion_List_from_Load;
+                        }
                     }
                 }
 
@@ -2096,16 +2119,7 @@ namespace EasyLife.PageModels
                 }
                 else
                 {
-                    if (Transaktion_per_Load != Preferences.Get("Transaktion_per_load", 20.0))
-                    {
-                        Preferences.Set("Transaktion_per_load", Transaktion_per_Load);
-
-                        Load_Progress[1] = Preferences.Get("Transaktion_per_load", 20.0);
-                    }
-                    else
-                    {
-                        Load_Progress[1] += Preferences.Get("Transaktion_per_load", 20.0);
-                    }
+                    Load_Progress[1] += Preferences.Get("Transaktion_per_load", 20.0);
                 }
 
                 if (Load_Progress[1] > Load_Progress[0])
@@ -2114,6 +2128,8 @@ namespace EasyLife.PageModels
                 }
 
                 output = Transaktion_List_for_Load.GetRange(0, (int)Load_Progress[1]);
+
+                Transaktion_List_from_Load = output;
 
                 if (Load_Progress[1] != Load_Progress[0])
                 {
@@ -2125,8 +2141,6 @@ namespace EasyLife.PageModels
                 Transaktion.AddRange(output);
 
                 await Add_to_Groups();
-
-                Transaktion_List_from_Load = output;
             }
             catch (Exception ex)
             {
