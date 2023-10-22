@@ -12,6 +12,8 @@ namespace EasyLife.Cells
 
         public DataTemplate Ausgaben { get; set; }
 
+        public DataTemplate Laden { get; set; }
+
         /// <summary>
         /// Funktion die die Transaktionsitems in der Haushaltsbuchliste nach einem bestimmten Muster auswählt.
         /// </summary>
@@ -30,6 +32,10 @@ namespace EasyLife.Cells
             }
             else
             {
+                if (transaktion.Auftrags_id == "Load")
+                {
+                    return Laden;
+                }
                 return Einnahmen;
             }
         }

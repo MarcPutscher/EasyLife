@@ -68,6 +68,7 @@
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
+    
     <ScrollView Margin="20,0,20,0" VerticalScrollBarVisibility="Never">
         <FlexLayout Direction="Column" 
                     JustifyContent="SpaceEvenly">

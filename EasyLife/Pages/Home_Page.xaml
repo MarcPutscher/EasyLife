@@ -81,7 +81,36 @@
                     </Grid>
                 </ViewCell>
             </DataTemplate>
-            <cells:Transaktions_Template_Selector x:Key="Transaktions_Selector" Einnahmen="{StaticResource Einnamen}" Ausgaben="{StaticResource Ausgaben}"/>
+            <DataTemplate x:Key="Laden" x:DataType="{x:Null}">
+                <ViewCell >
+                    <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5" BackgroundColor="Transparent">
+                        <Grid ColumnDefinitions="Auto,*" Padding="5" Grid.Row="1" Grid.Column="1">
+                            <Frame Grid.Column="0" BackgroundColor="Transparent">
+                                <StackLayout Orientation="Horizontal">
+                                    <Picker SelectedItem="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.Transaktion_per_Load}" Title="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.Transaktion_per_Load}" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontSize="Large" FontAttributes="Bold">
+                                        <Picker.ItemsSource>
+                                            <x:Array Type="{x:Type x:Double}">
+                                                <x:Double>20</x:Double>
+                                                <x:Double>30</x:Double>
+                                                <x:Double>40</x:Double>
+                                                <x:Double>50</x:Double>
+                                            </x:Array>
+                                        </Picker.ItemsSource>
+                                        <Picker.Behaviors>
+                                            <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.Amount_per_Load_Changed_Command}"/>
+                                        </Picker.Behaviors>
+                                    </Picker>
+                                    <Label Text="/ Laden" TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalTextAlignment="Center"/>
+                                </StackLayout>
+                            </Frame>
+                            <Frame Grid.Column="1" Padding="5" BackgroundColor="Transparent">
+                                <Button Text="Mehr laden" TextColor="Black" FontSize="Large" Padding="5" FontAttributes="Bold" BorderColor="DarkBlue" BorderWidth="1" BackgroundColor="Gray" CornerRadius="20" HorizontalOptions="Center" VerticalOptions="Center" Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.Load_on_demand_Command}"/>
+                            </Frame>
+                        </Grid>
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+            <cells:Transaktions_Template_Selector x:Key="Transaktions_Selector" Einnahmen="{StaticResource Einnamen}" Ausgaben="{StaticResource Ausgaben}" Laden="{StaticResource Laden}"/>
             <DataTemplate x:Key="Rechnung_Einnamen" x:DataType="{x:Null}">
                 <ViewCell>
                     <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5" IsVisible="{Binding Normal_State}">
@@ -152,7 +181,36 @@
                     </Grid>
                 </ViewCell>
             </DataTemplate>
-            <cells:Transaktions_Template_Selector x:Key="Transaktions_Selector_for_Calculator" Einnahmen="{StaticResource Rechnung_Einnamen}" Ausgaben="{StaticResource Rechnung_Ausgaben}"/>
+            <DataTemplate x:Key="Rechnung_Laden" x:DataType="{x:Null}">
+                <ViewCell >
+                    <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5" BackgroundColor="Transparent">
+                        <Grid ColumnDefinitions="Auto,*" Padding="5" Grid.Row="1" Grid.Column="1">
+                            <Frame Grid.Column="0" BackgroundColor="Transparent">
+                                <StackLayout Orientation="Horizontal">
+                                    <Picker SelectedItem="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Transaktion_per_Load}" Title="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Transaktion_per_Load}" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontSize="Large" FontAttributes="Bold">
+                                        <Picker.ItemsSource>
+                                            <x:Array Type="{x:Type x:Double}">
+                                                <x:Double>20</x:Double>
+                                                <x:Double>30</x:Double>
+                                                <x:Double>40</x:Double>
+                                                <x:Double>50</x:Double>
+                                            </x:Array>
+                                        </Picker.ItemsSource>
+                                        <Picker.Behaviors>
+                                            <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Amount_per_Load_Changed_Command}"/>
+                                        </Picker.Behaviors>
+                                    </Picker>
+                                    <Label Text="/ Laden" TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalTextAlignment="Center"/>
+                                </StackLayout>
+                            </Frame>
+                            <Frame Grid.Column="1" Padding="5" BackgroundColor="Transparent">
+                                <Button Text="Mehr laden" TextColor="Black" FontSize="Large" Padding="5" FontAttributes="Bold" BorderColor="DarkBlue" BorderWidth="1" BackgroundColor="Gray" CornerRadius="20" HorizontalOptions="Center" VerticalOptions="Center" Command="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Load_on_demand_Command}"/>
+                            </Frame>
+                        </Grid>
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+            <cells:Transaktions_Template_Selector x:Key="Transaktions_Selector_for_Calculator" Einnahmen="{StaticResource Rechnung_Einnamen}" Ausgaben="{StaticResource Rechnung_Ausgaben}" Laden="{StaticResource Rechnung_Laden}"/>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -231,20 +289,20 @@
             IsVisible="{Binding List_of_Transaktion_Status}"
             Padding="0">
                 <ListView
-            CachingStrategy = "RecycleElement"
-            IsEnabled="True"
-            RefreshCommand="{Binding RefreshCommand}"
-            IsRefreshing="{Binding IsBusy, Mode=OneWay}"
-            IsPullToRefreshEnabled="True"
-            RefreshControlColor="{DynamicResource Refresh_Color}"    
-            HasUnevenRows="True"
-            x:Name="ContextSwipeView"
-            ItemsSource="{Binding transaktionGroups}"
-            IsGroupingEnabled="True"
-            GroupDisplayBinding="{Binding Key}"
-            SelectionMode="None"
-            SeparatorVisibility="None"
-            ItemTemplate="{StaticResource Transaktions_Selector}">
+                    CachingStrategy = "RecycleElement"
+                    IsEnabled="True"
+                    RefreshCommand="{Binding RefreshCommand}"
+                    IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                    IsPullToRefreshEnabled="True"
+                    RefreshControlColor="{DynamicResource Refresh_Color}"    
+                    HasUnevenRows="True"
+                    x:Name="ContextSwipeView"
+                    ItemsSource="{Binding transaktionGroups}"
+                    IsGroupingEnabled="True"
+                    GroupDisplayBinding="{Binding Key}"
+                    SelectionMode="None"
+                    SeparatorVisibility="None"
+                    ItemTemplate="{StaticResource Transaktions_Selector}">
                     <ListView.GroupHeaderTemplate>
                         <DataTemplate x:DataType="{x:Null}">
                             <ViewCell Height = "30" >
