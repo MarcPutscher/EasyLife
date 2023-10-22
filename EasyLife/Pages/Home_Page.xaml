@@ -84,26 +84,10 @@
             <DataTemplate x:Key="Laden" x:DataType="{x:Null}">
                 <ViewCell >
                     <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5" BackgroundColor="Transparent">
-                        <Grid ColumnDefinitions="Auto,*" Padding="5" Grid.Row="1" Grid.Column="1">
-                            <Frame Grid.Column="0" BackgroundColor="Transparent">
-                                <StackLayout Orientation="Horizontal">
-                                    <Picker SelectedItem="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.Transaktion_per_Load}" Title="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.Transaktion_per_Load}" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontSize="Large" FontAttributes="Bold">
-                                        <Picker.ItemsSource>
-                                            <x:Array Type="{x:Type x:Double}">
-                                                <x:Double>20</x:Double>
-                                                <x:Double>30</x:Double>
-                                                <x:Double>40</x:Double>
-                                                <x:Double>50</x:Double>
-                                            </x:Array>
-                                        </Picker.ItemsSource>
-                                    </Picker>
-                                    <Label Text="/ Laden" TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalTextAlignment="Center"/>
-                                </StackLayout>
-                            </Frame>
-                            <Frame Grid.Column="1" BackgroundColor="Transparent">
-                                <Button Text="Mehr laden" TextColor="Black" FontSize="Large" Padding="10" FontAttributes="Bold" BorderColor="DarkBlue" BorderWidth="1" BackgroundColor="Gray" CornerRadius="20" HorizontalOptions="Center" VerticalOptions="Center" Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.Load_on_demand_Command}"/>
-                            </Frame>
-                        </Grid>
+                        <Frame Grid.Column="1" Grid.Row="1" BackgroundColor="Transparent">
+                            <Button Text="Mehr laden" TextColor="Black" FontSize="Large" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.Load_on_demand_Command}"
+                                    xct:TouchEffect.LongPressCommand="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.Load_Ratio_Command}"/>
+                        </Frame>
                     </Grid>
                 </ViewCell>
             </DataTemplate>
@@ -181,26 +165,10 @@
             <DataTemplate x:Key="Rechnung_Laden" x:DataType="{x:Null}">
                 <ViewCell >
                     <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5" BackgroundColor="Transparent">
-                        <Grid ColumnDefinitions="Auto,*" Padding="5" Grid.Row="1" Grid.Column="1">
-                            <Frame Grid.Column="0" BackgroundColor="Transparent">
-                                <StackLayout Orientation="Horizontal">
-                                    <Picker SelectedItem="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Transaktion_per_Load}" Title="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Transaktion_per_Load}" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontSize="Large" FontAttributes="Bold">
-                                        <Picker.ItemsSource>
-                                            <x:Array Type="{x:Type x:Double}">
-                                                <x:Double>20</x:Double>
-                                                <x:Double>30</x:Double>
-                                                <x:Double>40</x:Double>
-                                                <x:Double>50</x:Double>
-                                            </x:Array>
-                                        </Picker.ItemsSource>
-                                    </Picker>
-                                    <Label Text="/ Laden" TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalTextAlignment="Center"/>
-                                </StackLayout>
-                            </Frame>
-                            <Frame Grid.Column="1" BackgroundColor="Transparent">
-                                <Button Text="Mehr laden" TextColor="Black" FontSize="Large" Padding="10" FontAttributes="Bold" BorderColor="DarkBlue" BorderWidth="1" BackgroundColor="Gray" CornerRadius="20" HorizontalOptions="Center" VerticalOptions="Center" Command="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Load_on_demand_Command}"/>
-                            </Frame>
-                        </Grid>
+                        <Frame Grid.Column="1" Grid.Row="1" BackgroundColor="Transparent">
+                            <Button Text="Mehr laden" TextColor="Black" FontSize="Large" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" Command="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Load_on_demand_Command}"
+                                    xct:TouchEffect.LongPressCommand="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Load_Ratio_Command}"/>
+                        </Frame>
                     </Grid>
                 </ViewCell>
             </DataTemplate>
