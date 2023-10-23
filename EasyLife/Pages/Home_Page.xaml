@@ -81,12 +81,12 @@
                     </Grid>
                 </ViewCell>
             </DataTemplate>
-            <DataTemplate x:Key="Laden" x:DataType="{x:Null}">
+            <DataTemplate x:Key="Laden" x:DataType="model:Transaktion">
                 <ViewCell >
                     <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5" BackgroundColor="Transparent">
                         <Frame Grid.Column="1" Grid.Row="1" BackgroundColor="Transparent">
                             <Button Text="Mehr laden" TextColor="Black" FontSize="Large" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.Load_on_demand_Command}"
-                                    xct:TouchEffect.LongPressCommand="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.Load_Ratio_Command}"/>
+                                    xct:TouchEffect.LongPressCommand="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.Load_Ratio_Command}" CommandParameter="{Binding Zweck}"/>
                         </Frame>
                     </Grid>
                 </ViewCell>
@@ -162,12 +162,12 @@
                     </Grid>
                 </ViewCell>
             </DataTemplate>
-            <DataTemplate x:Key="Rechnung_Laden" x:DataType="{x:Null}">
+            <DataTemplate x:Key="Rechnung_Laden" x:DataType="model:Transaktion">
                 <ViewCell >
                     <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5" BackgroundColor="Transparent">
                         <Frame Grid.Column="1" Grid.Row="1" BackgroundColor="Transparent">
                             <Button Text="Mehr laden" TextColor="Black" FontSize="Large" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" Command="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Load_on_demand_Command}"
-                                    xct:TouchEffect.LongPressCommand="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Load_Ratio_Command}"/>
+                                xct:TouchEffect.LongPressCommand="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Load_Ratio_Command}" CommandParameter="{Binding Zweck}"/>
                         </Frame>
                     </Grid>
                 </ViewCell>
