@@ -133,7 +133,7 @@ namespace EasyLife.PageModels
             {
                 if (Notiz == value)
                     return;
-                notiz = value.Trim(); RaisePropertyChanged();
+                notiz = value; RaisePropertyChanged();
             }
         }
 
