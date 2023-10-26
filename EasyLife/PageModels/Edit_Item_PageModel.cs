@@ -65,7 +65,7 @@ namespace EasyLife.PageModels
                     return;
                 if (double.TryParse(value, out double result) == true)
                 {
-                    betrag = value.Replace(".",","); RaisePropertyChanged();
+                    betrag = value.Replace(".",",").Trim(); RaisePropertyChanged();
                 }
                 else
                 {

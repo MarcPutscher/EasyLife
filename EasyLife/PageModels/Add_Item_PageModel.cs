@@ -109,7 +109,7 @@ namespace EasyLife.PageModels
             {
                 if (Betrag == value)
                     return;
-                betrag = value; RaisePropertyChanged();
+                betrag = value.Trim(); RaisePropertyChanged();
             }
         }
 
@@ -355,7 +355,7 @@ namespace EasyLife.PageModels
             {
                 var result = await Shell.Current.DisplayPromptAsync("Zweck erstellen", null, "Hinzufügen", "Verwerfen", "Zweck hier eingeben", 30);
 
-                if (String.IsNullOrEmpty(result) == false)
+                if (String.IsNullOrWhiteSpace(result) == false)
                 {
                     if (result == "Verwerfen")
                     {
@@ -370,7 +370,7 @@ namespace EasyLife.PageModels
                     {
                         if (result2 == "Verwerfen")
                         {
-                            await Notificater("Der Zweck wurde verworfen.");
+                            await Notificater("Der Zweck " + result.Trim() + " wurde verworfen.");
 
                             return;
                         }
@@ -380,12 +380,15 @@ namespace EasyLife.PageModels
                         if (result3 == true)
                         {
                             await Get_Reasons_Liste();
-                            await Notificater("Der Zweck wurde erfolgreich hinzugefügt.");
+
+                            await Notificater("Der Zweck " + result.Trim() + " wurde verworfen.");
+
                             return;
                         }
                         else
                         {
-                            await Notificater("Der Zweck ist bereits vorhanden.");
+                            await Notificater("Der Zweck " + result.Trim() + " wurde verworfen.");
+
                             return;
                         }
                     }
@@ -420,7 +423,7 @@ namespace EasyLife.PageModels
                 {
                     var result = await Shell.Current.DisplayActionSheet("Angezeigte Zwecke", "Zurück", null, zweck_string);
 
-                    if (String.IsNullOrEmpty(result) == false)
+                    if (String.IsNullOrWhiteSpace(result) == false)
                     {
                         if (result == "Zurück")
                         {

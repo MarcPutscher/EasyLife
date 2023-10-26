@@ -21,6 +21,7 @@ using System.IO;
 using PermissionStatus = Xamarin.Essentials.PermissionStatus;
 using Xamarin.Forms.Internals;
 using System.ComponentModel;
+using static SQLite.SQLite3;
 
 namespace EasyLife.PageModels
 {
@@ -105,6 +106,8 @@ namespace EasyLife.PageModels
         public AsyncCommand<string> Load_on_demand_Command { get; }
 
         public AsyncCommand Load_Ratio_Command { get; }
+
+        public AsyncCommand Add_Catchphrase_To_Search_Command { get; }
 
         public bool serchbar_visibility = false;
         public bool Serchbar_Visibility
@@ -211,6 +214,8 @@ namespace EasyLife.PageModels
                 search_text = value; RaisePropertyChanged();
             }
         }
+
+        public string Last_Search_Text;
 
         public string saldo_value = null;
         public string Saldo_Value
@@ -491,6 +496,7 @@ namespace EasyLife.PageModels
             Clear_SearchText_Command = new AsyncCommand(Clear_SearchText_Methode);
             Set_Searchbar_Visibility_Command = new AsyncCommand(Set_Searchbar_Visibility_MethodeAsync);
             The_Searchbar_is_Tapped = new AsyncCommand(The_Searchbar_is_Tapped_Methode);
+            Add_Catchphrase_To_Search_Command = new AsyncCommand(Add_Catchphrase_To_Search_Methode);
             Add_Command = new AsyncCommand(Add_Methode);
             Filter_Command = new AsyncCommand(Filter_Methode);
             Calculator_Addition_Command = new AsyncCommand<Transaktion>(Calculator_Addition_Methode);
@@ -1106,7 +1112,21 @@ namespace EasyLife.PageModels
         {
             try
             {
-                string pseudosearchtext = Search_Text;
+                if (Search_Text == Last_Search_Text)
+                {
+                    return;
+                }
+                else
+                {
+                    Last_Search_Text = Search_Text;
+
+                    if (String.IsNullOrWhiteSpace(Last_Search_Text) == true)
+                    {
+                        return;
+                    }
+                }
+
+                string pseudosearchtext = Search_Text.Trim();
 
                 List<Filter> filters = new List<Filter>()
                     {
@@ -1645,6 +1665,45 @@ namespace EasyLife.PageModels
                         Kein_Ergebnis_Transaktion_Status = false;
                         List_of_Transaktion_Status = true;
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
+        private async Task Add_Catchphrase_To_Search_Methode()
+        {
+            try
+            {
+                string title = "Suchbegriff erstellen";
+
+                string message = "Nach welchen Suchbegriff wollen Sie im Haushaltsbuch suchen?";
+
+                if (string.IsNullOrWhiteSpace(Search_Text) == false)
+                {
+                    title = "Suchbegriff hinzufügen";
+
+                    message = "Nach welchem Suchbegriff wollen Sie weiter im Haushaltsbuch suchen?\nAktueller Suchbegriff: " + Search_Text + "";
+                }
+
+                var result = await Shell.Current.DisplayPromptAsync(title, message, "Hinzufügen", "Verwerfen", "Hier eingeben", 100, null, "");
+
+                if (result == null)
+                {
+                    return;
+                }
+
+                if (String.IsNullOrWhiteSpace(Search_Text) == false)
+                {
+                    Search_Text = Search_Text.Trim();
+
+                    Search_Text += "-" + result.Trim() + "";
+                }
+                else
+                {
+                    Search_Text = result;
                 }
             }
             catch (Exception ex)
