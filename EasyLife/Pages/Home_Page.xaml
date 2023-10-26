@@ -231,11 +231,11 @@
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="model:Suggestion">
                     <ViewCell>
-                        <Grid ColumnDefinitions="50,*,70" Padding="5">
-                            <Grid ColumnDefinitions="50,20" Padding="0" Grid.Column="2">
-                                <Button Grid.Column="0" BackgroundColor="{DynamicResource Page_Backgroundcolor}" Text="X" TextColor="Black" HorizontalOptions="Fill" Command="{Binding Source={x:Reference SuggestionSwipeView}, Path=BindingContext.Delet_Suggestion}" CommandParameter="{Binding .}"/>
+                        <Grid ColumnDefinitions="50,*,90" Padding="5">
+                            <Grid ColumnDefinitions="20,50,20" Padding="0" Grid.Column="2">
+                                <Button Grid.Column="1" BackgroundColor="{DynamicResource Page_Backgroundcolor}" Text="X" TextColor="Black" HorizontalOptions="Fill" Command="{Binding Source={x:Reference SuggestionSwipeView}, Path=BindingContext.Delet_Suggestion}" CommandParameter="{Binding .}"/>
                             </Grid>
-                            <Label Text="{Binding Suggestion_value}" TextColor="White" FontSize="Body" TextTransform="None" HeightRequest="10" VerticalTextAlignment="Center" Padding="0" HorizontalOptions= "Start" Grid.Column="1" BackgroundColor="{DynamicResource Page_Backgroundcolor}">
+                            <Label Text="{Binding Suggestion_value}" TextColor="White" FontSize="Body" TextTransform="None" HeightRequest="10" VerticalTextAlignment="Center" Padding="0" HorizontalOptions= "FillAndExpand" HorizontalTextAlignment="Start" Grid.Column="1" BackgroundColor="{DynamicResource Page_Backgroundcolor}">
                                 <Label.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding Source={x:Reference SuggestionSwipeView}, Path=BindingContext.Select_Suggestion}" CommandParameter="{Binding .}" />
                                 </Label.GestureRecognizers>

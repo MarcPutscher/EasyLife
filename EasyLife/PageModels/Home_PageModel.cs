@@ -496,7 +496,13 @@ namespace EasyLife.PageModels
 
                 if (GroupingOption == 1)
                 {
+                    List<Transaktion> help = Transaktion.ToList();
+
                     var groups1 = await ReasonService.Get_all_Reason();
+
+                    Transaktion.Clear();
+
+                    Transaktion.AddRange(help);
 
                     List<string> groups = new List<string>();
 
@@ -1099,7 +1105,16 @@ namespace EasyLife.PageModels
                     }
                 }
 
-                await Search_Methode2();
+                if(Search_Text == null)
+                {
+                    await Search_Methode2();
+
+                    ActivityIndicator_IsRunning = false;
+
+                    ActivityIndicator_IsVisible = false;
+
+                    return;
+                }
 
                 List<Transaktion> search_transaktionscontent = new List<Transaktion>();
 
@@ -1292,15 +1307,27 @@ namespace EasyLife.PageModels
                     }
                     else
                     {
-                        used_reasons_list.Clear();
+                        int count = 0;
 
-                        Load_Progress.Clear();
-
-                        foreach(Transaktion trans in search_transaktionscontent)
+                        if(Load_Progress.Count() != 0)
                         {
-                            if (!used_reasons_list.Contains(trans.Zweck))
+                            foreach(double[] db in Load_Progress)
                             {
-                                used_reasons_list.Add(trans.Zweck);
+                                count += (int)db[0];
+                            }
+                        }
+                        if (count != search_transaktionscontent.Count)
+                        {
+                            used_reasons_list.Clear();
+
+                            Load_Progress.Clear();
+
+                            foreach (Transaktion trans in search_transaktionscontent)
+                            {
+                                if (!used_reasons_list.Contains(trans.Zweck))
+                                {
+                                    used_reasons_list.Add(trans.Zweck);
+                                }
                             }
                         }
 
@@ -1384,9 +1411,9 @@ namespace EasyLife.PageModels
                     }
 
                     Transaktion.AddRange(search_transaktionscontent);
-                }
 
-                await Add_to_Groups();
+                    await Add_to_Groups();
+                }
 
                 ActivityIndicator_IsRunning = false;
 
@@ -1397,6 +1424,8 @@ namespace EasyLife.PageModels
                 SuggestionCollection.Clear();
 
                 SuggestionCollection.AddRange(await SearchSuggestionService.Get_all_Suggestion());
+
+                Title = "Suche im Haushaltsbuch";
             }
             catch (Exception ex)
             {
@@ -1427,92 +1456,94 @@ namespace EasyLife.PageModels
                 {
                     if (string.IsNullOrEmpty(Search_Text))
                     {
-                        Transaktion.Clear();
+                        await Refresh();
 
-                        var transaktionscontent = await ContentService.Get_all_enabeled_Transaktion();
+                        //Transaktion.Clear();
 
-                        List<Transaktion> sorted_after_month_transaktionscontent = new List<Transaktion>();
+                        //var transaktionscontent = await ContentService.Get_all_enabeled_Transaktion();
 
-                        sorted_after_month_transaktionscontent.Clear();
+                        //List<Transaktion> sorted_after_month_transaktionscontent = new List<Transaktion>();
 
-                        foreach (var trans in transaktionscontent)
-                        {
-                            if (trans.Datum.Year == Current_Viewtime.Year)
-                            {
-                                if (trans.Datum.ToString("MMMM", new CultureInfo("de-DE")) == Current_Viewtime.Month)
-                                {
-                                    if (GroupingOption == 0)
-                                    {
-                                        trans.Pseudotext = trans.Zweck;
-                                        sorted_after_month_transaktionscontent.Add(trans);
-                                    }
-                                    else
-                                    {
-                                        trans.Pseudotext = trans.Datumanzeige;
-                                        sorted_after_month_transaktionscontent.Add(trans);
-                                    }
-                                }
-                                if (Current_Viewtime.Month == "")
-                                {
-                                    if (GroupingOption == 0)
-                                    {
-                                        trans.Pseudotext = trans.Zweck;
-                                        sorted_after_month_transaktionscontent.Add(trans);
-                                    }
-                                    else
-                                    {
-                                        trans.Pseudotext = trans.Datumanzeige;
-                                        sorted_after_month_transaktionscontent.Add(trans);
-                                    }
-                                }
-                            }
-                        }
+                        //sorted_after_month_transaktionscontent.Clear();
 
-                        Transaktion.AddRange(sorted_after_month_transaktionscontent);
+                        //foreach (var trans in transaktionscontent)
+                        //{
+                        //    if (trans.Datum.Year == Current_Viewtime.Year)
+                        //    {
+                        //        if (trans.Datum.ToString("MMMM", new CultureInfo("de-DE")) == Current_Viewtime.Month)
+                        //        {
+                        //            if (GroupingOption == 0)
+                        //            {
+                        //                trans.Pseudotext = trans.Zweck;
+                        //                sorted_after_month_transaktionscontent.Add(trans);
+                        //            }
+                        //            else
+                        //            {
+                        //                trans.Pseudotext = trans.Datumanzeige;
+                        //                sorted_after_month_transaktionscontent.Add(trans);
+                        //            }
+                        //        }
+                        //        if (Current_Viewtime.Month == "")
+                        //        {
+                        //            if (GroupingOption == 0)
+                        //            {
+                        //                trans.Pseudotext = trans.Zweck;
+                        //                sorted_after_month_transaktionscontent.Add(trans);
+                        //            }
+                        //            else
+                        //            {
+                        //                trans.Pseudotext = trans.Datumanzeige;
+                        //                sorted_after_month_transaktionscontent.Add(trans);
+                        //            }
+                        //        }
+                        //    }
+                        //}
 
-                        await Add_to_Groups();
+                        //Transaktion.AddRange(sorted_after_month_transaktionscontent);
+
+                        //await Add_to_Groups();
 
 
-                        if (Transaktion.Count() == 0)
-                        {
-                            Kein_Ergebnis_Transaktion_Status = true;
+                        //if (Transaktion.Count() == 0)
+                        //{
+                        //    Kein_Ergebnis_Transaktion_Status = true;
 
-                            Kein_Ergebnis_Suggestion_Status = false;
+                        //    Kein_Ergebnis_Suggestion_Status = false;
 
-                            List_of_Transaktion_Status = false;
-                        }
-                        else
-                        {
-                            Kein_Ergebnis_Suggestion_Status = false;
-                            Kein_Ergebnis_Transaktion_Status = false;
-                            List_of_Transaktion_Status = true;
-                        }
-                        ActivityIndicator_IsRunning = false;
+                        //    List_of_Transaktion_Status = false;
+                        //}
+                        //else
+                        //{
+                        //    Kein_Ergebnis_Suggestion_Status = false;
+                        //    Kein_Ergebnis_Transaktion_Status = false;
+                        //    List_of_Transaktion_Status = true;
+                        //}
+                        //ActivityIndicator_IsRunning = false;
 
-                        ActivityIndicator_IsVisible = false;
+                        //ActivityIndicator_IsVisible = false;
 
-                        if (Transaktion.Count() == 0)
-                        {
-                            Title = "Haushaltsbuch";
-                        }
-                        else
-                        {
-                            if (String.IsNullOrEmpty(Current_Viewtime.Year.ToString()) == false && String.IsNullOrEmpty(Current_Viewtime.Month) == false)
-                            {
-                                Title = "Haushaltsbuch " + Current_Viewtime.Year + " " + Current_Viewtime.Month + "";
-                            }
-                            else
-                            {
-                                if (String.IsNullOrEmpty(Current_Viewtime.Year.ToString()) == true)
-                                {
-                                    Title = "Haushaltsbuch";
-                                }
-                                if (String.IsNullOrEmpty(Current_Viewtime.Month.ToString()) == true)
-                                {
-                                    Title = "Haushaltsbuch " + Current_Viewtime.Year + "";
-                                }
-                            }
-                        }
+                        //if (Transaktion.Count() == 0)
+                        //{
+                        //    Title = "Haushaltsbuch";
+                        //}
+                        //else
+                        //{
+                        //    if (String.IsNullOrEmpty(Current_Viewtime.Year.ToString()) == false && String.IsNullOrEmpty(Current_Viewtime.Month) == false)
+                        //    {
+                        //        Title = "Haushaltsbuch " + Current_Viewtime.Year + " " + Current_Viewtime.Month + "";
+                        //    }
+                        //    else
+                        //    {
+                        //        if (String.IsNullOrEmpty(Current_Viewtime.Year.ToString()) == true)
+                        //        {
+                        //            Title = "Haushaltsbuch";
+                        //        }
+                        //        if (String.IsNullOrEmpty(Current_Viewtime.Month.ToString()) == true)
+                        //        {
+                        //            Title = "Haushaltsbuch " + Current_Viewtime.Year + "";
+                        //        }
+                        //    }
+                        //}
 
                         return;
                     }
@@ -1576,9 +1607,17 @@ namespace EasyLife.PageModels
             {
                 if (Search_Text != null)
                 {
-                    Search_Text = null;
+                    Load_Progress.Clear();
 
-                    await Refresh();
+                    Load_Progress.Add(new double[] { -1, -1 });
+
+                    All_Transaktion_List_for_Load.Clear();
+
+                    Transaktion_List_Load_for_Load.Clear();
+
+                    Transaktion_List_from_Load.Clear();
+
+                    Search_Text = null;
                 }
             }
             catch (Exception ex)
@@ -2082,16 +2121,23 @@ namespace EasyLife.PageModels
         {
             try
             {
-                var result = await Shell.Current.ShowPopupAsync(new Viewtime_Popup(Current_Viewtime));
-
-                if(result == null)
+                if(String.IsNullOrEmpty(Search_Text) == true)
                 {
-                    return;
+                    var result = await Shell.Current.ShowPopupAsync(new Viewtime_Popup(Current_Viewtime));
+
+                    if (result == null)
+                    {
+                        return;
+                    }
+
+                    Current_Viewtime = (Viewtime)result;
+
+                    await Refresh();
                 }
-
-                Current_Viewtime = (Viewtime)result;
-
-                await Refresh();
+                else
+                {
+                    await Notificater("Während Sie suchen können Sie nicht die Zeit verändern.");
+                }
             }
             catch (Exception ex)
             {
@@ -2406,7 +2452,7 @@ namespace EasyLife.PageModels
 
                 if(input == null)
                 {
-                    if (Load_Progress[0][0] != All_Transaktion_List_for_Load.Count)
+                    if (Load_Progress[0][0] != All_Transaktion_List_for_Load.Count())
                     {
                         Load_Progress[0][0] = All_Transaktion_List_for_Load.Count;
 
@@ -2419,7 +2465,7 @@ namespace EasyLife.PageModels
 
                     if (Load_Progress[0][1] > Load_Progress[0][0])
                     {
-                        Load_Progress[1] = Load_Progress[0];
+                        Load_Progress[0][1] = Load_Progress[0][0];
                     }
 
                     output = All_Transaktion_List_for_Load.GetRange(0, (int)Load_Progress[0][1]);
