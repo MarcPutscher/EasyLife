@@ -81,7 +81,17 @@
                     </Grid>
                 </ViewCell>
             </DataTemplate>
-            <cells:Transaktions_Template_Selector x:Key="Transaktions_Selector" Einnahmen="{StaticResource Einnamen}" Ausgaben="{StaticResource Ausgaben}"/>
+            <DataTemplate x:Key="Laden" x:DataType="model:Transaktion">
+                <ViewCell >
+                    <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5" BackgroundColor="Transparent">
+                        <Frame Grid.Column="1" Grid.Row="1" BackgroundColor="Transparent">
+                            <Button Text="Mehr laden" TextColor="Black" FontSize="Large" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.Load_on_demand_Command}"
+                                    xct:TouchEffect.LongPressCommand="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.Load_Ratio_Command}" CommandParameter="{Binding Zweck}"/>
+                        </Frame>
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+            <cells:Transaktions_Template_Selector x:Key="Transaktions_Selector" Einnahmen="{StaticResource Einnamen}" Ausgaben="{StaticResource Ausgaben}" Laden="{StaticResource Laden}"/>
             <DataTemplate x:Key="Rechnung_Einnamen" x:DataType="{x:Null}">
                 <ViewCell>
                     <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5" IsVisible="{Binding Normal_State}">
@@ -152,8 +162,17 @@
                     </Grid>
                 </ViewCell>
             </DataTemplate>
-            <cells:Transaktions_Template_Selector x:Key="Transaktions_Selector_for_Calculator" Einnahmen="{StaticResource Rechnung_Einnamen}" Ausgaben="{StaticResource Rechnung_Ausgaben}"/>
-        </ResourceDictionary>
+            <DataTemplate x:Key="Rechnung_Laden" x:DataType="model:Transaktion">
+                <ViewCell >
+                    <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5" BackgroundColor="Transparent">
+                        <Frame Grid.Column="1" Grid.Row="1" BackgroundColor="Transparent">
+                            <Button Text="Mehr laden" TextColor="Black" FontSize="Large" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" Command="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Load_on_demand_Command}"
+                                xct:TouchEffect.LongPressCommand="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Load_Ratio_Command}" CommandParameter="{Binding Zweck}"/>
+                        </Frame>
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+            <cells:Transaktions_Template_Selector x:Key="Transaktions_Selector_for_Calculator" Einnahmen="{StaticResource Rechnung_Einnamen}" Ausgaben="{StaticResource Rechnung_Ausgaben}" Laden="{StaticResource Rechnung_Laden}"/>        </ResourceDictionary>
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
@@ -169,7 +188,7 @@
             <xct:Expander>
                 <xct:Expander.Header>
                     <Grid Padding="0" ColumnDefinitions="*,30,30" BackgroundColor="White" HorizontalOptions="Fill">
-                        <SearchBar Placeholder="Suchen" Text="{Binding Search_Text}" Grid.ColumnSpan="3" BackgroundColor="DimGray" IsVisible="{Binding Serchbar_Visibility}" HorizontalOptions="Fill" >
+                        <SearchBar Placeholder="Suchen" Text="{Binding Search_Text}" Grid.ColumnSpan="3" BackgroundColor="DimGray" IsVisible="{Binding Serchbar_Visibility}" HorizontalOptions="Fill">
                             <SearchBar.Behaviors>
                                 <xct:EventToCommandBehavior EventName="SearchButtonPressed" Command="{Binding Search_Command}"/>
                                 <xct:EventToCommandBehavior EventName="TextChanged" Command="{Binding Search_Command2}"/>
@@ -191,8 +210,6 @@
                     <xct:EventToCommandBehavior EventName="Tapped" Command="{Binding The_Searchbar_is_Tapped}"/>
                 </xct:Expander.Behaviors>
             </xct:Expander>
-
-            <ActivityIndicator Color="{DynamicResource Refresh_Color}" IsRunning="{Binding ActivityIndicator_IsRunning}" BackgroundColor="Transparent" IsVisible="{Binding ActivityIndicator_IsVisible}"/>
         </StackLayout>
 
         <ListView
@@ -211,11 +228,11 @@
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="model:Suggestion">
                     <ViewCell>
-                        <Grid ColumnDefinitions="50,*,70" Padding="5">
-                            <Grid ColumnDefinitions="50,20" Padding="0" Grid.Column="2">
-                                <Button Grid.Column="0" BackgroundColor="{DynamicResource Page_Backgroundcolor}" Text="X" TextColor="Black" HorizontalOptions="Fill" Command="{Binding Source={x:Reference SuggestionSwipeView}, Path=BindingContext.Delet_Suggestion}" CommandParameter="{Binding .}"/>
+                        <Grid ColumnDefinitions="50,*,90" Padding="5">
+                            <Grid ColumnDefinitions="20,50,20" Padding="0" Grid.Column="2">
+                                <Button Grid.Column="1" BackgroundColor="{DynamicResource Page_Backgroundcolor}" Text="X" TextColor="Black" HorizontalOptions="Fill" Command="{Binding Source={x:Reference SuggestionSwipeView}, Path=BindingContext.Delet_Suggestion}" CommandParameter="{Binding .}"/>
                             </Grid>
-                            <Label Text="{Binding Suggestion_value}" TextColor="White" FontSize="Body" TextTransform="None" HeightRequest="10" VerticalTextAlignment="Center" Padding="0" HorizontalOptions= "Start" Grid.Column="1" BackgroundColor="{DynamicResource Page_Backgroundcolor}">
+                            <Label Text="{Binding Suggestion_value}" TextColor="White" FontSize="Body" TextTransform="None" HeightRequest="10" VerticalTextAlignment="Center" Padding="0" HorizontalOptions= "FillAndExpand" HorizontalTextAlignment="Start" Grid.Column="1" BackgroundColor="{DynamicResource Page_Backgroundcolor}">
                                 <Label.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding Source={x:Reference SuggestionSwipeView}, Path=BindingContext.Select_Suggestion}" CommandParameter="{Binding .}" />
                                 </Label.GestureRecognizers>

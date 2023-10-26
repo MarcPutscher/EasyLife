@@ -102,6 +102,10 @@ namespace EasyLife.PageModels
 
         public Command Show_Letter_Saldo_Command { get; }
 
+        public AsyncCommand<string> Load_on_demand_Command { get; }
+
+        public AsyncCommand Load_Ratio_Command { get; }
+
         public bool serchbar_visibility = false;
         public bool Serchbar_Visibility
         {
@@ -329,30 +333,6 @@ namespace EasyLife.PageModels
             }
         }
 
-        public bool activityindicator_isrunning = false;
-        public bool ActivityIndicator_IsRunning
-        {
-            get { return activityindicator_isrunning; }
-            set
-            {
-                if (ActivityIndicator_IsRunning == value)
-                    return;
-                activityindicator_isrunning = value; RaisePropertyChanged();
-            }
-        }
-
-        public bool activityindicator_isvisible = false;
-        public bool ActivityIndicator_IsVisible
-        {
-            get { return activityindicator_isvisible; }
-            set
-            {
-                if (ActivityIndicator_IsVisible == value)
-                    return;
-                activityindicator_isvisible = value; RaisePropertyChanged();
-            }
-        }
-
         public bool list_of_suggestion_Status = false;
         public bool List_of_Suggestion_Status
         {
@@ -479,6 +459,17 @@ namespace EasyLife.PageModels
 
         public List<Transaktion> Calculator_List = new List<Transaktion>();
 
+        public List<double[]> Load_Progress = new List<double[]>() { new double[] { -1, -1 } };
+
+        public List<Transaktion> All_Transaktion_List_for_Load = new List<Transaktion>();
+
+        public List<Transaktion> Transaktion_List_Load_for_Load = new List<Transaktion>();
+
+        public List<Transaktion> Transaktion_List_from_Load = new List<Transaktion>();
+
+        public List<string> used_reasons_list = new List<string>();
+
+
 
         public Home_PageModel()
         {
@@ -509,6 +500,8 @@ namespace EasyLife.PageModels
             Calculator_RemoveAll_Command = new AsyncCommand(Calculator_RemoveAll_Methode);
             ShowCalculator_List_Command = new AsyncCommand(ShowCalculator_List_Methode);
             Show_Letter_Saldo_Command = new Command(Show_Letter_Saldo_Methode);
+            Load_on_demand_Command = new AsyncCommand<string>(Load_on_demand_Methode);
+            Load_Ratio_Command = new AsyncCommand(Load_Ratio_Methode);
 
             Period_Command = new AsyncCommand(Period_Popup);
 
@@ -537,7 +530,13 @@ namespace EasyLife.PageModels
 
                 if (GroupingOption == 1)
                 {
+                    List<Transaktion> help = Transaktion.ToList();
+
                     var groups1 = await ReasonService.Get_all_Reason();
+
+                    Transaktion.Clear();
+
+                    Transaktion.AddRange(help);
 
                     List<string> groups = new List<string>();
 
@@ -565,10 +564,13 @@ namespace EasyLife.PageModels
 
                     foreach (Transaktion tr in Transaktion)
                     {
-                        if (tr.Datumanzeige != tr1)
+                        if (tr.Auftrags_id != "Load")
                         {
-                            groups.Add(tr.Datumanzeige);
-                            tr1 = tr.Datumanzeige;
+                            if (tr.Datumanzeige != tr1)
+                            {
+                                groups.Add(tr.Datumanzeige);
+                                tr1 = tr.Datumanzeige;
+                            }
                         }
                     }
 
@@ -596,6 +598,14 @@ namespace EasyLife.PageModels
                             transaktionGroups.Add(new Grouping<string, Transaktion>(st, Transaktion.Where(ts => ts.Datumanzeige == st)));
                         }
                     }
+
+                    if (Transaktion.Count() != 0)
+                    {
+                        if (Transaktion.Last().Auftrags_id == "Load")
+                        {
+                            transaktionGroups.Add(new Grouping<string, Transaktion>("", new List<Transaktion>() { Transaktion.Last() }));
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -616,6 +626,17 @@ namespace EasyLife.PageModels
                 }
 
                 GroupingOption = (int)result;
+
+
+                Load_Progress.Clear();
+
+                Load_Progress.Add(new double[] { -1, -1 });
+
+                All_Transaktion_List_for_Load.Clear();
+
+                Transaktion_List_Load_for_Load.Clear();
+
+                Transaktion_List_from_Load.Clear();
 
                 await Refresh();
             }
@@ -1098,10 +1119,6 @@ namespace EasyLife.PageModels
                         new Filter(){Name="Quersuche" , State = Preferences.Get("Quersuche", false) }
                     };
 
-                ActivityIndicator_IsVisible = true;
-
-                ActivityIndicator_IsRunning = true;
-
                 Transaktion.Clear();
 
                 var transaktionscontent = await ContentService.Get_all_enabeled_Transaktion();
@@ -1118,7 +1135,12 @@ namespace EasyLife.PageModels
                     }
                 }
 
-                await Search_Methode2();
+                if (Search_Text == null)
+                {
+                    await Search_Methode2();
+
+                    return;
+                }
 
                 List<Transaktion> search_transaktionscontent = new List<Transaktion>();
 
@@ -1235,10 +1257,6 @@ namespace EasyLife.PageModels
 
                     SuggestionCollection.AddRange(await SearchSuggestionService.Get_all_Suggestion());
 
-                    ActivityIndicator_IsRunning = false;
-
-                    ActivityIndicator_IsVisible = false;
-
                     return;
                 }
                 else
@@ -1251,20 +1269,182 @@ namespace EasyLife.PageModels
 
                     List_of_Transaktion_Status = true;
 
+
+                    if (GroupingOption == 0)
+                    {
+                        All_Transaktion_List_for_Load = search_transaktionscontent.ToList();
+
+                        if (Load_Progress[0][0] != search_transaktionscontent.Count)
+                        {
+
+                            Load_Progress[0][0] = search_transaktionscontent.Count;
+
+                            Load_Progress[0][1] = Preferences.Get("Transaktion_per_load", 20.0);
+
+                            if (Load_Progress[0][1] > Load_Progress[0][0])
+                            {
+                                Load_Progress[0][1] = Load_Progress[0][0];
+                            }
+
+                            List<Transaktion> new_sorted_after_month_transaktionscontent = search_transaktionscontent.GetRange(0, (int)Load_Progress[0][1]);
+
+                            if (Load_Progress[0][1] != Load_Progress[0][0])
+                            {
+                                new_sorted_after_month_transaktionscontent.Add(new Transaktion { Auftrags_id = "Load", Betrag = "0" });
+                            }
+
+                            search_transaktionscontent.Clear();
+
+                            search_transaktionscontent = new_sorted_after_month_transaktionscontent;
+                        }
+                        else
+                        {
+                            if (Load_Progress[0][1] < Load_Progress[0][0])
+                            {
+                                if (Transaktion_List_from_Load.Count == 0)
+                                {
+                                    Load_Progress[0][1] = Preferences.Get("Transaktion_per_load", 20.0);
+
+                                    if (Load_Progress[0][1] > Load_Progress[0][0])
+                                    {
+                                        Load_Progress[0][1] = Load_Progress[0][0];
+                                    }
+
+                                    List<Transaktion> new_sorted_after_month_transaktionscontent = search_transaktionscontent.GetRange(0, (int)Load_Progress[0][1]);
+
+                                    if (Load_Progress[0][1] != Load_Progress[0][0])
+                                    {
+                                        new_sorted_after_month_transaktionscontent.Add(new Transaktion { Auftrags_id = "Load", Betrag = "0" });
+                                    }
+
+                                    search_transaktionscontent.Clear();
+
+                                    search_transaktionscontent = new_sorted_after_month_transaktionscontent;
+                                }
+                                else
+                                {
+                                    search_transaktionscontent = Transaktion_List_from_Load;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        int count = 0;
+
+                        if (Load_Progress.Count() != 0)
+                        {
+                            foreach (double[] db in Load_Progress)
+                            {
+                                count += (int)db[0];
+                            }
+                        }
+                        if (count != search_transaktionscontent.Count)
+                        {
+                            used_reasons_list.Clear();
+
+                            Load_Progress.Clear();
+
+                            foreach (Transaktion trans in search_transaktionscontent)
+                            {
+                                if (!used_reasons_list.Contains(trans.Zweck))
+                                {
+                                    used_reasons_list.Add(trans.Zweck);
+                                }
+                            }
+                        }
+
+                        if (used_reasons_list.Count() != 0)
+                        {
+                            int follower = 0;
+
+                            All_Transaktion_List_for_Load = search_transaktionscontent.ToList();
+
+                            List<Transaktion> root_sorted_after_month_transaktionscontent = new List<Transaktion>();
+
+                            foreach (string zweck in used_reasons_list)
+                            {
+                                if (Load_Progress.Count() < follower + 1)
+                                {
+                                    Load_Progress.Add(new double[] { -1, -1 });
+                                }
+
+                                if (Load_Progress[follower][0] != search_transaktionscontent.Where(ts => ts.Zweck == zweck).Count())
+                                {
+                                    Load_Progress[follower][0] = search_transaktionscontent.Where(ts => ts.Zweck == zweck).Count();
+
+                                    Load_Progress[follower][1] = Preferences.Get("Transaktion_per_load", 20.0);
+
+                                    if (Load_Progress[follower][1] > Load_Progress[follower][0])
+                                    {
+                                        Load_Progress[follower][1] = Load_Progress[follower][0];
+                                    }
+
+                                    List<Transaktion> new_sorted_after_month_transaktionscontent = search_transaktionscontent.Where(ts => ts.Zweck == zweck).ToList().GetRange(0, (int)Load_Progress[follower][1]);
+
+                                    if (Load_Progress[follower][1] != Load_Progress[follower][0])
+                                    {
+                                        new_sorted_after_month_transaktionscontent.Add(new Transaktion { Auftrags_id = "Load", Betrag = "0", Zweck = zweck, Datum = new DateTime(1999, 12, 31) });
+                                    }
+
+                                    root_sorted_after_month_transaktionscontent.AddRange(new_sorted_after_month_transaktionscontent);
+                                }
+                                else
+                                {
+                                    if (Load_Progress[follower][1] < Load_Progress[follower][0])
+                                    {
+                                        if (Transaktion_List_Load_for_Load.Where(ts => ts.Zweck == zweck).Count() == 0)
+                                        {
+                                            Load_Progress[follower][1] = Preferences.Get("Transaktion_per_load", 20.0);
+
+                                            if (Load_Progress[follower][1] > Load_Progress[follower][0])
+                                            {
+                                                Load_Progress[follower][1] = Load_Progress[follower][0];
+                                            }
+
+                                            List<Transaktion> new_sorted_after_month_transaktionscontent = search_transaktionscontent.Where(ts => ts.Zweck == zweck).ToList().GetRange(0, (int)Load_Progress[follower][1]);
+
+                                            if (Load_Progress[follower][1] != Load_Progress[follower][0])
+                                            {
+                                                new_sorted_after_month_transaktionscontent.Add(new Transaktion { Auftrags_id = "Load", Betrag = "0", Zweck = zweck, Datum = new DateTime(1999, 12, 31) });
+                                            }
+
+                                            root_sorted_after_month_transaktionscontent = new_sorted_after_month_transaktionscontent;
+                                        }
+                                        else
+                                        {
+                                            root_sorted_after_month_transaktionscontent.AddRange(Transaktion_List_Load_for_Load.Where(ts => ts.Zweck == zweck));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        root_sorted_after_month_transaktionscontent.AddRange(All_Transaktion_List_for_Load.Where(ts => ts.Zweck == zweck));
+                                    }
+                                }
+
+                                follower++;
+                            }
+
+                            search_transaktionscontent = root_sorted_after_month_transaktionscontent;
+
+                            Transaktion_List_Load_for_Load = root_sorted_after_month_transaktionscontent;
+
+                            search_transaktionscontent = (from p in search_transaktionscontent orderby DateTime.ParseExact(p.Datumanzeige, "dddd, d.M.yyyy", new CultureInfo("de-DE")) descending select p).ToList();
+                        }
+                    }
+
                     Transaktion.AddRange(search_transaktionscontent);
+
+                    await Add_to_Groups();
                 }
-
-                await Add_to_Groups();
-
-                ActivityIndicator_IsRunning = false;
-
-                ActivityIndicator_IsVisible = false;
 
                 await SearchSuggestionService.Add_Suggestion(Search_Text);
 
                 SuggestionCollection.Clear();
 
                 SuggestionCollection.AddRange(await SearchSuggestionService.Get_all_Suggestion());
+
+                Title = "Suche im Haushaltsbuch";
             }
             catch (Exception ex)
             {
@@ -1295,94 +1475,7 @@ namespace EasyLife.PageModels
                 {
                     if (string.IsNullOrEmpty(Search_Text))
                     {
-                        Transaktion.Clear();
-
-                        var transaktionscontent = await ContentService.Get_all_enabeled_Transaktion();
-
-                        List<Transaktion> sorted_after_month_transaktionscontent = new List<Transaktion>();
-
-                        sorted_after_month_transaktionscontent.Clear();
-
-                        foreach (var trans in transaktionscontent)
-                        {
-                            if (trans.Datum.Year == Current_Viewtime.Year)
-                            {
-                                if (trans.Datum.ToString("MMMM", new CultureInfo("de-DE")) == Current_Viewtime.Month)
-                                {
-                                    if (GroupingOption == 0)
-                                    {
-                                        trans.Pseudotext = trans.Zweck;
-                                        sorted_after_month_transaktionscontent.Add(trans);
-                                    }
-                                    else
-                                    {
-                                        trans.Pseudotext = trans.Datumanzeige;
-                                        sorted_after_month_transaktionscontent.Add(trans);
-                                    }
-                                }
-                                if (Current_Viewtime.Month == "")
-                                {
-                                    if (GroupingOption == 0)
-                                    {
-                                        trans.Pseudotext = trans.Zweck;
-                                        sorted_after_month_transaktionscontent.Add(trans);
-                                    }
-                                    else
-                                    {
-                                        trans.Pseudotext = trans.Datumanzeige;
-                                        sorted_after_month_transaktionscontent.Add(trans);
-                                    }
-                                }
-                            }
-                        }
-
-                        Transaktion.AddRange(sorted_after_month_transaktionscontent);
-
-                        await Add_to_Groups();
-
-
-                        if (Transaktion.Count() == 0)
-                        {
-                            Kein_Ergebnis_Transaktion_Status = true;
-
-                            Kein_Ergebnis_Suggestion_Status = false;
-
-                            List_of_Transaktion_Status = false;
-                        }
-                        else
-                        {
-                            Kein_Ergebnis_Suggestion_Status = false;
-                            Kein_Ergebnis_Transaktion_Status = false;
-                            List_of_Transaktion_Status = true;
-                        }
-                        ActivityIndicator_IsRunning = false;
-
-                        ActivityIndicator_IsVisible = false;
-
-                        if (Transaktion.Count() == 0)
-                        {
-                            Title = "Haushaltsbuch";
-                        }
-                        else
-                        {
-                            if (String.IsNullOrEmpty(Current_Viewtime.Year.ToString()) == false && String.IsNullOrEmpty(Current_Viewtime.Month) == false)
-                            {
-                                Title = "Haushaltsbuch " + Current_Viewtime.Year + " " + Current_Viewtime.Month + "";
-                            }
-                            else
-                            {
-                                if (String.IsNullOrEmpty(Current_Viewtime.Year.ToString()) == true)
-                                {
-                                    Title = "Haushaltsbuch";
-                                }
-                                if (String.IsNullOrEmpty(Current_Viewtime.Month.ToString()) == true)
-                                {
-                                    Title = "Haushaltsbuch " + Current_Viewtime.Year + "";
-                                }
-                            }
-                        }
-
-                        return;
+                        await Refresh();
                     }
                 }
             }
@@ -1444,9 +1537,17 @@ namespace EasyLife.PageModels
             {
                 if (Search_Text != null)
                 {
-                    Search_Text = null;
+                    Load_Progress.Clear();
 
-                    await Refresh();
+                    Load_Progress.Add(new double[] { -1, -1 });
+
+                    All_Transaktion_List_for_Load.Clear();
+
+                    Transaktion_List_Load_for_Load.Clear();
+
+                    Transaktion_List_from_Load.Clear();
+
+                    Search_Text = null;
                 }
             }
             catch (Exception ex)
@@ -1611,46 +1712,108 @@ namespace EasyLife.PageModels
 
                 if(transaktionscontent.Count() != 0)
                 {
-                    foreach (var trans in transaktionscontent)
+                    if (GroupingOption == 1)
                     {
-                        if (DateTime.Compare(trans.Datum, DateTime.Today.AddDays(1).AddSeconds(-1)) <= 0)
+                        if (Load_Progress.Count() == 1)
                         {
-                            if(trans.Saldo_Visibility == true)
-                            {
-                                saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
-                            }
-                            else
-                            {
-                                letter_saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
-                            }
+                            Load_Progress.Clear();
                         }
 
-                        if (trans.Datum.Year == Current_Viewtime.Year)
+                        used_reasons_list.Clear();
+
+                        foreach (var trans in transaktionscontent)
                         {
-                            if (trans.Datum.ToString("MMMM", new CultureInfo("de-DE")) == Current_Viewtime.Month)
+                            if (DateTime.Compare(trans.Datum, DateTime.Today.AddDays(1).AddSeconds(-1)) <= 0)
                             {
-                                if (GroupingOption == 0)
+                                if (trans.Saldo_Visibility == true)
                                 {
-                                    trans.Pseudotext = trans.Zweck;
-                                    sorted_after_month_transaktionscontent.Add(trans);
+                                    saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
                                 }
                                 else
                                 {
-                                    trans.Pseudotext = trans.Datumanzeige;
-                                    sorted_after_month_transaktionscontent.Add(trans);
+                                    letter_saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
                                 }
                             }
-                            if (Current_Viewtime.Month == "")
+
+                            if (trans.Datum.Year == Current_Viewtime.Year)
                             {
-                                if (GroupingOption == 0)
+                                if (trans.Datum.ToString("MMMM", new CultureInfo("de-DE")) == Current_Viewtime.Month)
                                 {
-                                    trans.Pseudotext = trans.Zweck;
-                                    sorted_after_month_transaktionscontent.Add(trans);
+                                    if (GroupingOption == 0)
+                                    {
+                                        trans.Pseudotext = trans.Zweck;
+                                        sorted_after_month_transaktionscontent.Add(trans);
+                                    }
+                                    else
+                                    {
+                                        trans.Pseudotext = trans.Datumanzeige;
+                                        sorted_after_month_transaktionscontent.Add(trans);
+                                    }
+                                }
+                                if (Current_Viewtime.Month == "")
+                                {
+                                    if (GroupingOption == 0)
+                                    {
+                                        trans.Pseudotext = trans.Zweck;
+                                        sorted_after_month_transaktionscontent.Add(trans);
+                                    }
+                                    else
+                                    {
+                                        trans.Pseudotext = trans.Datumanzeige;
+                                        sorted_after_month_transaktionscontent.Add(trans);
+                                    }
+                                }
+                            }
+
+                            if (!used_reasons_list.Contains(trans.Zweck))
+                            {
+                                used_reasons_list.Add(trans.Zweck);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var trans in transaktionscontent)
+                        {
+                            if (DateTime.Compare(trans.Datum, DateTime.Today.AddDays(1).AddSeconds(-1)) <= 0)
+                            {
+                                if (trans.Saldo_Visibility == true)
+                                {
+                                    saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
                                 }
                                 else
                                 {
-                                    trans.Pseudotext = trans.Datumanzeige;
-                                    sorted_after_month_transaktionscontent.Add(trans);
+                                    letter_saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                                }
+                            }
+
+                            if (trans.Datum.Year == Current_Viewtime.Year)
+                            {
+                                if (trans.Datum.ToString("MMMM", new CultureInfo("de-DE")) == Current_Viewtime.Month)
+                                {
+                                    if (GroupingOption == 0)
+                                    {
+                                        trans.Pseudotext = trans.Zweck;
+                                        sorted_after_month_transaktionscontent.Add(trans);
+                                    }
+                                    else
+                                    {
+                                        trans.Pseudotext = trans.Datumanzeige;
+                                        sorted_after_month_transaktionscontent.Add(trans);
+                                    }
+                                }
+                                if (Current_Viewtime.Month == "")
+                                {
+                                    if (GroupingOption == 0)
+                                    {
+                                        trans.Pseudotext = trans.Zweck;
+                                        sorted_after_month_transaktionscontent.Add(trans);
+                                    }
+                                    else
+                                    {
+                                        trans.Pseudotext = trans.Datumanzeige;
+                                        sorted_after_month_transaktionscontent.Add(trans);
+                                    }
                                 }
                             }
                         }
@@ -1711,6 +1874,143 @@ namespace EasyLife.PageModels
                 }
 
                 sorted_after_month_transaktionscontent = (from p in sorted_after_month_transaktionscontent orderby DateTime.ParseExact(p.Datumanzeige, "dddd, d.M.yyyy", new CultureInfo("de-DE")) descending select p).ToList();
+
+                All_Transaktion_List_for_Load = sorted_after_month_transaktionscontent.ToList();
+
+                if (GroupingOption == 0)
+                {
+                    if (Load_Progress[0][0] != sorted_after_month_transaktionscontent.Count)
+                    {
+
+                        Load_Progress[0][0] = sorted_after_month_transaktionscontent.Count;
+
+                        Load_Progress[0][1] = Preferences.Get("Transaktion_per_load", 20.0);
+
+                        if (Load_Progress[0][1] > Load_Progress[0][0])
+                        {
+                            Load_Progress[0][1] = Load_Progress[0][0];
+                        }
+
+                        List<Transaktion> new_sorted_after_month_transaktionscontent = sorted_after_month_transaktionscontent.GetRange(0, (int)Load_Progress[0][1]);
+
+                        if (Load_Progress[0][1] != Load_Progress[0][0])
+                        {
+                            new_sorted_after_month_transaktionscontent.Add(new Transaktion { Auftrags_id = "Load", Betrag = "0" });
+                        }
+
+                        sorted_after_month_transaktionscontent.Clear();
+
+                        sorted_after_month_transaktionscontent = new_sorted_after_month_transaktionscontent;
+                    }
+                    else
+                    {
+                        if (Load_Progress[0][1] < Load_Progress[0][0])
+                        {
+                            if (Transaktion_List_from_Load.Count == 0)
+                            {
+                                Load_Progress[0][1] = Preferences.Get("Transaktion_per_load", 20.0);
+
+                                if (Load_Progress[0][1] > Load_Progress[0][0])
+                                {
+                                    Load_Progress[0][1] = Load_Progress[0][0];
+                                }
+
+                                List<Transaktion> new_sorted_after_month_transaktionscontent = sorted_after_month_transaktionscontent.GetRange(0, (int)Load_Progress[0][1]);
+
+                                if (Load_Progress[0][1] != Load_Progress[0][0])
+                                {
+                                    new_sorted_after_month_transaktionscontent.Add(new Transaktion { Auftrags_id = "Load", Betrag = "0" });
+                                }
+
+                                sorted_after_month_transaktionscontent.Clear();
+
+                                sorted_after_month_transaktionscontent = new_sorted_after_month_transaktionscontent;
+                            }
+                            else
+                            {
+                                sorted_after_month_transaktionscontent = Transaktion_List_from_Load;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (used_reasons_list.Count() != 0)
+                    {
+                        int follower = 0;
+
+                        List<Transaktion> root_sorted_after_month_transaktionscontent = new List<Transaktion>();
+
+                        foreach (string zweck in used_reasons_list)
+                        {
+                            if (Load_Progress.Count() < follower + 1)
+                            {
+                                Load_Progress.Add(new double[] { -1, -1 });
+                            }
+
+                            if (Load_Progress[follower][0] != sorted_after_month_transaktionscontent.Where(ts => ts.Zweck == zweck).Count())
+                            {
+                                Load_Progress[follower][0] = sorted_after_month_transaktionscontent.Where(ts => ts.Zweck == zweck).Count();
+
+                                Load_Progress[follower][1] = Preferences.Get("Transaktion_per_load", 20.0);
+
+                                if (Load_Progress[follower][1] > Load_Progress[follower][0])
+                                {
+                                    Load_Progress[follower][1] = Load_Progress[follower][0];
+                                }
+
+                                List<Transaktion> new_sorted_after_month_transaktionscontent = sorted_after_month_transaktionscontent.Where(ts => ts.Zweck == zweck).ToList().GetRange(0, (int)Load_Progress[follower][1]);
+
+                                if (Load_Progress[follower][1] != Load_Progress[follower][0])
+                                {
+                                    new_sorted_after_month_transaktionscontent.Add(new Transaktion { Auftrags_id = "Load", Betrag = "0", Zweck = zweck, Datum = new DateTime(1999, 12, 31) });
+                                }
+
+                                root_sorted_after_month_transaktionscontent.AddRange(new_sorted_after_month_transaktionscontent);
+                            }
+                            else
+                            {
+                                if (Load_Progress[follower][1] < Load_Progress[follower][0])
+                                {
+                                    if (Transaktion_List_Load_for_Load.Where(ts => ts.Zweck == zweck).Count() == 0)
+                                    {
+                                        Load_Progress[follower][1] = Preferences.Get("Transaktion_per_load", 20.0);
+
+                                        if (Load_Progress[follower][1] > Load_Progress[follower][0])
+                                        {
+                                            Load_Progress[follower][1] = Load_Progress[follower][0];
+                                        }
+
+                                        List<Transaktion> new_sorted_after_month_transaktionscontent = sorted_after_month_transaktionscontent.Where(ts => ts.Zweck == zweck).ToList().GetRange(0, (int)Load_Progress[follower][1]);
+
+                                        if (Load_Progress[follower][1] != Load_Progress[follower][0])
+                                        {
+                                            new_sorted_after_month_transaktionscontent.Add(new Transaktion { Auftrags_id = "Load", Betrag = "0", Zweck = zweck, Datum = new DateTime(1999, 12, 31) });
+                                        }
+
+                                        root_sorted_after_month_transaktionscontent = new_sorted_after_month_transaktionscontent;
+                                    }
+                                    else
+                                    {
+                                        root_sorted_after_month_transaktionscontent.AddRange(Transaktion_List_Load_for_Load.Where(ts => ts.Zweck == zweck));
+                                    }
+                                }
+                                else
+                                {
+                                    root_sorted_after_month_transaktionscontent.AddRange(All_Transaktion_List_for_Load.Where(ts => ts.Zweck == zweck));
+                                }
+                            }
+
+                            follower++;
+                        }
+
+                        sorted_after_month_transaktionscontent = root_sorted_after_month_transaktionscontent;
+
+                        Transaktion_List_Load_for_Load = root_sorted_after_month_transaktionscontent;
+
+                        sorted_after_month_transaktionscontent = (from p in sorted_after_month_transaktionscontent orderby DateTime.ParseExact(p.Datumanzeige, "dddd, d.M.yyyy", new CultureInfo("de-DE")) descending select p).ToList();
+                    }
+                }
 
                 Transaktion.AddRange(sorted_after_month_transaktionscontent);
 
@@ -1775,22 +2075,40 @@ namespace EasyLife.PageModels
         private void ViewIsDisappearing_Methode()
         {
             Is_Aktiv = false;
+
+            Load_Progress.Clear();
+
+            Load_Progress.Add(new double[] { -1, -1 });
+
+            All_Transaktion_List_for_Load.Clear();
+
+            Transaktion_List_Load_for_Load.Clear();
+
+            Transaktion_List_from_Load.Clear();
         }
 
         public async Task Period_Popup()
         {
             try
             {
-                var result = await Shell.Current.ShowPopupAsync(new Viewtime_Popup(Current_Viewtime));
 
-                if(result == null)
+                if (String.IsNullOrEmpty(Search_Text) == true)
                 {
-                    return;
+                    var result = await Shell.Current.ShowPopupAsync(new Viewtime_Popup(Current_Viewtime));
+
+                    if (result == null)
+                    {
+                        return;
+                    }
+
+                    Current_Viewtime = (Viewtime)result;
+
+                    await Refresh();
                 }
-
-                Current_Viewtime = (Viewtime)result;
-
-                await Refresh();
+                else
+                {
+                    await Notificater("Während Sie suchen können Sie nicht die Zeit verändern.");
+                }
             }
             catch (Exception ex)
             {
@@ -2108,6 +2426,124 @@ namespace EasyLife.PageModels
             else
             {
                 Height = 80;
+            }
+        }
+
+        private async Task Load_on_demand_Methode(string input)
+        {
+            try
+            {
+                List<Transaktion> output = new List<Transaktion>();
+
+                if (input == null)
+                {
+                    if (Load_Progress[0][0] != All_Transaktion_List_for_Load.Count())
+                    {
+                        Load_Progress[0][0] = All_Transaktion_List_for_Load.Count;
+
+                        Load_Progress[0][1] = Preferences.Get("Transaktion_per_load", 20.0);
+                    }
+                    else
+                    {
+                        Load_Progress[0][1] += Preferences.Get("Transaktion_per_load", 20.0);
+                    }
+
+                    if (Load_Progress[0][1] > Load_Progress[0][0])
+                    {
+                        Load_Progress[0][1] = Load_Progress[0][0];
+                    }
+
+                    output = All_Transaktion_List_for_Load.GetRange(0, (int)Load_Progress[0][1]);
+
+                    Transaktion_List_from_Load = output;
+
+                    if (Load_Progress[0][1] != Load_Progress[0][0])
+                    {
+                        output.Add(new Transaktion { Auftrags_id = "Load", Betrag = "0", Zweck = null });
+                    }
+                }
+                else
+                {
+                    if (!used_reasons_list.Contains(input))
+                    {
+                        return;
+                    }
+
+                    output.AddRange(Transaktion_List_Load_for_Load);
+
+                    foreach (Transaktion trans in Transaktion_List_Load_for_Load.Where(ts => ts.Zweck == input).ToList())
+                    {
+                        output.Remove(trans);
+                    }
+
+                    if (Load_Progress[used_reasons_list.IndexOf(input)][0] != All_Transaktion_List_for_Load.Where(ts => ts.Zweck == input).Count())
+                    {
+                        Load_Progress[used_reasons_list.IndexOf(input)][0] = All_Transaktion_List_for_Load.Where(ts => ts.Zweck == input).Count();
+
+                        Load_Progress[used_reasons_list.IndexOf(input)][1] = Preferences.Get("Transaktion_per_load", 20.0);
+                    }
+                    else
+                    {
+                        Load_Progress[used_reasons_list.IndexOf(input)][1] += Preferences.Get("Transaktion_per_load", 20.0);
+                    }
+
+                    if (Load_Progress[used_reasons_list.IndexOf(input)][1] > Load_Progress[used_reasons_list.IndexOf(input)][0])
+                    {
+                        Load_Progress[used_reasons_list.IndexOf(input)][1] = Load_Progress[used_reasons_list.IndexOf(input)][0];
+                    }
+
+
+                    output.AddRange(All_Transaktion_List_for_Load.Where(ts => ts.Zweck == input).ToList().GetRange(0, (int)Load_Progress[used_reasons_list.IndexOf(input)][1]));
+
+                    if (Load_Progress[used_reasons_list.IndexOf(input)][1] != Load_Progress[used_reasons_list.IndexOf(input)][0])
+                    {
+                        output.Add(new Transaktion { Auftrags_id = "Load", Betrag = "0", Zweck = input, Datum = new DateTime(1999, 12, 31) });
+                    }
+
+                    Transaktion_List_Load_for_Load = output.ToList();
+                }
+
+                Transaktion.Clear();
+
+                Transaktion.AddRange(output);
+
+                await Add_to_Groups();
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
+        private async Task Load_Ratio_Methode()
+        {
+            try
+            {
+                var result = await Shell.Current.DisplayActionSheet("Ladeverhalten\nAktuell : " + Preferences.Get("Transaktion_per_load", 20.0) + " Transaktionen pro Laden", "Zurück", null, new string[] { "20 Transaktion pro Laden", "30 Transaktion pro Laden", "40 Transaktion pro Laden", "50 Transaktion pro Laden" });
+
+                if (result != null)
+                {
+                    if (result == "20 Transaktion pro Laden")
+                    {
+                        Preferences.Set("Transaktion_per_load", 20.0);
+                    }
+                    if (result == "30 Transaktion pro Laden")
+                    {
+                        Preferences.Set("Transaktion_per_load", 30.0);
+                    }
+                    if (result == "40 Transaktion pro Laden")
+                    {
+                        Preferences.Set("Transaktion_per_load", 40.0);
+                    }
+                    if (result == "50 Transaktion pro Laden")
+                    {
+                        Preferences.Set("Transaktion_per_load", 50.0);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
             }
         }
 
