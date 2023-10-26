@@ -1030,7 +1030,7 @@ namespace EasyLife.PageModels
                     return;
                 if (double.TryParse(value, out double result) == true)
                 {
-                    betrag = value.Replace(".", ","); RaisePropertyChanged();
+                    betrag = value.Replace(".", ",").Trim(); RaisePropertyChanged();
                 }
                 else
                 {
@@ -1071,7 +1071,7 @@ namespace EasyLife.PageModels
             {
                 if (Notiz == value)
                     return;
-                notiz = value; RaisePropertyChanged();
+                notiz = value.Trim(); RaisePropertyChanged();
             }
         }
 

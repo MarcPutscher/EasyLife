@@ -188,8 +188,8 @@
         <StackLayout Orientation="Vertical">
             <xct:Expander>
                 <xct:Expander.Header>
-                    <Grid Padding="0" ColumnDefinitions="*,30,30" BackgroundColor="White" HorizontalOptions="Fill">
-                        <SearchBar Placeholder="Suchen" Text="{Binding Search_Text}" Grid.ColumnSpan="3" BackgroundColor="DimGray" IsVisible="{Binding Serchbar_Visibility}" HorizontalOptions="Fill" >
+                    <Grid Padding="0" ColumnDefinitions="*,30,30,30,30" BackgroundColor="White" HorizontalOptions="Fill">
+                        <SearchBar Placeholder="Suche Transaktionen..." Text="{Binding Search_Text}" TextColor="Orange" Grid.ColumnSpan="5" BackgroundColor="DimGray" IsVisible="{Binding Serchbar_Visibility}" HorizontalOptions="Fill" SearchCommand="{Binding Search_Command}" >
                             <SearchBar.Behaviors>
                                 <xct:EventToCommandBehavior EventName="SearchButtonPressed" Command="{Binding Search_Command}"/>
                                 <xct:EventToCommandBehavior EventName="TextChanged" Command="{Binding Search_Command2}"/>
@@ -200,7 +200,17 @@
                                 <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.CircleXmark}" Color="Red"/>
                             </ImageButton.Source>
                         </ImageButton>
-                        <ImageButton BackgroundColor="DimGray" Padding="5" Grid.Column="2" IsVisible="{Binding Serchbar_Visibility}" HorizontalOptions="EndAndExpand" Margin="-5,0,0,0" Command="{Binding Filter_Command}">
+                        <ImageButton BackgroundColor="DimGray" Padding="5" Grid.Column="2" IsVisible="{Binding Serchbar_Visibility}" HorizontalOptions="EndAndExpand" Margin="-5,0,0,0" Command="{Binding Add_Catchphrase_To_Search_Command}">
+                            <ImageButton.Source>
+                                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.SquarePlus}" Color="Blue"/>
+                            </ImageButton.Source>
+                        </ImageButton>
+                        <ImageButton BackgroundColor="DimGray" Padding="5" Grid.Column="3" IsVisible="{Binding Serchbar_Visibility}" HorizontalOptions="EndAndExpand" Margin="-5,0,0,0" Command="{Binding The_Searchbar_is_Tapped}">
+                            <ImageButton.Source>
+                                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.TableList}" Color="White"/>
+                            </ImageButton.Source>
+                        </ImageButton>
+                        <ImageButton BackgroundColor="DimGray" Padding="5" Grid.Column="4" IsVisible="{Binding Serchbar_Visibility}" HorizontalOptions="EndAndExpand" Margin="-5,0,0,0" Command="{Binding Filter_Command}">
                             <ImageButton.Source>
                                 <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Filter}" Color="{Binding Filter_ActivityColor}"/>
                             </ImageButton.Source>
@@ -208,7 +218,7 @@
                     </Grid>
                 </xct:Expander.Header>
                 <xct:Expander.Behaviors>
-                    <xct:EventToCommandBehavior EventName="Tapped" Command="{Binding The_Searchbar_is_Tapped}"/>
+                    <xct:EventToCommandBehavior EventName="Tapped" Command="{Binding Search_Command}"/>
                 </xct:Expander.Behaviors>
             </xct:Expander>
         </StackLayout>
