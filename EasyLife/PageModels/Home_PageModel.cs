@@ -301,30 +301,6 @@ namespace EasyLife.PageModels
             }
         }
 
-        public bool activityindicator_isrunning = false;
-        public bool ActivityIndicator_IsRunning
-        {
-            get { return activityindicator_isrunning; }
-            set
-            {
-                if (ActivityIndicator_IsRunning == value)
-                    return;
-                activityindicator_isrunning = value; RaisePropertyChanged();
-            }
-        }
-
-        public bool activityindicator_isvisible = false;
-        public bool ActivityIndicator_IsVisible
-        {
-            get { return activityindicator_isvisible; }
-            set
-            {
-                if (ActivityIndicator_IsVisible == value)
-                    return;
-                activityindicator_isvisible = value; RaisePropertyChanged();
-            }
-        }
-
         public bool list_of_suggestion_Status = false;
         public bool List_of_Suggestion_Status
         {
@@ -1085,10 +1061,6 @@ namespace EasyLife.PageModels
                         new Filter(){Name="Quersuche" , State = Preferences.Get("Quersuche", false) }
                     };
 
-                ActivityIndicator_IsVisible = true;
-
-                ActivityIndicator_IsRunning = true;
-
                 Transaktion.Clear();
 
                 var transaktionscontent = await ContentService.Get_all_enabeled_Transaktion();
@@ -1108,10 +1080,6 @@ namespace EasyLife.PageModels
                 if(Search_Text == null)
                 {
                     await Search_Methode2();
-
-                    ActivityIndicator_IsRunning = false;
-
-                    ActivityIndicator_IsVisible = false;
 
                     return;
                 }
@@ -1230,10 +1198,6 @@ namespace EasyLife.PageModels
                     SuggestionCollection.Clear();
 
                     SuggestionCollection.AddRange(await SearchSuggestionService.Get_all_Suggestion());
-
-                    ActivityIndicator_IsRunning = false;
-
-                    ActivityIndicator_IsVisible = false;
 
                     return;
                 }
@@ -1414,10 +1378,6 @@ namespace EasyLife.PageModels
 
                     await Add_to_Groups();
                 }
-
-                ActivityIndicator_IsRunning = false;
-
-                ActivityIndicator_IsVisible = false;
 
                 await SearchSuggestionService.Add_Suggestion(Search_Text);
 

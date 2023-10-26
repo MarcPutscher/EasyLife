@@ -211,8 +211,6 @@
                     <xct:EventToCommandBehavior EventName="Tapped" Command="{Binding The_Searchbar_is_Tapped}"/>
                 </xct:Expander.Behaviors>
             </xct:Expander>
-
-            <ActivityIndicator Color="{DynamicResource Refresh_Color}" IsRunning="{Binding ActivityIndicator_IsRunning}" BackgroundColor="Transparent" IsVisible="{Binding ActivityIndicator_IsVisible}"/>
         </StackLayout>
 
         <ListView
