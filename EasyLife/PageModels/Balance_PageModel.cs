@@ -1479,15 +1479,15 @@ namespace EasyLife.PageModels
 
                                     if(stack.Reason == Selected_Reason)
                                     {
-                                        foreach(Transaktion trans in stack.Detail)
+                                        foreach (Transaktion trans in stack.Detail)
                                         {
-                                            if(double.Parse(trans.Betrag) > 0)
+                                            if (double.Parse(trans.Betrag) > 0)
                                             {
-                                                list_entries_chart_2.Add(new ChartEntry(float.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"))) { Label = trans.Datum.ToString("d.M.yy", new CultureInfo("de-DE")), ValueLabel = trans.Betrag + " €", Color = SKColors.Green });
+                                                list_entries_chart_2.Add(new ChartEntry(float.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"))) { Label = trans.Datum.ToString("d.M.yy", new CultureInfo("de-DE")), ValueLabel = trans.Betrag + " €", Color = SKColors.Green, ValueLabelColor = SKColors.Black });
                                             }
                                             else
                                             {
-                                                list_entries_chart_2.Add(new ChartEntry(float.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"))) { Label = trans.Datum.ToString("d.M.yy", new CultureInfo("de-DE")), ValueLabel = trans.Betrag + " €", Color = SKColors.Red });
+                                                list_entries_chart_2.Add(new ChartEntry(float.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"))) { Label = trans.Datum.ToString("d.M.yy", new CultureInfo("de-DE")), ValueLabel = trans.Betrag + " €", Color = SKColors.Red, ValueLabelColor = SKColors.Black });
                                             }
 
                                             sum_chart_2 += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
@@ -1497,13 +1497,13 @@ namespace EasyLife.PageModels
                             }
                         }
 
-                        Chart_1 = new BarChart { Entries = list_entries_chart_1.ToArray(), ValueLabelOrientation = Orientation.Horizontal, LabelOrientation = Orientation.Vertical , LabelTextSize = 30, IsAnimated = true , LabelColor = SKColors.Black , BackgroundColor = SKColors.Transparent};
+                        Chart_1 = new BarChart { Entries = list_entries_chart_1.ToArray(), ValueLabelOrientation = Orientation.Vertical, LabelOrientation = Orientation.Vertical , LabelTextSize = 30, IsAnimated = true , LabelColor = SKColors.Black , BackgroundColor = SKColors.Transparent};
 
                         Amount_of_Entries_Chart_1 = list_entries_chart_1.Count().ToString();
 
                         Sum_of_Entries_Chart_1 = double.Parse(Total, NumberStyles.Any, new CultureInfo("de-DE")).ToString("F2").Replace(".", ",");
 
-                        Chart_2 = new RadarChart { Entries = list_entries_chart_2.ToArray(), LabelTextSize = 30, IsAnimated = true , LabelColor = SKColors.Black, BackgroundColor = SKColors.Transparent };
+                        Chart_2 = new RadarChart { Entries = list_entries_chart_2.ToArray(), LabelTextSize = 30, BorderLineColor = SKColors.Black, IsAnimated = true, LabelColor = SKColors.Black, BackgroundColor = SKColors.Transparent };
 
                         Amount_of_Entries_Chart_2 = list_entries_chart_2.Count().ToString();
 
@@ -1575,11 +1575,11 @@ namespace EasyLife.PageModels
                                         {
                                             if (double.Parse(trans.Betrag) > 0)
                                             {
-                                                list_entries_chart_2.Add(new ChartEntry(float.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"))) { Label = trans.Datum.ToString("d.M.yy", new CultureInfo("de-DE")), ValueLabel = trans.Betrag + " €", Color = SKColors.Green });
+                                                list_entries_chart_2.Add(new ChartEntry(float.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"))) { Label = trans.Datum.ToString("d.M.yy", new CultureInfo("de-DE")), ValueLabel = trans.Betrag + " €", Color = SKColors.Green, ValueLabelColor = SKColors.Black });
                                             }
                                             else
                                             {
-                                                list_entries_chart_2.Add(new ChartEntry(float.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"))) { Label = trans.Datum.ToString("d.M.yy", new CultureInfo("de-DE")), ValueLabel = trans.Betrag + " €", Color = SKColors.Red });
+                                                list_entries_chart_2.Add(new ChartEntry(float.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"))) { Label = trans.Datum.ToString("d.M.yy", new CultureInfo("de-DE")), ValueLabel = trans.Betrag + " €", Color = SKColors.Red, ValueLabelColor = SKColors.Black });
                                             }
 
                                             sum_chart_2 += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
@@ -1589,7 +1589,7 @@ namespace EasyLife.PageModels
                             }
                         }
 
-                        Chart_2 = new RadarChart { Entries = list_entries_chart_2.ToArray(), LabelTextSize = 30, IsAnimated = true, LabelColor = SKColors.Black, BackgroundColor = SKColors.Transparent };
+                        Chart_2 = new RadarChart { Entries = list_entries_chart_2.ToArray(), LabelTextSize = 30,BorderLineColor = SKColors.Black, IsAnimated = true, LabelColor = SKColors.Black, BackgroundColor = SKColors.Transparent };
 
                         Amount_of_Entries_Chart_2 = list_entries_chart_2.Count().ToString();
 

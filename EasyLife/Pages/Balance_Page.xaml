@@ -122,7 +122,7 @@
                 </StackLayout>
                 <StackLayout BackgroundColor="Black" HorizontalOptions="Fill" HeightRequest="2"/>
                 <Label Text="Spezieller Zweck" FontSize="Large" TextColor="White" HorizontalOptions="Center" TextDecorations="Underline"/>
-                <microcharts:ChartView Chart="{Binding Chart_2}" HeightRequest="285" BackgroundColor="{DynamicResource Page_Backgroundcolor}"/>
+                <microcharts:ChartView Chart="{Binding Chart_2}" HeightRequest="245" BackgroundColor="{DynamicResource Page_Backgroundcolor}"/>
                 <Label Text="{Binding Selected_Reason}" HorizontalOptions="Center" TextColor="Orange" FontSize="Large">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding Change_Chart_2_Command}"/>
