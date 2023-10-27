@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
+using static SQLite.SQLite3;
 
 
 namespace EasyLife.Services
@@ -268,6 +269,31 @@ namespace EasyLife.Services
                 if (re.Benutzerdefinierter_Zweck.Substring(0, re.Benutzerdefinierter_Zweck.IndexOf(":")).ToUpper() == result.Substring(0, result.IndexOf(":")).ToUpper())
                 {
                     return re;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gibt die Definition eines spezifischen Zweckes zurück.
+        /// </summary>
+        /// <param name="input">Der Name des Zweckes der zum finden der Difinition des spezifischen Zweckes notwendig ist.</param>
+        /// <returns></returns>
+        public static async Task<string> Get_definition_of_specific_Reason(string input)
+        {
+            await Init();
+
+            var reasontabel = await Get_all_Reason();
+
+            foreach (var re in reasontabel)
+            {
+                if (re.Benutzerdefinierter_Zweck.Substring(0, re.Benutzerdefinierter_Zweck.IndexOf(":")).ToUpper() == input.ToUpper())
+                {
+                    return re.Benutzerdefinierter_Zweck.Substring(re.Benutzerdefinierter_Zweck.IndexOf(":")+1);
                 }
                 else
                 {

@@ -7,6 +7,7 @@
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     xmlns:fontAwesome="clr-namespace:FontAwesome"
     xmlns:helper="clr-namespace:EasyLife.Helpers"
+    xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
     x:Class="EasyLife.Pages.Balance_Page"
     xmlns:cells="clr-namespace:EasyLife.Cells"
     Title="{Binding Title}"
@@ -39,6 +40,11 @@
                 <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.FilePdf}" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
+        <ToolbarItem Order="Primary" Text="Diagramme"  Command="{Binding Show_Charts_Command}" CommandParameter="0">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.ChartBar}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
     </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>
@@ -63,15 +69,16 @@
     </ContentPage.Resources>
     
     <ContentPage.Content>
-        <Grid  Padding="0" RowDefinitions="Auto,*,Auto">
+        <StackLayout Padding="0">
+            <StackLayout IsVisible="{Binding Charts_State, Converter={helper:InverseBoolConverter}}" Padding="0">
+                <Grid  Padding="0" RowDefinitions="Auto,*,Auto">
+                    <Grid ColumnDefinitions="10,125,*,80,*,100,10" Padding="10" HorizontalOptions="Fill" VerticalOptions="Center" BackgroundColor="DarkGray" IsVisible="{Binding Stackholder_Bundle_Visibility}" Grid.Row="0">
+                        <Label Text="Zweck" TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="1"/>
+                        <Label Text="Anzahl" TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="3"/>
+                        <Label Text="Summe" TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="5"/>
+                    </Grid>
 
-            <Grid ColumnDefinitions="10,125,*,80,*,100,10" Padding="10" HorizontalOptions="Fill" VerticalOptions="Center" BackgroundColor="DarkGray" IsVisible="{Binding Stackholder_Bundle_Visibility}" Grid.Row="0">
-                <Label Text="Zweck" TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="1"/>
-                <Label Text="Anzahl" TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="3"/>
-                <Label Text="Summe" TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="5"/>
-            </Grid>
-
-            <ScrollView
+                    <ScrollView
                 IsVisible="{Binding Stackholder_Bundle_Visibility}"
                 Grid.Row="1"
                 VerticalOptions="Fill"
@@ -79,7 +86,7 @@
                 BackgroundColor="Transparent"
                 Padding="0"
                 VerticalScrollBarVisibility="Never">
-                <ListView
+                        <ListView
                     SelectionMode="None"
                     CachingStrategy = "RecycleElement"
                     IsPullToRefreshEnabled="False"     
@@ -89,20 +96,47 @@
                     BackgroundColor="Transparent"
                     VerticalScrollBarVisibility="Never"
                     ItemTemplate="{StaticResource Stackholder_Selector}">
-                </ListView>
-            </ScrollView>
+                        </ListView>
+                    </ScrollView>
 
-            <Grid ColumnDefinitions="*,Auto" Padding="10" HorizontalOptions="Fill" VerticalOptions="Center" BackgroundColor="DarkGray" IsVisible="{Binding Stackholder_Bundle_Visibility}" Grid.Row="2">
-                <Label Text="Restgeld : " TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
-                <Grid ColumnDefinitions="*,10,20" HorizontalOptions="Fill" VerticalOptions="Center" Grid.Column="1" ColumnSpacing="3">
-                    <Label Text="{Binding Total}" TextColor="{Binding Evaluating_of_Totoal}" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
-                    <Label Text="€" TextColor="{Binding Evaluating_of_Totoal}" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="1"/>
+                    <Grid ColumnDefinitions="*,Auto" Padding="10" HorizontalOptions="Fill" VerticalOptions="Center" BackgroundColor="DarkGray" IsVisible="{Binding Stackholder_Bundle_Visibility}" Grid.Row="2">
+                        <Label Text="Restgeld : " TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
+                        <Grid ColumnDefinitions="*,10,20" HorizontalOptions="Fill" VerticalOptions="Center" Grid.Column="1" ColumnSpacing="3">
+                            <Label Text="{Binding Total}" TextColor="{Binding Evaluating_of_Totoal}" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
+                            <Label Text="€" TextColor="{Binding Evaluating_of_Totoal}" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="1"/>
+                        </Grid>
+                    </Grid>
                 </Grid>
-            </Grid>
+            </StackLayout>
 
-            <Grid RowDefinitions="300,100,*" IsVisible="{Binding Kein_Ergebnis_Stackholder_Status}" VerticalOptions="FillAndExpand" Grid.RowSpan="3">
-                <Label Grid.Row="1" Text="Keine Bilanz vorhanden!" TextColor="Black" FontSize="20" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="Center"/>
-            </Grid>
-        </Grid>
+            <StackLayout IsVisible="{Binding Charts_State}" Padding="5">
+                <Label Text="Gesamter Zeitraum" FontSize="Large" TextColor="White" HorizontalOptions="Center" TextDecorations="Underline"/>
+                <microcharts:ChartView Chart="{Binding Chart_1}" HeightRequest="285" BackgroundColor="{DynamicResource Page_Backgroundcolor}"/>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="5">
+                    <Label Text="Anzahl:" TextColor="Black" FontSize="Medium"/>
+                    <Label Text="{Binding Amount_of_Entries_Chart_1}" TextColor="White" FontSize="Medium"/>
+                    <Label Text="   "/>
+                    <Label Text="Summe:" TextColor="Black" FontSize="Medium"/>
+                    <Label Text="{Binding Sum_of_Entries_Chart_1}" TextColor="{Binding Evaluating_of_Totoal}" FontSize="Medium"/>
+                    <Label Text="€" TextColor="{Binding Evaluating_of_Totoal}" FontSize="Medium"/>
+                </StackLayout>
+                <StackLayout BackgroundColor="Black" HorizontalOptions="Fill" HeightRequest="2"/>
+                <Label Text="Spezieller Zweck" FontSize="Large" TextColor="White" HorizontalOptions="Center" TextDecorations="Underline"/>
+                <microcharts:ChartView Chart="{Binding Chart_2}" HeightRequest="285" BackgroundColor="{DynamicResource Page_Backgroundcolor}"/>
+                <Label Text="{Binding Selected_Reason}" HorizontalOptions="Center" TextColor="Orange" FontSize="Large">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Change_Chart_2_Command}"/>
+                    </Label.GestureRecognizers>
+                </Label>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="5">
+                    <Label Text="Anzahl:" TextColor="Black" FontSize="Medium"/>
+                    <Label Text="{Binding Amount_of_Entries_Chart_2}" TextColor="White" FontSize="Medium"/>
+                    <Label Text="   "/>
+                    <Label Text="Summe:" TextColor="Black" FontSize="Medium"/>
+                    <Label Text="{Binding Sum_of_Entries_Chart_2}" TextColor="{Binding Evaluating_of_Sum_of_Entries_Chart_2}" FontSize="Medium"/>
+                    <Label Text="€" TextColor="{Binding Evaluating_of_Sum_of_Entries_Chart_2}" FontSize="Medium"/>
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

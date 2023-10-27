@@ -10,9 +10,12 @@ using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
+using iText.StyledXmlParser.Css.Util;
 using iText.StyledXmlParser.Jsoup.Nodes;
+using Microcharts;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -48,6 +51,8 @@ namespace EasyLife.PageModels
             Period_Command = new AsyncCommand(Period_Popup);
             Settings_Command = new AsyncCommand(Settings_Methode);
             Create_PDF_Command = new AsyncCommand(Create_PDF_Methode);
+            Show_Charts_Command = new AsyncCommand<string>(Show_Charts_Methode);
+            Change_Chart_2_Command = new AsyncCommand(Change_Chart_2_Methode);
         }
 
         private async Task Create_PDF_Methode()
@@ -562,6 +567,11 @@ namespace EasyLife.PageModels
                     Stackholder_Bundle_Visibility = true;
                     Kein_Ergebnis_Stackholder_Status = false;
                     Title = "" + Current_Viewtime.Month + " " + Current_Viewtime.Year + "";
+                }
+
+                if(Charts_State == true)
+                {
+                    await Show_Charts_Methode("1");
                 }
             }
             catch (Exception ex)
@@ -1419,6 +1429,197 @@ namespace EasyLife.PageModels
             }
         }
 
+        private async Task Show_Charts_Methode(string input)
+        {
+            try
+            {
+                if(Bundles.Count() != 0)
+                {
+                    if(input == "0")
+                    {
+                        Charts_State = !Charts_State;
+                    }
+
+                    if(Charts_State == true)
+                    {
+                        Selected_Reason = null;
+
+                        double sum_chart_2 = 0;
+
+                        Reason_List.Clear();
+
+                        List<ChartEntry> list_entries_chart_1 = new List<ChartEntry>();
+
+                        List<ChartEntry> list_entries_chart_2 = new List<ChartEntry>();
+
+                        foreach (var bundle in Bundles)
+                        {
+                            if (bundle.Definition == 0)
+                            {
+                                foreach (Stackholder stack in bundle.StackholderSource)
+                                {
+                                    if (await ReasonService.Get_definition_of_specific_Reason(stack.Reason) == "Einnahmen")
+                                    {
+                                        list_entries_chart_1.Add(new ChartEntry(float.Parse(stack.Value, NumberStyles.Any, new CultureInfo("de-DE"))) { Label = stack.Reason+"("+stack.Count+")", ValueLabel = stack.Value+" €" , Color = SKColors.Green , ValueLabelColor = SKColors.Green });
+                                    }
+                                    else
+                                    {
+                                        list_entries_chart_1.Add(new ChartEntry(float.Parse(stack.Value, NumberStyles.Any, new CultureInfo("de-DE"))) { Label = stack.Reason + "(" + stack.Count + ")", ValueLabel = stack.Value+" €", Color = SKColors.Red , ValueLabelColor = SKColors.Red});
+                                    }
+
+                                    if (String.IsNullOrEmpty(Selected_Reason))
+                                    {
+                                        Selected_Reason = stack.Reason;
+                                    }
+
+                                    if(!Reason_List.Contains(stack.Reason))
+                                    {
+                                        Reason_List.Add(stack.Reason);
+                                    }
+
+                                    if(stack.Reason == Selected_Reason)
+                                    {
+                                        foreach(Transaktion trans in stack.Detail)
+                                        {
+                                            if(double.Parse(trans.Betrag) > 0)
+                                            {
+                                                list_entries_chart_2.Add(new ChartEntry(float.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"))) { Label = trans.Datum.ToString("d.M.yy", new CultureInfo("de-DE")), ValueLabel = trans.Betrag + " €", Color = SKColors.Green });
+                                            }
+                                            else
+                                            {
+                                                list_entries_chart_2.Add(new ChartEntry(float.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"))) { Label = trans.Datum.ToString("d.M.yy", new CultureInfo("de-DE")), ValueLabel = trans.Betrag + " €", Color = SKColors.Red });
+                                            }
+
+                                            sum_chart_2 += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        Chart_1 = new BarChart { Entries = list_entries_chart_1.ToArray(), ValueLabelOrientation = Orientation.Horizontal, LabelOrientation = Orientation.Vertical , LabelTextSize = 30, IsAnimated = true , LabelColor = SKColors.Black , BackgroundColor = SKColors.Transparent};
+
+                        Amount_of_Entries_Chart_1 = list_entries_chart_1.Count().ToString();
+
+                        Sum_of_Entries_Chart_1 = double.Parse(Total, NumberStyles.Any, new CultureInfo("de-DE")).ToString("F2").Replace(".", ",");
+
+                        Chart_2 = new RadarChart { Entries = list_entries_chart_2.ToArray(), LabelTextSize = 30, IsAnimated = true , LabelColor = SKColors.Black, BackgroundColor = SKColors.Transparent };
+
+                        Amount_of_Entries_Chart_2 = list_entries_chart_2.Count().ToString();
+
+                        Sum_of_Entries_Chart_2 = sum_chart_2.ToString("F2").Replace(".", ",");
+
+                        if (sum_chart_2 < 0)
+                        {
+                            Evaluating_of_Sum_of_Entries_Chart_2 = Xamarin.Forms.Color.Red;
+                        }
+                        if (sum_chart_2 > 0)
+                        {
+                            Evaluating_of_Sum_of_Entries_Chart_2 = Xamarin.Forms.Color.Green;
+                        }
+                        if (sum_chart_2 == 0)
+                        {
+                            Evaluating_of_Sum_of_Entries_Chart_2 = Xamarin.Forms.Color.DarkGray;
+                        }
+                    }
+                    else
+                    {
+                        await Load();
+                    }
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert("Leere Bilanz", "Es kann kein Diagramm erstellt werden, wenn die Bilanz leer ist.", "Verstanden");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
+        private async Task Change_Chart_2_Methode()
+        {
+            try
+            {
+                if(Reason_List.Count() != 0)
+                {
+                    var result = await Shell.Current.DisplayActionSheet("Zweck auswählen", "Verwerfen", null, Reason_List.ToArray());
+
+                    if(result == null)
+                    {
+                        return;
+                    }
+
+                    if(result == "Verwerfen")
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        Selected_Reason = result;
+
+                        double sum_chart_2 = 0;
+
+                        List<ChartEntry> list_entries_chart_2 = new List<ChartEntry>();
+
+                        foreach (var bundle in Bundles)
+                        {
+                            if (bundle.Definition == 0)
+                            {
+                                foreach (Stackholder stack in bundle.StackholderSource)
+                                {
+                                    if (stack.Reason == Selected_Reason)
+                                    {
+                                        foreach (Transaktion trans in stack.Detail)
+                                        {
+                                            if (double.Parse(trans.Betrag) > 0)
+                                            {
+                                                list_entries_chart_2.Add(new ChartEntry(float.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"))) { Label = trans.Datum.ToString("d.M.yy", new CultureInfo("de-DE")), ValueLabel = trans.Betrag + " €", Color = SKColors.Green });
+                                            }
+                                            else
+                                            {
+                                                list_entries_chart_2.Add(new ChartEntry(float.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"))) { Label = trans.Datum.ToString("d.M.yy", new CultureInfo("de-DE")), ValueLabel = trans.Betrag + " €", Color = SKColors.Red });
+                                            }
+
+                                            sum_chart_2 += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        Chart_2 = new RadarChart { Entries = list_entries_chart_2.ToArray(), LabelTextSize = 30, IsAnimated = true, LabelColor = SKColors.Black, BackgroundColor = SKColors.Transparent };
+
+                        Amount_of_Entries_Chart_2 = list_entries_chart_2.Count().ToString();
+
+                        Sum_of_Entries_Chart_2 = sum_chart_2.ToString("F2").Replace(".", ",");
+
+                        if (sum_chart_2 < 0)
+                        {
+                            Evaluating_of_Sum_of_Entries_Chart_2 = Xamarin.Forms.Color.Red;
+                        }
+                        if (sum_chart_2 > 0)
+                        {
+                            Evaluating_of_Sum_of_Entries_Chart_2 = Xamarin.Forms.Color.Green;
+                        }
+                        if (sum_chart_2 == 0)
+                        {
+                            Evaluating_of_Sum_of_Entries_Chart_2 = Xamarin.Forms.Color.DarkGray;
+                        }
+                    }
+                }
+                else
+                {
+                    await Notificater("Es gibt keine Zwecke zwischen denen man wählen kann.");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
         private async Task Notificater(string v)
         {
             await Shell.Current.DisplayToastAsync(v, 5000);
@@ -1632,6 +1833,10 @@ namespace EasyLife.PageModels
         public AsyncCommand Settings_Command { get; }
         public AsyncCommand Create_PDF_Command { get; }
 
+        public AsyncCommand<string> Show_Charts_Command { get; }
+
+        public AsyncCommand Change_Chart_2_Command { get; }
+
         public Xamarin.Forms.Color evaluating_of_totoal_outcome_account;
         public Xamarin.Forms.Color Evaluating_of_Totoal_Outcome_Account
         {
@@ -1779,6 +1984,158 @@ namespace EasyLife.PageModels
                 }
 
                 total = value; RaisePropertyChanged();
+            }
+        }
+
+        public string selected_reason;
+        public string Selected_Reason
+        {
+            get { return selected_reason; }
+            set
+            {
+                if (Selected_Reason == value)
+                {
+                    return;
+                }
+
+                selected_reason = value; RaisePropertyChanged();
+            }
+        }
+
+        public List<string> reason_list = new List<string>();
+
+        public List<string> Reason_List
+        {
+            get { return reason_list; }
+            set
+            {
+                if (Reason_List == value)
+                {
+                    return;
+                }
+                reason_list = value; RaisePropertyChanged();
+            }
+        }
+
+        public bool charts_state = false;
+        public bool Charts_State
+        {
+            get { return charts_state; }
+            set
+            {
+                if (Charts_State == value)
+                {
+                    return;
+                }
+
+                charts_state = value; RaisePropertyChanged();
+            }
+        }
+
+        public BarChart chart_1 = new BarChart() {Entries = null};
+
+        public BarChart Chart_1
+        {
+            get { return chart_1; }
+            set
+            {
+                if (Chart_1 == value)
+                {
+                    return;
+                }
+
+                chart_1 = value; RaisePropertyChanged();
+            }
+        }
+
+        public RadarChart chart_2 = new RadarChart() { Entries = null };
+
+        public RadarChart Chart_2
+        {
+            get { return chart_2; }
+            set
+            {
+                if (Chart_2 == value)
+                {
+                    return;
+                }
+
+                chart_2 = value; RaisePropertyChanged();
+            }
+        }
+
+        public string amount_of_entries_chart_1;
+        public string Amount_of_Entries_Chart_1
+        {
+            get { return amount_of_entries_chart_1; }
+            set
+            {
+                if (Amount_of_Entries_Chart_1 == value)
+                {
+                    return;
+                }
+
+                amount_of_entries_chart_1 = value; RaisePropertyChanged();
+            }
+        }
+
+        public string sum_of_entries_chart_1;
+        public string Sum_of_Entries_Chart_1
+        {
+            get { return sum_of_entries_chart_1; }
+            set
+            {
+                if (Sum_of_Entries_Chart_1 == value)
+                {
+                    return;
+                }
+
+                sum_of_entries_chart_1 = value; RaisePropertyChanged();
+            }
+        }
+
+        public string amount_of_entries_chart_2;
+        public string Amount_of_Entries_Chart_2
+        {
+            get { return amount_of_entries_chart_2; }
+            set
+            {
+                if (Amount_of_Entries_Chart_2 == value)
+                {
+                    return;
+                }
+
+                amount_of_entries_chart_2 = value; RaisePropertyChanged();
+            }
+        }
+
+        public string sum_of_entries_chart_2;
+        public string Sum_of_Entries_Chart_2
+        {
+            get { return sum_of_entries_chart_2; }
+            set
+            {
+                if (Sum_of_Entries_Chart_2 == value)
+                {
+                    return;
+                }
+
+                sum_of_entries_chart_2 = value; RaisePropertyChanged();
+            }
+        }
+
+        public Xamarin.Forms.Color evaluating_of_sum_of_entries_chart_2;
+        public Xamarin.Forms.Color Evaluating_of_Sum_of_Entries_Chart_2
+        {
+            get { return evaluating_of_sum_of_entries_chart_2; }
+            set
+            {
+                if (Evaluating_of_Sum_of_Entries_Chart_2 == value)
+                {
+                    return;
+                }
+
+                evaluating_of_sum_of_entries_chart_2 = value; RaisePropertyChanged();
             }
         }
     }
