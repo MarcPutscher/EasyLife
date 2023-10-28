@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xct:Popup
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="EasyLife.Pages.Budget_Popup"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+    xmlns:model="clr-namespace:EasyLife.Models"
+    x:Name="Budget_Popup_Size"
+    IsLightDismissEnabled="False"
+    Size="400,600"
+    Color="Transparent"
+    HorizontalOptions="Center"
+    VerticalOptions="Center">
+
+    <StackLayout VerticalOptions="Fill">
+        <Button Clicked="CancelButton_Clicked" HorizontalOptions="End" VerticalOptions="Start" Text="X" FontSize="20" FontAttributes="Bold" BackgroundColor="Red" BorderColor="DarkRed" Padding="5" CornerRadius="100" WidthRequest="50" Margin="0,0,0,5"/>
+        <StackLayout Orientation="Vertical" HorizontalOptions="Fill" VerticalOptions="Start">
+            <Label Text="Budgets" TextColor="White" FontSize="30" FontAttributes="Bold" HorizontalTextAlignment="Center" TextDecorations="Underline"/>
+            <Frame Padding="20" CornerRadius="20" BackgroundColor="Gray" BorderColor="Black" VerticalOptions="Center" HorizontalOptions="Center" xct:ShadowEffect.Color="Blue" x:Name="Rahmen" WidthRequest="400">
+                <StackLayout>
+                    <ListView
+                        IsPullToRefreshEnabled="false"
+                        IsRefreshing="False"
+                        HasUnevenRows="True"
+                        x:Name="BudgetList"
+                        IsGroupingEnabled="false"
+                        SeparatorVisibility="Default"
+                        VerticalOptions="FillAndExpand">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="model:Budget">
+                                <ViewCell>
+                                    <SwipeView BackgroundColor="Transparent" Padding="0">
+                                        <SwipeView.LeftItems>
+                                            <SwipeItems Mode="Execute">
+                                                <SwipeItem Invoked="SwipeItemLeft_Invoked" CommandParameter="{Binding .}" Text="Entfernen" BackgroundColor="Red" />
+                                            </SwipeItems>
+                                        </SwipeView.LeftItems>
+                                        <SwipeView.RightItems>
+                                            <SwipeItems Mode="Execute">
+                                                <SwipeItem Invoked="SwipeItemRight_Invoked" CommandParameter="{Binding .}" Text="Bearbeiten" BackgroundColor="Green" />
+                                            </SwipeItems>
+                                        </SwipeView.RightItems>
+                                        <Grid ColumnDefinitions="Auto,*,Auto" Padding="0" Margin="0,10,0,10">
+                                            <Grid Grid.ColumnSpan="3">
+                                                <Frame BackgroundColor="Green" WidthRequest="360" CornerRadius="20" Grid.Row="0" HorizontalOptions="Fill"/>
+                                                <Frame BackgroundColor="Red" IsVisible="{Binding Visibility}" WidthRequest="{Binding Red}" CornerRadius="20" Grid.Row="0" HorizontalOptions="Start"/>
+                                            </Grid>
+                                            <Label Text="{Binding Name}" TextColor="Blue" FontAttributes="Bold" FontSize="Medium"  VerticalTextAlignment="Center" Margin="10,0,0,0" Grid.Column="0" HorizontalOptions="Start"/>
+                                            <StackLayout Grid.Column="2" Orientation="Horizontal" HorizontalOptions="End" Margin="0,0,10,0">
+                                                <StackLayout Orientation="Horizontal" HorizontalOptions="Start">
+                                                    <Label Text="{Binding Current}" TextColor="Blue" FontAttributes="Bold" FontSize="Medium" VerticalTextAlignment="Center" />
+                                                    <Label Text="€" TextColor="Blue" FontAttributes="Bold" FontSize="Medium" VerticalTextAlignment="Center" />
+                                                </StackLayout>
+                                                <Label Text="/" TextColor="Blue" FontAttributes="Bold" FontSize="Medium" VerticalTextAlignment="Center" />
+                                                <StackLayout Orientation="Horizontal" HorizontalOptions="End">
+                                                    <Label Text="{Binding Goal}" TextColor="Blue" FontAttributes="Bold" FontSize="Medium" VerticalTextAlignment="Center" />
+                                                    <Label Text="€" TextColor="Blue" FontAttributes="Bold" FontSize="Medium" VerticalTextAlignment="Center" />
+                                                </StackLayout>
+                                            </StackLayout>
+                                        </Grid>
+                                    </SwipeView>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Button Text="Budget hinzufügen" Clicked="Add_Budget" BackgroundColor="Gray" BorderColor="Black" TextColor="White" FontSize="Large" FontAttributes="Bold" Padding="0"/>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+    </StackLayout>
+</xct:Popup>

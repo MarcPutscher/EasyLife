@@ -45,6 +45,9 @@
     <Compile Update="Cells\GroupeTotal_Cell.xaml.cs">
       <DependentUpon>GroupeTotal_Cell.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Pages\Budget_Poup.xaml.cs">
+      <DependentUpon>Budget_Poup.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\Edit_Item_With_Order_Page.xaml.cs">
       <DependentUpon>Edit_Item_With_Order_Page.xaml</DependentUpon>
     </Compile>
@@ -59,6 +62,9 @@
     </Compile>
     <Compile Update="Pages\Styling_Color_Page.xaml.cs">
       <DependentUpon>Styling_Color_Page.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Change_Saldo_Date_Popup.xaml.cs">
+      <DependentUpon>Change_Saldo_Date_Popup.xaml</DependentUpon>
     </Compile>
     <Compile Update="Pages\Viewtime_Popup.xaml.cs">
       <DependentUpon>Viewtime_Popup.xaml</DependentUpon>

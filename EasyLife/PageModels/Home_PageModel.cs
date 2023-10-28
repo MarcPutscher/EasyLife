@@ -106,6 +106,10 @@ namespace EasyLife.PageModels
 
         public AsyncCommand Add_Catchphrase_To_Search_Command { get; }
 
+        public AsyncCommand Budget_Command { get; }
+
+        public AsyncCommand Change_Saldo_Date_Command { get; }
+
         public bool serchbar_visibility = false;
         public bool Serchbar_Visibility
         {
@@ -229,7 +233,7 @@ namespace EasyLife.PageModels
             }
         }
 
-        public string saldo_date = DateTime.Now.ToString("dddd, d.M.yyyy", new CultureInfo("de-DE"));
+        public string saldo_date = Preferences.Get("Saldo_Date", DateTime.Now.ToString("dddd, d.M.yyyy", new CultureInfo("de-DE")));
         public string Saldo_Date
         {
             get { return saldo_date; }
@@ -449,6 +453,8 @@ namespace EasyLife.PageModels
             ShowCalculator_List_Command = new AsyncCommand(ShowCalculator_List_Methode);
             Load_on_demand_Command = new AsyncCommand<string>(Load_on_demand_Methode);
             Load_Ratio_Command = new AsyncCommand(Load_Ratio_Methode);
+            Budget_Command = new AsyncCommand(Budget_Methode);
+            Change_Saldo_Date_Command = new AsyncCommand(Change_Saldo_Date_Methode);
 
             Period_Command = new AsyncCommand(Period_Popup);
 
@@ -1811,7 +1817,7 @@ namespace EasyLife.PageModels
 
                         foreach (var trans in transaktionscontent)
                         {
-                            if (DateTime.Compare(trans.Datum, DateTime.Today.AddDays(1).AddSeconds(-1)) <= 0)
+                            if (DateTime.Compare(trans.Datum, DateTime.ParseExact(Saldo_Date, "dddd, d.M.yyyy", new CultureInfo("de-DE")).AddDays(1).AddSeconds(-1)) <= 0)
                             {
                                 saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
                             }
@@ -1856,7 +1862,7 @@ namespace EasyLife.PageModels
                     {
                         foreach (var trans in transaktionscontent)
                         {
-                            if (DateTime.Compare(trans.Datum, DateTime.Today.AddDays(1).AddSeconds(-1)) <= 0)
+                            if (DateTime.Compare(trans.Datum, DateTime.ParseExact(Saldo_Date, "dddd, d.M.yyyy", new CultureInfo("de-DE")).AddDays(1).AddSeconds(-1)) <= 0)
                             {
                                 saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
                             }
@@ -1894,7 +1900,17 @@ namespace EasyLife.PageModels
                     }
                 }
 
-                Saldo_Date = DateTime.Now.ToString("dddd, d.M.yyyy", new CultureInfo("de-DE"));
+                TimeSpan timespan = DateTime.Now - DateTime.ParseExact(Saldo_Date, "dddd, d.M.yyyy", new CultureInfo("de-DE"));
+
+                if (DateTime.Compare(DateTime.ParseExact(Saldo_Date, "dddd, d.M.yyyy", new CultureInfo("de-DE")), DateTime.Now) <=0)
+                {
+                    if (timespan.TotalDays <= 1)
+                    {
+                        Preferences.Set("Saldo_Date", DateTime.Now.ToString("dddd, d.M.yyyy", new CultureInfo("de-DE")));
+
+                        Saldo_Date = Preferences.Get("Saldo_Date", DateTime.Now.ToString("dddd, d.M.yyyy", new CultureInfo("de-DE")));
+                    }
+                }
 
                 if (saldo != 0)
                 {
@@ -2575,6 +2591,183 @@ namespace EasyLife.PageModels
                         Preferences.Set("Transaktion_per_load", 50.0);
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
+        private async Task Budget_Methode()
+        {
+            try
+            {
+                if(Current_Viewtime.Month != "")
+                {
+                    List<Transaktion> transaktionlist = new List<Transaktion>();
+
+                    var allbudget = await BudgetService.Get_all_Budget();
+
+                    var enablereason = await ReasonService.Get_Enable_ReasonDictionary();
+
+                    List<string> enablereasonlist = enablereason.Keys.ToList();
+
+                    var transaktioncontent = await ContentService.Get_all_enabeled_Transaktion();
+
+                    if (transaktioncontent.Count() != 0)
+                    {
+                        if (allbudget.Count() != 0)
+                        {
+                            List<Budget> budgetlist = new List<Budget>();
+
+                            foreach (Budget bg in allbudget)
+                            {
+                                bg.Current = 0;
+
+                                if (enablereasonlist.Contains(bg.Name) == true || bg.Name == "Monat")
+                                {
+                                    budgetlist.Add(bg);
+                                }
+                            }
+
+                            budgetlist.Reverse();
+
+                            allbudget = budgetlist;
+                        }
+
+                        foreach (var transaktion in transaktioncontent)
+                        {
+                            if (transaktion.Datum.Year == Current_Viewtime.Year)
+                            {
+                                if (transaktion.Datum.ToString("MMMM", new CultureInfo("de-DE")) == Current_Viewtime.Month)
+                                {
+                                    transaktionlist.Add(transaktion);
+
+                                    if (allbudget.Count() != 0)
+                                    {
+                                        foreach (Budget budget in allbudget)
+                                        {
+                                            if (transaktion.Zweck == budget.Name)
+                                            {
+                                                budget.Current += Math.Abs(double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")));
+                                            }
+
+                                            if (budget.Name == "Monat")
+                                            {
+                                                budget.Current += double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (allbudget.Count() != 0)
+                        {
+                            foreach (Budget budget in allbudget)
+                            {
+                                budget.Red = Math.Round((budget.Current / budget.Goal) * 360, 0);
+
+                                budget.Visibility = true;
+
+                                if (budget.Red <= 0)
+                                {
+                                    budget.Red = 0;
+
+                                    budget.Visibility = false;
+                                }
+                                if (budget.Red > 360)
+                                {
+                                    budget.Red = 360;
+                                }
+                            }
+                        }
+                    }
+
+                    await Shell.Current.ShowPopupAsync(new Budget_Popup(allbudget.ToList(), Current_Viewtime, transaktionlist));
+                }
+                else
+                {
+                    await Notificater("Um das Budget einsehen zu können, müssen Sie sich in einem Monat befinden.");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
+        private async Task Change_Saldo_Date_Methode()
+        {
+            try
+            {
+                var transaktioncontent = await ContentService.Get_all_Transaktion();
+
+                if(transaktioncontent.Count() != 0)
+                {
+                    DateTime lastdate = DateTime.Now;
+
+                    DateTime firstdate = DateTime.Now;
+
+                    transaktioncontent = (from p in transaktioncontent orderby DateTime.ParseExact(p.Datumanzeige, "dddd, d.M.yyyy", new CultureInfo("de-DE")) descending select p).ToList();
+
+                    lastdate = transaktioncontent.First().Datum;
+
+                    firstdate = transaktioncontent.Last().Datum;
+
+                    var result = await Shell.Current.ShowPopupAsync(new Change_Saldo_Date_Popup(firstdate,lastdate, DateTime.ParseExact(Saldo_Date, "dddd, d.M.yyyy", new CultureInfo("de-DE"))));
+
+                    if(result != null)
+                    {
+                        DateTime currentdate = (DateTime)result;
+
+                        double saldo = 0;
+
+                        Saldo_Date = currentdate.ToString("dddd, d.M.yyyy", new CultureInfo("de-DE"));
+
+                        Preferences.Set("Saldo_Date", Saldo_Date);
+
+                        foreach (var trans in transaktioncontent)
+                        {
+                            if (DateTime.Compare(trans.Datum, currentdate.AddDays(1).AddSeconds(-1)) <= 0)
+                            {
+                                saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                            }
+                        }
+
+                        if (saldo != 0)
+                        {
+                            saldo = Math.Round(saldo, 2);
+
+                            Saldo_Value = saldo.ToString().Replace(".", ",");
+
+                            IsSaldoVisibility = true;
+
+                            if (saldo < 0)
+                            {
+                                Saldo_Evaluate = Color.Red;
+                            }
+                            if (saldo == 0)
+                            {
+                                Saldo_Evaluate = Color.White;
+                            }
+                            if (saldo > 0)
+                            {
+                                Saldo_Evaluate = Color.Green;
+                            }
+                        }
+                        else
+                        {
+                            Saldo_Value = null;
+                            IsSaldoVisibility = false;
+                        }
+                    }
+                }
+                else
+                {
+                    await Notificater("Es gibt keine Transaktionen, wo man den Stand bestimmen kann.");
+                }
+
             }
             catch (Exception ex)
             {

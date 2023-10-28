@@ -284,6 +284,13 @@
                     </ListView.GroupHeaderTemplate>
                 </ListView>
                 <Grid ColumnDefinitions="*,Auto,*" HeightRequest="80" Padding="0" Margin="0,-7,0,5">
+                    <Grid ColumnDefinitions="10,Auto,*" Grid.Column="0" Padding="0" VerticalOptions="Center" HeightRequest="80" Margin="0,5,0,0">
+                        <ImageButton Command="{Binding Budget_Command}" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="55" HeightRequest="55" Padding="0">
+                            <ImageButton.Source>
+                                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Wallet}" Color="SaddleBrown"/>
+                            </ImageButton.Source>
+                        </ImageButton>
+                    </Grid>
                     <StackLayout Grid.Column="1" Margin="0,0,0,10">
                         <Frame IsVisible="{Binding IsSaldoVisibility}" CornerRadius="50"  Padding="5" BackgroundColor="{DynamicResource Saldo_Backgroundcolor}" HorizontalOptions="Center" HasShadow="True" xct:ShadowEffect.Color="{Binding Saldo_Evaluate}">
                             <StackLayout>
@@ -293,13 +300,21 @@
                                     <Label Text="€" TextColor="{Binding Saldo_Evaluate}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </StackLayout>
                                 <StackLayout Orientation="Horizontal" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center" Margin="20,0,20,0">
-                                    <Label Text="{Binding Saldo_Date}" TextColor="{DynamicResource Saldo_Textcolor}" FontSize="Subtitle" FontAttributes="None" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center" />
+                                    <Label Text="{Binding Saldo_Date}" TextColor="{DynamicResource Saldo_Textcolor}" FontSize="Subtitle" FontAttributes="None" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Change_Saldo_Date_Command}"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
                                 </StackLayout>
                             </StackLayout>
                         </Frame>
                     </StackLayout>
                     <Grid ColumnDefinitions="*,Auto,10" Grid.Column="2" Padding="0" VerticalOptions="Center" HeightRequest="80" Margin="0,5,0,0">
-                        <Button Command="{Binding Add_Command}" Grid.Column="1" FontSize="30" Text="+" TextColor="Orange" VerticalOptions="Center" HorizontalOptions="Center" CornerRadius="60" WidthRequest="55" HeightRequest="54" Padding="0"/>
+                        <ImageButton Command="{Binding Add_Command}" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="55" HeightRequest="55" Padding="0" BackgroundColor="Transparent">
+                            <ImageButton.Source>
+                                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.CirclePlus}" Color="Orange"/>
+                            </ImageButton.Source>
+                        </ImageButton>
                     </Grid>
                 </Grid>
             </StackLayout>
