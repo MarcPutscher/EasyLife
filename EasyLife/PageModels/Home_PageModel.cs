@@ -2677,7 +2677,10 @@ namespace EasyLife.PageModels
 
                                             if (budget.Name == "Monat")
                                             {
-                                                budget.Current += double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                                                if (double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")) < 0)
+                                                {
+                                                    budget.Current += Math.Abs(double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")));
+                                                }
                                             }
                                         }
                                     }

@@ -210,7 +210,10 @@ namespace EasyLife.Pages
 
                                         if (bg.Budget.Name == "Monat")
                                         {
-                                            bg.Budget.Current += double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                                            if (double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")) < 0)
+                                            {
+                                                bg.Budget.Current += Math.Abs(double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")));
+                                            }
                                         }
                                     }
                                 }
@@ -366,7 +369,10 @@ namespace EasyLife.Pages
 
                                             if (bg.Budget.Name == "Monat")
                                             {
-                                                bg.Budget.Current += double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                                                if (double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")) < 0)
+                                                {
+                                                    bg.Budget.Current += Math.Abs(double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")));
+                                                }
                                             }
                                         }
                                     }
