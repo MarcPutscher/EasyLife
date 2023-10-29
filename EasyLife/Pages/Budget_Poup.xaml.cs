@@ -306,7 +306,16 @@ namespace EasyLife.Pages
 
             List<string> budget_names = new List<string>() {"Monat"};
 
-            budget_names.AddRange(enablereason.Keys.ToList());
+            if (enablereason.Count() != 0)
+            {
+                foreach (var value in enablereason)
+                {
+                    if (value.Value == "Ausgaben")
+                    {
+                        budget_names.Add(value.Key);
+                    }
+                }
+            }
 
             budget_name_list = budget_names.ToArray();
 
