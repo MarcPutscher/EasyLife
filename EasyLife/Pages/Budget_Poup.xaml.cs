@@ -20,6 +20,8 @@ namespace EasyLife.Pages
     {
         public List<Budget> budgetList = new List<Budget>();
 
+        public List<Budget_Progessbar> budget_ProgessbarsList = new List<Budget_Progessbar>(); 
+
         public Viewtime Current_Viewtime { get; set; }
 
         public List<Transaktion> transaktionslist { get; set; }
@@ -28,26 +30,50 @@ namespace EasyLife.Pages
         {
             budgetList = input;
 
+            if(budgetList.Count() != 0)
+            {
+                foreach(Budget bg in budgetList)
+                {
+                    Budget_Progessbar placeholder = new Budget_Progessbar();
+
+                    if ((bg.Current / bg.Goal) < 1)
+                    {
+                        placeholder = new Budget_Progessbar() { Budget = bg, Rect = new Rectangle(0, 0, (bg.Current / bg.Goal), 1) };
+                    }
+                    else
+                    {
+                        placeholder = new Budget_Progessbar() { Budget = bg, Rect = new Rectangle(0, 0, 1, 1) };
+                    }
+
+                    budget_ProgessbarsList.Add(placeholder);
+                }
+            }
+
             Current_Viewtime = input2;
 
             transaktionslist = input3;
 
             InitializeComponent();
 
-            BudgetList.ItemsSource = budgetList;
+            BudgetList.ItemsSource = budget_ProgessbarsList;
 
-            if (budgetList.Count() == 0)
+            if (budget_ProgessbarsList.Count() == 0)
             {
                 BudgetList.IsVisible = false;
+
             }
             else
             {
                 BudgetList.IsVisible = true;
 
-                Budget_Popup_Size.Size = new Size(400, 600);
-
-                Rahmen.HeightRequest = 65 * budgetList.Count() + 50;
+                Rahmen.HeightRequest = 65 * budget_ProgessbarsList.Count() + 50;
             }
+
+            Budget_Popup_Size.Size = new Size(400, 600);
+
+            Budget_Popup_Size.HorizontalOptions = LayoutOptions.Center;
+
+            Budget_Popup_Size.VerticalOptions = LayoutOptions.Center;
         }
 
         private void CancelButton_Clicked(object sender, EventArgs e)
@@ -66,17 +92,17 @@ namespace EasyLife.Pages
         {
             var input = sender as SwipeItem;
 
-            Budget budget = input.CommandParameter as Budget;
+            Budget_Progessbar budget = input.CommandParameter as Budget_Progessbar;
 
             if (budget != null)
             {
-                await BudgetService.Remove_Budget(budget);
+                await BudgetService.Remove_Budget(budget.Budget);
 
-                budgetList.Remove(budget);
+                budget_ProgessbarsList.Remove(budget);
 
-                if(budgetList.Count() != 0)
+                if(budget_ProgessbarsList.Count() != 0)
                 {
-                    Rahmen.HeightRequest = 65 * budgetList.Count() + 50;
+                    Rahmen.HeightRequest = 65 * budget_ProgessbarsList.Count() + 50;
                 }
                 else
                 {
@@ -87,7 +113,7 @@ namespace EasyLife.Pages
 
                 BudgetList.ItemsSource = null;
 
-                BudgetList.ItemsSource = budgetList;
+                BudgetList.ItemsSource = budget_ProgessbarsList;
             }
         }
 
@@ -95,7 +121,7 @@ namespace EasyLife.Pages
         {
             var input = sender as SwipeItem;
 
-            Budget budget = input.CommandParameter as Budget;
+            Budget_Progessbar budget = input.CommandParameter as Budget_Progessbar;
 
             if (budget != null)
             {
@@ -103,7 +129,7 @@ namespace EasyLife.Pages
 
                 while(indicator == false)
                 {
-                    var result = await Shell.Current.DisplayPromptAsync("Budget ändern", "Das aktuelle Budget liegt bei " + budget.Goal.ToString().Replace(".", ",") + " €.", "Verändern", "Abbrechen", "Hier das neue Budget eingeben.", 20, null, null);
+                    var result = await Shell.Current.DisplayPromptAsync("Budget ändern", "Das aktuelle Budget liegt bei " + budget.Budget.Goal.ToString().Replace(".", ",") + " €.", "Verändern", "Abbrechen", "Hier das neue Budget eingeben.", 20, null, null);
 
                     if (result != null)
                     {
@@ -119,57 +145,51 @@ namespace EasyLife.Pages
                             }
                             else
                             {
-                                budget.Goal = result0;
+                                budget.Budget.Goal = result0;
 
-                                await BudgetService.Edit_Budget(budget);
+                                await BudgetService.Edit_Budget(budget.Budget);
 
-                                foreach (Budget bg in budgetList)
+                                foreach (Budget_Progessbar bg in budget_ProgessbarsList)
                                 {
-                                    if (bg.Id == budget.Id)
+                                    if (bg.Budget.Id == budget.Budget.Id)
                                     {
-                                        bg.Goal = budget.Goal;
+                                        bg.Budget.Goal = budget.Budget.Goal;
                                     }
 
-                                    bg.Current = 0;
+                                    bg.Budget.Current = 0;
                                 }
 
                                 foreach (Transaktion transaktion in transaktionslist)
                                 {
-                                    foreach (Budget bg in budgetList)
+                                    foreach (Budget_Progessbar bg in budget_ProgessbarsList)
                                     {
-                                        if (transaktion.Zweck == bg.Name)
+                                        if (transaktion.Zweck == bg.Budget.Name)
                                         {
-                                            bg.Current += Math.Abs(double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")));
+                                            bg.Budget.Current += Math.Abs(double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")));
                                         }
 
-                                        if (bg.Name == "Monat")
+                                        if (bg.Budget.Name == "Monat")
                                         {
-                                            bg.Current += double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                                            bg.Budget.Current += double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
                                         }
                                     }
                                 }
 
-                                foreach (Budget bg in budgetList)
+                                foreach (Budget_Progessbar bg in budget_ProgessbarsList)
                                 {
-                                    bg.Red = Math.Round((bg.Current / bg.Goal) * 360, 0);
-
-                                    bg.Visibility = true;
-
-                                    if (bg.Red <= 0)
+                                    if ((bg.Budget.Current / bg.Budget.Goal) < 1)
                                     {
-                                        bg.Red = 0;
-
-                                        bg.Visibility = false;
+                                        bg.Rect = new Rectangle(0, 0, (bg.Budget.Current / bg.Budget.Goal), 1) ;
                                     }
-                                    if (bg.Red > 360)
+                                    else
                                     {
-                                        bg.Red = 360;
+                                        bg.Rect = new Rectangle(0, 0, 1, 1);
                                     }
                                 }
 
                                 BudgetList.ItemsSource = null;
 
-                                BudgetList.ItemsSource = budgetList;
+                                BudgetList.ItemsSource = budget_ProgessbarsList;
 
                                 indicator = true;
                             }
@@ -239,54 +259,55 @@ namespace EasyLife.Pages
 
                                 if(result3 == 0)
                                 {
-                                    budgetList.Add(new_budget);
-
-                                    foreach(Budget bg in budgetList)
+                                    if ((new_budget.Current / new_budget.Goal) < 1)
                                     {
-                                        bg.Current = 0;
+                                        budget_ProgessbarsList.Add(new Budget_Progessbar() { Budget = new_budget, Rect = new Rectangle(0,0, (new_budget.Current / new_budget.Goal), 1)  });
+                                    }
+                                    else
+                                    {
+                                        budget_ProgessbarsList.Add(new Budget_Progessbar() { Budget = new_budget, Rect = new Rectangle(0,0,0,1) });
+                                    }
+
+                                    foreach (Budget_Progessbar bg in budget_ProgessbarsList)
+                                    {
+                                        bg.Budget.Current = 0;
                                     }
 
                                     foreach (Transaktion transaktion in transaktionslist)
                                     {
-                                        foreach (Budget bg in budgetList)
+                                        foreach (Budget_Progessbar bg in budget_ProgessbarsList)
                                         {
-                                            if (transaktion.Zweck == bg.Name)
+                                            if (transaktion.Zweck == bg.Budget.Name)
                                             {
-                                                bg.Current += Math.Abs(double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")));
+                                                bg.Budget.Current += Math.Abs(double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")));
                                             }
 
-                                            if (bg.Name == "Monat")
+                                            if (bg.Budget.Name == "Monat")
                                             {
-                                                bg.Current += double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                                                bg.Budget.Current += double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
                                             }
                                         }
                                     }
 
-                                    foreach (Budget bg in budgetList)
+                                    foreach (Budget_Progessbar bg in budget_ProgessbarsList)
                                     {
-                                        bg.Red = Math.Round((bg.Current / bg.Goal) * 360, 0);
-
-                                        bg.Visibility = true;
-
-                                        if (bg.Red <= 0)
+                                        if ((bg.Budget.Current / bg.Budget.Goal) < 1)
                                         {
-                                            bg.Red = 0;
-
-                                            bg.Visibility = false;
+                                            bg.Rect = new Rectangle(0, 0, (bg.Budget.Current / bg.Budget.Goal), 1);
                                         }
-                                        if (bg.Red > 360)
+                                        else
                                         {
-                                            bg.Red = 360;
+                                            bg.Rect = new Rectangle(0, 0, 1, 1);
                                         }
                                     }
 
                                     BudgetList.ItemsSource = null;
 
-                                    BudgetList.ItemsSource = budgetList;
+                                    BudgetList.ItemsSource = budget_ProgessbarsList;
 
                                     BudgetList.IsVisible = true;
 
-                                    Rahmen.HeightRequest = 65 * budgetList.Count() + 50;
+                                    Rahmen.HeightRequest = 65 * budget_ProgessbarsList.Count() + 50;
 
                                     indicator = true;
                                 }

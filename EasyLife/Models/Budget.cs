@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using Xamarin.Forms;
 
 namespace EasyLife.Models
 {
@@ -21,9 +22,9 @@ namespace EasyLife.Models
             }
         }
 
-        public event PropertyChangingEventHandler PropertyChanging;
+        public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
 
-        void OnPropertyChanged(string name) => PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(name));
+        void OnPropertyChanged(string name) => PropertyChanging?.Invoke(this, new System.ComponentModel.PropertyChangingEventArgs(name));
 
         string name;
         public string Name
@@ -50,9 +51,12 @@ namespace EasyLife.Models
         }
 
         public double Current { get; set; }
+    }
 
-        public double Red { get; set; }
+    public class Budget_Progessbar
+    {
+        public Budget Budget {  get; set; }
 
-        public bool Visibility { get; set; }
+        public Rectangle Rect { get; set; }
     }
 }

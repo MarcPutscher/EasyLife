@@ -2661,27 +2661,6 @@ namespace EasyLife.PageModels
                                 }
                             }
                         }
-
-                        if (allbudget.Count() != 0)
-                        {
-                            foreach (Budget budget in allbudget)
-                            {
-                                budget.Red = Math.Round((budget.Current / budget.Goal) * 360, 0);
-
-                                budget.Visibility = true;
-
-                                if (budget.Red <= 0)
-                                {
-                                    budget.Red = 0;
-
-                                    budget.Visibility = false;
-                                }
-                                if (budget.Red > 360)
-                                {
-                                    budget.Red = 360;
-                                }
-                            }
-                        }
                     }
 
                     await Shell.Current.ShowPopupAsync(new Budget_Popup(allbudget.ToList(), Current_Viewtime, transaktionlist));

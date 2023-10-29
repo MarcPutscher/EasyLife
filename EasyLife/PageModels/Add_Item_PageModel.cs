@@ -109,7 +109,23 @@ namespace EasyLife.PageModels
             {
                 if (Betrag == value)
                     return;
-                betrag = value.Trim(); RaisePropertyChanged();
+                if (double.TryParse(value, out double result) == true)
+                {
+                    betrag = value.Replace(".", ",").Trim();
+                }
+                else
+                {
+                    if (value == null)
+                    {
+                        betrag = "";
+                    }
+                    else
+                    {
+                        Betrag = betrag;
+                    }
+                }
+
+                RaisePropertyChanged();
             }
         }
 

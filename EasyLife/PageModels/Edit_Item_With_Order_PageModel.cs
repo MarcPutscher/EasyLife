@@ -1030,12 +1030,21 @@ namespace EasyLife.PageModels
                     return;
                 if (double.TryParse(value, out double result) == true)
                 {
-                    betrag = value.Replace(".", ",").Trim(); RaisePropertyChanged();
+                    betrag = value.Replace(".", ",").Trim();
                 }
                 else
                 {
-                    betrag = ""; RaisePropertyChanged();
+                    if (value == null)
+                    {
+                        betrag = "";
+                    }
+                    else
+                    {
+                        Betrag = betrag;
+                    }
                 }
+
+                RaisePropertyChanged();
             }
         }
 
