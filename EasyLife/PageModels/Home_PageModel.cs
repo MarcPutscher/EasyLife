@@ -2610,9 +2610,20 @@ namespace EasyLife.PageModels
 
                     var enablereason = await ReasonService.Get_Enable_ReasonDictionary();
 
-                    List<string> enablereasonlist = enablereason.Keys.ToList();
+                    List<string> enablereasonlist = new List<string>();
 
                     var transaktioncontent = await ContentService.Get_all_enabeled_Transaktion();
+
+                    if(enablereason.Count() != 0)
+                    {
+                        foreach (var value in enablereason)
+                        {
+                            if(value.Value == "Ausgaben")
+                            {
+                                enablereasonlist.Add(value.Key);
+                            }
+                        }
+                    }
 
                     if (transaktioncontent.Count() != 0)
                     {
@@ -2654,7 +2665,10 @@ namespace EasyLife.PageModels
 
                                             if (budget.Name == "Monat")
                                             {
-                                                budget.Current += double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                                                if(double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")) < 0)
+                                                {
+                                                    budget.Current += Math.Abs(double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")));
+                                                }
                                             }
                                         }
                                     }
