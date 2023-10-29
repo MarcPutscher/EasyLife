@@ -38,11 +38,50 @@ namespace EasyLife.Pages
 
                     if ((bg.Current / bg.Goal) < 1)
                     {
-                        placeholder = new Budget_Progessbar() { Budget = bg, Rect = new Rectangle(0, 0, (bg.Current / bg.Goal), 1) };
+                        placeholder = new Budget_Progessbar() { Budget = bg, Progress = new Rectangle(0, 0, (bg.Current / bg.Goal), 1), Rest_Progress = new Rectangle(1, 0, 1 - (bg.Current / bg.Goal), 1), Rest_Budget = bg.Goal - bg.Current };
+
+                        if ((bg.Current / bg.Goal) < 0.2)
+                        {
+                            placeholder.Progress_visibility = false;
+                        }
+                        else
+                        {
+                            placeholder.Progress_visibility = true;
+                        }
+
+                        if ((bg.Current / bg.Goal) > 0.8)
+                        {
+                            placeholder.Rest_Progress_visibility = false;
+                        }
+                        else
+                        {
+                            placeholder.Rest_Progress_visibility = true;
+                        }
+
+                        placeholder.Overload = false;
+
+                        placeholder.Successful = false;
                     }
                     else
                     {
-                        placeholder = new Budget_Progessbar() { Budget = bg, Rect = new Rectangle(0, 0, 1, 1) };
+                        placeholder = new Budget_Progessbar() { Budget = bg, Progress = new Rectangle(0, 0, (bg.Current / bg.Goal), 1), Rest_Progress = new Rectangle(1, 0, 0, 1), Rest_Budget = 0, Rest_Progress_visibility = false };
+
+                        if (bg.Current > bg.Goal)
+                        {
+                            placeholder.Progress_visibility = false;
+
+                            placeholder.Overload = true;
+
+                            placeholder.Successful = false;
+                        }
+                        else
+                        {
+                            placeholder.Progress_visibility = false;
+
+                            placeholder.Overload = false;
+
+                            placeholder.Successful = true;
+                        }
                     }
 
                     budget_ProgessbarsList.Add(placeholder);
@@ -61,15 +100,16 @@ namespace EasyLife.Pages
             {
                 BudgetList.IsVisible = false;
 
+                Rahmen.HeightRequest = 50;
             }
             else
             {
                 BudgetList.IsVisible = true;
 
-                Rahmen.HeightRequest = 65 * budget_ProgessbarsList.Count() + 50;
+                Rahmen.HeightRequest = 105 * budget_ProgessbarsList.Count() + 70;
             }
 
-            Budget_Popup_Size.Size = new Size(400, 600);
+            Budget_Popup_Size.Size = new Size(400, 900);
 
             Budget_Popup_Size.HorizontalOptions = LayoutOptions.Center;
 
@@ -102,7 +142,7 @@ namespace EasyLife.Pages
 
                 if (budget_ProgessbarsList.Count() != 0)
                 {
-                    Rahmen.HeightRequest = 65 * budget_ProgessbarsList.Count() + 50;
+                    Rahmen.HeightRequest = 105 * budget_ProgessbarsList.Count() + 70;
                 }
                 else
                 {
@@ -179,11 +219,60 @@ namespace EasyLife.Pages
                                 {
                                     if ((bg.Budget.Current / bg.Budget.Goal) < 1)
                                     {
-                                        bg.Rect = new Rectangle(0, 0, (bg.Budget.Current / bg.Budget.Goal), 1);
+                                        bg.Progress = new Rectangle(0, 0, (bg.Budget.Current / bg.Budget.Goal), 1);
+
+                                        bg.Rest_Progress = new Rectangle(1, 0, 1 - (bg.Budget.Current / bg.Budget.Goal), 1);
+
+                                        bg.Rest_Budget = bg.Budget.Goal - bg.Budget.Current;
+
+                                        if ((bg.Budget.Current / bg.Budget.Goal) < 0.2)
+                                        {
+                                            bg.Progress_visibility = false;
+                                        }
+                                        else
+                                        {
+                                            bg.Progress_visibility = true;
+                                        }
+
+                                        if ((bg.Budget.Current / bg.Budget.Goal) > 0.8)
+                                        {
+                                            bg.Rest_Progress_visibility = false;
+                                        }
+                                        else
+                                        {
+                                            bg.Rest_Progress_visibility = true;
+                                        }
+
+                                        bg.Overload = false;
+
+                                        bg.Successful = false;
                                     }
                                     else
                                     {
-                                        bg.Rect = new Rectangle(0, 0, 1, 1);
+                                        bg.Progress = new Rectangle(0, 0, 1, 1);
+
+                                        bg.Rest_Progress = new Rectangle(1, 0, 0, 1);
+
+                                        bg.Rest_Budget = 0;
+
+                                        bg.Rest_Progress_visibility = false;
+
+                                        if (bg.Budget.Current > bg.Budget.Goal)
+                                        {
+                                            bg.Progress_visibility = false;
+
+                                            bg.Overload = true;
+
+                                            bg.Successful = false;
+                                        }
+                                        else
+                                        {
+                                            bg.Progress_visibility = false;
+
+                                            bg.Overload = false;
+
+                                            bg.Successful = true;
+                                        }
                                     }
                                 }
 
@@ -197,7 +286,7 @@ namespace EasyLife.Pages
                     }
                     else
                     {
-                        await ToastHelper.ShowToast("Die Eingabe war inkorrekt.");
+                        indicator = true;
                     }
                 }
 
@@ -259,14 +348,7 @@ namespace EasyLife.Pages
 
                                 if (result3 == 0)
                                 {
-                                    if ((new_budget.Current / new_budget.Goal) < 1)
-                                    {
-                                        budget_ProgessbarsList.Add(new Budget_Progessbar() { Budget = new_budget, Rect = new Rectangle(0, 0, (new_budget.Current / new_budget.Goal), 1) });
-                                    }
-                                    else
-                                    {
-                                        budget_ProgessbarsList.Add(new Budget_Progessbar() { Budget = new_budget, Rect = new Rectangle(0, 0, 0, 1) });
-                                    }
+                                    budget_ProgessbarsList.Add(new Budget_Progessbar() { Budget = new_budget });
 
                                     foreach (Budget_Progessbar bg in budget_ProgessbarsList)
                                     {
@@ -293,11 +375,60 @@ namespace EasyLife.Pages
                                     {
                                         if ((bg.Budget.Current / bg.Budget.Goal) < 1)
                                         {
-                                            bg.Rect = new Rectangle(0, 0, (bg.Budget.Current / bg.Budget.Goal), 1);
+                                            bg.Progress = new Rectangle(0, 0, (bg.Budget.Current / bg.Budget.Goal), 1);
+
+                                            bg.Rest_Progress = new Rectangle(1, 0, 1 - (bg.Budget.Current / bg.Budget.Goal), 1);
+
+                                            bg.Rest_Budget = bg.Budget.Goal - bg.Budget.Current;
+
+                                            if ((bg.Budget.Current / bg.Budget.Goal) < 0.2)
+                                            {
+                                                bg.Progress_visibility = false;
+                                            }
+                                            else
+                                            {
+                                                bg.Progress_visibility = true;
+                                            }
+
+                                            if ((bg.Budget.Current / bg.Budget.Goal) > 0.8)
+                                            {
+                                                bg.Rest_Progress_visibility = false;
+                                            }
+                                            else
+                                            {
+                                                bg.Rest_Progress_visibility = true;
+                                            }
+
+                                            bg.Overload = false;
+
+                                            bg.Successful = false;
                                         }
                                         else
                                         {
-                                            bg.Rect = new Rectangle(0, 0, 1, 1);
+                                            bg.Progress = new Rectangle(0, 0, 1, 1);
+
+                                            bg.Rest_Progress = new Rectangle(1, 0, 0, 1);
+
+                                            bg.Rest_Budget = 0;
+
+                                            bg.Rest_Progress_visibility = false;
+
+                                            if (bg.Budget.Current > bg.Budget.Goal)
+                                            {
+                                                bg.Progress_visibility = false;
+
+                                                bg.Overload = true;
+
+                                                bg.Successful = false;
+                                            }
+                                            else
+                                            {
+                                                bg.Progress_visibility = false;
+
+                                                bg.Overload = false;
+
+                                                bg.Successful = true;
+                                            }
                                         }
                                     }
 
@@ -307,7 +438,7 @@ namespace EasyLife.Pages
 
                                     BudgetList.IsVisible = true;
 
-                                    Rahmen.HeightRequest = 65 * budget_ProgessbarsList.Count() + 50;
+                                    Rahmen.HeightRequest = 105 * budget_ProgessbarsList.Count() + 70;
 
                                     indicator = true;
                                 }
