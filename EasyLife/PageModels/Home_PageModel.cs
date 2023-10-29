@@ -2633,9 +2633,20 @@ namespace EasyLife.PageModels
 
                     var enablereason = await ReasonService.Get_Enable_ReasonDictionary();
 
-                    List<string> enablereasonlist = enablereason.Keys.ToList();
+                    List<string> enablereasonlist = new List<string>();
 
                     var transaktioncontent = await ContentService.Get_all_enabeled_Transaktion();
+
+                    if (enablereason.Count() != 0)
+                    {
+                        foreach (var value in enablereason)
+                        {
+                            if (value.Value == "Ausgaben")
+                            {
+                                enablereasonlist.Add(value.Key);
+                            }
+                        }
+                    }
 
                     if (transaktioncontent.Count() != 0)
                     {
@@ -2664,22 +2675,25 @@ namespace EasyLife.PageModels
                             {
                                 if (transaktion.Datum.ToString("MMMM", new CultureInfo("de-DE")) == Current_Viewtime.Month)
                                 {
-                                    transaktionlist.Add(transaktion);
-
-                                    if (allbudget.Count() != 0)
+                                    if(transaktion.Saldo_Visibility == true)
                                     {
-                                        foreach (Budget budget in allbudget)
-                                        {
-                                            if (transaktion.Zweck == budget.Name)
-                                            {
-                                                budget.Current += Math.Abs(double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")));
-                                            }
+                                        transaktionlist.Add(transaktion);
 
-                                            if (budget.Name == "Monat")
+                                        if (allbudget.Count() != 0)
+                                        {
+                                            foreach (Budget budget in allbudget)
                                             {
-                                                if (double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")) < 0)
+                                                if (transaktion.Zweck == budget.Name)
                                                 {
                                                     budget.Current += Math.Abs(double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")));
+                                                }
+
+                                                if (budget.Name == "Monat")
+                                                {
+                                                    if (double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")) < 0)
+                                                    {
+                                                        budget.Current += Math.Abs(double.Parse(transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")));
+                                                    }
                                                 }
                                             }
                                         }
