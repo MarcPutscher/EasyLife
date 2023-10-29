@@ -57,6 +57,18 @@ namespace EasyLife.Models
     {
         public Budget Budget {  get; set; }
 
-        public Rectangle Rect { get; set; }
+        public Rectangle Progress { get; set; }
+
+        public Rectangle Rest_Progress { get; set; }
+
+        public double Rest_Budget { get; set;}
+
+        public bool Progress_visibility { get; set; }
+
+        public bool Rest_Progress_visibility { get; set;}
+
+        public bool Overload { get; set; }
+
+        public bool Successful { get; set; }
     }
 }
