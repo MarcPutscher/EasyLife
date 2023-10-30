@@ -2694,7 +2694,7 @@ namespace EasyLife.PageModels
         {
             try
             {
-                var transaktioncontent = await ContentService.Get_all_Transaktion();
+                var transaktioncontent = await ContentService.Get_all_enabeled_Transaktion();
 
                 if(transaktioncontent.Count() != 0)
                 {
