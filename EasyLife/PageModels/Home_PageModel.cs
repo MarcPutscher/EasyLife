@@ -1920,7 +1920,11 @@ namespace EasyLife.PageModels
                 else
                 {
                     Saldo_Value = null;
-                    IsSaldoVisibility = false;
+
+                    if (transaktionscontent.Count() == 0)
+                    {
+                        IsSaldoVisibility = false;
+                    }
                 }
 
                 if (letter_saldo != 0)
@@ -2720,7 +2724,7 @@ namespace EasyLife.PageModels
         {
             try
             {
-                var transaktioncontent = await ContentService.Get_all_Transaktion();
+                var transaktioncontent = await ContentService.Get_all_enabeled_Transaktion();
 
                 if (transaktioncontent.Count() != 0)
                 {
@@ -2742,6 +2746,8 @@ namespace EasyLife.PageModels
 
                         double saldo = 0;
 
+                        double letter_saldo = 0;
+
                         Saldo_Date = currentdate.ToString("dddd, d.M.yyyy", new CultureInfo("de-DE"));
 
                         Preferences.Set("Saldo_Date", Saldo_Date);
@@ -2750,7 +2756,14 @@ namespace EasyLife.PageModels
                         {
                             if (DateTime.Compare(trans.Datum, currentdate.AddDays(1).AddSeconds(-1)) <= 0)
                             {
-                                saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                                if (trans.Saldo_Visibility == true)
+                                {
+                                    saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                                }
+                                else
+                                {
+                                    letter_saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                                }
                             }
                         }
 
@@ -2778,7 +2791,35 @@ namespace EasyLife.PageModels
                         else
                         {
                             Saldo_Value = null;
-                            IsSaldoVisibility = false;
+
+                            if(transaktioncontent.Count() == 0)
+                            {
+                                IsSaldoVisibility = false;
+                            }
+                        }
+
+                        if (letter_saldo != 0)
+                        {
+                            letter_saldo = Math.Round(letter_saldo, 2);
+
+                            Letter_Saldo_Value = letter_saldo.ToString().Replace(".", ",");
+
+                            if (letter_saldo < 0)
+                            {
+                                Letter_Saldo_Evaluate = Color.Red;
+                            }
+                            if (letter_saldo == 0)
+                            {
+                                Letter_Saldo_Evaluate = Color.White;
+                            }
+                            if (letter_saldo > 0)
+                            {
+                                Letter_Saldo_Evaluate = Color.Green;
+                            }
+                        }
+                        else
+                        {
+                            Letter_Saldo_Value = "0";
                         }
                     }
                 }
