@@ -265,7 +265,7 @@ namespace EasyLife.Services
 
                 Button_name = Backup_name.ToArray();
 
-                string result = await Shell.Current.DisplayActionSheet("Vorhande Backups", "Zurück", null, Button_name);
+                string result = await Shell.Current.DisplayActionSheet("Vorhandene Backups", "Zurück", null, Button_name);
 
                 if (result == "Zurück")
                 {

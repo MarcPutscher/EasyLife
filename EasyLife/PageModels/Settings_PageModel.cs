@@ -31,6 +31,8 @@ namespace EasyLife.PageModels
 
             Restore_Backup_Command = new AsyncCommand(Restore_Backup_Methode);
 
+            Share_Backup_Command = new AsyncCommand(Share_Backup_Methode);
+
             Last_Backup_Date = Preferences.Get("Last_Backup_Date","");
 
             Next_Backup_Date = Preferences.Get("Next_Backup_Date", "");
@@ -91,6 +93,76 @@ namespace EasyLife.PageModels
                     }
                 }
                 await Shell.Current.DisplayAlert("Fehler", "Es ist bei der erstellung des Backups ein Fehler aufgetretten.\nFehler:"+ex.ToString()+"", "Verstanden");
+            }
+        }
+
+        public async Task Share_Backup_Methode()
+        {
+            try
+            {
+                string[] files = Directory.GetFiles(DependencyService.Get<IAccessFile>().CreateFile(null), "EasyLife-Backup-*");
+
+                if (files.Count() != 0)
+                {
+                    List<DateTime> Backup_dates = new List<DateTime>();
+
+                    List<string> Backup_name = new List<string>();
+
+
+                    string[] Button_name = null;
+
+                    Dictionary<DateTime, string> dict_0 = new Dictionary<DateTime, string>();
+
+                    Dictionary<string, string> dict = new Dictionary<string, string>();
+
+                    foreach (string file in files)
+                    {
+                        Backup_dates.Add(DateTime.ParseExact(file.Substring(file.LastIndexOf("-") + 1).Substring(0, file.Substring(file.LastIndexOf("-")).LastIndexOf(".") - 1), "dd.MM.yyyy", new CultureInfo("de-DE")));
+
+                        dict_0.Add(Backup_dates.Last(), file);
+                    }
+
+                    Backup_dates = Backup_dates.OrderByDescending(d => d.Date).ToList();
+
+                    Backup_dates.Reverse();
+
+                    foreach (DateTime time in Backup_dates)
+                    {
+                        Backup_name.Add("Backup vom " + time.ToString("dd.MM.yyyy") + "");
+
+                        dict.Add(Backup_name.Last(), dict_0[time]);
+                    }
+
+                    Backup_name.Reverse();
+
+                    Button_name = Backup_name.ToArray();
+
+                    string result = await Shell.Current.DisplayActionSheet("Vorhandene Backups", "Zurück", null, Button_name);
+
+                    if (result == "Zurück")
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        if (result == null)
+                        {
+                            await Shell.Current.DisplayToastAsync("Es wurde kein Backup ausgewählt.", 5000);
+                        }
+                        else
+                        {
+                            await Share.RequestAsync(new ShareFileRequest { Title = result , File = new ShareFile(dict[result]) });
+                        }
+                    }
+                }
+                else
+                {
+                    await Shell.Current.DisplayToastAsync("Es wurde kein Backup gefunden.", 5000);
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist beim Senden des Backups ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
             }
         }
 
@@ -401,6 +473,33 @@ namespace EasyLife.PageModels
                 Amount_of_use_Notification = amount_of_use_notification;
 
                 Amount_of_unuse_Notification = amount_of_unuse_notification;
+
+
+                var budgetscontent = await BudgetService.Get_all_Budget();
+
+                int amount_of_generated_budgets = 0;
+
+                int amount_of_deleted_budgets = 0;
+
+                int amount_of_use_budgets = 0;
+
+                if (budgetscontent.Count() != 0)
+                {
+                    amount_of_generated_budgets = budgetscontent.First().Id;
+
+                    foreach (var budget in budgetscontent)
+                    {
+                        amount_of_use_budgets++;
+                    }
+
+                    amount_of_deleted_budgets = amount_of_generated_budgets - amount_of_use_budgets;
+                }
+
+                Amount_of_generated_Budgets = amount_of_generated_budgets;
+
+                Amount_of_deleted_Budgets = amount_of_deleted_budgets;
+
+                Amount_of_use_Budgets = amount_of_use_budgets;
             }
             catch (Exception ex)
             {
@@ -465,6 +564,8 @@ namespace EasyLife.PageModels
         public AsyncCommand View_Appering_Command { get; }
         public AsyncCommand Create_Backup_Command { get; }
         public AsyncCommand Restore_Backup_Command { get; }
+
+        public AsyncCommand Share_Backup_Command { get; }
 
         public string is_notification_enable;
         public string Is_Notification_Enable
@@ -794,6 +895,51 @@ namespace EasyLife.PageModels
                 }
 
                 amount_of_unuse_notification = value; RaisePropertyChanged();
+            }
+        }
+
+        public int amount_of_generated_budgets = 0;
+        public int Amount_of_generated_Budgets
+        {
+            get { return amount_of_generated_budgets; }
+            set
+            {
+                if (Amount_of_generated_Budgets == value)
+                {
+                    return;
+                }
+
+                amount_of_generated_budgets = value; RaisePropertyChanged();
+            }
+        }
+
+        public int amount_of_deleted_budgets = 0;
+        public int Amount_of_deleted_Budgets
+        {
+            get { return amount_of_deleted_budgets; }
+            set
+            {
+                if (Amount_of_deleted_Budgets == value)
+                {
+                    return;
+                }
+
+                amount_of_deleted_budgets = value; RaisePropertyChanged();
+            }
+        }
+
+        public int amount_of_use_budgets = 0;
+        public int Amount_of_use_Budgets
+        {
+            get { return amount_of_use_budgets; }
+            set
+            {
+                if (Amount_of_use_Budgets == value)
+                {
+                    return;
+                }
+
+                amount_of_use_budgets = value; RaisePropertyChanged();
             }
         }
     }
