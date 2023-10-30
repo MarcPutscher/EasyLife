@@ -1936,7 +1936,11 @@ namespace EasyLife.PageModels
                 else
                 {
                     Saldo_Value = null;
-                    IsSaldoVisibility = false;
+
+                    if(transaktionscontent.Count() == 0)
+                    {
+                        IsSaldoVisibility = false;
+                    }
                 }
 
                 sorted_after_month_transaktionscontent = (from p in sorted_after_month_transaktionscontent orderby DateTime.ParseExact(p.Datumanzeige, "dddd, d.M.yyyy", new CultureInfo("de-DE")) descending select p).ToList();
@@ -2752,7 +2756,11 @@ namespace EasyLife.PageModels
                         else
                         {
                             Saldo_Value = null;
-                            IsSaldoVisibility = false;
+
+                            if (transaktioncontent.Count() == 0)
+                            {
+                                IsSaldoVisibility = false;
+                            }
                         }
                     }
                 }
