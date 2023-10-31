@@ -36,7 +36,9 @@ namespace EasyLife.Services
 
         public static int indicator = 0;
 
-        public static string sourch_path = Path.Combine(FileSystem.AppDataDirectory, "EasyLife.db");
+        public static string source_path = Path.Combine(FileSystem.AppDataDirectory, "EasyLife.db");
+
+        public static string placeholder_path = Path.Combine(FileSystem.AppDataDirectory, "Placeholder.db");
 
         public static string helper_path = Path.Combine(DependencyService.Get<IAccessFile>().CreateFile("EasyLife-HelperBackup.db"));
 
@@ -48,7 +50,18 @@ namespace EasyLife.Services
             if (db_create != null)
                 return;
 
-            db_create = new SQLiteAsyncConnection(sourch_path);
+            db_create = new SQLiteAsyncConnection(source_path);
+        }
+
+        /// <summary>
+        /// Erstellt eine Verbindung zur Datenbank her.
+        /// </summary>
+        public static void Init_Placeholder()
+        {
+            if (db_create != null)
+                return;
+
+            db_create = new SQLiteAsyncConnection(placeholder_path);
         }
 
         /// <summary>
@@ -99,9 +112,9 @@ namespace EasyLife.Services
         {
             if(indicator == 1)
             {
-                if (File.Exists(sourch_path))
+                if (File.Exists(source_path))
                 {
-                    File.Delete(sourch_path);
+                    File.Delete(source_path);
                 }
             }
         }
@@ -148,7 +161,7 @@ namespace EasyLife.Services
 
             if (!File.Exists(Preferences.Get("Create_Backup_Path", "")))
             {
-                sourceStream = new FileStream(sourch_path, FileMode.Open, FileAccess.ReadWrite);
+                sourceStream = new FileStream(source_path, FileMode.Open, FileAccess.ReadWrite);
 
                 destinationStream = new FileStream(Preferences.Get("Create_Backup_Path", ""), FileMode.OpenOrCreate, FileAccess.ReadWrite);
 
@@ -169,7 +182,7 @@ namespace EasyLife.Services
 
             indicator = 1;
 
-            sourceStream = new FileStream(sourch_path, FileMode.Open, FileAccess.ReadWrite);
+            sourceStream = new FileStream(source_path, FileMode.Open, FileAccess.ReadWrite);
 
             destinationStream = new FileStream(Preferences.Get("Create_Backup_Path", ""), FileMode.OpenOrCreate, FileAccess.ReadWrite);
 
@@ -245,9 +258,13 @@ namespace EasyLife.Services
 
                 foreach(string file in files)
                 {
-                    Backup_dates.Add(DateTime.ParseExact(file.Substring(file.LastIndexOf("-") + 1).Substring(0, file.Substring(file.LastIndexOf("-")).LastIndexOf(".") - 1), "dd.MM.yyyy", new CultureInfo("de-DE")));
+                    try
+                    {
+                        Backup_dates.Add(DateTime.ParseExact(file.Substring(file.LastIndexOf("-") + 1).Substring(0, file.Substring(file.LastIndexOf("-")).LastIndexOf(".") - 1), "dd.MM.yyyy", new CultureInfo("de-DE")));
 
-                    dict_0.Add(Backup_dates.Last(), file);
+                        dict_0.Add(Backup_dates.Last(), file);
+                    }
+                    catch { }
                 }
 
                 Backup_dates = Backup_dates.OrderByDescending(d => d.Date).ToList();
@@ -292,11 +309,11 @@ namespace EasyLife.Services
             //  Danach wird die Datenbankverbinndung auf null gesetzt und der Indikator auf 1.
             //  Am Ende werden alle Benachrichtigungen die noch anstehen können wiederhergestellt und das Datum des letzten Backups, falls dieses leer seien sollte, erstellt.
 
-            if (!File.Exists(sourch_path))
+            if (!File.Exists(source_path))
             {
                 sourceStream = new FileStream(Preferences.Get("Restored_Backup_Path", ""), FileMode.Open, FileAccess.ReadWrite);
 
-                destinationStream = new FileStream(sourch_path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                destinationStream = new FileStream(source_path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
 
                 sourceStream.CopyTo(destinationStream);
 
@@ -315,9 +332,9 @@ namespace EasyLife.Services
 
             sourceStream = new FileStream(Preferences.Get("Restored_Backup_Path", ""), FileMode.Open, FileAccess.ReadWrite);
 
-            File.Delete(sourch_path);
+            File.Delete(source_path);
 
-            destinationStream = new FileStream(sourch_path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            destinationStream = new FileStream(source_path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
 
             sourceStream.CopyTo(destinationStream);
 
@@ -411,6 +428,242 @@ namespace EasyLife.Services
             }
 
             await db_create.CloseAsync();
+        }
+
+        /// <summary>
+        /// Erstellt, aus den wiederhergestellt Daten, alle Benachrichtigungen wieder her. 
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<List<List<object>>> Show_Content_of_Backup(string path)
+        {
+            List<List<object>> Content = new List<List<object>>();
+
+            if (!File.Exists(placeholder_path))
+            {
+                sourceStream = new FileStream(path, FileMode.Open, FileAccess.ReadWrite);
+
+                destinationStream = new FileStream(placeholder_path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+
+                sourceStream.CopyTo(destinationStream);
+
+                destinationStream.Close();
+
+                sourceStream.Close();
+
+                indicator = 1;
+
+                db_create = null;
+
+            }
+            else
+            {
+                sourceStream = new FileStream(path, FileMode.Open, FileAccess.ReadWrite);
+
+                File.Delete(placeholder_path);
+
+                destinationStream = new FileStream(placeholder_path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+
+                sourceStream.CopyTo(destinationStream);
+
+                destinationStream.Close();
+
+                sourceStream.Close();
+
+                indicator = 1;
+
+                db_create = null;
+            }
+
+            Init_Placeholder();
+
+            await db_create.CreateTableAsync<Transaktion>();
+
+            List<Transaktion> transaktion_list = new List<Transaktion>(await db_create.Table<Transaktion>().ToListAsync());
+
+            if (transaktion_list.Count() == 0)
+            {
+                Content.Add(new List<object>() 
+                { 
+                    "Transaktionen",
+                    0,
+                    0      
+                });
+            }
+            else
+            {
+                Content.Add(new List<object>() 
+                {
+                    "Transaktionen", 
+                    transaktion_list.Last().Id,
+                    transaktion_list.Last().Id - transaktion_list.Count()
+                });
+            }
+
+            await db_create.CloseAsync();
+
+            Init_Placeholder();
+
+            await db_create.CreateTableAsync<Auftrag>();
+
+            List<Auftrag> order_list = new List<Auftrag>(await db_create.Table<Auftrag>().ToListAsync());
+
+            if (order_list.Count() == 0)
+            {
+                Content.Add(new List<object>()
+                {
+                    "Auftrage",
+                    0,
+                    0
+                });
+            }
+            else
+            {
+                Content.Add(new List<object>()
+                {
+                    "Aufträge",
+                    order_list.Last().Id,
+                    order_list.Last().Id - order_list.Count(),
+                });
+            }
+
+            await db_create.CloseAsync();
+
+            Init_Placeholder();
+
+            await db_create.CreateTableAsync<Notification>();
+
+            List<Notification> notification_list = new List<Notification>(await db_create.Table<Notification>().ToListAsync());
+
+            if (notification_list.Count() == 0)
+            {
+                Content.Add(new List<object>()
+                {
+                    "Benachrichtigungen",
+                    0,
+                    0,
+                });
+            }
+            else
+            {
+                Content.Add(new List<object>()
+                {
+                    "Benachrichtigungen",
+                    notification_list.Last().Id,
+                    notification_list.Last().Id - notification_list.Count(),
+                });
+            }
+
+            await db_create.CloseAsync();
+
+            Init_Placeholder();
+
+            await db_create.CreateTableAsync<HelperBalanceprofile>();
+
+            List<HelperBalanceprofile> helperbalanceprofile_list = new List<HelperBalanceprofile>(await db_create.Table<HelperBalanceprofile>().ToListAsync());
+
+            if (helperbalanceprofile_list.Count() == 0)
+            {
+                Content.Add(new List<object>() 
+                { 
+                    "Bilanzprofile",
+                    0,
+                    0
+                });
+            }
+            else
+            {
+                Content.Add(new List<object>() 
+                { 
+                    "Bilanzprofile",
+                    helperbalanceprofile_list.Last().Id,
+                    helperbalanceprofile_list.Last().Id - helperbalanceprofile_list.Count(),
+                });
+            }
+
+            await db_create.CloseAsync();
+
+            Init_Placeholder();
+
+            await db_create.CreateTableAsync<Budget>();
+
+            List<Budget> budget_list = new List<Budget>(await db_create.Table<Budget>().ToListAsync());
+
+            if (budget_list.Count() == 0)
+            {
+                Content.Add(new List<object>()
+                {
+                    "Budgets",
+                    0,
+                    0,
+                });
+            }
+            else
+            {
+                Content.Add(new List<object>()
+                {
+                    "Budgets",
+                    budget_list.Last().Id,
+                    budget_list.Last().Id - budget_list.Count(),
+                });
+            }
+
+            await db_create.CloseAsync();
+
+            Init_Placeholder();
+
+            await db_create.CreateTableAsync<Zweck>();
+
+            List<Zweck> reason_list = new List<Zweck>(await db_create.Table<Zweck>().ToListAsync());
+
+            if (reason_list.Count() == 0)
+            {
+                Content.Add(new List<object>()
+                {
+                    "Zwecke",
+                    0,
+                    0,
+                });
+            }
+            else
+            {
+                Content.Add(new List<object>()
+                {
+                    "Zwecke",
+                    reason_list.Last().Id,
+                    reason_list.Last().Id - reason_list.Count(),
+                });
+            }
+
+            await db_create.CloseAsync();
+
+            Init_Placeholder();
+
+            await db_create.CreateTableAsync<Suggestion>();
+
+            List<Suggestion> suggestion_list = new List<Suggestion>(await db_create.Table<Suggestion>().ToListAsync());
+
+            if (suggestion_list.Count() == 0)
+            {
+                Content.Add(new List<object>()
+                {
+                    "Suchbegriffe",
+                    0,
+                    0,
+                });
+            }
+            else
+            {
+                Content.Add(new List<object>()
+                {
+                    "Suchbegriffe",
+                    suggestion_list.Last().Id,
+                    suggestion_list.Last().Id - suggestion_list.Count(),
+                });
+            }
+
+            await db_create.CloseAsync();
+
+            return Content;
         }
     }
 }

@@ -27,11 +27,7 @@ namespace EasyLife.PageModels
 
             View_Appering_Command = new AsyncCommand(View_Appering_Methode);
 
-            Create_Backup_Command = new AsyncCommand(Create_Backup_Methode);
-
-            Restore_Backup_Command = new AsyncCommand(Restore_Backup_Methode);
-
-            Share_Backup_Command = new AsyncCommand(Share_Backup_Methode);
+            Datanmanagment_Command = new AsyncCommand(Datanmanagment_Methode);
 
             Last_Backup_Date = Preferences.Get("Last_Backup_Date","");
 
@@ -40,6 +36,39 @@ namespace EasyLife.PageModels
             Restored_Backup_Date = Preferences.Get("Restored_Backup_Date", "");
         }
 
+        public async Task Datanmanagment_Methode()
+        {
+            try
+            {
+                var result = await Shell.Current.ShowPopupAsync(new Datamanagment_Popup());
+
+                if (result == null)
+                {
+                    return;
+                }
+
+                if((int)result == 1)
+                {
+                    await Create_Backup_Methode();
+                }
+                if((int)result == 2)
+                {
+                    await Share_Backup_Methode();
+                }
+                if((int)result == 3)
+                {
+                    await Restore_Backup_Methode();
+                }
+                if ((int)result == 4)
+                {
+                    await Show_Content_of_Backup_Methode();
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist beim Senden des Backups ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
         private async Task Create_Backup_Methode()
         {
             try
@@ -117,9 +146,13 @@ namespace EasyLife.PageModels
 
                     foreach (string file in files)
                     {
-                        Backup_dates.Add(DateTime.ParseExact(file.Substring(file.LastIndexOf("-") + 1).Substring(0, file.Substring(file.LastIndexOf("-")).LastIndexOf(".") - 1), "dd.MM.yyyy", new CultureInfo("de-DE")));
+                        try
+                        {
+                            Backup_dates.Add(DateTime.ParseExact(file.Substring(file.LastIndexOf("-") + 1).Substring(0, file.Substring(file.LastIndexOf("-")).LastIndexOf(".") - 1), "dd.MM.yyyy", new CultureInfo("de-DE")));
 
-                        dict_0.Add(Backup_dates.Last(), file);
+                            dict_0.Add(Backup_dates.Last(), file);
+                        }
+                        catch { }
                     }
 
                     Backup_dates = Backup_dates.OrderByDescending(d => d.Date).ToList();
@@ -193,6 +226,8 @@ namespace EasyLife.PageModels
                             Restored_Backup_Date = Preferences.Get("Restored_Backup_Date", "");
 
                             await Shell.Current.DisplayToastAsync("Es wurden erfolgreich die Daten aus dem Backup vom " + Preferences.Get("Restored_Backup_Date", "") + " wiederherstellt.", 5000);
+
+                            await Load_Metadata();
                         }
                         if (result2 == 2)
                         {
@@ -208,6 +243,103 @@ namespace EasyLife.PageModels
                 Preferences.Set("Restored_Backup_Path", "");
 
                 BackupService.Delete_Restored_Source();
+            }
+        }
+
+        private async Task Show_Content_of_Backup_Methode()
+        {
+            try
+            {
+                string[] files = Directory.GetFiles(DependencyService.Get<IAccessFile>().CreateFile(null), "EasyLife-Backup-*");
+
+                if (files.Count() != 0)
+                {
+                    List<DateTime> Backup_dates = new List<DateTime>();
+
+                    List<string> Backup_name = new List<string>();
+
+
+                    string[] Button_name = null;
+
+                    Dictionary<DateTime, string> dict_0 = new Dictionary<DateTime, string>();
+
+                    Dictionary<string, string> dict = new Dictionary<string, string>();
+
+                    foreach (string file in files)
+                    {
+                        try
+                        {
+                            Backup_dates.Add(DateTime.ParseExact(file.Substring(file.LastIndexOf("-") + 1).Substring(0, file.Substring(file.LastIndexOf("-")).LastIndexOf(".") - 1), "dd.MM.yyyy", new CultureInfo("de-DE")));
+
+                            dict_0.Add(Backup_dates.Last(), file);
+                        }
+                        catch { }
+                    }
+
+                    Backup_dates = Backup_dates.OrderByDescending(d => d.Date).ToList();
+
+                    Backup_dates.Reverse();
+
+                    foreach (DateTime time in Backup_dates)
+                    {
+                        Backup_name.Add("Backup vom " + time.ToString("dd.MM.yyyy") + "");
+
+                        dict.Add(Backup_name.Last(), dict_0[time]);
+                    }
+
+                    Backup_name.Reverse();
+
+                    Button_name = Backup_name.ToArray();
+
+                    bool indikator = false;
+
+                    while(indikator == false)
+                    {
+                        string result = await Shell.Current.DisplayActionSheet("Vorhandene Backups", "Zurück", null, Button_name);
+
+                        if (result == "Zurück")
+                        {
+                            indikator = true;
+                        }
+                        else
+                        {
+                            if (result == null)
+                            {
+                                await Shell.Current.DisplayToastAsync("Es wurde kein Backup ausgewählt.", 5000);
+                            }
+                            else
+                            {
+                                List<List<object>> result1 = await BackupService.Show_Content_of_Backup(dict[result]);
+
+                                if (result1 == null)
+                                {
+                                    await Shell.Current.DisplayToastAsync("Das Backup ist leer.", 5000);
+
+                                    return;
+                                }
+                                else
+                                {
+                                    string content = string.Empty;
+
+                                    foreach (List<object> list in result1)
+                                    {
+                                        content += list[0].ToString() + "\nerstellt: " + list[1] + "| gelöscht: " + list[2] + "\n";
+                                    }
+
+                                    await Shell.Current.DisplayAlert("Stand: " + result + "", content, "Zurück");
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    await Shell.Current.DisplayToastAsync("Es wurde kein Backup gefunden.", 5000);
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist beim Senden des Backups ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
             }
         }
 
@@ -562,10 +694,7 @@ namespace EasyLife.PageModels
         public AsyncCommand Styling_Color_Command { get;}
         public AsyncCommand Notification_Command { get;}
         public AsyncCommand View_Appering_Command { get; }
-        public AsyncCommand Create_Backup_Command { get; }
-        public AsyncCommand Restore_Backup_Command { get; }
-
-        public AsyncCommand Share_Backup_Command { get; }
+        public AsyncCommand Datanmanagment_Command { get; }
 
         public string is_notification_enable;
         public string Is_Notification_Enable

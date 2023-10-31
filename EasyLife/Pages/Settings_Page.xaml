@@ -521,9 +521,8 @@
                             FontAttributes="None"/>
                             <Label Text="{Binding Next_Backup_Date}" TextColor="Gold" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
-                        <Button Text="Backup manuell erstellen" Padding="10" CornerRadius="30" Command="{Binding Create_Backup_Command}" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Gray" TextColor="White" FontSize="Medium" BorderColor="White" BorderWidth="2" Margin="0,10,0,5"/>
-                        <Button Text="Backup manuell senden" Padding="10" CornerRadius="30" Command="{Binding Share_Backup_Command}" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Gray" TextColor="White" FontSize="Medium" BorderColor="White" BorderWidth="2" Margin="0,5,0,0"/>
-                        <Button Text="Daten manuell wiederherstellen" Padding="10" CornerRadius="30" Command="{Binding Restore_Backup_Command}" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Gray" TextColor="White" FontSize="Medium" BorderColor="White" BorderWidth="2" Margin="0,5,0,0"/>
+
+                        <Button Text="Datenmanagement" Padding="10" CornerRadius="30" Command="{Binding Datanmanagment_Command}" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Gray" TextColor="White" FontSize="Medium" BorderColor="White" BorderWidth="2"/>
 
                         <Label Text="Styling" TextDecorations="Underline" TextColor="Red" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,10,0,1"/>
                         <Button Text="Benutzerdefinierte Farben" Padding="10" CornerRadius="30" Command="{Binding Styling_Color_Command}" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Gray" TextColor="White" FontSize="Medium" BorderColor="White" BorderWidth="2"/>

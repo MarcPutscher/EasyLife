@@ -54,6 +54,9 @@
     <Compile Update="Pages\Edit_Order_Page.xaml.cs">
       <DependentUpon>Edit_Order_Page.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Pages\Datamanagment_Popup.xaml.cs">
+      <DependentUpon>Datamanagment_Popup.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\Home_Page.xaml.cs">
       <DependentUpon>Home_Page.xaml</DependentUpon>
     </Compile>
