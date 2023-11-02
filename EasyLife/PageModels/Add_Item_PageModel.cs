@@ -397,7 +397,7 @@ namespace EasyLife.PageModels
                         {
                             await Get_Reasons_Liste();
 
-                            await Notificater("Der Zweck " + result.Trim() + " wurde verworfen.");
+                            await Notificater("Der Zweck " + result.Trim() + " wurde hinzugefügt.");
 
                             return;
                         }
