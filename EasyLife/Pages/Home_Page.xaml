@@ -35,7 +35,7 @@
                                     <SwipeItems>
                                         <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.EditCommand}" CommandParameter="{Binding .}">
                                             <Frame Margin="5,0,0,0" BackgroundColor="{DynamicResource Edit_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Edit_Bordercolor}">
-                                                <Label Text="Bearbeiten" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Edit_Textcolor}" FontAttributes="Bold" FontSize="Medium"/>
+                                            <Label Text="Bearbeiten" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Edit_Textcolor}" FontAttributes="Bold" FontSize="Medium"/>
                                             </Frame>
                                         </SwipeItemView>
                                     </SwipeItems>
@@ -44,7 +44,7 @@
                                     <SwipeItems>
                                         <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.RemoveCommand}" CommandParameter="{Binding .}">
                                             <Frame Margin="0,0,5,0" BackgroundColor="{DynamicResource Remove_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Remove_Bordercolor}">
-                                                <Label Text="Löschen" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Remove_Textcolor}" FontAttributes="Bold" FontSize="Medium"/>
+                                            <Label Text="Löschen" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Remove_Textcolor}" FontAttributes="Bold" FontSize="Medium"/>
                                             </Frame>
                                         </SwipeItemView>
                                     </SwipeItems>

@@ -630,7 +630,7 @@ namespace EasyLife.PageModels
 
                     if(capcity == transaktion_list2.Count)
                     {
-                        var result = await Shell.Current.DisplayActionSheet("Entfernen", "Zurück", null, new string[] { "Diese Transaktion entfernen", "Alle mit dieser Auftrag-ID entfernen"});
+                        var result = await Shell.Current.ShowPopupAsync(new Home_Remove_Popup(true, true, false));
 
                         if (result == "Diese Transaktion entfernen")
                         {
@@ -730,7 +730,7 @@ namespace EasyLife.PageModels
                     }
                     else
                     {
-                        var result = await Shell.Current.DisplayActionSheet("Entfernen", "Zurück", null, new string[] { "Diese Transaktion entfernen","Alle mit dieser Auftrag-ID entfernen", "Alle mit dieser Auftrag-ID ab dieser Transaktion entfernen" });
+                        var result = await Shell.Current.ShowPopupAsync(new Home_Remove_Popup(true, true, true));
 
                         if (result == "Diese Transaktion entfernen")
                         {
@@ -930,7 +930,7 @@ namespace EasyLife.PageModels
 
                     if(capcity == transaktion_list2.Count)
                     {
-                        var result = await Shell.Current.DisplayActionSheet("Bearbeiten", "Zurück", null, new string[] { "Diese Transaktion bearbeiten", "Alle mit dieser Auftrags-ID bearbeiten" , "Alle mit dieser Auftrags-ID um eine bestimmte Zeit versetzten"});
+                        var result = await Shell.Current.ShowPopupAsync(new Home_Edit_Popup(true,true,false,true));
 
                         if (result == "Diese Transaktion bearbeiten" && item != null)
                         {
@@ -955,7 +955,12 @@ namespace EasyLife.PageModels
                         {
                             var result1 = await Shell.Current.ShowPopupAsync(new Timespane_Popup(item,transaktion_list3));
 
-                            if((bool)result1 == true)
+                            if (result1 == null)
+                            {
+                                return;
+                            }
+
+                            if ((bool)result1 == true)
                             {
                                 await Refresh();
                             }
@@ -972,7 +977,7 @@ namespace EasyLife.PageModels
                     }
                     else
                     {
-                        var result = await Shell.Current.DisplayActionSheet("Bearbeiten", "Zurück", null, new string[] { "Diese Transaktion bearbeiten", "Alle mit dieser Auftrags-ID bearbeiten", "Alle mit dieser Auftrags-ID ab dieser Transaktion bearbeiten", "Alle mit dieser Auftrags-ID um eine bestimmte Zeit versetzten" });
+                        var result = await Shell.Current.ShowPopupAsync(new Home_Edit_Popup(true, true, true, true));
 
                         if (result == "Diese Transaktion bearbeiten" && item != null)
                         {
@@ -1005,7 +1010,7 @@ namespace EasyLife.PageModels
                         {
                             var result1 = await Shell.Current.ShowPopupAsync(new Timespane_Popup(item, transaktion_list3));
 
-                            if(result == null)
+                            if(result1 == null)
                             {
                                 return;
                             }
@@ -1794,6 +1799,14 @@ namespace EasyLife.PageModels
                     return;
                 }
 
+                if (Preferences.Get("Is_Saldo_Date_Changed", false) == false)
+                {
+                    Preferences.Set("Saldo_Date", DateTime.Now.ToString("dddd, d.M.yyyy", new CultureInfo("de-DE")));
+
+                    Saldo_Date = Preferences.Get("Saldo_Date", DateTime.Now.ToString("dddd, d.M.yyyy", new CultureInfo("de-DE")));
+
+                }
+
                 Transaktion.Clear();
 
                 transaktionGroups.Clear();
@@ -1897,18 +1910,6 @@ namespace EasyLife.PageModels
                                 }
                             }
                         }
-                    }
-                }
-
-                TimeSpan timespan = DateTime.Now - DateTime.ParseExact(Saldo_Date, "dddd, d.M.yyyy", new CultureInfo("de-DE"));
-
-                if (DateTime.Compare(DateTime.ParseExact(Saldo_Date, "dddd, d.M.yyyy", new CultureInfo("de-DE")), DateTime.Now) <=0)
-                {
-                    if (timespan.TotalDays <= 1)
-                    {
-                        Preferences.Set("Saldo_Date", DateTime.Now.ToString("dddd, d.M.yyyy", new CultureInfo("de-DE")));
-
-                        Saldo_Date = Preferences.Get("Saldo_Date", DateTime.Now.ToString("dddd, d.M.yyyy", new CultureInfo("de-DE")));
                     }
                 }
 
@@ -2761,6 +2762,15 @@ namespace EasyLife.PageModels
                             {
                                 IsSaldoVisibility = false;
                             }
+                        }
+
+                        if(Saldo_Date != DateTime.Today.ToString("dddd, d.M.yyyy", new CultureInfo("de-DE")))
+                        {
+                            Preferences.Set("Is_Saldo_Date_Changed", true);
+                        }
+                        else
+                        {
+                            Preferences.Set("Is_Saldo_Date_Changed", false);
                         }
                     }
                 }

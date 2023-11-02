@@ -434,7 +434,7 @@ namespace EasyLife.Services
         /// Erstellt, aus den wiederhergestellt Daten, alle Benachrichtigungen wieder her. 
         /// </summary>
         /// <returns></returns>
-        public static async Task<List<List<object>>> Show_Content_of_Backup(string path)
+        public static async Task<List<List<object>>> Show_Content_of_Backup(string path, DateTime saldo_date)
         {
             List<List<object>> Content = new List<List<object>>();
 
@@ -486,16 +486,30 @@ namespace EasyLife.Services
                 { 
                     "Transaktionen",
                     0,
-                    0      
+                    0,
+                    0,
+                    transaktion_list
                 });
             }
             else
             {
-                Content.Add(new List<object>() 
+                double saldo = 0;
+
+                foreach (var trans in transaktion_list)
                 {
-                    "Transaktionen", 
+                    if (DateTime.Compare(trans.Datum, saldo_date.AddDays(1).AddSeconds(-1)) <= 0)
+                    {
+                        saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                    }
+                }
+
+                Content.Add(new List<object>()
+                {
+                    "Transaktionen",
                     transaktion_list.Last().Id,
-                    transaktion_list.Last().Id - transaktion_list.Count()
+                    transaktion_list.Last().Id - transaktion_list.Count(),
+                    saldo,
+                    transaktion_list
                 });
             }
 
@@ -511,9 +525,10 @@ namespace EasyLife.Services
             {
                 Content.Add(new List<object>()
                 {
-                    "Auftrage",
+                    "Aufträge",
                     0,
-                    0
+                    0,
+                    order_list
                 });
             }
             else
@@ -523,6 +538,7 @@ namespace EasyLife.Services
                     "Aufträge",
                     order_list.Last().Id,
                     order_list.Last().Id - order_list.Count(),
+                    order_list
                 });
             }
 
@@ -541,6 +557,7 @@ namespace EasyLife.Services
                     "Benachrichtigungen",
                     0,
                     0,
+                    notification_list
                 });
             }
             else
@@ -550,6 +567,7 @@ namespace EasyLife.Services
                     "Benachrichtigungen",
                     notification_list.Last().Id,
                     notification_list.Last().Id - notification_list.Count(),
+                    notification_list
                 });
             }
 
@@ -561,22 +579,31 @@ namespace EasyLife.Services
 
             List<HelperBalanceprofile> helperbalanceprofile_list = new List<HelperBalanceprofile>(await db_create.Table<HelperBalanceprofile>().ToListAsync());
 
+            List<Balanceprofile> balanceprofiles_list = new List<Balanceprofile>();
+
             if (helperbalanceprofile_list.Count() == 0)
             {
                 Content.Add(new List<object>() 
                 { 
                     "Bilanzprofile",
                     0,
-                    0
+                    0,
+                    balanceprofiles_list
                 });
             }
             else
             {
+                foreach(HelperBalanceprofile helperBalanceprofile in helperbalanceprofile_list)
+                {
+                    balanceprofiles_list.Add(Konverter.Deserilize(helperBalanceprofile));
+                }
+
                 Content.Add(new List<object>() 
                 { 
                     "Bilanzprofile",
                     helperbalanceprofile_list.Last().Id,
                     helperbalanceprofile_list.Last().Id - helperbalanceprofile_list.Count(),
+                    balanceprofiles_list
                 });
             }
 
@@ -595,6 +622,7 @@ namespace EasyLife.Services
                     "Budgets",
                     0,
                     0,
+                    budget_list
                 });
             }
             else
@@ -604,6 +632,7 @@ namespace EasyLife.Services
                     "Budgets",
                     budget_list.Last().Id,
                     budget_list.Last().Id - budget_list.Count(),
+                    budget_list
                 });
             }
 
@@ -622,6 +651,7 @@ namespace EasyLife.Services
                     "Zwecke",
                     0,
                     0,
+                    reason_list
                 });
             }
             else
@@ -631,6 +661,7 @@ namespace EasyLife.Services
                     "Zwecke",
                     reason_list.Last().Id,
                     reason_list.Last().Id - reason_list.Count(),
+                    reason_list
                 });
             }
 
@@ -649,6 +680,7 @@ namespace EasyLife.Services
                     "Suchbegriffe",
                     0,
                     0,
+                    suggestion_list
                 });
             }
             else
@@ -658,6 +690,7 @@ namespace EasyLife.Services
                     "Suchbegriffe",
                     suggestion_list.Last().Id,
                     suggestion_list.Last().Id - suggestion_list.Count(),
+                    suggestion_list
                 });
             }
 
