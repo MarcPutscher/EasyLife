@@ -431,7 +431,7 @@ namespace EasyLife.Services
         }
 
         /// <summary>
-        /// Erstellt, aus den wiederhergestellt Daten, alle Benachrichtigungen wieder her. 
+        /// Erstellt eine Vorschau zu einem Backup. 
         /// </summary>
         /// <returns></returns>
         public static async Task<List<List<object>>> Show_Content_of_Backup(string path, DateTime saldo_date)
@@ -497,9 +497,12 @@ namespace EasyLife.Services
 
                 foreach (var trans in transaktion_list)
                 {
-                    if (DateTime.Compare(trans.Datum, saldo_date.AddDays(1).AddSeconds(-1)) <= 0)
+                    if(trans.Content_Visibility == true)
                     {
-                        saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                        if (DateTime.Compare(trans.Datum, saldo_date.AddDays(1).AddSeconds(-1)) <= 0)
+                        {
+                            saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                        }
                     }
                 }
 
@@ -508,7 +511,7 @@ namespace EasyLife.Services
                     "Transaktionen",
                     transaktion_list.Last().Id,
                     transaktion_list.Last().Id - transaktion_list.Count(),
-                    saldo,
+                    Math.Round(saldo,2),
                     transaktion_list
                 });
             }
