@@ -502,13 +502,16 @@ namespace EasyLife.Services
                 {
                     if (DateTime.Compare(trans.Datum, saldo_date.AddDays(1).AddSeconds(-1)) <= 0)
                     {
-                        if(trans.Saldo_Visibility == true)
+                        if(trans.Content_Visibility == true)
                         {
-                            saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
-                        }
-                        else
-                        {
-                            letter += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                            if(trans.Saldo_Visibility == true)
+                            {
+                                saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                            }
+                            else
+                            {
+                                letter += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                            }
                         }
                     }
                 }
@@ -518,7 +521,7 @@ namespace EasyLife.Services
                     "Transaktionen",
                     transaktion_list.Last().Id,
                     transaktion_list.Last().Id - transaktion_list.Count(),
-                    saldo,
+                    Math.Round(saldo,2),
                     transaktion_list,
                     letter
                 });
