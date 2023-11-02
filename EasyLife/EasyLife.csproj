@@ -13,12 +13,14 @@
     <None Remove="Resources\Fonts\fa-brands-400.ttf" />
     <None Remove="Resources\Fonts\fa-regular-400.ttf" />
     <None Remove="Resources\Fonts\fa-solid-900.ttf" />
+    <None Remove="Resources\Fonts\Samantha.ttf" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\Fonts\fa-brands-400.ttf" />
     <EmbeddedResource Include="Resources\Fonts\fa-regular-400.ttf" />
     <EmbeddedResource Include="Resources\Fonts\fa-solid-900.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\Samantha.ttf" />
   </ItemGroup>
 
   <ItemGroup>
@@ -56,10 +58,22 @@
     <Compile Update="Pages\Add_Order_Page.xaml.cs">
       <DependentUpon>Add_Order_Page.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Pages\Popup\Home_Remove_Popup.xaml.cs">
+      <DependentUpon>Home_Remove_Popup.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Popup\Home_Edit_Popup.xaml.cs">
+      <DependentUpon>Home_Edit_Popup.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Popup\Datamanagment_Popup.xaml.cs">
+      <DependentUpon>Datamanagment_Popup.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Popup\MetaData_Popup.xaml.cs">
+      <DependentUpon>MetaData_Popup.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\Styling_Color_Page.xaml.cs">
       <DependentUpon>Styling_Color_Page.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\Viewtime_Popup.xaml.cs">
+    <Compile Update="Pages\Popup\Viewtime_Popup.xaml.cs">
       <DependentUpon>Viewtime_Popup.xaml</DependentUpon>
     </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
@@ -88,13 +102,13 @@
     <EmbeddedResource Update="Pages\Balance_Page.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Budget_Popup.xaml">
+    <EmbeddedResource Update="Pages\Popup\Budget_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\CalculateListe_Popup.xaml">
+    <EmbeddedResource Update="Pages\Popup\CalculateListe_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Change_Saldo_Date_Popup.xaml">
+    <EmbeddedResource Update="Pages\Popup\Change_Saldo_Date_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\Edit_Item_Page.xaml">
@@ -106,10 +120,10 @@
     <EmbeddedResource Update="Pages\Edit_Order_Page.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Filter_Popup.xaml">
+    <EmbeddedResource Update="Pages\Popup\Filter_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Grouping_Popup.xaml">
+    <EmbeddedResource Update="Pages\Popup\Grouping_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\Master_Page.xaml">
@@ -124,13 +138,13 @@
     <EmbeddedResource Update="Pages\Styling_Color_Page.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Timespane_Popup.xaml">
+    <EmbeddedResource Update="Pages\Popup\Timespane_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\Trashcan_Page.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Viewtime_Popup.xaml">
+    <EmbeddedResource Update="Pages\Popup\Viewtime_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\Resources.resx">

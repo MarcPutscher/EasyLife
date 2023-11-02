@@ -14,12 +14,13 @@ using EasyLife.Interfaces;
 using Xamarin.CommunityToolkit.Extensions;
 using System.IO;
 using EasyLife.Models;
+using System.Text;
 
 namespace EasyLife.PageModels
 {
     public class Settings_PageModel : FreshBasePageModel
     {
-        public Settings_PageModel() 
+        public Settings_PageModel()
         {
             Notification_Command = new AsyncCommand(Notification_Methode);
 
@@ -27,24 +28,57 @@ namespace EasyLife.PageModels
 
             View_Appering_Command = new AsyncCommand(View_Appering_Methode);
 
-            Create_Backup_Command = new AsyncCommand(Create_Backup_Methode);
+            Datanmanagment_Command = new AsyncCommand(Datanmanagment_Methode);
 
-            Restore_Backup_Command = new AsyncCommand(Restore_Backup_Methode);
+            Load_Metadata_Command = new AsyncCommand(Load_Metadata);
 
-            Last_Backup_Date = Preferences.Get("Last_Backup_Date","");
+            Last_Backup_Date = Preferences.Get("Last_Backup_Date", "");
 
             Next_Backup_Date = Preferences.Get("Next_Backup_Date", "");
 
             Restored_Backup_Date = Preferences.Get("Restored_Backup_Date", "");
         }
 
+        public async Task Datanmanagment_Methode()
+        {
+            try
+            {
+                var result = await Shell.Current.ShowPopupAsync(new Datamanagment_Popup());
+
+                if (result == null)
+                {
+                    return;
+                }
+
+                if ((int)result == 1)
+                {
+                    await Create_Backup_Methode();
+                }
+                if ((int)result == 2)
+                {
+                    await Share_Backup_Methode();
+                }
+                if ((int)result == 3)
+                {
+                    await Restore_Backup_Methode();
+                }
+                if ((int)result == 4)
+                {
+                    await Show_Content_of_Backup_Methode();
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist beim Senden des Backups ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
         private async Task Create_Backup_Methode()
         {
             try
             {
                 var result0 = await Shell.Current.DisplayAlert("Backup erstellen", "Wollen Sie wirklich ein Backup manuell erstellen?", "Ja", "Nein");
-                
-                if(result0 == true)
+
+                if (result0 == true)
                 {
                     bool result = BackupService.Create_Backup(DateTime.Now.ToString("dd.MM.yyyy"));
 
@@ -70,8 +104,8 @@ namespace EasyLife.PageModels
                 }
             }
             catch (Exception ex)
-            {         
-                if(BackupService.indicator == 1)
+            {
+                if (BackupService.indicator == 1)
                 {
                     try
                     {
@@ -90,7 +124,81 @@ namespace EasyLife.PageModels
                         await Shell.Current.DisplayAlert("Fehler", "Es ist bei der erstellung des Backups ein Fehler aufgetretten.\nFehler:" + e.ToString() + "", "Verstanden");
                     }
                 }
-                await Shell.Current.DisplayAlert("Fehler", "Es ist bei der erstellung des Backups ein Fehler aufgetretten.\nFehler:"+ex.ToString()+"", "Verstanden");
+                await Shell.Current.DisplayAlert("Fehler", "Es ist bei der erstellung des Backups ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+            }
+        }
+
+        public async Task Share_Backup_Methode()
+        {
+            try
+            {
+                string[] files = Directory.GetFiles(DependencyService.Get<IAccessFile>().CreateFile(null), "EasyLife-Backup-*");
+
+                if (files.Count() != 0)
+                {
+                    List<DateTime> Backup_dates = new List<DateTime>();
+
+                    List<string> Backup_name = new List<string>();
+
+
+                    string[] Button_name = null;
+
+                    Dictionary<DateTime, string> dict_0 = new Dictionary<DateTime, string>();
+
+                    Dictionary<string, string> dict = new Dictionary<string, string>();
+
+                    foreach (string file in files)
+                    {
+                        try
+                        {
+                            Backup_dates.Add(DateTime.ParseExact(file.Substring(file.LastIndexOf("-") + 1).Substring(0, file.Substring(file.LastIndexOf("-")).LastIndexOf(".") - 1), "dd.MM.yyyy", new CultureInfo("de-DE")));
+
+                            dict_0.Add(Backup_dates.Last(), file);
+                        }
+                        catch { }
+                    }
+
+                    Backup_dates = Backup_dates.OrderByDescending(d => d.Date).ToList();
+
+                    Backup_dates.Reverse();
+
+                    foreach (DateTime time in Backup_dates)
+                    {
+                        Backup_name.Add("Backup vom " + time.ToString("dd.MM.yyyy") + "");
+
+                        dict.Add(Backup_name.Last(), dict_0[time]);
+                    }
+
+                    Backup_name.Reverse();
+
+                    Button_name = Backup_name.ToArray();
+
+                    string result = await Shell.Current.DisplayActionSheet("Vorhandene Backups", "Zurück", null, Button_name);
+
+                    if (result == "Zurück")
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        if (result == null)
+                        {
+                            await Shell.Current.DisplayToastAsync("Es wurde kein Backup ausgewählt.", 5000);
+                        }
+                        else
+                        {
+                            await Share.RequestAsync(new ShareFileRequest { Title = result, File = new ShareFile(dict[result]) });
+                        }
+                    }
+                }
+                else
+                {
+                    await Shell.Current.DisplayToastAsync("Es wurde kein Backup gefunden.", 5000);
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist beim Senden des Backups ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
             }
         }
 
@@ -131,11 +239,378 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist bei der Wiederherstellung der Daten ein Fehler aufgetretten.\nFehler:"+ex.ToString()+"", "Verstanden");
+                await Shell.Current.DisplayAlert("Fehler", "Es ist bei der Wiederherstellung der Daten ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
 
                 Preferences.Set("Restored_Backup_Path", "");
 
                 BackupService.Delete_Restored_Source();
+            }
+        }
+
+        private async Task Show_Content_of_Backup_Methode()
+        {
+            try
+            {
+                string[] files = Directory.GetFiles(DependencyService.Get<IAccessFile>().CreateFile(null), "EasyLife-Backup-*");
+
+                if (files.Count() != 0)
+                {
+                    List<DateTime> Backup_dates = new List<DateTime>();
+
+                    List<string> Backup_name = new List<string>();
+
+
+                    string[] Button_name = null;
+
+                    Dictionary<DateTime, string> dict_0 = new Dictionary<DateTime, string>();
+
+                    Dictionary<string, string> dict = new Dictionary<string, string>();
+
+                    foreach (string file in files)
+                    {
+                        try
+                        {
+                            Backup_dates.Add(DateTime.ParseExact(file.Substring(file.LastIndexOf("-") + 1).Substring(0, file.Substring(file.LastIndexOf("-")).LastIndexOf(".") - 1), "dd.MM.yyyy", new CultureInfo("de-DE")));
+
+                            dict_0.Add(Backup_dates.Last(), file);
+                        }
+                        catch { }
+                    }
+
+                    Backup_dates = Backup_dates.OrderByDescending(d => d.Date).ToList();
+
+                    Backup_dates.Reverse();
+
+                    foreach (DateTime time in Backup_dates)
+                    {
+                        Backup_name.Add("Backup vom " + time.ToString("dd.MM.yyyy") + "");
+
+                        dict.Add(Backup_name.Last(), dict_0[time]);
+                    }
+
+                    Backup_name.Reverse();
+
+                    Button_name = Backup_name.ToArray();
+
+                    bool indikator = false;
+
+                    while (indikator == false)
+                    {
+                        string result = await Shell.Current.DisplayActionSheet("Vorhandene Backups", "Zurück", null, Button_name);
+
+                        if (result == "Zurück")
+                        {
+                            indikator = true;
+                        }
+                        else
+                        {
+                            if (result == null)
+                            {
+                                await Shell.Current.DisplayToastAsync("Es wurde kein Backup ausgewählt.", 5000);
+                            }
+                            else
+                            {
+                                List<List<object>> result1 = await BackupService.Show_Content_of_Backup(dict[result], DateTime.ParseExact(result.Substring(result.LastIndexOf("m") + 2), "dd.MM.yyyy", new CultureInfo("de-DE")));
+
+                                if (result1 == null)
+                                {
+                                    await Shell.Current.DisplayToastAsync("Das Backup ist leer.", 5000);
+
+                                    return;
+                                }
+                                else
+                                {
+                                    string[] content = { };
+
+                                    List<string> contentlist = new List<string> { };
+
+                                    Dictionary<string, string> contentdic = new Dictionary<string, string> { };
+
+                                    Dictionary<string, object> content1dic = new Dictionary<string, object> { };
+
+                                    foreach (List<object> list in result1)
+                                    {
+                                        if (list[0].ToString() == "Transaktionen")
+                                        {
+                                            contentlist.Add(list[0].ToString() + "\nerstellt: " + list[1] + " | gelöscht: " + list[2] + "\nStand : " + list[3] + "€\nStand des Briefumschlages: " + list[5]+"€");
+
+                                            contentdic.Add(contentlist.Last(), list[0].ToString());
+
+                                            content1dic.Add(list[0].ToString(), list[4]);
+                                        }
+                                        else
+                                        {
+                                            contentlist.Add(list[0].ToString() + "\nerstellt: " + list[1] + "| gelöscht: " + list[2] + "");
+
+                                            contentdic.Add(contentlist.Last(), list[0].ToString());
+
+                                            content1dic.Add(list[0].ToString(), list[3]);
+                                        }
+
+                                    }
+
+                                    content = contentlist.ToArray();
+
+                                    bool indikator2 = false;
+
+                                    while (indikator2 == false)
+                                    {
+                                        var result2 = await Shell.Current.DisplayActionSheet("Stand: " + result + "", "Zurück", null, content);
+
+                                        if (result2 == null)
+                                        {
+                                            indikator2 = true;
+                                        }
+                                        else
+                                        {
+                                            if (result2 == "Zurück")
+                                            {
+                                                indikator2 = true;
+                                            }
+                                            else
+                                            {
+                                                if (contentdic[result2] == "Transaktionen")
+                                                {
+                                                    string[] resultarray = { };
+
+                                                    List<string> resultlist = new List<string>();
+
+                                                    List<Transaktion> transaktionslist = (List<Transaktion>)content1dic[contentdic[result2]];
+
+                                                    if (transaktionslist.Count() != 0)
+                                                    {
+                                                        foreach (Transaktion trans in transaktionslist)
+                                                        {
+                                                            resultlist.Add("\nTransaktion " + trans.Id + "\n" + trans.Datumanzeige + "\n" + trans.Zweck + " | " + trans.Betrag + "€\n");
+                                                        }
+
+                                                        resultarray = resultlist.ToArray();
+
+                                                        bool indikator3 = false;
+
+                                                        while (indikator3 == false)
+                                                        {
+                                                            var result3 = await Shell.Current.DisplayActionSheet("Transaktionen", "Zurück", null, resultarray);
+
+                                                            if (resultlist.Contains(result3) == true)
+                                                            {
+                                                                Transaktion item = transaktionslist[resultlist.IndexOf(result3)];
+
+                                                                string message = null;
+
+                                                                if (String.IsNullOrEmpty(item.Auftrags_id) == false)
+                                                                {
+                                                                    if (item.Auftrags_Option == 1)
+                                                                    {
+                                                                        message = "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String +"\nWird zum Stand berechnet:"+item.Saldo_Visibility_String + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
+                                                                    }
+                                                                    if (item.Auftrags_Option == 2)
+                                                                    {
+                                                                        message = "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird zum Stand berechnet:" + item.Saldo_Visibility_String + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + "";
+                                                                    }
+                                                                    if (item.Auftrags_Option == 3)
+                                                                    {
+                                                                        message = "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird zum Stand berechnet:" + item.Saldo_Visibility_String + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
+                                                                    }
+
+                                                                    await Shell.Current.DisplayAlert("Transaktion " + item.Id + "", message, "Zurück");
+                                                                }
+                                                                else
+                                                                {
+                                                                    await Shell.Current.DisplayAlert("Transaktion " + item.Id + "", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird zum Stand berechnet:" + item.Saldo_Visibility_String + "", "Zurück");
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                indikator3 = true;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                                if (contentdic[result2] == "Aufträge")
+                                                {
+                                                    string resultstring = string.Empty;
+
+                                                    List<Auftrag> objektlist = (List<Auftrag>)content1dic[contentdic[result2]];
+
+                                                    if (objektlist.Count() != 0)
+                                                    {
+                                                        foreach (Auftrag objekt in objektlist)
+                                                        {
+                                                            resultstring += "\nAuftrag " + objekt.Id + "\nArt: " + objekt.Art_an_Wiederholungen + "\nAnzahl: " + objekt.Anzahl_an_Wiederholungen + "\nSpeziell: " + objekt.Speziell + "€\n";
+                                                        }
+
+                                                        await Shell.Current.DisplayAlert("Aufträge", resultstring, "Zurück");
+                                                    }
+                                                }
+
+                                                if (contentdic[result2] == "Bilanzprofile")
+                                                {
+                                                    string[] resultarray = { };
+
+                                                    List<string> resultlist = new List<string>();
+
+                                                    List<Balanceprofile> objektlist = (List<Balanceprofile>)content1dic[contentdic[result2]];
+
+                                                    if (objektlist.Count() != 0)
+                                                    {
+                                                        foreach (Balanceprofile objekt in objektlist)
+                                                        {
+                                                            resultlist.Add("Bilanzprofil " + objekt.Id + "");
+                                                        }
+
+                                                        resultarray = resultlist.ToArray();
+
+                                                        bool indikator3 = false;
+
+                                                        while (indikator3 == false)
+                                                        {
+
+                                                            var result3 = await Shell.Current.DisplayActionSheet("Bilanzprofile", "Zurück", null, resultarray);
+
+                                                            if (result3 == null)
+                                                            {
+                                                                indikator3 = true;
+                                                            }
+                                                            else
+                                                            {
+                                                                if (result3 == "Zurück")
+                                                                {
+                                                                    indikator3 = true;
+                                                                }
+                                                                else
+                                                                {
+                                                                    int id = int.Parse(result3.ToString().Substring(12));
+
+                                                                    Balanceprofile ChoosenBilanceprofil = objektlist.Where(bp => bp.Id == id).First();
+
+                                                                    string resultstring = string.Empty;
+
+                                                                    List<string> sortetinitreasons_substring = new List<string>();
+
+                                                                    List<Stackholderhelper> sortetinitreasons = new List<Stackholderhelper>();
+
+                                                                    foreach (string re in ChoosenBilanceprofil.Outcome_Account)
+                                                                    {
+                                                                        sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Ausgaben Konto" });
+                                                                    }
+
+                                                                    foreach (string re in ChoosenBilanceprofil.Income_Account)
+                                                                    {
+                                                                        sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Einnahmen Konto" });
+                                                                    }
+
+                                                                    foreach (string re in ChoosenBilanceprofil.Outcome_Cash)
+                                                                    {
+                                                                        sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Barausgaben" });
+                                                                    }
+
+                                                                    foreach (string re in ChoosenBilanceprofil.Income_Cash)
+                                                                    {
+                                                                        sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "Bareinnahmen" });
+                                                                    }
+
+                                                                    foreach (string re in ChoosenBilanceprofil.Ignore)
+                                                                    {
+                                                                        sortetinitreasons.Add(new Stackholderhelper() { Reason = re, Option = "ignorieren" });
+                                                                    }
+
+                                                                    foreach (Stackholderhelper sh in sortetinitreasons)
+                                                                    {
+                                                                        resultstring += sh.Substring + "\n\n";
+                                                                    }
+
+                                                                    await Shell.Current.DisplayAlert("Bilanzprofil " + ChoosenBilanceprofil.Id + "", resultstring, "Zurück");
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                                if (contentdic[result2] == "Budgets")
+                                                {
+                                                    string resultstring = string.Empty;
+
+                                                    List<Budget> objektlist = (List<Budget>)content1dic[contentdic[result2]];
+
+                                                    if (objektlist.Count() != 0)
+                                                    {
+                                                        foreach (Budget objekt in objektlist)
+                                                        {
+                                                            resultstring += "\nBudget " + objekt.Id + "\nName: " + objekt.Name + "\nZiel: " + objekt.Goal + "€\n";
+                                                        }
+
+                                                        await Shell.Current.DisplayAlert("Budgets", resultstring, "Zurück");
+                                                    }
+                                                }
+
+                                                if (contentdic[result2] == "Zwecke")
+                                                {
+                                                    string resultstring = string.Empty;
+
+                                                    List<Zweck> objektlist = (List<Zweck>)content1dic[contentdic[result2]];
+
+                                                    if (objektlist.Count() != 0)
+                                                    {
+                                                        foreach (Zweck objekt in objektlist)
+                                                        {
+                                                            resultstring += "\nZweck " + objekt.Id + "\nName: " + objekt.Benutzerdefinierter_Zweck.Substring(0, objekt.Benutzerdefinierter_Zweck.IndexOf(":")) + "\nDefinition: " + objekt.Benutzerdefinierter_Zweck.Substring(objekt.Benutzerdefinierter_Zweck.IndexOf(":") + 1) + "\n";
+                                                        }
+
+                                                        await Shell.Current.DisplayAlert("Zwecke", resultstring, "Zurück");
+                                                    }
+                                                }
+
+                                                if (contentdic[result2] == "Suchbegriffe")
+                                                {
+                                                    string resultstring = string.Empty;
+
+                                                    List<Suggestion> objektlist = (List<Suggestion>)content1dic[contentdic[result2]];
+
+                                                    if (objektlist.Count() != 0)
+                                                    {
+                                                        foreach (Suggestion objekt in objektlist)
+                                                        {
+                                                            resultstring += "\nSuchbegriff " + objekt.Id + "\nBegriff: " + objekt.Suggestion_value + "\n";
+                                                        }
+
+                                                        await Shell.Current.DisplayAlert("Suchbegriffe", resultstring, "Zurück");
+                                                    }
+                                                }
+
+                                                if (contentdic[result2] == "Benachrichtigungen")
+                                                {
+                                                    string resultstring = string.Empty;
+
+                                                    List<Notification> objektlist = (List<Notification>)content1dic[contentdic[result2]];
+
+                                                    if (objektlist.Count() != 0)
+                                                    {
+                                                        foreach (Notification objekt in objektlist)
+                                                        {
+                                                            resultstring += "\nBenachrichtigung " + objekt.Id + "\nZugehöriger Auftrag: " + objekt.Auftrags_ID + "\n";
+                                                        }
+
+                                                        await Shell.Current.DisplayAlert("Benachrichtigungen", resultstring, "Zurück");
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    await Shell.Current.DisplayToastAsync("Es wurde kein Backup gefunden.", 5000);
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Es ist beim Senden des Backups ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
             }
         }
 
@@ -145,7 +620,7 @@ namespace EasyLife.PageModels
             {
                 var result = await LocalNotificationCenter.Current.AreNotificationsEnabled();
 
-                if(result == false)
+                if (result == false)
                 {
                     Is_Notification_Enable = "Nein";
                 }
@@ -176,12 +651,12 @@ namespace EasyLife.PageModels
                     Is_Read_Storage_Enable = "Ja";
                 }
 
-                if(status1 == PermissionStatus.Denied)
+                if (status1 == PermissionStatus.Denied)
                 {
                     Is_Read_Storage_Enable = "Nein";
                 }
 
-                if(status1 == PermissionStatus.Unknown)
+                if (status1 == PermissionStatus.Unknown)
                 {
                     Is_Read_Storage_Enable = "Unbekannt";
                 }
@@ -193,7 +668,7 @@ namespace EasyLife.PageModels
                     {
                         Is_Write_Storage_Enable = "Ja";
 
-                        await Shell.Current.DisplayToastAsync("Aufgrund von internen Äderungen bei der Berechtigung von EasyLife muss das Programm neugestartet werden.",5000);
+                        await Shell.Current.DisplayToastAsync("Aufgrund von internen Äderungen bei der Berechtigung von EasyLife muss das Programm neugestartet werden.", 5000);
 
                         DependencyService.Get<ICloseApplication>().closeApplication();
                     }
@@ -210,8 +685,6 @@ namespace EasyLife.PageModels
                 {
                     Is_Write_Storage_Enable = "Unbekannt";
                 }
-
-                await Load_Metadata();
             }
             catch (Exception ex)
             {
@@ -223,6 +696,8 @@ namespace EasyLife.PageModels
         {
             try
             {
+                List<int> amount_list = new List<int>();
+
                 var transaktionscontent = await ContentService.Get_all_Transaktion();
 
                 int amount_of_generated_transaktion = 0;
@@ -243,12 +718,12 @@ namespace EasyLife.PageModels
 
                     foreach (var trans in transaktionscontent)
                     {
-                        if(trans.Auftrags_id != null)
+                        if (trans.Auftrags_id != null)
                         {
                             amount_of_transaktion_in_orders++;
                         }
 
-                        if(trans.Content_Visibility == true)
+                        if (trans.Content_Visibility == true)
                         {
                             amount_of_use_transaktion++;
                         }
@@ -259,15 +734,15 @@ namespace EasyLife.PageModels
                     }
                 }
 
-                Amount_of_generated_Transaktion = amount_of_generated_transaktion;
+                amount_list.Add(amount_of_generated_transaktion);
 
-                Amount_of_deleted_Transaktion = amount_of_delete_transaktion;
+                amount_list.Add(amount_of_delete_transaktion);
 
-                Amount_of_use_Transaktion = amount_of_use_transaktion;
+                amount_list.Add(amount_of_use_transaktion);
 
-                Amount_of_unuse_Transaktion = amount_of_unuse_transaktion;
+                amount_list.Add(amount_of_unuse_transaktion);
 
-                Amount_of_Transaktion_in_Orders = amount_of_transaktion_in_orders;
+                amount_list.Add(amount_of_transaktion_in_orders);
 
 
                 var ordercontent = await OrderService.Get_all_Order();
@@ -292,33 +767,33 @@ namespace EasyLife.PageModels
 
                         foreach (var trans in transaktionscontent)
                         {
-                            if(trans.Auftrags_id != null)
-                            { 
+                            if (trans.Auftrags_id != null)
+                            {
                                 if (trans.Auftrags_id.Substring(0, trans.Auftrags_id.IndexOf(".")) == order.Id.ToString())
                                 {
-                                   inuse = true;
+                                    inuse = true;
                                 }
                             }
                         }
 
-                        if(inuse == true)
+                        if (inuse == true)
                         {
-                            amount_of_use_order ++;
+                            amount_of_use_order++;
                         }
                         else
                         {
-                            amount_of_unuse_order ++;
+                            amount_of_unuse_order++;
                         }
                     }
                 }
 
-                Amount_of_generated_Order = amount_of_generated_order;
+                amount_list.Add(amount_of_generated_order);
 
-                Amount_of_deleted_Order = amount_of_delete_order;
+                amount_list.Add(amount_of_delete_order);
 
-                Amount_of_use_Order = amount_of_use_order;
+                amount_list.Add(amount_of_use_order);
 
-                Amount_of_unuse_Order = amount_of_unuse_order;
+                amount_list.Add(amount_of_unuse_order);
 
 
                 var reasoncontent = await ReasonService.Get_all_Reason();
@@ -335,22 +810,22 @@ namespace EasyLife.PageModels
 
                     foreach (var reason in reasoncontent)
                     {
-                        if(reason.Reason_Visibility == true)
+                        if (reason.Reason_Visibility == true)
                         {
-                            amount_of_use_reason ++;
+                            amount_of_use_reason++;
                         }
                         else
-                        { 
-                            amount_of_unuse_reason ++;
+                        {
+                            amount_of_unuse_reason++;
                         }
                     }
                 }
 
-                Amount_of_generated_Reason = amount_of_generated_reason;
+                amount_list.Add(amount_of_generated_reason);
 
-                Amount_of_use_Reason = amount_of_use_reason;
+                amount_list.Add(amount_of_use_reason);
 
-                Amount_of_unuse_Reason = amount_of_unuse_reason;
+                amount_list.Add(amount_of_unuse_reason);
 
 
                 var notificationcontent = await NotificationService.Get_all_Notification();
@@ -383,9 +858,9 @@ namespace EasyLife.PageModels
                             }
                         }
 
-                        if(isused == false)
+                        if (isused == false)
                         {
-                            amount_of_delete_notification ++;
+                            amount_of_delete_notification++;
                         }
                     }
 
@@ -394,20 +869,97 @@ namespace EasyLife.PageModels
                     amount_of_use_notification = list_of_pending_notification.Count();
                 }
 
-                Amount_of_generated_Notification = amount_of_generated_notification;
+                amount_list.Add(amount_of_generated_notification);
 
-                Amount_of_deleted_Notification = amount_of_delete_notification;
+                amount_list.Add(amount_of_delete_notification);
 
-                Amount_of_use_Notification = amount_of_use_notification;
+                amount_list.Add(amount_of_use_notification);
 
-                Amount_of_unuse_Notification = amount_of_unuse_notification;
+                amount_list.Add(amount_of_unuse_notification);
+
+
+                var suggestioncontent = await SearchSuggestionService.Get_all_Suggestion();
+
+                int amount_of_generated_suggestion = 0;
+
+                int amount_of_deleted_suggestion = 0;
+
+                int amount_of_use_suggestionn = 0;
+
+                if (suggestioncontent.Count() != 0)
+                {
+                    amount_of_generated_suggestion = suggestioncontent.First().Id;
+
+                    amount_of_use_suggestionn = suggestioncontent.Count();
+
+                    amount_of_deleted_suggestion = suggestioncontent.First().Id - suggestioncontent.Count();
+                }
+
+                amount_list.Add(amount_of_generated_suggestion);
+
+                amount_list.Add(amount_of_deleted_suggestion);
+
+                amount_list.Add(amount_of_use_suggestionn);
+
+
+                var balanceprofilecontent = await BalanceService.Get_all_Balanceprofile();
+
+                int amount_of_generated_balanceprofile = 0;
+
+                int amount_of_deleted_balanceprofile = 0;
+
+                int amount_of_use_balanceprofile = 0;
+
+                if (balanceprofilecontent.Count() != 0)
+                {
+                    amount_of_generated_balanceprofile = balanceprofilecontent.First().Id;
+
+                    amount_of_use_balanceprofile = balanceprofilecontent.Count();
+
+                    amount_of_deleted_balanceprofile = balanceprofilecontent.First().Id - balanceprofilecontent.Count();
+                }
+
+                amount_list.Add(amount_of_generated_balanceprofile);
+
+                amount_list.Add(amount_of_deleted_balanceprofile);
+
+                amount_list.Add(amount_of_use_balanceprofile);
+
+
+                var budgetscontent = await BudgetService.Get_all_Budget();
+
+                int amount_of_generated_budgets = 0;
+
+                int amount_of_deleted_budgets = 0;
+
+                int amount_of_use_budgets = 0;
+
+                if (budgetscontent.Count() != 0)
+                {
+                    amount_of_generated_budgets = budgetscontent.First().Id;
+
+                    foreach (var budget in budgetscontent)
+                    {
+                        amount_of_use_budgets++;
+                    }
+
+                    amount_of_deleted_budgets = amount_of_generated_budgets - amount_of_use_budgets;
+                }
+
+                amount_list.Add(amount_of_generated_budgets);
+
+                amount_list.Add(amount_of_deleted_budgets);
+
+                amount_list.Add(amount_of_use_budgets);
+
+                await Shell.Current.ShowPopupAsync(new MetaData_Popup(amount_list));
+
             }
             catch (Exception ex)
             {
                 await Shell.Current.DisplayAlert("Fehler", "Es ist beim Erstellen der Metadaten ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
             }
         }
-
         private async Task Notification_Methode()
         {
             try
@@ -461,11 +1013,11 @@ namespace EasyLife.PageModels
             await Shell.Current.GoToAsync(nameof(Styling_Color_Page));
         }
 
-        public AsyncCommand Styling_Color_Command { get;}
-        public AsyncCommand Notification_Command { get;}
+        public AsyncCommand Styling_Color_Command { get; }
+        public AsyncCommand Notification_Command { get; }
         public AsyncCommand View_Appering_Command { get; }
-        public AsyncCommand Create_Backup_Command { get; }
-        public AsyncCommand Restore_Backup_Command { get; }
+        public AsyncCommand Datanmanagment_Command { get; }
+        public AsyncCommand Load_Metadata_Command { get; }
 
         public string is_notification_enable;
         public string Is_Notification_Enable
@@ -554,246 +1106,6 @@ namespace EasyLife.PageModels
                 }
 
                 restored_backup_date = value; RaisePropertyChanged();
-            }
-        }
-
-        public int amount_of_generated_transaktion = 0;
-        public int Amount_of_generated_Transaktion
-        {
-            get { return amount_of_generated_transaktion; }
-            set
-            {
-                if (Amount_of_generated_Transaktion == value)
-                {
-                    return;
-                }
-
-                amount_of_generated_transaktion = value; RaisePropertyChanged();
-            }
-        }
-
-        public int amount_of_use_transaktion = 0;
-        public int Amount_of_use_Transaktion
-        {
-            get { return amount_of_use_transaktion; }
-            set
-            {
-                if (Amount_of_use_Transaktion == value)
-                {
-                    return;
-                }
-
-                amount_of_use_transaktion = value; RaisePropertyChanged();
-            }
-        }
-
-        public int amount_of_unuse_transaktion = 0;
-        public int Amount_of_unuse_Transaktion
-        {
-            get { return amount_of_unuse_transaktion; }
-            set
-            {
-                if (Amount_of_unuse_Transaktion == value)
-                {
-                    return;
-                }
-
-                amount_of_unuse_transaktion = value; RaisePropertyChanged();
-            }
-        }
-
-        public int amount_of_transaktion_in_orders = 0;
-        public int Amount_of_Transaktion_in_Orders
-        {
-            get { return amount_of_transaktion_in_orders; }
-            set
-            {
-                if (Amount_of_Transaktion_in_Orders == value)
-                {
-                    return;
-                }
-
-                amount_of_transaktion_in_orders = value; RaisePropertyChanged();
-            }
-        }
-
-        public int amount_of_deleted_transaktion = 0;
-        public int Amount_of_deleted_Transaktion
-        {
-            get { return amount_of_deleted_transaktion; }
-            set
-            {
-                if (Amount_of_deleted_Transaktion == value)
-                {
-                    return;
-                }
-
-                amount_of_deleted_transaktion = value; RaisePropertyChanged();
-            }
-        }
-
-        public int amount_of_generated_order = 0;
-        public int Amount_of_generated_Order
-        {
-            get { return amount_of_generated_order; }
-            set
-            {
-                if (Amount_of_generated_Order == value)
-                {
-                    return;
-                }
-
-                amount_of_generated_order = value; RaisePropertyChanged();
-            }
-        }
-
-        public int amount_of_use_order = 0;
-        public int Amount_of_use_Order
-        {
-            get { return amount_of_use_order; }
-            set
-            {
-                if (Amount_of_use_Order == value)
-                {
-                    return;
-                }
-
-                amount_of_use_order = value; RaisePropertyChanged();
-            }
-        }
-
-        public int amount_of_unuse_order = 0;
-        public int Amount_of_unuse_Order
-        {
-            get { return amount_of_unuse_order; }
-            set
-            {
-                if (Amount_of_unuse_Order == value)
-                {
-                    return;
-                }
-
-                amount_of_unuse_order = value; RaisePropertyChanged();
-            }
-        }
-
-        public int amount_of_deleted_order = 0;
-        public int Amount_of_deleted_Order
-        {
-            get { return amount_of_deleted_order; }
-            set
-            {
-                if (Amount_of_deleted_Order == value)
-                {
-                    return;
-                }
-
-                amount_of_deleted_order = value; RaisePropertyChanged();
-            }
-        }
-
-        public int amount_of_generated_reason = 0;
-        public int Amount_of_generated_Reason
-        {
-            get { return amount_of_generated_reason; }
-            set
-            {
-                if (Amount_of_generated_Reason == value)
-                {
-                    return;
-                }
-
-                amount_of_generated_reason = value; RaisePropertyChanged();
-            }
-        }
-
-        public int amount_of_use_reason = 0;
-        public int Amount_of_use_Reason
-        {
-            get { return amount_of_use_reason; }
-            set
-            {
-                if (Amount_of_use_Reason == value)
-                {
-                    return;
-                }
-
-                amount_of_use_reason = value; RaisePropertyChanged();
-            }
-        }
-
-        public int amount_of_unuse_reason = 0;
-        public int Amount_of_unuse_Reason
-        {
-            get { return amount_of_unuse_reason; }
-            set
-            {
-                if (Amount_of_unuse_Reason == value)
-                {
-                    return;
-                }
-
-                amount_of_unuse_reason = value; RaisePropertyChanged();
-            }
-        }
-
-        public int amount_of_generated_notification = 0;
-        public int Amount_of_generated_Notification
-        {
-            get { return amount_of_generated_notification; }
-            set
-            {
-                if (Amount_of_generated_Notification == value)
-                {
-                    return;
-                }
-
-                amount_of_generated_notification = value; RaisePropertyChanged();
-            }
-        }
-
-        public int amount_of_deleted_notification = 0;
-        public int Amount_of_deleted_Notification
-        {
-            get { return amount_of_deleted_notification; }
-            set
-            {
-                if (Amount_of_deleted_Notification == value)
-                {
-                    return;
-                }
-
-                amount_of_deleted_notification = value; RaisePropertyChanged();
-            }
-        }
-
-        public int amount_of_use_notification = 0;
-        public int Amount_of_use_Notification
-        {
-            get { return amount_of_use_notification; }
-            set
-            {
-                if (Amount_of_use_Notification == value)
-                {
-                    return;
-                }
-
-                amount_of_use_notification = value; RaisePropertyChanged();
-            }
-        }
-
-        public int amount_of_unuse_notification = 0;
-        public int Amount_of_unuse_Notification
-        {
-            get { return amount_of_unuse_notification; }
-            set
-            {
-                if (Amount_of_unuse_Notification == value)
-                {
-                    return;
-                }
-
-                amount_of_unuse_notification = value; RaisePropertyChanged();
             }
         }
     }

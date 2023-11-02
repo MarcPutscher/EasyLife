@@ -67,22 +67,22 @@ namespace EasyLife.Cells
                             {
                                 if (item.Auftrags_Option == 1)
                                 {
-                                    message = "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: "+item.Balance_Visibility_String+"\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
+                                    message = "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: "+item.Balance_Visibility_String+"\nWird zum Stand berechnet: "+item.Saldo_Visibility_String + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
                                 }
                                 if (item.Auftrags_Option == 2)
                                 {
-                                    message = "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + "";
+                                    message = "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird zum Stand berechnet: "+item.Saldo_Visibility_String + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + "";
                                 }
                                 if (item.Auftrags_Option == 3)
                                 {
-                                    message = "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
+                                    message = "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird zum Stand berechnet: "+item.Saldo_Visibility_String + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
                                 }
 
                                 await Shell.Current.DisplayAlert("Transaktion " + item.Id + "", message, "Zurück");
                             }
                             else
                             {
-                                await Shell.Current.DisplayAlert("Transaktion " + item.Id + "", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"", "Zurück");
+                                await Shell.Current.DisplayAlert("Transaktion " + item.Id + "", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird zum Stand berechnet: "+item.Saldo_Visibility_String + "", "Zurück");
                             }
                         }
                         else

@@ -11,7 +11,7 @@ namespace EasyLife.Pages
         {
             InitializeComponent();
 
-            Init( input);
+            Init(input);
         }
 
         public int Output;
@@ -20,19 +20,19 @@ namespace EasyLife.Pages
         {
             try
             {
-                if(input == 1)
+                if (input == 1)
                 {
-                    ReasonButton.BackgroundColor = Xamarin.Forms.Color.LightGray;
+                    ReasonButton.BackgroundColor = Xamarin.Forms.Color.DarkGray;
 
-                    DateButton.BackgroundColor = Xamarin.Forms.Color.DarkGray;
+                    DateButton.BackgroundColor = Xamarin.Forms.Color.Black;
 
                     Output = 1;
                 }
                 if (input == 0)
                 {
-                    ReasonButton.BackgroundColor = Xamarin.Forms.Color.DarkGray;
+                    ReasonButton.BackgroundColor = Xamarin.Forms.Color.Black;
 
-                    DateButton.BackgroundColor = Xamarin.Forms.Color.LightGray;
+                    DateButton.BackgroundColor = Xamarin.Forms.Color.DarkGray;
 
                     Output = 0;
                 }
@@ -42,9 +42,9 @@ namespace EasyLife.Pages
 
         private void ReasonButton_Clicked(object sender, System.EventArgs e)
         {
-            ReasonButton.BackgroundColor = Xamarin.Forms.Color.LightGray;
+            ReasonButton.BackgroundColor = Xamarin.Forms.Color.DarkGray;
 
-            DateButton.BackgroundColor = Xamarin.Forms.Color.DarkGray;
+            DateButton.BackgroundColor = Xamarin.Forms.Color.Black;
 
             Output = 1;
 
@@ -53,9 +53,9 @@ namespace EasyLife.Pages
 
         private void DateButton_Clicked(object sender, System.EventArgs e)
         {
-            ReasonButton.BackgroundColor = Xamarin.Forms.Color.DarkGray;
+            ReasonButton.BackgroundColor = Xamarin.Forms.Color.Black;
 
-            DateButton.BackgroundColor = Xamarin.Forms.Color.LightGray;
+            DateButton.BackgroundColor = Xamarin.Forms.Color.DarkGray;
 
             Output = 0;
 
