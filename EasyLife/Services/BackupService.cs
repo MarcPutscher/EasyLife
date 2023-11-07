@@ -598,7 +598,7 @@ namespace EasyLife.Services
             {
                 foreach(HelperBalanceprofile helperBalanceprofile in helperbalanceprofile_list)
                 {
-                    balanceprofiles_list.Add(Konverter.Deserilize(helperBalanceprofile));
+                    balanceprofiles_list.Add(Balanceprofile_Konverter.Deserilize(helperBalanceprofile));
                 }
 
                 Content.Add(new List<object>() 

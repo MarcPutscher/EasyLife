@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:pagemodels="clr-namespace:EasyLife.PageModels"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:fontAwesome="clr-namespace:FontAwesome" 
+             x:Class="EasyLife.Cells.Styling.HomeView">
+    
+  <ContentView.Content>
+        <Frame BackgroundColor="{DynamicResource Hintergrund_Seite_Home}" CornerRadius="20" Padding="0">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer x:Name="Seite" Command="{Binding Source={RelativeSource AncestorType={x:Type pagemodels:Styling_Color_PageModel}}, Path=Choose_Command}"/>
+            </Frame.GestureRecognizers>
+            <StackLayout BackgroundColor="Transparent" Padding="0" Margin="5,10,5,0">
+
+                <Grid RowDefinitions="0,*,Auto" ColumnDefinitions="5,*,Auto,5" Margin="0,0,0,0" Padding="0" HeightRequest="80">
+                    <Frame Margin="0,0,0,0" BackgroundColor="{DynamicResource Hintergrund_Bearbeiten_Home}" CornerRadius="20" Padding="0" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Rand_Bearbeiten_Home}" Grid.Row="1" Grid.Column="1">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer x:Name="Bearbeiten" Command="{Binding Source={RelativeSource AncestorType={x:Type pagemodels:Styling_Color_PageModel}}, Path=Choose_Command}"/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="Bearbeiten" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Text_Bearbeiten_Home}" FontAttributes="Bold" FontSize="Small" />
+                    </Frame>
+                    <Frame CornerRadius="20" HasShadow="True" BackgroundColor="{DynamicResource Hintergrund_Transaktion_Home}"  BorderColor="{DynamicResource Rand_Transaktion_Home}" Padding="10" Grid.Row="1" Grid.Column="2" Grid.RowSpan="2">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer x:Name="Transaktion_Positiv" Command="{Binding Source={RelativeSource AncestorType={x:Type pagemodels:Styling_Color_PageModel}}, Path=Choose_Command}"/>
+                        </Frame.GestureRecognizers>
+                        <Grid ColumnDefinitions="10,*,Auto,10" RowDefinitions="Auto,*" Padding="0" HorizontalOptions="Center">
+                            <Grid Grid.Column="2" Grid.Row="0" HorizontalOptions="Fill" VerticalOptions="Center">
+                                <Frame BackgroundColor="{DynamicResource Hintergrund_Positiver_Betrag_Transaktion_Home}" HorizontalOptions="End" CornerRadius="30" Padding="1" VerticalOptions="Center" BorderColor="{DynamicResource Rand_Positiver_Betrag_Transaktion_Home}">
+                                    <Grid ColumnDefinitions="5,Auto,Auto,5" HorizontalOptions="Center" VerticalOptions="Center">
+                                        <Label VerticalOptions="Center"
+                                FontSize="Body"
+                                Grid.Column="1"
+                                Text="1000"
+                                TextColor="{DynamicResource Text_Positiver_Betrag_Transaktion_Home}"
+                                FontAttributes="Bold"/>
+                                        <Label VerticalOptions="Center"
+                                FontSize="Body"
+                                Grid.Column="2"
+                                Text="€"
+                                TextColor="{DynamicResource Text_Positiver_Betrag_Transaktion_Home}"
+                                FontAttributes="Bold"/>
+                                    </Grid>
+                                </Frame>
+                            </Grid>
+                            <Label Grid.Row="0" Text="Beispiel1" TextColor="{DynamicResource Text_Transaktion_Home}" VerticalOptions="Center" FontSize="Body" HorizontalOptions="Center" Grid.Column="1" FontAttributes="Bold" Padding="1"/>
+                            <Frame Grid.Row="1" Grid.ColumnSpan="4" VerticalOptions="Fill" HorizontalOptions="Fill" BackgroundColor="{DynamicResource Hintergrund_Detail_Transaktion_Home}" CornerRadius="10" Padding="1">
+                                <Label Text="Detail1" TextColor="{DynamicResource Text_Detail_Transaktion_Home}" VerticalOptions="Center" FontSize="Small" HorizontalOptions="Center" Grid.Column="1" FontAttributes="Bold" Padding="1"/>
+                            </Frame>
+                        </Grid>
+                    </Frame>
+                </Grid>
+
+                <Grid RowDefinitions="0,*,Auto" ColumnDefinitions="5,Auto,*,5" Margin="0,0,0,0" Padding="0" HeightRequest="80">
+                    <Frame Margin="0,0,0,0" BackgroundColor="{DynamicResource Hintergrund_Löschen_Home}" Padding="0" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Rand_Löschen_Home}" Grid.Row="1" Grid.Column="2">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer x:Name="Löschen" Command="{Binding Source={RelativeSource AncestorType={x:Type pagemodels:Styling_Color_PageModel}}, Path=Choose_Command}"/>
+                        </Frame.GestureRecognizers>
+
+                        <Label Text="Löschen" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Text_Löschen_Home}" FontAttributes="Bold" FontSize="Small"/>
+                    </Frame>
+                    <Frame CornerRadius="20" HasShadow="True" BackgroundColor="{DynamicResource Hintergrund_Transaktion_Home}"  BorderColor="{DynamicResource Rand_Transaktion_Home}" Padding="10" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer x:Name="Transaktion_Negativ" Command="{Binding Source={RelativeSource AncestorType={x:Type pagemodels:Styling_Color_PageModel}}, Path=Choose_Command}"/>
+                        </Frame.GestureRecognizers>
+                        <Grid ColumnDefinitions="10,*,Auto,10" RowDefinitions="Auto,*" Padding="0" HorizontalOptions="Center">
+                            <Grid Grid.Column="2" Grid.Row="0" HorizontalOptions="Fill" VerticalOptions="Center">
+                                <Frame BackgroundColor="{DynamicResource Hintergrund_Negativer_Betrag_Transaktion_Home}" HorizontalOptions="End" CornerRadius="30" Padding="1" VerticalOptions="Center" BorderColor="{DynamicResource Rand_Negativer_Betrag_Transaktion_Home}">
+                                    <Grid ColumnDefinitions="5,Auto,Auto,5" HorizontalOptions="Center" VerticalOptions="Center">
+                                        <Label VerticalOptions="Center"
+                                FontSize="Body"
+                                Grid.Column="1"
+                                Text="-500"
+                                TextColor="{DynamicResource Text_Negativer_Betrag_Transaktion_Home}"
+                                FontAttributes="Bold"/>
+                                        <Label VerticalOptions="Center"
+                                FontSize="Body"
+                                Grid.Column="2"
+                                Text="€"
+                                TextColor="{DynamicResource Text_Negativer_Betrag_Transaktion_Home}"
+                                FontAttributes="Bold"/>
+                                    </Grid>
+                                </Frame>
+                            </Grid>
+                            <Label Grid.Row="0" Text="Beispiel1" TextColor="{DynamicResource Text_Transaktion_Home}" VerticalOptions="Center" FontSize="Body" HorizontalOptions="Center" Grid.Column="1" FontAttributes="Bold" Padding="1"/>
+                            <Frame Grid.Row="1" Grid.ColumnSpan="4" VerticalOptions="Fill" HorizontalOptions="Fill" BackgroundColor="{DynamicResource Hintergrund_Detail_Transaktion_Home}" CornerRadius="10" Padding="1">
+                                <Label Text="Detail1" TextColor="{DynamicResource Text_Detail_Transaktion_Home}" VerticalOptions="Center" FontSize="Small" HorizontalOptions="Center" Grid.Column="1" FontAttributes="Bold" Padding="1"/>
+                            </Frame>
+                        </Grid>
+                    </Frame>
+                </Grid>
+                    
+                <Frame BackgroundColor="Transparent" Margin="0,0,0,0" Padding="0">
+                    <Button x:Name="MehrLaden" Text="Mehr laden" TextColor="{DynamicResource Text_MehrLaden_Home}" FontSize="Body" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" Padding="0"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type pagemodels:Styling_Color_PageModel}}, Path=Choose_Command}"/>
+                </Frame>
+
+                <Grid ColumnDefinitions="*,Auto,*" HeightRequest="60" Padding="0" VerticalOptions="End" HorizontalOptions="Center" Margin="0,0,0,-10">
+                    <Grid ColumnDefinitions="10,Auto,*" Grid.Column="0" Padding="0" VerticalOptions="Center" HeightRequest="80" Margin="0,0,0,0">
+                        <ImageButton x:Name="Budget" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="45" HeightRequest="45" Padding="0"
+                                     Command="{Binding Source={RelativeSource AncestorType={x:Type pagemodels:Styling_Color_PageModel}}, Path=Choose_Command}">
+                            <ImageButton.Source>
+                                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Wallet}" Color="{DynamicResource Vordergrund_Budget_Home}"/>
+                            </ImageButton.Source>
+                        </ImageButton>
+                    </Grid>
+                    <StackLayout Grid.Column="1" Margin="0,0,0,10">
+                        <Frame CornerRadius="50"  Padding="5" BackgroundColor="{DynamicResource Hintergrund_Saldo_Home}" HorizontalOptions="Center" HasShadow="True" xct:ShadowEffect.Color="Green">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer x:Name="Saldo" Command="{Binding Source={RelativeSource AncestorType={x:Type pagemodels:Styling_Color_PageModel}}, Path=Choose_Command}"/>
+                            </Frame.GestureRecognizers>
+                            <StackLayout>
+                                <StackLayout Orientation="Horizontal" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Label Text="Stand : " TextColor="{DynamicResource Text_Saldo_Home}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    <Label Text="42" TextColor="Green" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    <Label Text="€" TextColor="Green" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center" Margin="20,0,20,0">
+                                    <Label Text="Montag, 30.4.2099" TextColor="{DynamicResource Text_Saldo_Home}" FontSize="Subtitle" FontAttributes="None" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center">
+                                    </Label>
+                                </StackLayout>
+                            </StackLayout>   
+                        </Frame>
+                    </StackLayout>
+                    <Grid ColumnDefinitions="*,Auto,10" Grid.Column="2" Padding="0" VerticalOptions="Center" HeightRequest="80" Margin="0,5,0,0">
+                        <ImageButton x:Name="Hinzufügen" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="45" HeightRequest="45" Padding="0" BackgroundColor="Transparent"
+                                     Command="{Binding Source={RelativeSource AncestorType={x:Type pagemodels:Styling_Color_PageModel}}, Path=Choose_Command}">
+                            <ImageButton.Source>
+                                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.CirclePlus}" Color="{DynamicResource Vordergrund_Hinzufügen_Home}"/>
+                            </ImageButton.Source>
+                        </ImageButton>
+                    </Grid>
+                </Grid>
+
+            </StackLayout>
+        </Frame>
+    </ContentView.Content>
+</ContentView>

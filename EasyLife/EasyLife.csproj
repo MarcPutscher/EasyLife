@@ -24,6 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CarouselView.FormsPlugin" Version="6.0.0" />
+    <PackageReference Include="ColorPicker.Xamarin.Forms" Version="1.3.4.21" />
     <PackageReference Include="FreshMvvm" Version="4.0.1" />
     <PackageReference Include="itext7" Version="8.0.2" />
     <PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.2" />
@@ -47,14 +49,17 @@
     <Compile Update="Cells\GroupeTotal_Cell.xaml.cs">
       <DependentUpon>GroupeTotal_Cell.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Pages\Popup\CustomePromt_Popup.xaml.cs">
+      <DependentUpon>CustomePromt_Popup.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Popup\CustomeAlert_Popup.xaml.cs">
+      <DependentUpon>CustomeAlert_Popup.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Popup\CustomeAktionSheet_Popup.xaml.cs">
+      <DependentUpon>CustomeAktionSheet_Popup.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\Popup\Budget_Poup.xaml.cs">
       <DependentUpon>Budget_Poup.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Popup\Home_Remove_Popup.xaml.cs">
-      <DependentUpon>Home_Remove_Popup.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Popup\Home_Edit_Popup.xaml.cs">
-      <DependentUpon>Home_Edit_Popup.xaml</DependentUpon>
     </Compile>
     <Compile Update="Pages\Popup\MetaData_Popup.xaml.cs">
       <DependentUpon>MetaData_Popup.xaml</DependentUpon>
@@ -64,9 +69,6 @@
     </Compile>
     <Compile Update="Pages\Edit_Order_Page.xaml.cs">
       <DependentUpon>Edit_Order_Page.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Popup\Datamanagment_Popup.xaml.cs">
-      <DependentUpon>Datamanagment_Popup.xaml</DependentUpon>
     </Compile>
     <Compile Update="Pages\Home_Page.xaml.cs">
       <DependentUpon>Home_Page.xaml</DependentUpon>
@@ -103,6 +105,15 @@
     <EmbeddedResource Update="Cells\Stackholder_Cell.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Cells\Styling\ErrorView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Cells\Styling\HomeView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Cells\Styling\PopupView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Cells\Total_Cell.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -122,9 +133,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\Popup\Filter_Popup.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Popup\Grouping_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\Master_Page.xaml">

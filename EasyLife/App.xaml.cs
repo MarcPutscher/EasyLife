@@ -1,4 +1,4 @@
-﻿using EasyLife.PageModels;
+﻿ using EasyLife.PageModels;
 using EasyLife.Pages;
 using EasyLife.Services;
 using FreshMvvm;
@@ -18,6 +18,83 @@ namespace EasyLife
             MainPage = new Master_Page();
 
             //Definiert die Farben in der App.
+
+            //Popup
+            dictionary["Vordergrund_Cancel_Popup"] = Preferences.Get("Vordergrund_Cancel_Popup", "#710117");
+            dictionary["Hintergrund_Cancel_Popup"] = Preferences.Get("Hintergrund_Cancel_Popup", Color.Black.ToHex());
+            dictionary["Text_Titel_Popup"] = Preferences.Get("Text_Titel_Popup", "#cbcdcb");
+            dictionary["Hintergrund_Content_Popup"] = Preferences.Get("Hintergrund_Content_Popup", "#0b1c48");
+            dictionary["Rand_Content_Popup"] = Preferences.Get("Rand_Content_Popup", "#2b6ad0");
+            dictionary["Text_Content_Popup"] = Preferences.Get("Text_Content_Popup", "#ecd5bb");
+            dictionary["Subtext_Content_Popup"] = Preferences.Get("Subtext_Content_Popup", "#ecd5bb");
+            dictionary["Hintertgrund_Button_Popup"] = Preferences.Get("Hintertgrund_Button_Popup", "#0b1c48");
+            dictionary["Rand_Button_Popup"] = Preferences.Get("Rand_Button_Popup", "#2b6ad0");
+            dictionary["Text_Button_Popup"] = Preferences.Get("Text_Button_Popup", "#138b83");
+
+            //Home
+            dictionary["Hintergrund_Seite_Home"] = Preferences.Get("Hintergrund_Seite_Home", Color.DarkSlateGray.ToHex());
+            dictionary["Hintergrund_Bearbeiten_Home"] = Preferences.Get("Hintergrund_Bearbeiten_Home", Color.Green.ToHex());
+            dictionary["Rand_Bearbeiten_Home"] = Preferences.Get("Rand_Bearbeiten_Home", Color.DarkGreen.ToHex());
+            dictionary["Text_Bearbeiten_Home"] = Preferences.Get("Text_Bearbeiten_Home", Color.White.ToHex());
+            dictionary["Hintergrund_Löschen_Home"] = Preferences.Get("Hintergrund_Löschen_Home", Color.Red.ToHex());
+            dictionary["Rand_Löschen_Home"] = Preferences.Get("Rand_Löschen_Home", Color.DarkRed.ToHex());
+            dictionary["Text_Löschen_Home"] = Preferences.Get("Text_Löschen_Home", Color.White.ToHex());
+            dictionary["Hintergrund_Transaktion_Home"] = Preferences.Get("Hintergrund_Transaktion_Home", Color.Gray.ToHex());
+            dictionary["Rand_Transaktion_Home"] = Preferences.Get("Rand_Transaktion_Home", Color.DarkGray.ToHex());
+            dictionary["Text_Transaktion_Home"] = Preferences.Get("Text_Transaktion_Home", Color.Black.ToHex());
+            dictionary["Hintergrund_Detail_Transaktion_Home"] = Preferences.Get("Hintergrund_Detail_Transaktion_Home", Color.LightGray.ToHex());
+            dictionary["Text_Detail_Transaktion_Home"] = Preferences.Get("Text_Detail_Transaktion_Home", Color.Black.ToHex());
+            dictionary["Hintergrund_Positiver_Betrag_Transaktion_Home"] = Preferences.Get("Hintergrund_Positiver_Betrag_Transaktion_Home", Color.MediumSeaGreen.ToHex());
+            dictionary["Rand_Positiver_Betrag_Transaktion_Home"] = Preferences.Get("Rand_Positiver_Betrag_Transaktion_Home", Color.ForestGreen.ToHex());
+            dictionary["Text_Positiver_Betrag_Transaktion_Home"] = Preferences.Get("Text_Positiver_Betrag_Transaktion_Home", Color.Black.ToHex());
+            dictionary["Hintergrund_Negativer_Betrag_Transaktion_Home"] = Preferences.Get("Hintergrund_Negativer_Betrag_Transaktion_Home", Color.Salmon.ToHex());
+            dictionary["Rand_Negativer_Betrag_Transaktion_Home"] = Preferences.Get("Rand_Negativer_Betrag_Transaktion_Home", Color.Red.ToHex());
+            dictionary["Text_Negativer_Betrag_Transaktion_Home"] = Preferences.Get("Text_Negativer_Betrag_Transaktion_Home", Color.Black.ToHex());
+            dictionary["Text_MehrLaden_Home"] = Preferences.Get("Text_MehrLaden_Home", Color.Black.ToHex());
+            dictionary["Vordergrund_Budget_Home"] = Preferences.Get("Vordergrund_Budget_Home", Color.SaddleBrown.ToHex());
+            dictionary["Hintergrund_Saldo_Home"] = Preferences.Get("Hintergrund_Saldo_Home", Color.Black.ToHex());
+            dictionary["Text_Saldo_Home"] = Preferences.Get("Text_Saldo_Home", Color.White.ToHex());
+            dictionary["Vordergrund_Hinzufügen_Home"] = Preferences.Get("Vordergrund_Hinzufügen_Home", Color.Orange.ToHex());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             dictionary["App_Backgroundcolor"] = Preferences.Get("App_Backgroundcolor", "#1d0e21");
 

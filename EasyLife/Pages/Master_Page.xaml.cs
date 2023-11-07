@@ -20,7 +20,6 @@ namespace EasyLife.Pages
             Routing.RegisterRoute(nameof(Home_Page), typeof(Home_Page));
             Routing.RegisterRoute(nameof(Add_Item_Page), typeof(Add_Item_Page));
             Routing.RegisterRoute(nameof(Viewtime_Popup), typeof(Viewtime_Popup));
-            Routing.RegisterRoute(nameof(Grouping_Popup), typeof(Grouping_Popup));
             Routing.RegisterRoute(nameof(Settings_Page), typeof(Settings_Page));
             Routing.RegisterRoute(nameof(Trashcan_Page), typeof(Trashcan_Page));
             Routing.RegisterRoute(nameof(Edit_Item_Page), typeof(Edit_Item_Page));

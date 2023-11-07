@@ -1,5 +1,6 @@
 ﻿using EasyLife.Helpers;
 using EasyLife.Models;
+using EasyLife.Pages;
 using EasyLife.Services;
 using FreshMvvm;
 using MvvmHelpers;
@@ -160,12 +161,17 @@ namespace EasyLife.PageModels
                 }
 
                 /// Wenn es Transaktionen gibt
-                bool value = await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Warnung!", "Wollen Sie wirklich alle Transaktionen im Papierkorb entfernen?", "Ja", "Nein");
+                var value = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Warnung!",300,350,"Ja","Nein", "Wollen Sie wirklich alle Transaktionen im Papierkorb entfernen?"));
+
+                if(value == null)
+                {
+                    return;
+                }
 
                 /// Wenn die Antwort Ja ist, dann sollen alle Transaktionen im Papierkorb gelöscht werden
                 /// Es zeigt das Ladezeichen an solange die Transaktionen gelöscht werden
                 /// Es geht durch die Liste an Transaktionen die im Papierkorb sind durch und löscht jede einzelne
-                if (value == true)
+                if ((bool)value == true)
                 {
                     IsBusy = true;
 
@@ -307,9 +313,14 @@ namespace EasyLife.PageModels
                         message = "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
                     }
 
-                    bool value = await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Warnung!", message , "Ja", "Nein");
+                    var value = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Warnung!", 300, 550, "Ja", "Nein", message));
 
-                    if (value == true)
+                    if(value ==  null)
+                    {
+                        return;
+                    }
+
+                    if ((bool)value == true)
                     {
                         IsBusy = true;
 
@@ -402,8 +413,14 @@ namespace EasyLife.PageModels
                 }
                 else
                 {
-                    bool value = await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Warnung!", "Wollen Sie wirklich diese Transaktionen entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "", "Ja", "Nein");
-                    if (value == true)
+                    var value = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Warnung!", 300, 450, "Ja", "Nein", "Wollen Sie wirklich diese Transaktionen entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + ""));
+
+                    if(value == null)
+                    {
+                        return;
+                    }
+
+                    if ((bool)value == true)
                     {
                         IsBusy = true;
 
@@ -418,7 +435,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -450,9 +467,13 @@ namespace EasyLife.PageModels
                         message = "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag wiederherstellen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
                     }
 
-                    bool value = await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Wiederherstellen", message, "Ja", "Nein");
+                    var value = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Wiederherstellen", 300, 550, "Ja", "Nein", message));
 
-                    if (value == true)
+                    if (value == null)
+                    {
+                        return;
+                    }
+                    if ((bool)value == true)
                     {
                         IsBusy = true;
 
@@ -524,9 +545,13 @@ namespace EasyLife.PageModels
                 }
                 else
                 {
-                    bool value = await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Wiederherstellen", "Wollen Sie wirklich diese Transaktionen wiederherstellen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "", "Ja", "Nein");
+                    var value = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Wiederherstellen", 300, 350, "Ja", "Nein", "Wollen Sie wirklich diese Transaktionen wiederherstellen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + ""));
 
-                    if (value == true)
+                    if(value == null)
+                    {
+                        return;
+                    }
+                    if ((bool)value == true)
                     {
                         IsBusy = true;
 
@@ -542,7 +567,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -650,7 +675,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 IsBusy = false;
             }
@@ -784,7 +809,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 IsBusy = false;
             }

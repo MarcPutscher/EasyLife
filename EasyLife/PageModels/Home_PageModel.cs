@@ -564,7 +564,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -572,14 +572,20 @@ namespace EasyLife.PageModels
         {
             try
             {
-                var result = await Shell.Current.ShowPopupAsync(new Grouping_Popup(GroupingOption));
+                var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Anordnung",300,new List<string>() { "Sortieren nach Datum", "Sortieren nach Zweck"}));
 
                 if(result == null)
                 {
                     return;
                 }
-
-                GroupingOption = (int)result;
+                if((string)result == "Sortieren nach Datum")
+                {
+                    GroupingOption = 0;
+                }
+                else
+                {
+                    GroupingOption = 1;
+                }
 
                 Load_Progress.Clear();
 
@@ -595,7 +601,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -611,7 +617,7 @@ namespace EasyLife.PageModels
 
                     int capcity = 0;
 
-                    string message = null;
+                    string[] message = null;
 
                     foreach (Transaktion trans in transaktion_list)
                     {
@@ -630,12 +636,21 @@ namespace EasyLife.PageModels
 
                     if(capcity == transaktion_list2.Count)
                     {
-                        var result = await Shell.Current.ShowPopupAsync(new Home_Remove_Popup(true, true, false));
+                        var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Transaktion löschen",370, new List<string>() { "Diese Transaktion entfernen", "Alle mit dieser Auftrag-ID entfernen"}));
 
-                        if (result == "Diese Transaktion entfernen")
+                        if (result == null)
                         {
-                            bool value = await Shell.Current.DisplayAlert("Entfernen", "Wollen Sie diese Transaktion wirklich entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "", "Ja", "Nein");
-                            if (value == true)
+                            return;
+                        }
+                        if ((string)result == "Diese Transaktion entfernen")
+                        {
+                            var value = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Entfernen", 300, 350, "Ja", "Nein", new string[] { "Wollen Sie diese Transaktion wirklich entfernen?", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "" }));
+
+                            if (value == null)
+                            {
+                                return;
+                            }
+                            if ((bool)value == true)
                             {
                                 item.Content_Visibility = false;
                                 await ContentService.Edit_Transaktion(item);
@@ -670,28 +685,29 @@ namespace EasyLife.PageModels
 
                                 await Refresh();
                             }
-                            else
-                            {
-                                return;
-                            }
                         }
-                        if (result == "Alle mit dieser Auftrag-ID entfernen")
+                        if ((string)result == "Alle mit dieser Auftrag-ID entfernen")
                         {
                             if(item.Auftrags_Option == 1)
                             {
-                                message = "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
+                                message = new string[] { "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "" };
                             }
                             if (item.Auftrags_Option == 2)
                             {
-                                message = "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + "";
+                                message = new string[] { "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + "" };
                             }
                             if (item.Auftrags_Option == 3)
                             {
-                                message = "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
+                                message = new string[] { "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "" };
                             }
 
-                            bool value = await Shell.Current.DisplayAlert("Entfernen", message , "Ja", "Nein");
-                            if (value == true)
+                            var value = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Entfernen", 300, 420, "Ja", "Nein", message));
+
+                            if (value == null)
+                            {
+                                return;
+                            }
+                            if ((bool)value == true)
                             {
                                 List<Transaktion> all = new List<Transaktion>(await ContentService.Get_all_enabeled_Transaktion());
 
@@ -723,19 +739,24 @@ namespace EasyLife.PageModels
                                 return;
                             }
                         }
-                        else
-                        {
-                            return;
-                        }
                     }
                     else
                     {
-                        var result = await Shell.Current.ShowPopupAsync(new Home_Remove_Popup(true, true, true));
+                        var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Transaktion löschen", 370, new List<string>() { "Diese Transaktion entfernen", "Alle mit dieser Auftrag-ID entfernen" , "Alle mit dieser Auftrag-ID ab dieser Transaktion entfernen" }));
 
-                        if (result == "Diese Transaktion entfernen")
+                        if(result == null)
                         {
-                            bool value = await Shell.Current.DisplayAlert("Entfernen", "Wollen Sie diese Transaktion wirklich entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "", "Ja", "Nein");
-                            if (value == true)
+                            return;
+                        }
+                        if ((string)result == "Diese Transaktion entfernen")
+                        {
+                            var value = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Entfernen", 300, 420, "Ja", "Nein", new string[] { "Wollen Sie diese Transaktion wirklich entfernen?", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "" }));
+
+                            if(value == null)
+                            {
+                                return;
+                            }
+                            if ((bool)value == true)
                             {
                                 item.Content_Visibility = false;
                                 await ContentService.Edit_Transaktion(item);
@@ -766,28 +787,29 @@ namespace EasyLife.PageModels
 
                                 await Refresh();
                             }
-                            else
-                            {
-                                return;
-                            }
                         }
-                        if (result == "Alle mit dieser Auftrag-ID entfernen")
+                        if ((string)result == "Alle mit dieser Auftrag-ID entfernen")
                         {
                             if (item.Auftrags_Option == 1)
                             {
-                                message = "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
+                                message = new string[] { "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "" };
                             }
                             if (item.Auftrags_Option == 2)
                             {
-                                message = "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + "";
+                                message = new string[] {"Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?","Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + ""};
                             }
                             if (item.Auftrags_Option == 3)
                             {
-                                message = "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
+                                message = new string[] { "Wollen Sie wirklich alle Transaktionen mit diese Auftrag-ID entfernen?","Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + ""};
                             }
 
-                            bool value = await Shell.Current.DisplayAlert("Entfernen", message, "Ja", "Nein");
-                            if (value == true)
+                            var value = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Entfernen", 300, 420, "Ja", "Nein", message));
+
+                            if (value == null)
+                            {
+                                return;
+                            }
+                            if ((bool)value == true)
                             {
                                 List<Transaktion> all = new List<Transaktion>(await ContentService.Get_all_enabeled_Transaktion());
 
@@ -814,28 +836,29 @@ namespace EasyLife.PageModels
 
                                 await Refresh();
                             }
-                            else
-                            {
-                                return;
-                            }
                         }
-                        if (result == "Alle mit dieser Auftrag-ID ab dieser Transaktion entfernen")
+                        if ((string)result == "Alle mit dieser Auftrag-ID ab dieser Transaktion entfernen")
                         {
                             if (item.Auftrags_Option == 1)
                             {
-                                message = "Wollen Sie wirklich alle folgenden Transaktionen mit dieser Auftrag-Id entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
+                                message = new string[] { "Wollen Sie wirklich alle folgenden Transaktionen mit dieser Auftrag-Id entfernen?", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "" };
                             }
                             if (item.Auftrags_Option == 2)
                             {
-                                message = "Wollen Sie wirklich alle folgenden Transaktionen mit dieser Auftrag-Id entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + "";
+                                message = new string[] { "Wollen Sie wirklich alle folgenden Transaktionen mit dieser Auftrag-Id entfernen?", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + "" };
                             }
                             if (item.Auftrags_Option == 3)
                             {
-                                message = "Wollen Sie wirklich alle folgenden Transaktionen mit dieser Auftrag-Id entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
+                                message = new string[] { "Wollen Sie wirklich alle folgenden Transaktionen mit dieser Auftrag-Id entfernen?", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "" };
                             }
 
-                            bool value = await Shell.Current.DisplayAlert("Entfernen", message , "Ja", "Nein");
-                            if (value == true)
+                            var value = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Entfernen", 300, 420, "Ja", "Nein", message));
+
+                            if (value == null)
+                            {
+                                return;
+                            }
+                            if ((bool)value == true)
                             {
                                 Transaktion newlasttransaktion = new Transaktion();
 
@@ -869,30 +892,27 @@ namespace EasyLife.PageModels
                                 return;
                             }
                         }
-                        else
-                        {
-                            return;
-                        }
                     }
                 }
                 else
                 {
-                    bool value = await Shell.Current.DisplayAlert("Entfernen", "Wollen Sie diese Transaktion wirklich entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "", "Ja", "Nein");
-                    if (value == true)
+                    var value = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Entfernen", 300, 420, "Ja", "Nein", new string[] { "Wollen Sie diese Transaktion wirklich entfernen?", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + ""}));
+
+                    if (value == null)
+                    {
+                        return;
+                    }
+                    if ((bool)value == true)
                     {
                         item.Content_Visibility = false;
                         await ContentService.Edit_Transaktion(item);
                         await Refresh();
                     }
-                    else
-                    {
-                        return;
-                    }
                 }
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -930,9 +950,14 @@ namespace EasyLife.PageModels
 
                     if(capcity == transaktion_list2.Count)
                     {
-                        var result = await Shell.Current.ShowPopupAsync(new Home_Edit_Popup(true,true,false,true));
+                        var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Transaktion bearbeiten", 380, new List<string>() { "Diese Transaktion bearbeiten", "Alle mit dieser Auftrags-ID bearbeiten" , "Alle mit dieser Auftrags-ID um eine bestimmte Zeit versetzten" }));
 
-                        if (result == "Diese Transaktion bearbeiten" && item != null)
+                        if(result == null)
+                        {
+                            return;
+                        }
+
+                        if ((string)result == "Diese Transaktion bearbeiten" && item != null)
                         {
                             await PassingTransaktionService.Remove_All_Transaktion();
 
@@ -942,7 +967,7 @@ namespace EasyLife.PageModels
 
                         }
 
-                        if (result == "Alle mit dieser Auftrags-ID bearbeiten" && item != null)
+                        if ((string)result == "Alle mit dieser Auftrags-ID bearbeiten" && item != null)
                         {
                             await PassingTransaktionService.Remove_All_Transaktion();
 
@@ -951,7 +976,7 @@ namespace EasyLife.PageModels
                             await Shell.Current.GoToAsync($"{nameof(Edit_Item_With_Order_Page)}?TransaktionID={item.Id}&OrderID={item.Auftrags_id.Substring(0, item.Auftrags_id.IndexOf("."))}&EditID=2");
                         }
 
-                        if(result == "Alle mit dieser Auftrags-ID um eine bestimmte Zeit versetzten")
+                        if((string)result == "Alle mit dieser Auftrags-ID um eine bestimmte Zeit versetzten")
                         {
                             var result1 = await Shell.Current.ShowPopupAsync(new Timespane_Popup(item,transaktion_list3));
 
@@ -969,17 +994,17 @@ namespace EasyLife.PageModels
                                 await Notificater("Bei der Versetzung der Transaktionen um ein bestimmte Zeit ist ein Fehler aufgetretten.");
                             }
                         }
-
-                        else
-                        {
-                            return;
-                        }
                     }
                     else
                     {
-                        var result = await Shell.Current.ShowPopupAsync(new Home_Edit_Popup(true, true, true, true));
+                        var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Transaktion bearbeiten", 450, new List<string>() { "Diese Transaktion bearbeiten", "Alle mit dieser Auftrags-ID bearbeiten", "Alle mit dieser Auftrags-ID ab dieser Transaktion bearbeiten", "Alle mit dieser Auftrags-ID um eine bestimmte Zeit versetzten" }));
 
-                        if (result == "Diese Transaktion bearbeiten" && item != null)
+                        if (result == null)
+                        {
+                            return;
+                        }
+
+                        if ((string)result == "Diese Transaktion bearbeiten" && item != null)
                         {
                             await PassingTransaktionService.Remove_All_Transaktion();
 
@@ -988,7 +1013,7 @@ namespace EasyLife.PageModels
                             await Shell.Current.GoToAsync($"{nameof(Edit_Item_With_Order_Page)}?TransaktionID={item.Id}&OrderID={item.Auftrags_id.Substring(0, item.Auftrags_id.IndexOf("."))}&EditID=1");
                         }
 
-                        if (result == "Alle mit dieser Auftrags-ID bearbeiten" && item != null)
+                        if ((string)result == "Alle mit dieser Auftrags-ID bearbeiten" && item != null)
                         {
                             await PassingTransaktionService.Remove_All_Transaktion();
 
@@ -997,7 +1022,7 @@ namespace EasyLife.PageModels
                             await Shell.Current.GoToAsync($"{nameof(Edit_Item_With_Order_Page)}?TransaktionID={item.Id}&OrderID={item.Auftrags_id.Substring(0, item.Auftrags_id.IndexOf("."))}&EditID=2");
                         }
 
-                        if (result == "Alle mit dieser Auftrags-ID ab dieser Transaktion bearbeiten" && item != null)
+                        if ((string)result == "Alle mit dieser Auftrags-ID ab dieser Transaktion bearbeiten" && item != null)
                         {
                             await PassingTransaktionService.Remove_All_Transaktion();
 
@@ -1006,7 +1031,7 @@ namespace EasyLife.PageModels
                             await Shell.Current.GoToAsync($"{nameof(Edit_Item_With_Order_Page)}?TransaktionID={item.Id}&OrderID={item.Auftrags_id.Substring(0, item.Auftrags_id.IndexOf("."))}&EditID=3");
                         }
 
-                        if (result == "Alle mit dieser Auftrags-ID um eine bestimmte Zeit versetzten")
+                        if ((string)result == "Alle mit dieser Auftrags-ID um eine bestimmte Zeit versetzten")
                         {
                             var result1 = await Shell.Current.ShowPopupAsync(new Timespane_Popup(item, transaktion_list3));
 
@@ -1033,9 +1058,13 @@ namespace EasyLife.PageModels
                 }
                 else
                 {
-                    bool value = await Application.Current.MainPage.DisplayAlert("Bearbeiten", "Wollen Sie wirklich diese Transaktionen bearbeiten?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "", "Ja", "Nein");
+                    var result = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Bearbeiten", 300, 400, "Ja", "Nein", new string[] {"Wollen Sie wirklich diese Transaktionen bearbeiten?", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "" }));
 
-                    if (value == true && item != null)
+                    if (result == null)
+                    {
+                        return;
+                    }
+                    if ((bool)result == true && item != null)
                     {
                         await PassingTransaktionService.Remove_All_Transaktion();
 
@@ -1052,7 +1081,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 await PassingOrderService.Remove_All_Order();
 
@@ -1419,7 +1448,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -1448,100 +1477,13 @@ namespace EasyLife.PageModels
                     {
                         await Refresh();
 
-                        //Transaktion.Clear();
-
-                        //var transaktionscontent = await ContentService.Get_all_enabeled_Transaktion();
-
-                        //List<Transaktion> sorted_after_month_transaktionscontent = new List<Transaktion>();
-
-                        //sorted_after_month_transaktionscontent.Clear();
-
-                        //foreach (var trans in transaktionscontent)
-                        //{
-                        //    if (trans.Datum.Year == Current_Viewtime.Year)
-                        //    {
-                        //        if (trans.Datum.ToString("MMMM", new CultureInfo("de-DE")) == Current_Viewtime.Month)
-                        //        {
-                        //            if (GroupingOption == 0)
-                        //            {
-                        //                trans.Pseudotext = trans.Zweck;
-                        //                sorted_after_month_transaktionscontent.Add(trans);
-                        //            }
-                        //            else
-                        //            {
-                        //                trans.Pseudotext = trans.Datumanzeige;
-                        //                sorted_after_month_transaktionscontent.Add(trans);
-                        //            }
-                        //        }
-                        //        if (Current_Viewtime.Month == "")
-                        //        {
-                        //            if (GroupingOption == 0)
-                        //            {
-                        //                trans.Pseudotext = trans.Zweck;
-                        //                sorted_after_month_transaktionscontent.Add(trans);
-                        //            }
-                        //            else
-                        //            {
-                        //                trans.Pseudotext = trans.Datumanzeige;
-                        //                sorted_after_month_transaktionscontent.Add(trans);
-                        //            }
-                        //        }
-                        //    }
-                        //}
-
-                        //Transaktion.AddRange(sorted_after_month_transaktionscontent);
-
-                        //await Add_to_Groups();
-
-
-                        //if (Transaktion.Count() == 0)
-                        //{
-                        //    Kein_Ergebnis_Transaktion_Status = true;
-
-                        //    Kein_Ergebnis_Suggestion_Status = false;
-
-                        //    List_of_Transaktion_Status = false;
-                        //}
-                        //else
-                        //{
-                        //    Kein_Ergebnis_Suggestion_Status = false;
-                        //    Kein_Ergebnis_Transaktion_Status = false;
-                        //    List_of_Transaktion_Status = true;
-                        //}
-                        //ActivityIndicator_IsRunning = false;
-
-                        //ActivityIndicator_IsVisible = false;
-
-                        //if (Transaktion.Count() == 0)
-                        //{
-                        //    Title = "Haushaltsbuch";
-                        //}
-                        //else
-                        //{
-                        //    if (String.IsNullOrEmpty(Current_Viewtime.Year.ToString()) == false && String.IsNullOrEmpty(Current_Viewtime.Month) == false)
-                        //    {
-                        //        Title = "Haushaltsbuch " + Current_Viewtime.Year + " " + Current_Viewtime.Month + "";
-                        //    }
-                        //    else
-                        //    {
-                        //        if (String.IsNullOrEmpty(Current_Viewtime.Year.ToString()) == true)
-                        //        {
-                        //            Title = "Haushaltsbuch";
-                        //        }
-                        //        if (String.IsNullOrEmpty(Current_Viewtime.Month.ToString()) == true)
-                        //        {
-                        //            Title = "Haushaltsbuch " + Current_Viewtime.Year + "";
-                        //        }
-                        //    }
-                        //}
-
                         return;
                     }
                 }
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -1570,7 +1512,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -1587,7 +1529,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -1612,7 +1554,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
 
         }
@@ -1643,7 +1585,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -1709,7 +1651,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -1728,7 +1670,7 @@ namespace EasyLife.PageModels
                     message = "Nach welchem Suchbegriff wollen Sie weiter im Haushaltsbuch suchen?\nAktueller Suchbegriff: "+Search_Text+"";
                 }
 
-                var result = await Shell.Current.DisplayPromptAsync(title,message,"Hinzufügen", "Verwerfen", "Hier eingeben",100,null,"");
+                var result = await Shell.Current.ShowPopupAsync(new CustomePromt_Popup(title,350,300,"Hinzufügen",null, "Hier Suchbegriff eingeben"));
 
                 if(result == null)
                 {
@@ -1736,21 +1678,23 @@ namespace EasyLife.PageModels
                 }
                 else
                 {
+                    string resultstring = (string)result;
+
                     if(String.IsNullOrWhiteSpace(Search_Text) == false)
                     {
                         Search_Text = Search_Text.Trim();
 
-                        Search_Text += "-" + result.Trim() + "";
+                        Search_Text += "-" + resultstring.Trim() + "";
                     }
                     else
                     {
-                        Search_Text = result;
+                        Search_Text = resultstring;
                     }
                 }
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -2085,30 +2029,34 @@ namespace EasyLife.PageModels
 
                 Transaktion.AddRange(sorted_after_month_transaktionscontent);
 
-                if (Transaktion.Count() == 0)
+                if (Kein_Ergebnis_Suggestion_Status != true && List_of_Suggestion_Status != true)
                 {
-                    List_of_Transaktion_Status = false;
-                    Kein_Ergebnis_Transaktion_Status = true;
-                    if (SuggestionCollection.Count() == 0)
+                    if (Transaktion.Count() == 0)
                     {
-                        SuggestionCollection.Clear();
+                        List_of_Transaktion_Status = false;
+                        Kein_Ergebnis_Transaktion_Status = true;
+                        if (SuggestionCollection.Count() == 0)
+                        {
+                            SuggestionCollection.Clear();
 
-                        SuggestionCollection.AddRange(await SearchSuggestionService.Get_all_Suggestion());
+                            SuggestionCollection.AddRange(await SearchSuggestionService.Get_all_Suggestion());
+                        }
+                    }
+                    else
+                    {
+                        await Add_to_Groups();
+
+                        Kein_Ergebnis_Transaktion_Status = false;
+                        List_of_Transaktion_Status = true;
+                        if (SuggestionCollection.Count() == 0)
+                        {
+                            SuggestionCollection.Clear();
+
+                            SuggestionCollection.AddRange(await SearchSuggestionService.Get_all_Suggestion());
+                        }
                     }
                 }
-                else
-                {
-                    await Add_to_Groups();
 
-                    Kein_Ergebnis_Transaktion_Status = false;
-                    List_of_Transaktion_Status = true;
-                    if (SuggestionCollection.Count() == 0)
-                    {
-                        SuggestionCollection.Clear();
-
-                        SuggestionCollection.AddRange(await SearchSuggestionService.Get_all_Suggestion());
-                    }
-                }
 
                 if (Transaktion.Count() == 0)
                 {
@@ -2137,7 +2085,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 IsBusy = false;
             }
@@ -2182,7 +2130,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 Current_Viewtime = new Viewtime() { Year = DateTime.Now.Year, Month = DateTime.Now.ToString("MMMM", new CultureInfo("de-DE")) };
 
@@ -2209,7 +2157,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -2278,7 +2226,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -2337,7 +2285,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -2413,7 +2361,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -2462,7 +2410,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -2481,7 +2429,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -2567,7 +2515,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -2599,7 +2547,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -2691,7 +2639,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -2782,7 +2730,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
