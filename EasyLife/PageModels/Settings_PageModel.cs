@@ -1060,7 +1060,7 @@ namespace EasyLife.PageModels
                 foreach (NotificationRequest pn in list_of_pending_notification)
                 {
                     DateTime time = (DateTime)pn.Schedule.NotifyTime;
-                    list_of_strings_of_pending_notification.Add("ID:" + pn.NotificationId + "| " + time.ToString("dddd, d.M.yyyy,  H:mm", new CultureInfo("de-DE")) + "Uhr");
+                    list_of_strings_of_pending_notification.Add("ID:" + pn.NotificationId + "| " + time.ToString("dddd, d.M.yyyy, H:mm", new CultureInfo("de-DE")) + "Uhr");
                 }
 
                 if (list_of_strings_of_pending_notification.Count() == 0)
@@ -1071,7 +1071,7 @@ namespace EasyLife.PageModels
                 {
                     try
                     {
-                        var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Benachrichtigungen", 370, list_of_strings_of_pending_notification));
+                        var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Benachrichtigungen", 390, list_of_strings_of_pending_notification));
 
                         if (result != null)
                         {
