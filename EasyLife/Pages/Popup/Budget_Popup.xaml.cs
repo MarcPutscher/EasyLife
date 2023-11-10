@@ -317,7 +317,6 @@ namespace EasyLife.Pages
                 }
             }
 
-
             budget_name_list = budget_names.ToArray();
 
             var result0 = await Shell.Current.DisplayActionSheet("Budget benennen", "Verwerfen", null, budget_name_list);

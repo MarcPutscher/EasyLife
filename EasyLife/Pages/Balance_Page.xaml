@@ -10,7 +10,7 @@
     x:Class="EasyLife.Pages.Balance_Page"
     xmlns:cells="clr-namespace:EasyLife.Cells"
     Title="{Binding Title}"
-    BackgroundColor="{DynamicResource Page_Backgroundcolor}"
+    BackgroundColor="{DynamicResource Hintergrund_Bilanz}"
     Padding="0">
 
     <ContentPage.BindingContext>
@@ -65,10 +65,10 @@
     <ContentPage.Content>
         <Grid  Padding="0" RowDefinitions="Auto,*,Auto">
 
-            <Grid ColumnDefinitions="10,125,*,80,*,100,10" Padding="10" HorizontalOptions="Fill" VerticalOptions="Center" BackgroundColor="DarkGray" IsVisible="{Binding Stackholder_Bundle_Visibility}" Grid.Row="0">
-                <Label Text="Zweck" TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="1"/>
-                <Label Text="Anzahl" TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="3"/>
-                <Label Text="Summe" TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="5"/>
+            <Grid ColumnDefinitions="10,125,*,80,*,100,10" Padding="10" HorizontalOptions="Fill" VerticalOptions="Center" BackgroundColor="{DynamicResource Hintergrund_Kopfzeile_Bilanz}" IsVisible="{Binding Stackholder_Bundle_Visibility}" Grid.Row="0">
+                <Label Text="Zweck" TextColor="{DynamicResource Text_Kopfzeile_Bilanz}" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="1"/>
+                <Label Text="Anzahl" TextColor="{DynamicResource Text_Kopfzeile_Bilanz}" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="3"/>
+                <Label Text="Summe" TextColor="{DynamicResource Text_Kopfzeile_Bilanz}" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="5"/>
             </Grid>
 
             <ScrollView
@@ -92,8 +92,8 @@
                 </ListView>
             </ScrollView>
 
-            <Grid ColumnDefinitions="*,Auto" Padding="10" HorizontalOptions="Fill" VerticalOptions="Center" BackgroundColor="DarkGray" IsVisible="{Binding Stackholder_Bundle_Visibility}" Grid.Row="2">
-                <Label Text="Restgeld : " TextColor="Black" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
+            <Grid ColumnDefinitions="*,Auto" Padding="10" HorizontalOptions="Fill" VerticalOptions="Center" BackgroundColor="{DynamicResource Hintergrund_Fußzeile_Bilanz}" IsVisible="{Binding Stackholder_Bundle_Visibility}" Grid.Row="2">
+                <Label Text="Restgeld : " TextColor="{DynamicResource Text_Fußzeile_Bilanz}" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
                 <Grid ColumnDefinitions="*,10,20" HorizontalOptions="Fill" VerticalOptions="Center" Grid.Column="1" ColumnSpacing="3">
                     <Label Text="{Binding Total}" TextColor="{Binding Evaluating_of_Totoal}" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
                     <Label Text="€" TextColor="{Binding Evaluating_of_Totoal}" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="1"/>

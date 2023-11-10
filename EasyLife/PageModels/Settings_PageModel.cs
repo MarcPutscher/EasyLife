@@ -15,6 +15,7 @@ using Xamarin.CommunityToolkit.Extensions;
 using System.IO;
 using EasyLife.Models;
 using System.Text;
+using Xamarin.Forms.Internals;
 
 namespace EasyLife.PageModels
 {
@@ -43,26 +44,26 @@ namespace EasyLife.PageModels
         {
             try
             {
-                var result = await Shell.Current.ShowPopupAsync(new Datamanagment_Popup());
+                var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Datenmanagment", 340, new List<string>() { "Backup erstellen", "Backup senden", "Backup einsehen", "Daten wiederherstellen" }));
 
                 if (result == null)
                 {
                     return;
                 }
 
-                if ((int)result == 1)
+                if ((string)result == "Backup erstellen")
                 {
                     await Create_Backup_Methode();
                 }
-                if ((int)result == 2)
+                if ((string)result == "Backup senden")
                 {
                     await Share_Backup_Methode();
                 }
-                if ((int)result == 3)
+                if ((string)result == "Daten wiederherstellen")
                 {
                     await Restore_Backup_Methode();
                 }
-                if ((int)result == 4)
+                if ((string)result == "Backup einsehen")
                 {
                     await Show_Content_of_Backup_Methode();
                 }
@@ -76,13 +77,16 @@ namespace EasyLife.PageModels
         {
             try
             {
-                var result0 = await Shell.Current.DisplayAlert("Backup erstellen", "Wollen Sie wirklich ein Backup manuell erstellen?", "Ja", "Nein");
+                var result0 = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Backup erstellen", 340, 250, "Ja", "Nein", "Wollen Sie wirklich ein Backup manuell erstellen?"));
 
-                if (result0 == true)
+                if (result0 == null)
+                {
+                    return;
+                }
+
+                if ((bool)result0 == true)
                 {
                     bool result = BackupService.Create_Backup(DateTime.Now.ToString("dd.MM.yyyy"));
-
-                    List<string> backup_list = new List<string>() { "Transaktionen", "Zwecken", "Benachrichtigungen", "Aufträgen", "Suchvorschlägen" };
 
                     if (result == false)
                     {
@@ -121,10 +125,11 @@ namespace EasyLife.PageModels
                     }
                     catch (Exception e)
                     {
-                        await Shell.Current.DisplayAlert("Fehler", "Es ist bei der erstellung des Backups ein Fehler aufgetretten.\nFehler:" + e.ToString() + "", "Verstanden");
+                        await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist bei der erstellung des Backups ein Fehler aufgetretten.\nFehler:" + e.ToString() + ""));
                     }
                 }
-                await Shell.Current.DisplayAlert("Fehler", "Es ist bei der erstellung des Backups ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist bei der erstellung des Backups ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -173,9 +178,9 @@ namespace EasyLife.PageModels
 
                     Button_name = Backup_name.ToArray();
 
-                    string result = await Shell.Current.DisplayActionSheet("Vorhandene Backups", "Zurück", null, Button_name);
+                    var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Vorhandene Backups", 350, Backup_name));
 
-                    if (result == "Zurück")
+                    if (result == null)
                     {
                         return;
                     }
@@ -187,7 +192,7 @@ namespace EasyLife.PageModels
                         }
                         else
                         {
-                            await Share.RequestAsync(new ShareFileRequest { Title = result, File = new ShareFile(dict[result]) });
+                            await Share.RequestAsync(new ShareFileRequest { Title = (string)result, File = new ShareFile(dict[(string)result]) });
                         }
                     }
                 }
@@ -198,7 +203,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist beim Senden des Backups ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist beim Senden des Backups ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -206,13 +211,23 @@ namespace EasyLife.PageModels
         {
             try
             {
-                var result0 = await Shell.Current.DisplayAlert("Warnung", "Wenn Sie die Daten vom Backup nehmen gehen alle vorhandenen Daten die jetzt in der App sind verloren.", "Verstanden", "Zurück");
+                var result0 = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Warnung", 350, 300, "Verstanden", "Zurück", "Wenn Sie die Daten vom Backup nehmen gehen alle vorhandenen Daten die jetzt in der App sind verloren."));
 
-                if (result0 == true)
+                if (result0 == null)
                 {
-                    var result1 = await Shell.Current.DisplayAlert("Warnung", "Sind Sie sich WIRKLICH SICHER, dass Sie die Appdaten mit dem letztem vorhandenem Backup überschreiben wollen.", "Ja", "Nein");
+                    return;
+                }
 
-                    if (result1 == true)
+                if ((bool)result0 == true)
+                {
+                    var result1 = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Warnung", 350, 300, "Ja", "Nein", "Sind Sie sich WIRKLICH SICHER, dass Sie die Appdaten mit dem letztem vorhandenem Backup überschreiben wollen."));
+
+                    if (result1 == null)
+                    {
+                        return;
+                    }
+
+                    if ((bool)result1 == true)
                     {
                         var result2 = await BackupService.Restore_Backup();
 
@@ -239,7 +254,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist bei der Wiederherstellung der Daten ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist bei der Wiederherstellung der Daten ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 Preferences.Set("Restored_Backup_Path", "");
 
@@ -296,9 +311,9 @@ namespace EasyLife.PageModels
 
                     while (indikator == false)
                     {
-                        string result = await Shell.Current.DisplayActionSheet("Vorhandene Backups", "Zurück", null, Button_name);
+                        var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Vorhandene Backups", 350, Backup_name));
 
-                        if (result == "Zurück")
+                        if (result == null)
                         {
                             indikator = true;
                         }
@@ -310,7 +325,9 @@ namespace EasyLife.PageModels
                             }
                             else
                             {
-                                List<List<object>> result1 = await BackupService.Show_Content_of_Backup(dict[result], DateTime.ParseExact(result.Substring(result.LastIndexOf("m") + 2), "dd.MM.yyyy", new CultureInfo("de-DE")));
+                                string result0string = (string)result;
+
+                                List<List<object>> result1 = await BackupService.Show_Content_of_Backup(dict[result0string], DateTime.ParseExact(result0string.Substring(result0string.LastIndexOf("m") + 2), "dd.MM.yyyy", new CultureInfo("de-DE")));
 
                                 if (result1 == null)
                                 {
@@ -322,7 +339,7 @@ namespace EasyLife.PageModels
                                 {
                                     string[] content = { };
 
-                                    List<string> contentlist = new List<string> { };
+                                    List<string[]> contentlist = new List<string[]>() { };
 
                                     Dictionary<string, string> contentdic = new Dictionary<string, string> { };
 
@@ -332,30 +349,38 @@ namespace EasyLife.PageModels
                                     {
                                         if (list[0].ToString() == "Transaktionen")
                                         {
-                                            contentlist.Add(list[0].ToString() + "\nerstellt: " + list[1] + " | gelöscht: " + list[2] + "\nStand : " + list[3] + "€\nStand des Briefumschlages: " + list[5]+"€");
+                                            contentlist.Add(new string[] { list[0].ToString(), "erstellt: " + list[1] + " | gelöscht: " + list[2] + "\nStand : " + list[3] + "€\nStand des Briefumschlages: " + list[5] + "€" });
 
-                                            contentdic.Add(contentlist.Last(), list[0].ToString());
+                                            contentdic.Add(list[0].ToString(), list[0].ToString());
 
                                             content1dic.Add(list[0].ToString(), list[4]);
                                         }
                                         else
                                         {
-                                            contentlist.Add(list[0].ToString() + "\nerstellt: " + list[1] + "| gelöscht: " + list[2] + "");
+                                            if (list[0].ToString() == "Stylingprofile")
+                                            {
+                                                contentlist.Add(new string[] { list[0].ToString(), "erstellt: " + list[1] + "" });
 
-                                            contentdic.Add(contentlist.Last(), list[0].ToString());
+                                                contentdic.Add(list[0].ToString(), list[0].ToString());
 
-                                            content1dic.Add(list[0].ToString(), list[3]);
+                                                content1dic.Add(list[0].ToString(), list[2]);
+                                            }
+                                            else
+                                            {
+                                                contentlist.Add(new string[] { list[0].ToString(), "erstellt: " + list[1] + " | gelöscht: " + list[2] + "" });
+
+                                                contentdic.Add(list[0].ToString(), list[0].ToString());
+
+                                                content1dic.Add(list[0].ToString(), list[3]);
+                                            }
                                         }
-
                                     }
-
-                                    content = contentlist.ToArray();
 
                                     bool indikator2 = false;
 
                                     while (indikator2 == false)
                                     {
-                                        var result2 = await Shell.Current.DisplayActionSheet("Stand: " + result + "", "Zurück", null, content);
+                                        var result2 = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Stand:" + result.ToString().Substring(result.ToString().IndexOf("m") + 1) + "", 350, contentlist));
 
                                         if (result2 == null)
                                         {
@@ -363,38 +388,43 @@ namespace EasyLife.PageModels
                                         }
                                         else
                                         {
-                                            if (result2 == "Zurück")
+                                            string result2string = (string)result2;
+
+                                            if (result2string == "Zurück")
                                             {
                                                 indikator2 = true;
                                             }
                                             else
                                             {
-                                                if (contentdic[result2] == "Transaktionen")
+                                                if (contentdic[result2string] == "Transaktionen")
                                                 {
                                                     string[] resultarray = { };
 
-                                                    List<string> resultlist = new List<string>();
+                                                    List<string[]> resultlist = new List<string[]>();
 
-                                                    List<Transaktion> transaktionslist = (List<Transaktion>)content1dic[contentdic[result2]];
+                                                    List<string> containstlist = new List<string>();
+
+
+                                                    List<Transaktion> transaktionslist = (List<Transaktion>)content1dic[contentdic[result2string]];
 
                                                     if (transaktionslist.Count() != 0)
                                                     {
                                                         foreach (Transaktion trans in transaktionslist)
                                                         {
-                                                            resultlist.Add("\nTransaktion " + trans.Id + "\n" + trans.Datumanzeige + "\n" + trans.Zweck + " | " + trans.Betrag + "€\n");
-                                                        }
+                                                            resultlist.Add(new string[] { "Transaktion " + trans.Id + "", "" + trans.Datumanzeige + "\n" + trans.Zweck + " | " + trans.Betrag + "€" });
 
-                                                        resultarray = resultlist.ToArray();
+                                                            containstlist.Add("Transaktion " + trans.Id + "");
+                                                        }
 
                                                         bool indikator3 = false;
 
                                                         while (indikator3 == false)
                                                         {
-                                                            var result3 = await Shell.Current.DisplayActionSheet("Transaktionen", "Zurück", null, resultarray);
+                                                            var result3 = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Transaktionen", 300, resultlist));
 
-                                                            if (resultlist.Contains(result3) == true)
+                                                            if (containstlist.Contains(result3) == true)
                                                             {
-                                                                Transaktion item = transaktionslist[resultlist.IndexOf(result3)];
+                                                                Transaktion item = transaktionslist[resultlist.IndexOf(resultlist[containstlist.IndexOf(result3)])];
 
                                                                 string message = null;
 
@@ -402,22 +432,22 @@ namespace EasyLife.PageModels
                                                                 {
                                                                     if (item.Auftrags_Option == 1)
                                                                     {
-                                                                        message = "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String +"\nWird zum Stand berechnet:"+item.Saldo_Visibility_String + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
+                                                                        message = "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird im Stand berechnet: " + item.Saldo_Visibility_String + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
                                                                     }
                                                                     if (item.Auftrags_Option == 2)
                                                                     {
-                                                                        message = "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird zum Stand berechnet:" + item.Saldo_Visibility_String + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + "";
+                                                                        message = "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird im Stand berechnet: " + item.Saldo_Visibility_String + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + "";
                                                                     }
                                                                     if (item.Auftrags_Option == 3)
                                                                     {
-                                                                        message = "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird zum Stand berechnet:" + item.Saldo_Visibility_String + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
+                                                                        message = "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird im Stand berechnet: " + item.Saldo_Visibility_String + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
                                                                     }
 
-                                                                    await Shell.Current.DisplayAlert("Transaktion " + item.Id + "", message, "Zurück");
+                                                                    await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Transaktion " + item.Id + "", 350, 500, null, null, message));
                                                                 }
                                                                 else
                                                                 {
-                                                                    await Shell.Current.DisplayAlert("Transaktion " + item.Id + "", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird zum Stand berechnet:" + item.Saldo_Visibility_String + "", "Zurück");
+                                                                    await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Transaktion " + item.Id + "", 350, 500, null, null, "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird im Stand berechnet: " + item.Saldo_Visibility_String + ""));
                                                                 }
                                                             }
                                                             else
@@ -428,30 +458,28 @@ namespace EasyLife.PageModels
                                                     }
                                                 }
 
-                                                if (contentdic[result2] == "Aufträge")
+                                                if (contentdic[result2string] == "Aufträge")
                                                 {
-                                                    string resultstring = string.Empty;
+                                                    List<string[]> resultstring = new List<string[]>();
 
-                                                    List<Auftrag> objektlist = (List<Auftrag>)content1dic[contentdic[result2]];
+                                                    List<Auftrag> objektlist = (List<Auftrag>)content1dic[contentdic[result2string]];
 
                                                     if (objektlist.Count() != 0)
                                                     {
                                                         foreach (Auftrag objekt in objektlist)
                                                         {
-                                                            resultstring += "\nAuftrag " + objekt.Id + "\nArt: " + objekt.Art_an_Wiederholungen + "\nAnzahl: " + objekt.Anzahl_an_Wiederholungen + "\nSpeziell: " + objekt.Speziell + "€\n";
+                                                            resultstring.Add(new string[] { "Auftrag " + objekt.Id + "", "Art: " + objekt.Art_an_Wiederholungen + "\nAnzahl: " + objekt.Anzahl_an_Wiederholungen + "\nSpeziell: " + objekt.Speziell + "" });
                                                         }
 
-                                                        await Shell.Current.DisplayAlert("Aufträge", resultstring, "Zurück");
+                                                        await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Aufträge", 350, 0, null, null, resultstring));
                                                     }
                                                 }
 
-                                                if (contentdic[result2] == "Bilanzprofile")
+                                                if (contentdic[result2string] == "Bilanzprofile")
                                                 {
-                                                    string[] resultarray = { };
-
                                                     List<string> resultlist = new List<string>();
 
-                                                    List<Balanceprofile> objektlist = (List<Balanceprofile>)content1dic[contentdic[result2]];
+                                                    List<Balanceprofile> objektlist = (List<Balanceprofile>)content1dic[contentdic[result2string]];
 
                                                     if (objektlist.Count() != 0)
                                                     {
@@ -460,14 +488,11 @@ namespace EasyLife.PageModels
                                                             resultlist.Add("Bilanzprofil " + objekt.Id + "");
                                                         }
 
-                                                        resultarray = resultlist.ToArray();
-
                                                         bool indikator3 = false;
 
                                                         while (indikator3 == false)
                                                         {
-
-                                                            var result3 = await Shell.Current.DisplayActionSheet("Bilanzprofile", "Zurück", null, resultarray);
+                                                            var result3 = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Bilanzprofile", 260, resultlist));
 
                                                             if (result3 == null)
                                                             {
@@ -475,17 +500,19 @@ namespace EasyLife.PageModels
                                                             }
                                                             else
                                                             {
-                                                                if (result3 == "Zurück")
+                                                                string result3string = (string)result3;
+
+                                                                if (result3string == "Zurück")
                                                                 {
                                                                     indikator3 = true;
                                                                 }
                                                                 else
                                                                 {
-                                                                    int id = int.Parse(result3.ToString().Substring(12));
+                                                                    int id = int.Parse(result3string.ToString().Substring(12));
 
                                                                     Balanceprofile ChoosenBilanceprofil = objektlist.Where(bp => bp.Id == id).First();
 
-                                                                    string resultstring = string.Empty;
+                                                                    List<string[]> resultstring = new List<string[]>();
 
                                                                     List<string> sortetinitreasons_substring = new List<string>();
 
@@ -518,81 +545,128 @@ namespace EasyLife.PageModels
 
                                                                     foreach (Stackholderhelper sh in sortetinitreasons)
                                                                     {
-                                                                        resultstring += sh.Substring + "\n\n";
+                                                                        resultstring.Add(new string[] { sh.Reason.Substring(0, sh.Reason.LastIndexOf(":")) + " als " + sh.Reason.Substring(sh.Reason.LastIndexOf(":") + 1), "Gehört zu " + sh.Option + "" });
                                                                     }
 
-                                                                    await Shell.Current.DisplayAlert("Bilanzprofil " + ChoosenBilanceprofil.Id + "", resultstring, "Zurück");
+                                                                    await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Bilanzprofil " + ChoosenBilanceprofil.Id + "", 390, 0, null, null, resultstring));
                                                                 }
                                                             }
                                                         }
                                                     }
                                                 }
 
-                                                if (contentdic[result2] == "Budgets")
+                                                if (contentdic[result2string] == "Budgets")
                                                 {
-                                                    string resultstring = string.Empty;
+                                                    List<string> resultstring = new List<string>();
 
-                                                    List<Budget> objektlist = (List<Budget>)content1dic[contentdic[result2]];
+                                                    List<Budget> objektlist = (List<Budget>)content1dic[contentdic[result2string]];
 
                                                     if (objektlist.Count() != 0)
                                                     {
                                                         foreach (Budget objekt in objektlist)
                                                         {
-                                                            resultstring += "\nBudget " + objekt.Id + "\nName: " + objekt.Name + "\nZiel: " + objekt.Goal + "€\n";
+                                                            resultstring.Add("Budget " + objekt.Id + "\nName: " + objekt.Name + "\nZiel: " + objekt.Goal + "€");
                                                         }
 
-                                                        await Shell.Current.DisplayAlert("Budgets", resultstring, "Zurück");
+                                                        await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Budget", 300, 0, null, null, resultstring));
                                                     }
                                                 }
 
-                                                if (contentdic[result2] == "Zwecke")
+                                                if (contentdic[result2string] == "Zwecke")
                                                 {
-                                                    string resultstring = string.Empty;
+                                                    List<string[]> resultstring = new List<string[]>();
 
-                                                    List<Zweck> objektlist = (List<Zweck>)content1dic[contentdic[result2]];
+                                                    List<Zweck> objektlist = (List<Zweck>)content1dic[contentdic[result2string]];
 
                                                     if (objektlist.Count() != 0)
                                                     {
                                                         foreach (Zweck objekt in objektlist)
                                                         {
-                                                            resultstring += "\nZweck " + objekt.Id + "\nName: " + objekt.Benutzerdefinierter_Zweck.Substring(0, objekt.Benutzerdefinierter_Zweck.IndexOf(":")) + "\nDefinition: " + objekt.Benutzerdefinierter_Zweck.Substring(objekt.Benutzerdefinierter_Zweck.IndexOf(":") + 1) + "\n";
+                                                            resultstring.Add(new string[] { "Zweck " + objekt.Id + "", "" + objekt.Benutzerdefinierter_Zweck.Substring(0, objekt.Benutzerdefinierter_Zweck.IndexOf(":")) + " als " + objekt.Benutzerdefinierter_Zweck.Substring(objekt.Benutzerdefinierter_Zweck.IndexOf(":") + 1) + "" });
                                                         }
 
-                                                        await Shell.Current.DisplayAlert("Zwecke", resultstring, "Zurück");
+                                                        await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Zwecke", 320, 0, null, null, resultstring));
                                                     }
                                                 }
 
-                                                if (contentdic[result2] == "Suchbegriffe")
+                                                if (contentdic[result2string] == "Suchbegriffe")
                                                 {
-                                                    string resultstring = string.Empty;
+                                                    List<string[]> resultstring = new List<string[]>();
 
-                                                    List<Suggestion> objektlist = (List<Suggestion>)content1dic[contentdic[result2]];
+                                                    List<Suggestion> objektlist = (List<Suggestion>)content1dic[contentdic[result2string]];
 
                                                     if (objektlist.Count() != 0)
                                                     {
                                                         foreach (Suggestion objekt in objektlist)
                                                         {
-                                                            resultstring += "\nSuchbegriff " + objekt.Id + "\nBegriff: " + objekt.Suggestion_value + "\n";
+                                                            resultstring.Add(new string[] { "Suchbegriff " + objekt.Id + "", "" + objekt.Suggestion_value + "" });
                                                         }
 
-                                                        await Shell.Current.DisplayAlert("Suchbegriffe", resultstring, "Zurück");
+                                                        await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Suchbegriffe", 350, 0, null, null, resultstring));
                                                     }
                                                 }
 
-                                                if (contentdic[result2] == "Benachrichtigungen")
+                                                if (contentdic[result2string] == "Benachrichtigungen")
                                                 {
-                                                    string resultstring = string.Empty;
+                                                    List<string[]> resultstring = new List<string[]>();
 
-                                                    List<Notification> objektlist = (List<Notification>)content1dic[contentdic[result2]];
+                                                    List<Notification> objektlist = (List<Notification>)content1dic[contentdic[result2string]];
 
                                                     if (objektlist.Count() != 0)
                                                     {
                                                         foreach (Notification objekt in objektlist)
                                                         {
-                                                            resultstring += "\nBenachrichtigung " + objekt.Id + "\nZugehöriger Auftrag: " + objekt.Auftrags_ID + "\n";
+                                                            resultstring.Add(new string[] { "Benachrichtigung " + objekt.Id + "", "Zugehöriger Auftrag: " + objekt.Auftrags_ID + "" });
                                                         }
 
-                                                        await Shell.Current.DisplayAlert("Benachrichtigungen", resultstring, "Zurück");
+                                                        await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Benachrichtigungen", 350, 0, null, null, resultstring));
+                                                    }
+                                                }
+
+                                                if (contentdic[result2string] == "Stylingprofile")
+                                                {
+                                                    List<string> resultlist = new List<string>();
+
+                                                    List<Stylingprofile> objektlist = (List<Stylingprofile>)content1dic[contentdic[result2string]];
+
+                                                    if (objektlist.Count() != 0)
+                                                    {
+                                                        foreach (Stylingprofile objekt in objektlist)
+                                                        {
+                                                            resultlist.Add("Stylingprofil " + objekt.Id + "");
+                                                        }
+
+                                                        bool indikator3 = false;
+
+                                                        while (indikator3 == false)
+                                                        {
+                                                            var result3 = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Stylingprofile", 280, resultlist));
+
+                                                            if (result3 == null)
+                                                            {
+                                                                indikator3 = true;
+                                                            }
+                                                            else
+                                                            {
+                                                                string result3string = (string)result3;
+
+                                                                if (result3string == "Zurück")
+                                                                {
+                                                                    indikator3 = true;
+                                                                }
+                                                                else
+                                                                {
+                                                                    int id = int.Parse(result3string.ToString().Substring(13));
+
+                                                                    Stylingprofile ChoosenStylingprofil = objektlist.Where(bp => bp.Id == id).First();
+
+                                                                    if (ChoosenStylingprofil != null)
+                                                                    {
+                                                                        await Shell.Current.ShowPopupAsync(new CustomeColorSheet_Popup("Stylingprofil " + ChoosenStylingprofil.Id + "", 390, ChoosenStylingprofil));
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }
@@ -610,7 +684,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist beim Senden des Backups ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist bei der Vorschau der Backups ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -633,7 +707,7 @@ namespace EasyLife.PageModels
 
                 var status2 = PermissionStatus.Denied;
 
-                if (DeviceInfo.Version.Major >= 11)
+                if (Xamarin.Essentials.DeviceInfo.Version.Major >= 11)
                 {
                     status1 = await Permissions.CheckStatusAsync<Permissions.Media>();
 
@@ -952,12 +1026,23 @@ namespace EasyLife.PageModels
 
                 amount_list.Add(amount_of_use_budgets);
 
+                var stylingprofilecontent = await StylingService.Get_all_Stylingprofile();
+
+                int amount_of_generated_stylingprofile = 0;
+
+                if (stylingprofilecontent.Count() != 0)
+                {
+                    amount_of_generated_stylingprofile = stylingprofilecontent.First().Id;
+                }
+
+                amount_list.Add(amount_of_generated_stylingprofile);
+
                 await Shell.Current.ShowPopupAsync(new MetaData_Popup(amount_list));
 
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist beim Erstellen der Metadaten ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist beim Erstellen der Metadaten ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
         private async Task Notification_Methode()
@@ -984,19 +1069,19 @@ namespace EasyLife.PageModels
                 {
                     try
                     {
-                        string[] string_of_pending_notification = list_of_strings_of_pending_notification.ToArray();
+                        var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Benachrichtigungen", 370, list_of_strings_of_pending_notification));
 
-                        string result = await Shell.Current.DisplayActionSheet("Anstehende Benachrichtigungen", "Zurück", null, string_of_pending_notification);
-
-                        if (result != "Zurück")
+                        if (result != null)
                         {
-                            result = result.Substring(3, -3 + result.IndexOf("|"));
+                            string resultstring = (string)result;
 
-                            Models.Notification notification = await NotificationService.Get_specific_Notification_with_Notification_ID(int.Parse(result));
+                            resultstring = resultstring.Substring(3, -3 + resultstring.IndexOf("|"));
+
+                            Models.Notification notification = await NotificationService.Get_specific_Notification_with_Notification_ID(int.Parse(resultstring));
 
                             DateTime time = (DateTime)list_of_pending_notification.Where(t => t.NotificationId == notification.Notification_ID).First().Schedule.NotifyTime;
 
-                            await Shell.Current.DisplayAlert("Benachrichtigung " + result + "", "" + list_of_pending_notification.Where(t => t.NotificationId == notification.Notification_ID).First().Description + "\nDatum:" + time.ToString("dddd, d.M.yyyy,  H:mm", new CultureInfo("de-DE")) + "Uhr", "Zurück");
+                            await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Benachrichtigung " + resultstring + "", 390, 350, null, null, list_of_pending_notification.Where(t => t.NotificationId == notification.Notification_ID).First().Description + "\nDatum:" + time.ToString("dddd, d.M.yyyy,  H:mm", new CultureInfo("de-DE")) + "Uhr"));
                         }
                     }
                     catch { }
@@ -1004,13 +1089,20 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
         public async Task Styling_Color_Methode()
         {
-            await Shell.Current.GoToAsync(nameof(Styling_Color_Page));
+            try
+            {
+                await Shell.Current.GoToAsync(nameof(Styling_Color_Page));
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+            }
         }
 
         public AsyncCommand Styling_Color_Command { get; }

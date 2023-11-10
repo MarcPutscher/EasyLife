@@ -9,7 +9,7 @@
     xmlns:fontAwesome="clr-namespace:FontAwesome" 
     x:Class="EasyLife.Pages.Home_Page"
     Title="{Binding Title}"
-    BackgroundColor="{DynamicResource Page_Backgroundcolor}"
+    BackgroundColor="{DynamicResource Hintergrund_Home}"
     x:DataType="pagemodels:Home_PageModel">
 
     <ContentPage.BindingContext>
@@ -29,29 +29,29 @@
         <ResourceDictionary>
             <DataTemplate x:Key="Einnamen" x:DataType="{x:Null}">
                 <ViewCell>
-                        <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5">
-                            <SwipeView BackgroundColor="Transparent" Grid.Row="1" Grid.Column="1">
-                                <SwipeView.RightItems>
-                                    <SwipeItems>
-                                        <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.EditCommand}" CommandParameter="{Binding .}">
-                                            <Frame Margin="5,0,0,0" BackgroundColor="{DynamicResource Edit_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Edit_Bordercolor}">
-                                                <Label Text="Bearbeiten" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Edit_Textcolor}" FontAttributes="Bold" FontSize="Medium"/>
-                                            </Frame>
-                                        </SwipeItemView>
-                                    </SwipeItems>
-                                </SwipeView.RightItems>
-                                <SwipeView.LeftItems>
-                                    <SwipeItems>
-                                        <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.RemoveCommand}" CommandParameter="{Binding .}">
-                                            <Frame Margin="0,0,5,0" BackgroundColor="{DynamicResource Remove_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Remove_Bordercolor}">
-                                                <Label Text="Löschen" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Remove_Textcolor}" FontAttributes="Bold" FontSize="Medium"/>
-                                            </Frame>
-                                        </SwipeItemView>
-                                    </SwipeItems>
-                                </SwipeView.LeftItems>
-                                <cells:Income_Cell Grid.Row="1" Grid.Column="1"/>
-                            </SwipeView>
-                        </Grid>
+                    <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5">
+                        <SwipeView BackgroundColor="Transparent" Grid.Row="1" Grid.Column="1">
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.EditCommand}" CommandParameter="{Binding .}">
+                                        <Frame Margin="5,0,0,0" BackgroundColor="{DynamicResource Hintergrund_Bearbeiten_Home}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Rand_Bearbeiten_Home}">
+                                            <Label Text="Bearbeiten" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Text_Bearbeiten_Home}" FontAttributes="Bold" FontSize="Medium"/>
+                                        </Frame>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <SwipeView.LeftItems>
+                                <SwipeItems>
+                                    <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.RemoveCommand}" CommandParameter="{Binding .}">
+                                        <Frame Margin="0,0,5,0" BackgroundColor="{DynamicResource Hintergrund_Löschen_Home}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Rand_Löschen_Home}">
+                                            <Label Text="Löschen" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Text_Löschen_Home}" FontAttributes="Bold" FontSize="Medium"/>
+                                        </Frame>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.LeftItems>
+                            <cells:Income_Cell Grid.Row="1" Grid.Column="1"/>
+                        </SwipeView>
+                    </Grid>
                 </ViewCell>
             </DataTemplate>
             <DataTemplate x:Key="Ausgaben" x:DataType="{x:Null}">
@@ -61,8 +61,8 @@
                             <SwipeView.RightItems>
                                 <SwipeItems>
                                     <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.EditCommand}" CommandParameter="{Binding .}">
-                                        <Frame Margin="5,0,0,0" BackgroundColor="{DynamicResource Edit_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Edit_Bordercolor}">
-                                            <Label Text="Bearbeiten" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Edit_Textcolor}" FontAttributes="Bold" FontSize="Medium"/>
+                                        <Frame Margin="5,0,0,0" BackgroundColor="{DynamicResource Hintergrund_Bearbeiten_Home}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Rand_Bearbeiten_Home}">
+                                            <Label Text="Bearbeiten" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Text_Bearbeiten_Home}" FontAttributes="Bold" FontSize="Medium"/>
                                         </Frame>
                                     </SwipeItemView>
                                 </SwipeItems>
@@ -70,8 +70,8 @@
                             <SwipeView.LeftItems>
                                 <SwipeItems>
                                     <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.RemoveCommand}" CommandParameter="{Binding .}">
-                                        <Frame Margin="0,0,5,0" BackgroundColor="{DynamicResource Remove_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Remove_Bordercolor}">
-                                            <Label Text="Löschen" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Remove_Textcolor}" FontAttributes="Bold" FontSize="Medium"/>
+                                        <Frame Margin="0,0,5,0" BackgroundColor="{DynamicResource Hintergrund_Löschen_Home}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Rand_Löschen_Home}">
+                                            <Label Text="Löschen" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Text_Löschen_Home}" FontAttributes="Bold" FontSize="Medium"/>
                                         </Frame>
                                     </SwipeItemView>
                                 </SwipeItems>
@@ -85,7 +85,7 @@
                 <ViewCell >
                     <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5" BackgroundColor="Transparent">
                         <Frame Grid.Column="1" Grid.Row="1" BackgroundColor="Transparent">
-                            <Button Text="Mehr laden" TextColor="Black" FontSize="Large" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.Load_on_demand_Command}"
+                            <Button Text="Mehr laden" TextColor="{DynamicResource Text_MehrLaden_Home}" FontSize="Large" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.Load_on_demand_Command}"
                                     xct:TouchEffect.LongPressCommand="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.Load_Ratio_Command}" CommandParameter="{Binding Zweck}"/>
                         </Frame>
                     </Grid>
@@ -97,25 +97,25 @@
                     <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5" IsVisible="{Binding Normal_State}">
                         <SwipeView BackgroundColor="Transparent" Grid.Row="1" Grid.Column="1">
                             <SwipeView.RightItems>
-                                <SwipeItems Mode="Execute">
+                                <SwipeItems  Mode="Execute">
                                     <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Calculator_Addition_Command}" CommandParameter="{Binding .}">
-                                        <Frame Margin="5,0,0,0" BackgroundColor="{DynamicResource Edit_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Edit_Bordercolor}">
+                                        <Frame Margin="5,0,0,0" BackgroundColor="{DynamicResource Hintergrund_Bearbeiten_Home}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Rand_Bearbeiten_Home}">
                                             <Image VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
                                                 <Image.Source>
-                                                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.SquarePlus}" Color="{DynamicResource Edit_Textcolor}"/>
+                                                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.SquarePlus}" Color="{DynamicResource Text_Bearbeiten_Home}"/>
                                                 </Image.Source>
-                                            </Image>                                        
+                                            </Image>
                                         </Frame>
                                     </SwipeItemView>
                                 </SwipeItems>
                             </SwipeView.RightItems>
                             <SwipeView.LeftItems>
-                                <SwipeItems Mode="Execute">
+                                <SwipeItems  Mode="Execute">
                                     <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Calculator_Substraction_Command}" CommandParameter="{Binding .}">
-                                        <Frame Margin="0,0,5,0" BackgroundColor="{DynamicResource Remove_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Remove_Bordercolor}">
+                                        <Frame Margin="0,0,5,0" BackgroundColor="{DynamicResource Hintergrund_Löschen_Home}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Rand_Löschen_Home}">
                                             <Image VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
                                                 <Image.Source>
-                                                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.SquareMinus}" Color="{DynamicResource Remove_Textcolor}"/>
+                                                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.SquareMinus}" Color="{DynamicResource Text_Löschen_Home}"/>
                                                 </Image.Source>
                                             </Image>
                                         </Frame>
@@ -132,12 +132,12 @@
                     <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5">
                         <SwipeView BackgroundColor="Transparent" Grid.Row="1" Grid.Column="1">
                             <SwipeView.RightItems>
-                                <SwipeItems Mode="Execute">
+                                <SwipeItems  Mode="Execute">
                                     <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Calculator_Addition_Command}" CommandParameter="{Binding .}">
-                                        <Frame Margin="5,0,0,0" BackgroundColor="{DynamicResource Edit_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Edit_Bordercolor}">
+                                        <Frame Margin="5,0,0,0" BackgroundColor="{DynamicResource Hintergrund_Bearbeiten_Home}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Rand_Bearbeiten_Home}">
                                             <Image VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
                                                 <Image.Source>
-                                                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.SquarePlus}" Color="{DynamicResource Edit_Textcolor}"/>
+                                                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.SquarePlus}" Color="{DynamicResource Text_Bearbeiten_Home}"/>
                                                 </Image.Source>
                                             </Image>
                                         </Frame>
@@ -145,12 +145,12 @@
                                 </SwipeItems>
                             </SwipeView.RightItems>
                             <SwipeView.LeftItems>
-                                <SwipeItems Mode="Execute">
+                                <SwipeItems  Mode="Execute">
                                     <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Calculator_Substraction_Command}" CommandParameter="{Binding .}">
-                                        <Frame Margin="0,0,5,0" BackgroundColor="{DynamicResource Remove_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Remove_Bordercolor}">
+                                        <Frame Margin="0,0,5,0" BackgroundColor="{DynamicResource Hintergrund_Löschen_Home}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Rand_Löschen_Home}">
                                             <Image VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
                                                 <Image.Source>
-                                                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.SquareMinus}" Color="{DynamicResource Remove_Textcolor}"/>
+                                                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.SquareMinus}" Color="{DynamicResource Text_Löschen_Home}"/>
                                                 </Image.Source>
                                             </Image>
                                         </Frame>
@@ -166,13 +166,14 @@
                 <ViewCell >
                     <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5" BackgroundColor="Transparent">
                         <Frame Grid.Column="1" Grid.Row="1" BackgroundColor="Transparent">
-                            <Button Text="Mehr laden" TextColor="Black" FontSize="Large" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" Command="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Load_on_demand_Command}"
+                            <Button Text="Mehr laden" TextColor="{DynamicResource Text_MehrLaden_Home}" FontSize="Large" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" Command="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Load_on_demand_Command}"
                                 xct:TouchEffect.LongPressCommand="{Binding Source={x:Reference ContextSwipeView_Calculator}, Path=BindingContext.Load_Ratio_Command}" CommandParameter="{Binding Zweck}"/>
                         </Frame>
                     </Grid>
                 </ViewCell>
             </DataTemplate>
-            <cells:Transaktions_Template_Selector x:Key="Transaktions_Selector_for_Calculator" Einnahmen="{StaticResource Rechnung_Einnamen}" Ausgaben="{StaticResource Rechnung_Ausgaben}" Laden="{StaticResource Rechnung_Laden}"/>        </ResourceDictionary>
+            <cells:Transaktions_Template_Selector x:Key="Transaktions_Selector_for_Calculator" Einnahmen="{StaticResource Rechnung_Einnamen}" Ausgaben="{StaticResource Rechnung_Ausgaben}" Laden="{StaticResource Rechnung_Laden}"/>
+        </ResourceDictionary>
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
@@ -240,9 +241,9 @@
                     <ViewCell>
                         <Grid ColumnDefinitions="50,*,90" Padding="5">
                             <Grid ColumnDefinitions="20,50,20" Padding="0" Grid.Column="2">
-                                <Button Grid.Column="1" BackgroundColor="{DynamicResource Page_Backgroundcolor}" Text="X" TextColor="Black" HorizontalOptions="Fill" Command="{Binding Source={x:Reference SuggestionSwipeView}, Path=BindingContext.Delet_Suggestion}" CommandParameter="{Binding .}"/>
+                                <Button Grid.Column="1" BackgroundColor="{DynamicResource Hintergrund_Home}" Text="X" TextColor="Black" HorizontalOptions="Fill" Command="{Binding Source={x:Reference SuggestionSwipeView}, Path=BindingContext.Delet_Suggestion}" CommandParameter="{Binding .}"/>
                             </Grid>
-                            <Label Text="{Binding Suggestion_value}" TextColor="White" FontSize="Body" TextTransform="None" HeightRequest="10" VerticalTextAlignment="Center" Padding="0" HorizontalOptions= "FillAndExpand" HorizontalTextAlignment="Start" Grid.Column="1" BackgroundColor="{DynamicResource Page_Backgroundcolor}">
+                            <Label Text="{Binding Suggestion_value}" TextColor="White" FontSize="Body" TextTransform="None" HeightRequest="10" VerticalTextAlignment="Center" Padding="0" HorizontalOptions= "FillAndExpand" HorizontalTextAlignment="Start" Grid.Column="1" BackgroundColor="{DynamicResource Hintergrund_Home}">
                                 <Label.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding Source={x:Reference SuggestionSwipeView}, Path=BindingContext.Select_Suggestion}" CommandParameter="{Binding .}" />
                                 </Label.GestureRecognizers>
@@ -286,28 +287,28 @@
                     <Grid ColumnDefinitions="10,Auto,*" Grid.Column="0" Padding="0" VerticalOptions="Center" HeightRequest="80" Margin="0,5,0,0">
                         <ImageButton Command="{Binding Budget_Command}" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="55" HeightRequest="55" Padding="0">
                             <ImageButton.Source>
-                                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Wallet}" Color="SaddleBrown"/>
+                                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Wallet}" Color="{DynamicResource Vordergrund_Budget_Home}"/>
                             </ImageButton.Source>
                         </ImageButton>
                     </Grid>
                     <StackLayout Grid.Column="1" Margin="0,0,0,10">
-                        <Frame IsVisible="{Binding IsSaldoVisibility}" CornerRadius="50"  Padding="5" BackgroundColor="{DynamicResource Saldo_Backgroundcolor}" HorizontalOptions="Center" HasShadow="True" xct:ShadowEffect.Color="{Binding Saldo_Evaluate}">
+                        <Frame IsVisible="{Binding IsSaldoVisibility}" CornerRadius="50"  Padding="5" BackgroundColor="{DynamicResource Hintergrund_Saldo_Home}" HorizontalOptions="Center" HasShadow="True" xct:ShadowEffect.Color="{Binding Saldo_Evaluate}">
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding Show_Letter_Saldo_Command}"/>
                             </Frame.GestureRecognizers>
                             <StackLayout>
                                 <StackLayout Orientation="Horizontal" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
-                                    <Label Text="Stand : " TextColor="{DynamicResource Saldo_Textcolor}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    <Label Text="Stand : " TextColor="{DynamicResource Text_Saldo_Home}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
                                     <Label Text="{Binding Saldo_Value}" TextColor="{Binding Saldo_Evaluate}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
                                     <Label Text="€" TextColor="{Binding Saldo_Evaluate}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </StackLayout>
                                 <StackLayout Orientation="Horizontal" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center" IsVisible="{Binding IsLetterSaldoVisibility}">
-                                    <Label Text="Stand des Briefumschlages: " TextColor="{DynamicResource Saldo_Textcolor}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    <Label Text="Stand des Briefumschlages: " TextColor="{DynamicResource Text_Saldo_Home}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
                                     <Label Text="{Binding Letter_Saldo_Value}" TextColor="{Binding Letter_Saldo_Evaluate}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
                                     <Label Text="€" TextColor="{Binding Letter_Saldo_Evaluate}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </StackLayout>
                                 <StackLayout Orientation="Horizontal" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center" Margin="20,0,20,0">
-                                    <Label Text="{Binding Saldo_Date}" TextColor="{DynamicResource Saldo_Textcolor}" FontSize="Subtitle" FontAttributes="None" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Label Text="{Binding Saldo_Date}" TextColor="{DynamicResource Text_Saldo_Home}" FontSize="Subtitle" FontAttributes="None" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center">
                                         <Label.GestureRecognizers>
                                             <TapGestureRecognizer Command="{Binding Change_Saldo_Date_Command}"/>
                                         </Label.GestureRecognizers>
@@ -319,7 +320,7 @@
                     <Grid ColumnDefinitions="*,Auto,10" Grid.Column="2" Padding="0" VerticalOptions="Center" HeightRequest="80" Margin="0,5,0,0">
                         <ImageButton Command="{Binding Add_Command}" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="55" HeightRequest="55" Padding="0" BackgroundColor="Transparent">
                             <ImageButton.Source>
-                                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.CirclePlus}" Color="Orange"/>
+                                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.CirclePlus}" Color="{DynamicResource Vordergrund_Hinzufügen_Home}"/>
                             </ImageButton.Source>
                         </ImageButton>
                     </Grid>
@@ -357,10 +358,10 @@
                     </ListView.GroupHeaderTemplate>
                 </ListView>
                 <Grid ColumnDefinitions="*,Auto,*" HeightRequest="80" Padding="0" Margin="0,-7,0,5">
-                    <Frame CornerRadius="50"  Padding="10" Margin="0,0,0,5" Grid.Column="1" BackgroundColor="{DynamicResource Saldo_Backgroundcolor}" HorizontalOptions="Center" HasShadow="True" xct:ShadowEffect.Color="{Binding Saldo_Evaluate}">
+                    <Frame CornerRadius="50"  Padding="10" Margin="0,0,0,5" Grid.Column="1" BackgroundColor="{DynamicResource Hintergrund_Saldo_Home}" HorizontalOptions="Center" HasShadow="True" xct:ShadowEffect.Color="{Binding Saldo_Evaluate}">
                         <StackLayout IsVisible="{Binding Calculator_State}" VerticalOptions="Center">
                             <StackLayout Orientation="Horizontal" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
-                                <Label Text="Summe : " TextColor="{DynamicResource Saldo_Textcolor}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Label Text="Summe : " TextColor="{DynamicResource Text_Saldo_Home}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 <Label Text="{Binding Calculator_Value}" TextColor="{Binding Calculator_Evaluate}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 <Label Text="€" TextColor="{Binding Calculator_Evaluate}" FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
                             </StackLayout>
@@ -398,13 +399,17 @@
             </StackLayout>
         </StackLayout>
 
-        <Grid RowDefinitions="300,100,*" IsVisible="{Binding Kein_Ergebnis_Suggestion_Status}" BackgroundColor="{DynamicResource Page_Backgroundcolor}" VerticalOptions="FillAndExpand">
+        <Grid RowDefinitions="300,100,*" IsVisible="{Binding Kein_Ergebnis_Suggestion_Status}" BackgroundColor="{DynamicResource Hintergrund_Home}" VerticalOptions="FillAndExpand">
             <Label Grid.Row="1" Text="Keine Suchbegriff vorhanden!" TextColor="Black" FontSize="20" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="Center"/>
         </Grid>
 
         <Grid RowDefinitions="300,100,*" IsVisible="{Binding Kein_Ergebnis_Transaktion_Status}" VerticalOptions="FillAndExpand">
             <Label Grid.Row="1" Text="Keine Transaktionen vorhanden!" TextColor="Black" FontSize="20" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="Center"/>
-            <Button Command="{Binding Add_Command}" Grid.Row="2" FontSize="30" Text="+" TextColor="Orange" VerticalOptions="End" HorizontalOptions="End" CornerRadius="60" WidthRequest="55" HeightRequest="55" Padding="5" Margin="0,0,10,10"/>
+            <ImageButton Command="{Binding Add_Command}" Grid.Row="2" VerticalOptions="End" HorizontalOptions="End" WidthRequest="55" HeightRequest="55" Padding="0" BackgroundColor="Transparent" Margin="0,0,10,10">
+                <ImageButton.Source>
+                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.CirclePlus}" Color="{DynamicResource Vordergrund_Hinzufügen_Home}"/>
+                </ImageButton.Source>
+            </ImageButton>
         </Grid>
     </StackLayout>
 

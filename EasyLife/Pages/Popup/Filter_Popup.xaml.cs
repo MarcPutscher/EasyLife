@@ -44,7 +44,7 @@ namespace EasyLife.Pages
         {
             try
             {
-                Preferences.Set("Search_For_Transaktion_ID" , TransaktionsIDSwitch.IsToggled);
+                Preferences.Set("Search_For_Transaktion_ID", TransaktionsIDSwitch.IsToggled);
                 Preferences.Set("Search_For_Auftrags_ID", AuftragsIDSwitch.IsToggled);
                 Preferences.Set("Search_For_Datum", DatumSwitch.IsToggled);
                 Preferences.Set("Search_For_Zweck", ZweckSwitch.IsToggled);
@@ -64,7 +64,7 @@ namespace EasyLife.Pages
                     QuersucheSwitch.IsToggled
                 };
 
-                if(toggled.Contains(true) == true)
+                if (toggled.Contains(true) == true)
                 {
                     Preferences.Set("Filter_Activity", true);
                 }

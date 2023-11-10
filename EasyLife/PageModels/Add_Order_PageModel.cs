@@ -1,4 +1,5 @@
 ﻿using EasyLife.Models;
+using EasyLife.Pages;
 using EasyLife.Services;
 using FreshMvvm;
 using System;
@@ -7,6 +8,7 @@ using System.ComponentModel.Design;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 using static Xamarin.Forms.Internals.Profile;
@@ -317,14 +319,14 @@ namespace EasyLife.PageModels
                     await Shell.Current.GoToAsync($"..?TransaktionID={TransaktionID}&OrderID={OrderID}");
 
                 }
-                catch
+                catch(Exception e)
                 {
-                    await Shell.Current.DisplayAlert("Error", "Ein Fehler ist aufgetaucht.", "Okay");
+                    await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + e.ToString() + ""));
                 }
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
         public async Task Return_Zero()
@@ -789,7 +791,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 

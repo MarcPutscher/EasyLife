@@ -93,7 +93,7 @@ namespace EasyLife.Pages
                 if (all_months == value)
                     return;
                 all_months = value;
-                MonthPicker.ItemsSource=all_months;
+                MonthPicker.ItemsSource = all_months;
             }
         }
 
@@ -134,13 +134,13 @@ namespace EasyLife.Pages
                     return;
                 switch_istoggled = value;
                 OptionSwitch.IsToggled = switch_istoggled;
-                if(Switch_IsToggled == false)
+                if (Switch_IsToggled == false)
                 {
-                    ViewTime_Popup.Size = new Size(320, 290);
+                    ViewTime_Popup.Size = new Size(250, 320);
                 }
                 else
                 {
-                    ViewTime_Popup.Size = new Size(320, 250);
+                    ViewTime_Popup.Size = new Size(250, 280);
                 }
             }
         }
@@ -167,7 +167,7 @@ namespace EasyLife.Pages
             {
                 Month = MonthPicker.SelectedItem.ToString();
             }
-            catch 
+            catch
             {
                 Month = null;
             }
@@ -185,7 +185,7 @@ namespace EasyLife.Pages
                 Month_Control_Status = false;
                 Switch_IsToggled = true;
                 Month = null;
-                ViewTime_Popup.Size = new Size(320, 250);
+                ViewTime_Popup.Size = new Size(250, 280);
             }
             else
             {
@@ -193,7 +193,7 @@ namespace EasyLife.Pages
                 Month_Control_Status = true;
                 Switch_IsToggled = false;
                 Month = Current_Viewtime.Month;
-                ViewTime_Popup.Size = new Size(320, 290);
+                ViewTime_Popup.Size = new Size(250, 320);
             }
 
             years_list.Clear();
@@ -322,7 +322,7 @@ namespace EasyLife.Pages
         private async void OptionSwitch_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             Switch_IsToggled = OptionSwitch.IsToggled;
-            if(Switch_IsToggled == false)
+            if (Switch_IsToggled == false)
             {
                 Month_Control_Visibility = true;
                 Month_Control_Status = true;

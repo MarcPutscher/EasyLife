@@ -30,7 +30,7 @@
                     <Grid ColumnDefinitions="10,*,Auto,150" Padding="4" HorizontalOptions="Fill" Margin="0,0,6,0">
                         <Grid.GestureRecognizers>
                             <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" CommandParameter="{Binding Detail}">
-                                
+
                             </TapGestureRecognizer>
                         </Grid.GestureRecognizers>
                         <customrenderer:AutoFontSizeLabel 
@@ -46,10 +46,10 @@
                             MaxLines="1"
                             Padding="0"
                             Text="{Binding Reason}" 
-                            TextColor="White"
+                            TextColor="{DynamicResource Text_Zweck_Stack_Bilanz}"
                             FontAttributes="None"/>
                         <StackLayout HorizontalOptions="Fill" VerticalOptions="Center" Grid.Column="2">
-                            <Label Text="{Binding Count}" TextColor="White" FontSize="Medium" FontAttributes="None" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                            <Label Text="{Binding Count}" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" FontSize="Medium" FontAttributes="None" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
                         </StackLayout>
                         <Grid ColumnDefinitions="*,10,20" HorizontalOptions="Fill" VerticalOptions="Center" Grid.Column="3" ColumnSpacing="3">
                             <Label Text="{Binding Value}" TextColor="{Binding Evaluating}" FontSize="Medium" FontAttributes="None" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>

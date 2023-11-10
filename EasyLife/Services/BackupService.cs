@@ -710,6 +710,33 @@ namespace EasyLife.Services
 
             await db_create.CloseAsync();
 
+            Init_Placeholder();
+
+            await db_create.CreateTableAsync<Stylingprofile>();
+
+            List<Stylingprofile> stylingprofile_list = new List<Stylingprofile>(await db_create.Table<Stylingprofile>().ToListAsync());
+
+            if (stylingprofile_list.Count() == 0)
+            {
+                Content.Add(new List<object>()
+                {
+                    "Stylingprofile",
+                    0,
+                    stylingprofile_list
+                });
+            }
+            else
+            {
+                Content.Add(new List<object>()
+                {
+                    "Stylingprofile",
+                    stylingprofile_list.Last().Id,
+                    stylingprofile_list
+                });
+            }
+
+            await db_create.CloseAsync();
+
             return Content;
         }
     }

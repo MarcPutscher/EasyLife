@@ -344,24 +344,24 @@ namespace EasyLife.PageModels
         {
             try
             {
-                var result = await Shell.Current.DisplayActionSheet("Einstellungen für Zwecke" , "Zurück" , null , new string[] {"Zweck hinzufügen" , "Zweck entfernen" , "Zweck wiederherstellen"});
+                var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Option für Zwecke", 350, new List<string>() { "Zweck hinzufügen", "Zweck entfernen", "Zweck wiederherstellen" }));
 
-                if(result == "Zweck hinzufügen")
+                if ((string)result == "Zweck hinzufügen")
                 {
                     await Add_Reason_Methode();
                 }
-                if(result == "Zweck entfernen")
+                if((string)result == "Zweck entfernen")
                 {
                     await Remove_Reason_Methode();
                 }
-                if(result == "Zweck wiederherstellen")
+                if((string)result == "Zweck wiederherstellen")
                 {
                     await Revive_Reason_Methode();
                 }
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -369,52 +369,53 @@ namespace EasyLife.PageModels
         {
             try
             {
-                var result = await Shell.Current.DisplayPromptAsync("Zweck erstellen", null, "Hinzufügen", "Verwerfen", "Zweck hier eingeben", 30);
+                var result = await Shell.Current.ShowPopupAsync(new CustomePromt_Popup("Zweck erstellen", 350, 300, "Hinzufügen", "Verwerfen", "Hier Zweck eingeben"));
 
-                if (String.IsNullOrWhiteSpace(result) == false)
+                if (result == null)
                 {
-                    if (result == "Verwerfen")
+                    await Notificater("Das Erstellen eines Zweckes wurde verworfen.");
+
+                    return;
+                }
+
+                string reslutstring = (string)result;
+
+                if (String.IsNullOrWhiteSpace(reslutstring) == false)
+                {
+
+
+                    var result2 = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Zweck zuordnen", 300, new List<string>() { "Einnahmen", "Ausgaben" }));
+
+                    if (result2 == null)
                     {
-                        await Notificater("Der Zweck wurde verworfen.");
+                        await Notificater("Der Zweck " + reslutstring.Trim() + " wurde verworfen.");
 
                         return;
                     }
 
-                    var result2 = await Shell.Current.DisplayActionSheet("Zweck zuordnen", "Verwerfen", null, new string[] { "Einnahmen", "Ausgaben" });
-
-                    if (String.IsNullOrEmpty(result2) == false)
+                    if (String.IsNullOrEmpty((string)result2) == false)
                     {
-                        if (result2 == "Verwerfen")
-                        {
-                            await Notificater("Der Zweck " + result.Trim() + " wurde verworfen.");
-
-                            return;
-                        }
-
-                        var result3 = await ReasonService.Add_Reason(result, result2);
+                        var result3 = await ReasonService.Add_Reason(reslutstring.Trim(), (string)result2);
 
                         if (result3 == true)
                         {
                             await Get_Reasons_Liste();
-
-                            await Notificater("Der Zweck " + result.Trim() + " wurde hinzugefügt.");
-
+                            await Notificater("Der Zweck " + reslutstring.Trim() + " wurde erfolgreich hinzugefügt.");
                             return;
                         }
                         else
                         {
-                            await Notificater("Der Zweck " + result.Trim() + " wurde verworfen.");
-
+                            await Notificater("Der Zweck " + reslutstring.Trim() + " ist bereits vorhanden.");
                             return;
                         }
                     }
                 }
 
-                await Notificater("Der Zweck wurde verworfen.");
+                await Notificater("Der Zweck " + reslutstring + " wurde verworfen.");
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -433,19 +434,17 @@ namespace EasyLife.PageModels
                     zwecke2.Add(item.Key + ":" + item.Value);
                 }
 
-                zweck_string = zwecke2.ToArray();
-
                 if (zwecke2.Count != 0)
                 {
-                    var result = await Shell.Current.DisplayActionSheet("Angezeigte Zwecke", "Zurück", null, zweck_string);
+                    var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Angezeigte Zwecke", 350, zwecke2));
 
-                    if (String.IsNullOrWhiteSpace(result) == false)
+                    if (String.IsNullOrWhiteSpace((string)result) == false)
                     {
-                        if (result == "Zurück")
+                        if (result == null)
                         {
                             return;
                         }
-                        Zweck item = await ReasonService.Get_specific_Reason(result);
+                        Zweck item = await ReasonService.Get_specific_Reason((string)result);
 
                         bool in_use = false;
 
@@ -453,7 +452,7 @@ namespace EasyLife.PageModels
 
                         foreach (var trans in transaktion_list)
                         {
-                            if(trans.Zweck == item.zweck.Substring(0,item.zweck.IndexOf(":")))
+                            if (trans.Zweck == item.zweck.Substring(0, item.zweck.IndexOf(":")))
                             {
                                 in_use = true;
                             }
@@ -484,7 +483,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -507,16 +506,16 @@ namespace EasyLife.PageModels
 
                 if (zwecke2.Count != 0)
                 {
-                    var result = await Shell.Current.DisplayActionSheet("Entfernte Zwecke", "Zurück", null, zweck_string);
+                    var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Entfernte Zwecke", 330, zwecke2));
 
-                    if (String.IsNullOrEmpty(result) == false)
+                    if (String.IsNullOrEmpty((string)result) == false)
                     {
-                        if (result == "Zurück")
+                        if (result == null)
                         {
                             return;
                         }
 
-                        Zweck item = await ReasonService.Get_specific_Reason(result);
+                        Zweck item = await ReasonService.Get_specific_Reason((string)result);
 
                         item.Reason_Visibility = true;
 
@@ -535,7 +534,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -578,7 +577,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 Zweck_IsEnable = true;
 
@@ -712,7 +711,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 if (placeholder_Auftrag == 0)
                 {
@@ -1436,7 +1435,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 Fehler();
 
@@ -1474,7 +1473,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 Fehler();
             }
@@ -1502,7 +1501,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 Fehler();
             }
@@ -1530,7 +1529,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 Fehler();
             }
@@ -1558,7 +1557,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 Fehler();
             }
@@ -1586,7 +1585,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 Fehler();
             }
@@ -1612,7 +1611,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 Fehler();
             }
@@ -1788,7 +1787,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 Fehler();
             }
@@ -1829,7 +1828,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 Fehler();
             }

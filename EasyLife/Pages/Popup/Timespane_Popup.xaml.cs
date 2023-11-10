@@ -17,7 +17,7 @@ namespace EasyLife.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Timespane_Popup : Popup
     {
-        public Timespane_Popup(Transaktion input , List<Transaktion> input2)
+        public Timespane_Popup(Transaktion input, List<Transaktion> input2)
         {
             Current_Transaktion = input;
 
@@ -66,7 +66,7 @@ namespace EasyLife.Pages
 
                 Dismiss(true);
             }
-            catch 
+            catch
             {
                 Dismiss(false);
             }
@@ -79,7 +79,7 @@ namespace EasyLife.Pages
 
         DateTime Current_Date { get; set; }
 
-        Transaktion Current_Transaktion { get; set;}
+        Transaktion Current_Transaktion { get; set; }
 
         List<Transaktion> Transaktion_list { get; set; }
     }

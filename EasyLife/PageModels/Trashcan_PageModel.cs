@@ -1,5 +1,6 @@
 ﻿using EasyLife.Helpers;
 using EasyLife.Models;
+using EasyLife.Pages;
 using EasyLife.Services;
 using FreshMvvm;
 using MvvmHelpers;
@@ -153,19 +154,24 @@ namespace EasyLife.PageModels
             try
             {
                 /// Wenn es keine Transaktionen gibt 
-                if(Transaktion1.Count == 0)
+                if (Transaktion1.Count == 0)
                 {
                     await ToastHelper.ShowToast("Es gibt keine Transaktionen die entgültig gelöscht werden können.");
                     return;
                 }
 
                 /// Wenn es Transaktionen gibt
-                bool value = await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Warnung!", "Wollen Sie wirklich alle Transaktionen im Papierkorb entfernen?", "Ja", "Nein");
+                var value = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Warnung!", 300, 350, "Ja", "Nein", "Wollen Sie wirklich alle Transaktionen im Papierkorb entfernen?"));
+
+                if (value == null)
+                {
+                    return;
+                }
 
                 /// Wenn die Antwort Ja ist, dann sollen alle Transaktionen im Papierkorb gelöscht werden
                 /// Es zeigt das Ladezeichen an solange die Transaktionen gelöscht werden
                 /// Es geht durch die Liste an Transaktionen die im Papierkorb sind durch und löscht jede einzelne
-                if (value == true)
+                if ((bool)value == true)
                 {
                     IsBusy = true;
 
@@ -179,7 +185,7 @@ namespace EasyLife.PageModels
 
                                 foreach (Transaktion transs in all)
                                 {
-                                    if(String.IsNullOrEmpty(transs.Auftrags_id) == false)
+                                    if (String.IsNullOrEmpty(transs.Auftrags_id) == false)
                                     {
                                         if (transs.Auftrags_id.Substring(0, transs.Auftrags_id.IndexOf(".")) == trans.Auftrags_id.Substring(0, trans.Auftrags_id.IndexOf(".")))
                                         {
@@ -292,24 +298,29 @@ namespace EasyLife.PageModels
                 /// Sonst wird die einzelne Transaktion gelöscht
                 if (item.Auftrags_id != null)
                 {
-                    string message = null;
+                    string[] message = null;
 
                     if (item.Auftrags_Option == 1)
                     {
-                        message = "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
+                        message = new string[] { "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag entfernen?", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird im Stand berechnet: " + item.Saldo_Visibility_String + "\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "" };
                     }
                     if (item.Auftrags_Option == 2)
                     {
-                        message = "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + "";
+                        message = new string[] { "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag entfernen?", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String+ "\nWird im Stand berechnet: " + item.Saldo_Visibility_String + "\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + "" };
                     }
                     if (item.Auftrags_Option == 3)
                     {
-                        message = "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
+                        message = new string[] { "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag entfernen?", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird im Stand berechnet: " + item.Saldo_Visibility_String + "\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "" };
                     }
 
-                    bool value = await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Warnung!", message , "Ja", "Nein");
+                    var value = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Warnung!", 350, 450, "Ja", "Nein", message));
 
-                    if (value == true)
+                    if (value == null)
+                    {
+                        return;
+                    }
+
+                    if ((bool)value == true)
                     {
                         IsBusy = true;
 
@@ -369,9 +380,9 @@ namespace EasyLife.PageModels
 
                         try
                         {
-                            foreach(Transaktion trans in all)
+                            foreach (Transaktion trans in all)
                             {
-                                if(trans.Auftrags_id.Substring(0, trans.Auftrags_id.IndexOf(".")) == item.Auftrags_id.Substring(0, item.Auftrags_id.IndexOf(".")))
+                                if (trans.Auftrags_id.Substring(0, trans.Auftrags_id.IndexOf(".")) == item.Auftrags_id.Substring(0, item.Auftrags_id.IndexOf(".")))
                                 {
                                     count++;
                                 }
@@ -382,7 +393,7 @@ namespace EasyLife.PageModels
                             count = 1;
                         }
 
-                        if ( count == 0)
+                        if (count == 0)
                         {
                             Notification notification = await NotificationService.Get_specific_Notification_with_Order_ID(int.Parse(item.Auftrags_id.Substring(0, item.Auftrags_id.IndexOf("."))));
 
@@ -402,8 +413,14 @@ namespace EasyLife.PageModels
                 }
                 else
                 {
-                    bool value = await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Warnung!", "Wollen Sie wirklich diese Transaktionen entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\nID: " + item.Id + "", "Ja", "Nein");
-                    if (value == true)
+                    var value = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Warnung!", 350, 450, "Ja", "Nein", new string[] { "Wollen Sie wirklich diese Transaktionen entfernen?", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird im Stand berechnet: " + item.Saldo_Visibility_String + "\nID: " + item.Id + "" }));
+
+                    if (value == null)
+                    {
+                        return;
+                    }
+
+                    if ((bool)value == true)
                     {
                         IsBusy = true;
 
@@ -418,7 +435,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -435,24 +452,28 @@ namespace EasyLife.PageModels
                 /// Sonst wird die einzelne Transaktion wiederhergestellt
                 if (item.Auftrags_id != null)
                 {
-                    string message = null;
+                    string[] message = null;
 
                     if (item.Auftrags_Option == 1)
                     {
-                        message = "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag wiederherstellen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
+                        message = new string[]{ "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag wiederherstellen?","Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird im Stand berechnet: " + item.Saldo_Visibility_String + "\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + ""};
                     }
                     if (item.Auftrags_Option == 2)
                     {
-                        message = "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag wiederherstellen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + "";
+                        message = new string[] { "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag wiederherstellen?","Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird im Stand berechnet: " + item.Saldo_Visibility_String + "\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + ""};
                     }
                     if (item.Auftrags_Option == 3)
                     {
-                        message = "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag wiederherstellen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:  " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
+                        message = new string[] { "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag wiederherstellen?","Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird im Stand berechnet: " + item.Saldo_Visibility_String + "\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + ""};
                     }
 
-                    bool value = await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Wiederherstellen", message, "Ja", "Nein");
+                    var value = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Wiederherstellen", 350, 450, "Ja", "Nein", message));
 
-                    if (value == true)
+                    if (value == null)
+                    {
+                        return;
+                    }
+                    if ((bool)value == true)
                     {
                         IsBusy = true;
 
@@ -460,7 +481,7 @@ namespace EasyLife.PageModels
 
                         foreach (Transaktion trans in all)
                         {
-                            if(trans.Auftrags_id != null)
+                            if (trans.Auftrags_id != null)
                             {
                                 bool validate = true;
 
@@ -524,9 +545,13 @@ namespace EasyLife.PageModels
                 }
                 else
                 {
-                    bool value = await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Wiederherstellen", "Wollen Sie wirklich diese Transaktionen wiederherstellen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird im Stand berechnet: "+item.Saldo_Visibility_String+"\nID: " + item.Id + "", "Ja", "Nein");
+                    var value = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Wiederherstellen", 350, 450, "Ja", "Nein", new string[] { "Wollen Sie wirklich diese Transaktionen wiederherstellen?", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird im Stand berechnet: " + item.Saldo_Visibility_String + "\nID: " + item.Id + "" }));
 
-                    if (value == true)
+                    if (value == null)
+                    {
+                        return;
+                    }
+                    if ((bool)value == true)
                     {
                         IsBusy = true;
 
@@ -542,7 +567,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -554,7 +579,7 @@ namespace EasyLife.PageModels
         {
             try
             {
-                if(Is_Aktiv == true)
+                if (Is_Aktiv == true)
                 {
                     IsBusy = true;
                 }
@@ -575,8 +600,8 @@ namespace EasyLife.PageModels
                 /// Geht die Liste durch und erstellt die Pseudotexte der Transaktionen, 
                 /// sowie fügt jede einzelne Transaktion zu einer anderen Liste hinzu und 
                 /// gruppiert Tranaktionen mit dem selbem Auftrag und gibt die erste Transaktion von diesem Auftrag in die andere Liste hinzu
-                
-                if(transaktionscontent.Count() != 0)
+
+                if (transaktionscontent.Count() != 0)
                 {
                     foreach (var trans in transaktionscontent)
                     {
@@ -650,13 +675,13 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 IsBusy = false;
             }
             finally
-            { 
-                IsBusy = false; 
+            {
+                IsBusy = false;
             }
         }
 
@@ -683,9 +708,9 @@ namespace EasyLife.PageModels
                 List<string> transaktion_auftragid_list = new List<string>();
 
                 /// Füllt eine Liste an Transaktionen mit AuftragsIds von den Transaktionen die nicht in den Papierkorb gehören
-                foreach(Transaktion trans in transaktioncontent2)
+                foreach (Transaktion trans in transaktioncontent2)
                 {
-                    if(trans.Auftrags_id != null)
+                    if (trans.Auftrags_id != null)
                     {
                         transaktion_auftragid_list.Add(trans.Auftrags_id);
                     }
@@ -703,8 +728,8 @@ namespace EasyLife.PageModels
                 /// sowie überprüft es die Transaktionen nach deren Auftragsid und schait ob sie auch in der Liste mit den Transaktionsauftragsids die nicht in den Papierkorb gehören und wenn es eine übereinstimmung gibt wird sie gelöscht,
                 /// sowie fügt jede einzelne Transaktion zu einer anderen Liste hinzu und 
                 /// gruppiert Tranaktionen mit dem selbem Auftrag und gibt die erste Transaktion von diesem Auftrag in die andere Liste hinzu
-                
-                if(transaktionscontent.Count() != 0)
+
+                if (transaktionscontent.Count() != 0)
                 {
                     foreach (var trans in transaktionscontent)
                     {
@@ -715,7 +740,7 @@ namespace EasyLife.PageModels
                         }
                         else
                         {
-                            if(transaktion_auftragid_list.Contains(trans.Auftrags_id) == true)
+                            if (transaktion_auftragid_list.Contains(trans.Auftrags_id) == true)
                             {
                                 await ContentService.Remove_Transaktion(trans);
                             }
@@ -784,7 +809,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 IsBusy = false;
             }
@@ -799,7 +824,7 @@ namespace EasyLife.PageModels
         /// </summary>
         private void ViewIsDisappearing_Methode()
         {
-            Is_Aktiv = false; 
+            Is_Aktiv = false;
         }
     }
 }

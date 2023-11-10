@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:pagemodels="clr-namespace:EasyLife.PageModels"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:fontAwesome="clr-namespace:FontAwesome" 
+             xmlns:customrenderer="clr-namespace:EasyLife.CustomRenderer"
+             x:Class="EasyLife.Cells.Styling.BilanzView">
+
+    <ContentView.Content>
+        <Frame BackgroundColor="{DynamicResource Hintergrund_Bilanz}" CornerRadius="20" Padding="0">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer x:Name="Seite" Command="{Binding Source={RelativeSource AncestorType={x:Type pagemodels:Styling_Color_PageModel}}, Path=Choose_Command}"/>
+            </Frame.GestureRecognizers>
+            <Grid BackgroundColor="Transparent" Padding="0">
+                <Grid Grid.Row="0" Padding="0" RowDefinitions="Auto,*,Auto">
+                    <Grid ColumnDefinitions="10,125,*,80,*,100,10" Padding="10" HorizontalOptions="Fill" VerticalOptions="Start" BackgroundColor="{DynamicResource Hintergrund_Kopfzeile_Bilanz}" IsVisible="True" Grid.Row="0">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer x:Name="Kopfzeile" Command="{Binding Source={RelativeSource AncestorType={x:Type pagemodels:Styling_Color_PageModel}}, Path=Choose_Command}"/>
+                        </Grid.GestureRecognizers>
+                        <Label Text="Zweck" TextColor="{DynamicResource Text_Kopfzeile_Bilanz}" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="1"/>
+                        <Label Text="Anzahl" TextColor="{DynamicResource Text_Kopfzeile_Bilanz}" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="3"/>
+                        <Label Text="Summe" TextColor="{DynamicResource Text_Kopfzeile_Bilanz}" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="5"/>
+                    </Grid>
+
+                    <StackLayout Grid.Row="1">
+                        <StackLayout Spacing="0" Padding="0">
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer x:Name="Stacks" Command="{Binding Source={RelativeSource AncestorType={x:Type pagemodels:Styling_Color_PageModel}}, Path=Choose_Command}"/>
+                            </StackLayout.GestureRecognizers>
+                            <Grid ColumnDefinitions="10,*,Auto,150" Padding="4" HorizontalOptions="Fill" Margin="0,0,6,0">
+                                <customrenderer:AutoFontSizeLabel 
+                            AutoSizeMaxTextSize="30"
+                            AutoSizeMinTextSize="8"
+                            AutoSizeStepGranularity="1"
+                            HeightRequest="30"
+                            HorizontalTextAlignment="Start"
+                            VerticalTextAlignment="Center"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Fill"
+                            Grid.Column="1"                                
+                            MaxLines="1"
+                            Padding="0"
+                            Text="Beispiel1" 
+                            TextColor="{DynamicResource Text_Zweck_Stack_Bilanz}"
+                            FontAttributes="None"/>
+                                <StackLayout HorizontalOptions="Fill" VerticalOptions="Center" Grid.Column="2">
+                                    <Label Text="2" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" FontSize="Medium" FontAttributes="None" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                                </StackLayout>
+                                <Grid ColumnDefinitions="*,10,20" HorizontalOptions="Fill" VerticalOptions="Center" Grid.Column="3" ColumnSpacing="3">
+                                    <Label Text="-50" TextColor="Red" FontSize="Medium" FontAttributes="None" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
+                                    <Label Text="€" TextColor="Red" FontSize="Medium" FontAttributes="None" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="1"/>
+                                </Grid>
+                            </Grid>
+
+                            <Grid ColumnDefinitions="10,*,Auto,150" Padding="4" HorizontalOptions="Fill" Margin="0,0,6,0">
+                                <customrenderer:AutoFontSizeLabel 
+                            AutoSizeMaxTextSize="30"
+                            AutoSizeMinTextSize="8"
+                            AutoSizeStepGranularity="1"
+                            HeightRequest="30"
+                            HorizontalTextAlignment="Start"
+                            VerticalTextAlignment="Center"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Fill"
+                            Grid.Column="1"                                
+                            MaxLines="1"
+                            Padding="0"
+                            Text="Beispiel2" 
+                            TextColor="{DynamicResource Text_Zweck_Stack_Bilanz}"
+                            FontAttributes="None"/>
+                                <StackLayout HorizontalOptions="Fill" VerticalOptions="Center" Grid.Column="2">
+                                    <Label Text="14" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" FontSize="Medium" FontAttributes="None" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                                </StackLayout>
+                                <Grid ColumnDefinitions="*,10,20" HorizontalOptions="Fill" VerticalOptions="Center" Grid.Column="3" ColumnSpacing="3">
+                                    <Label Text="92" TextColor="Green" FontSize="Medium" FontAttributes="None" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
+                                    <Label Text="€" TextColor="Green" FontSize="Medium" FontAttributes="None" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="1"/>
+                                </Grid>
+                            </Grid>
+                        </StackLayout>
+
+                        <Grid ColumnDefinitions="*,Auto,3" Padding="1" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="Transparent">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer x:Name="Zusammenfassung" Command="{Binding Source={RelativeSource AncestorType={x:Type pagemodels:Styling_Color_PageModel}}, Path=Choose_Command}"/>
+                            </Grid.GestureRecognizers>
+                            <Label Text="Beispiel Summe" TextColor="{DynamicResource Text_Zusammenfassung_Bilanz}" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
+                            <Grid ColumnDefinitions="*,10,20" HorizontalOptions="Fill" VerticalOptions="Center" Grid.Column="1" ColumnSpacing="3">
+                                <Label Text="42" TextColor="Green" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
+                                <Label Text="€" TextColor="Green" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="1"/>
+                            </Grid>
+                        </Grid>
+                    </StackLayout>
+
+                    <Grid Grid.Row="2" ColumnDefinitions="*,Auto" Padding="10" HorizontalOptions="Fill" VerticalOptions="End" BackgroundColor="{DynamicResource Hintergrund_Fußzeile_Bilanz}" IsVisible="True">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer x:Name="Fußzeile" Command="{Binding Source={RelativeSource AncestorType={x:Type pagemodels:Styling_Color_PageModel}}, Path=Choose_Command}"/>
+                        </Grid.GestureRecognizers>
+                        <Label Text="Restgeld : " TextColor="{DynamicResource Text_Fußzeile_Bilanz}" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
+                        <Grid ColumnDefinitions="*,10,20" HorizontalOptions="Fill" VerticalOptions="Center" Grid.Column="1" ColumnSpacing="3">
+                            <Label Text="42" TextColor="Green" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
+                            <Label Text="€" TextColor="Green" FontSize="Large" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="1"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Frame>
+    </ContentView.Content>
+</ContentView>

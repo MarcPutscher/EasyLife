@@ -1,4 +1,5 @@
 ﻿using EasyLife.Models;
+using EasyLife.Pages;
 using EasyLife.Services;
 using FreshMvvm;
 using MvvmHelpers;
@@ -9,6 +10,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Forms;
 
 namespace EasyLife.PageModels
@@ -342,7 +344,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 await Shell.Current.GoToAsync($"..?TransaktionID={Viertuelle_TransaktionID}&OrderID={OrderID}&EditID={EditID}");
             }
@@ -853,7 +855,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 await Shell.Current.GoToAsync($"..?TransaktionID={Viertuelle_TransaktionID}&OrderID={OrderID}&EditID={EditID}");
             }

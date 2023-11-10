@@ -8,7 +8,7 @@
     x:Class="EasyLife.Pages.Trashcan_Page"    
     xmlns:pagemodels="clr-namespace:EasyLife.PageModels" 
     Title="Papierkorb"
-    BackgroundColor="{DynamicResource Page_Backgroundcolor}"
+    BackgroundColor="{DynamicResource Hintergrund_Home}"
     x:DataType="pagemodels:Trashcan_PageModel">
 
     <ContentPage.BindingContext>
@@ -32,18 +32,18 @@
                         <SwipeView BackgroundColor="Transparent" Grid.Row="1" Grid.Column="1">
                             <SwipeView.RightItems>
                                 <SwipeItems>
-                                    <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.ReviveCommand}" CommandParameter="{Binding .}">
-                                        <Frame Margin="5,0,0,0" BackgroundColor="{DynamicResource Revive_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Revive_Bordercolor}">
-                                            <Label Text="Wiederherstellen" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Revive_Textcolor}" FontAttributes="Bold" FontSize="Medium"/>
+                                    <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.RemoveCommand}" CommandParameter="{Binding .}">
+                                        <Frame Margin="0,0,5,0" BackgroundColor="{DynamicResource Hintergrund_Löschen_Home}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Rand_Löschen_Home}">
+                                            <Label Text="Löschen" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Text_Löschen_Home}" FontAttributes="Bold" FontSize="Medium"/>
                                         </Frame>
                                     </SwipeItemView>
                                 </SwipeItems>
                             </SwipeView.RightItems>
                             <SwipeView.LeftItems>
                                 <SwipeItems>
-                                    <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.RemoveCommand}" CommandParameter="{Binding .}">
-                                        <Frame Margin="0,0,5,0" BackgroundColor="{DynamicResource Delete_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Delete_Bordercolor}">
-                                            <Label Text="Löschen" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Delete_Textcolor}" FontAttributes="Bold" FontSize="Medium"/>
+                                    <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.ReviveCommand}" CommandParameter="{Binding .}">
+                                        <Frame Margin="5,0,0,0" BackgroundColor="{DynamicResource Hintergrund_Bearbeiten_Home}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Rand_Bearbeiten_Home}">
+                                            <Label Text="Wiederherstellen" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Text_Bearbeiten_Home}" FontAttributes="Bold" FontSize="Medium"/>
                                         </Frame>
                                     </SwipeItemView>
                                 </SwipeItems>
@@ -59,18 +59,18 @@
                         <SwipeView BackgroundColor="Transparent" Grid.Row="1" Grid.Column="1">
                             <SwipeView.RightItems>
                                 <SwipeItems>
-                                    <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.ReviveCommand}" CommandParameter="{Binding .}">
-                                        <Frame Margin="5,0,0,0" BackgroundColor="{DynamicResource Revive_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Revive_Bordercolor}">
-                                            <Label Text="Wiederherstellen" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Revive_Textcolor}" FontAttributes="Bold" FontSize="Medium"/>
+                                    <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.RemoveCommand}" CommandParameter="{Binding .}">
+                                        <Frame Margin="0,0,5,0" BackgroundColor="{DynamicResource Hintergrund_Löschen_Home}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Rand_Löschen_Home}">
+                                            <Label Text="Löschen" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Text_Löschen_Home}" FontAttributes="Bold" FontSize="Medium"/>
                                         </Frame>
                                     </SwipeItemView>
                                 </SwipeItems>
                             </SwipeView.RightItems>
                             <SwipeView.LeftItems>
                                 <SwipeItems>
-                                    <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.RemoveCommand}" CommandParameter="{Binding .}">
-                                        <Frame Margin="0,0,5,0" BackgroundColor="{DynamicResource Delete_Backgroundcolor}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Delete_Bordercolor}">
-                                            <Label Text="Löschen" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Delete_Textcolor}" FontAttributes="Bold" FontSize="Medium"/>
+                                    <SwipeItemView Command="{Binding Source={x:Reference ContextSwipeView}, Path=BindingContext.ReviveCommand}" CommandParameter="{Binding .}">
+                                        <Frame Margin="5,0,0,0" BackgroundColor="{DynamicResource Hintergrund_Bearbeiten_Home}" CornerRadius="20" xct:ShadowEffect.Opacity="0.7" BorderColor="{DynamicResource Rand_Bearbeiten_Home}">
+                                            <Label Text="Wiederherstellen" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{DynamicResource Text_Bearbeiten_Home}" FontAttributes="Bold" FontSize="Medium"/>
                                         </Frame>
                                     </SwipeItemView>
                                 </SwipeItems>
@@ -87,7 +87,7 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Papierkorb leeren" Priority="0" Order="Primary" Command="{Binding Empty_Command}">
             <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.TrashCan}"/>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.TrashCan}" Color="Gray"/>
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>

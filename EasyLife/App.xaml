@@ -4,55 +4,85 @@
              x:Class="EasyLife.App">
     <Application.Resources>
         <ResourceDictionary x:Name="dictionary">
+            
+            <Color x:Key="Vordergrund_Cancel_Popup">#710117</Color>
+            <Color x:Key="Hintergrund_Cancel_Popup">Black</Color>
+            <Color x:Key="Text_Titel_Popup">#cbcdcb</Color>
+            <Color x:Key="Hintergrund_Content_Popup">#0b1c48</Color>
+            <Color x:Key="Rand_Content_Popup">#2b6ad0</Color>
+            <Color x:Key="Text_Content_Popup">#ecd5bb</Color>
+            <Color x:Key="Subtext_Content_Popup">#ecd5bb</Color>
+            <Color x:Key="Hintertgrund_Button_Popup">#0b1c48</Color>
+            <Color x:Key="Rand_Button_Popup">#2b6ad0</Color>
+            <Color x:Key="Text_Button_Popup">#138b83</Color>
+            <Color x:Key="Aktiv_Schalter_Popup">ForestGreen</Color>
+            <Color x:Key="Deaktiv_Schalter_Popup">DarkRed</Color>
+
+
+            <Color x:Key="Hintergrund_Home">DarkSlateGray</Color>
+            <Color x:Key="Hintergrund_Bearbeiten_Home">Green</Color>
+            <Color x:Key="Rand_Bearbeiten_Home">DarkGreen</Color>
+            <Color x:Key="Text_Bearbeiten_Home">White</Color>
+            <Color x:Key="Hintergrund_Löschen_Home">Red</Color>
+            <Color x:Key="Rand_Löschen_Home">DarkRed</Color>
+            <Color x:Key="Text_Löschen_Home">White</Color>
+            <Color x:Key="Hintergrund_Transaktion_Home">Gray</Color>
+            <Color x:Key="Rand_Transaktion_Home">DarkGray</Color>
+            <Color x:Key="Text_Transaktion_Home">Black</Color>
+            <Color x:Key="Hintergrund_Detail_Transaktion_Home">LightGray</Color>
+            <Color x:Key="Text_Detail_Transaktion_Home">Black</Color>
+            <Color x:Key="Hintergrund_Positiver_Betrag_Transaktion_Home">MediumSeaGreen</Color>
+            <Color x:Key="Rand_Positiver_Betrag_Transaktion_Home">ForestGreen</Color>
+            <Color x:Key="Text_Positiver_Betrag_Transaktion_Home">Black</Color>
+            <Color x:Key="Hintergrund_Negativer_Betrag_Transaktion_Home">Salmon</Color>
+            <Color x:Key="Rand_Negativer_Betrag_Transaktion_Home">Red</Color>
+            <Color x:Key="Text_Negativer_Betrag_Transaktion_Home">Black</Color>
+            <Color x:Key="Text_MehrLaden_Home">Black</Color>
+            <Color x:Key="Vordergrund_Budget_Home">SaddleBrown</Color>
+            <Color x:Key="Hintergrund_Saldo_Home">Black</Color>
+            <Color x:Key="Text_Saldo_Home">White</Color>
+            <Color x:Key="Vordergrund_Hinzufügen_Home">Orange</Color>
+
+
+            <Color x:Key="Hintergrund_Hinzufügen">DarkSlateGray</Color>
+            <Color x:Key="Hintergrund_Eingabefeld_Hinzufügen">Orange</Color>
+            <Color x:Key="Rand_Eingabefeld_Hinzufügen">Coral</Color>
+            <Color x:Key="Title_Eingabefeld_Hinzufügen">White</Color>
+            <Color x:Key="Text_Eingabefeld_Hinzufügen">Black</Color>
+            <Color x:Key="Platzhater_Eingabefeld_Hinzufügen">#525252</Color>
+            <Color x:Key="Aktiv_Schalter_Eingabefeld_Hinzufügen">ForestGreen</Color>
+            <Color x:Key="Deaktiv_Schalter_Eingabefeld_Hinzufügen">DarkRed</Color>
+            <Color x:Key="Hintergrund_Wahlfeld_Hinzufügen">Orange</Color>
+            <Color x:Key="Haubttext_Wahlfeld_Hinzufügen">Black</Color>
+            <Color x:Key="Nebentext_Wahlfeld_Hinzufügen">Black</Color>
+            <Color x:Key="Hintergrund_Option_Wahlfeld_Hinzufügen">SkyBlue</Color>
+            <Color x:Key="Rand_Option_Wahlfeld_Hinzufügen">Blue</Color>
+            <Color x:Key="Text_Option_Wahlfeld_Hinzufügen">OrangeRed</Color>
+            <Color x:Key="Hintergrund_Schalter_Hinzufügen">SkyBlue</Color>
+            <Color x:Key="Rand_Schalter_Hinzufügen">Blue</Color>
+            <Color x:Key="Text_Schalter_Hinzufügen">OrangeRed</Color>
+
+
+            <Color x:Key="Hintergrund_Bilanz">DarkSlateGray</Color>
+            <Color x:Key="Hintergrund_Kopfzeile_Bilanz">DarkGray</Color>
+            <Color x:Key="Text_Kopfzeile_Bilanz">Black</Color>
+            <Color x:Key="Hintergrund_Fußzeile_Bilanz">DarkGray</Color>
+            <Color x:Key="Text_Fußzeile_Bilanz">Black</Color>
+            <Color x:Key="Text_Zusammenfassung_Bilanz">Black</Color>
+            <Color x:Key="Text_Zweck_Stack_Bilanz">White</Color>
+            <Color x:Key="Text_Anzahl_Stack_Bilanz">White</Color>
+
             <Color x:Key="App_Backgroundcolor">#1d0e21</Color>
-            
-            <Color x:Key="Page_Backgroundcolor">DarkSlateGray</Color>
 
-            <Color x:Key="Transaktion_Backgroundcolor">Gray</Color>
-            <Color x:Key="Transaktion_Bordercolor">DarkGray</Color>
-            <Color x:Key="Transaktion_Textcolor">Black</Color>
-            
-            <Color x:Key="EntryFrame_Backgroundcolor">Orange</Color>
-            <Color x:Key="EntryFrame_Bordercolor">Coral</Color>
-            <Color x:Key="EntryFrame_Textcolor">Black</Color>
-            
-            <Color x:Key="Button_Backgroundcolor">SkyBlue</Color>
-            <Color x:Key="Button_Bordercolor">Blue</Color>
-            <Color x:Key="Button_Textcolor">OrangeRed</Color>
-            
-            <Color x:Key="Label_Textcolor">White</Color>
-            
             <Color x:Key="Grouping_Textcolor">White</Color>
-            
+
             <Color x:Key="Refresh_Color">Blue</Color>
-            
-            <Color x:Key="Edit_Backgroundcolor">Green</Color>
-            <Color x:Key="Edit_Bordercolor">DarkGreen</Color>
-            <Color x:Key="Edit_Textcolor">White</Color>
-
-            <Color x:Key="Remove_Backgroundcolor">Red</Color>
-            <Color x:Key="Remove_Bordercolor">DarkRed</Color>
-            <Color x:Key="Remove_Textcolor">White</Color>
-            
-            <Color x:Key="Delete_Backgroundcolor">Red</Color>
-            <Color x:Key="Delete_Bordercolor">DarkRed</Color>
-            <Color x:Key="Delete_Textcolor">White</Color>
-
-            <Color x:Key="Revive_Backgroundcolor">Blue</Color>
-            <Color x:Key="Revive_Bordercolor">DarkBlue</Color>
-            <Color x:Key="Revive_Textcolor">White</Color>
-
-            <Color x:Key="Order_Backgroundcolor">Blue</Color>
-            <Color x:Key="Order_Bordercolor">DarkBlue</Color>
-            <Color x:Key="Order_Textcolor">White</Color>
-
-            <Color x:Key="Saldo_Backgroundcolor">Black</Color>
-            <Color x:Key="Saldo_Textcolor">White</Color>
 
             <Color x:Key="Flyout_Backgroundcolor">DarkGray</Color>
             <Color x:Key="Flyout_Selectcolor">LightGray</Color>
             <Color x:Key="Flyout_Textcolor">Black</Color>
             <Color x:Key="Flyout_Iconcolor">Black</Color>
+            
         </ResourceDictionary>    
     </Application.Resources>
 </Application>

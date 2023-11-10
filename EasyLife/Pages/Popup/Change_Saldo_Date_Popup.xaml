@@ -4,23 +4,29 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     x:Class="EasyLife.Pages.Change_Saldo_Date_Popup"
+    xmlns:fontAwesome="clr-namespace:FontAwesome" 
     IsLightDismissEnabled="False"
     Color="Transparent"
-    Size="320,270">
+    Size="320,320">
 
-    <StackLayout>
-        <Button Clicked="CancelButton_Clicked" HorizontalOptions="End" VerticalOptions="Start" Text="X" FontSize="20" FontAttributes="Bold" BackgroundColor="Red" BorderColor="DarkRed" Padding="5" CornerRadius="100" WidthRequest="50" Margin="0,0,0,5"/>
-        <Frame Padding="20" CornerRadius="20" BackgroundColor="Gray" BorderColor="Black" VerticalOptions="Center" HorizontalOptions="Center" xct:ShadowEffect.Color="Blue">
+    <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="15" ColumnDefinitions="Auto,*" ColumnSpacing="0" Padding="10" BackgroundColor="Transparent">
+        <ImageButton Grid.Row="0" Grid.Column="1" Clicked="CancelButton_Clicked" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="{DynamicResource Hintergrund_Cancel_Popup}" CornerRadius="50" Padding="0">
+            <ImageButton.Source>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.CircleXmark}" Color="{DynamicResource Vordergrund_Cancel_Popup}" Size="50"/>
+            </ImageButton.Source>
+        </ImageButton>
+        <Label Text="Stand ändern" TextColor="{DynamicResource Text_Titel_Popup}" FontSize="30" FontAttributes="Bold" HorizontalTextAlignment="Center" TextDecorations="Underline" Grid.Row="0" Grid.Column="0"/>
+        <Frame Grid.Row="1" Grid.ColumnSpan="2" Padding="20" CornerRadius="20" BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" BorderColor="{DynamicResource Rand_Content_Popup}" VerticalOptions="Center" HorizontalOptions="Center" xct:ShadowEffect.Color="Blue">
             <StackLayout>
                 <StackLayout Orientation="Horizontal" Spacing="10">
-                    <Label Text="Wählen Sie das Datum aus, bis wohin der Stand berechnet werden soll." VerticalTextAlignment="Center" HorizontalTextAlignment="Start" TextColor="White" FontSize="Medium" FontAttributes="Bold" />
+                    <Label Text="Wählen Sie das Datum aus, bis wohin der Stand berechnet werden soll." VerticalTextAlignment="Center" HorizontalTextAlignment="Start" TextColor="{DynamicResource Text_Content_Popup}" FontSize="Medium" FontAttributes="Bold" />
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Spacing="10">
                     <DatePicker x:Name="My_DatePicker" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" 
-                     TextColor="White" FontAttributes="Bold"/>
+                     TextColor="{DynamicResource Subtext_Content_Popup}" FontAttributes="Bold"/>
                 </StackLayout>
-                <Button x:Name="ReturnButton" Text="Anwenden" BackgroundColor="SkyBlue" Clicked="Apply" CornerRadius="10" xct:ShadowEffect.Color="Blue" BorderColor="DarkBlue" FontAttributes="Bold" />
             </StackLayout>
         </Frame>
-    </StackLayout>
+        <Button x:Name="ReturnButton" Grid.Row="2" Grid.ColumnSpan="2" Text="Anwenden" BackgroundColor="{DynamicResource Hintertgrund_Button_Popup}" Clicked="Apply" CornerRadius="30" xct:ShadowEffect.Color="{DynamicResource Rand_Button_Popup}" BorderColor="{DynamicResource Rand_Button_Popup}" TextColor="{DynamicResource Text_Button_Popup}" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" />
+    </Grid>
 </xct:Popup>

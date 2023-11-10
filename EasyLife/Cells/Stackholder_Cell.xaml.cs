@@ -1,10 +1,11 @@
 ﻿using EasyLife.Models;
+using EasyLife.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -52,14 +53,14 @@ namespace EasyLife.Cells
 
                     while (indikator == false)
                     {
-                        var result = await Shell.Current.DisplayActionSheet("Details zu " + input[0].Zweck + "", "Zurück", null, details);
+                        var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Details zu " + input[0].Zweck + "", 350, detaillist));
 
                         //  Wenn ein Button getrückt wurde, wird die Transaktion nach einem bestimmten Muster, als eingeständiges Fenster, angezeigt, falls dieser Button einem String in der detailliste entspricht.
                         //  Sonst wird das Auswahlfenster geschlossen.
-                        
+
                         if (detaillist.Contains(result) == true)
                         {
-                            Transaktion item = input[detaillist.IndexOf(result)];
+                            Transaktion item = input[detaillist.IndexOf((string)result)];
 
                             string message = null;
 
@@ -78,11 +79,11 @@ namespace EasyLife.Cells
                                     message = "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird zum Stand berechnet: "+item.Saldo_Visibility_String + "\n\nAuftragsdetails\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
                                 }
 
-                                await Shell.Current.DisplayAlert("Transaktion " + item.Id + "", message, "Zurück");
+                                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Transaktion " + item.Id + "", 350, 500, null, null, message));
                             }
                             else
                             {
-                                await Shell.Current.DisplayAlert("Transaktion " + item.Id + "", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt: " + item.Balance_Visibility_String + "\nWird zum Stand berechnet: "+item.Saldo_Visibility_String + "", "Zurück");
+                                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Transaktion " + item.Id + "", 350, 500, null, null, "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird im Stand berechnet: " + item.Saldo_Visibility_String + ""));
                             }
                         }
                         else
@@ -94,7 +95,7 @@ namespace EasyLife.Cells
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
     }
