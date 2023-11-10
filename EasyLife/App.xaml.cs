@@ -91,8 +91,6 @@ namespace EasyLife
             dictionary["Text_Zweck_Stack_Bilanz"] = Preferences.Get("Text_Zweck_Stack_Bilanz", Color.White.ToHex());
             dictionary["Text_Anzahl_Stack_Bilanz"] = Preferences.Get("Text_Anzahl_Stack_Bilanz", Color.White.ToHex());
 
-            dictionary["App_Backgroundcolor"] = Preferences.Get("App_Backgroundcolor", "#1d0e21");
-
             dictionary["Grouping_Textcolor"] = Preferences.Get("Grouping_Textcolor", Color.White.ToHex());
 
             dictionary["Refresh_Color"] = Preferences.Get("Refresh_Color", Color.Blue.ToHex());

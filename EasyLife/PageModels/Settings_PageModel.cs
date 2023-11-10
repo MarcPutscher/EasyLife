@@ -1058,7 +1058,7 @@ namespace EasyLife.PageModels
                 foreach (NotificationRequest pn in list_of_pending_notification)
                 {
                     DateTime time = (DateTime)pn.Schedule.NotifyTime;
-                    list_of_strings_of_pending_notification.Add("ID:" + pn.NotificationId + "| " + time.ToString("dddd, d.M.yyyy,  H:mm", new CultureInfo("de-DE")) + "Uhr");
+                    list_of_strings_of_pending_notification.Add("ID:" + pn.NotificationId + "| " + time.ToString("dddd, d.M.yyyy, H:mm", new CultureInfo("de-DE")) + "Uhr");
                 }
 
                 if (list_of_strings_of_pending_notification.Count() == 0)
@@ -1069,7 +1069,7 @@ namespace EasyLife.PageModels
                 {
                     try
                     {
-                        var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Benachrichtigungen", 370, list_of_strings_of_pending_notification));
+                        var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Benachrichtigungen", 400, list_of_strings_of_pending_notification));
 
                         if (result != null)
                         {
@@ -1081,7 +1081,7 @@ namespace EasyLife.PageModels
 
                             DateTime time = (DateTime)list_of_pending_notification.Where(t => t.NotificationId == notification.Notification_ID).First().Schedule.NotifyTime;
 
-                            await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Benachrichtigung " + resultstring + "", 390, 350, null, null, list_of_pending_notification.Where(t => t.NotificationId == notification.Notification_ID).First().Description + "\nDatum:" + time.ToString("dddd, d.M.yyyy,  H:mm", new CultureInfo("de-DE")) + "Uhr"));
+                            await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Benachrichtigung " + resultstring + "", 400, 350, null, null, list_of_pending_notification.Where(t => t.NotificationId == notification.Notification_ID).First().Description + "\nDatum:" + time.ToString("dddd, d.M.yyyy,  H:mm", new CultureInfo("de-DE")) + "Uhr"));
                         }
                     }
                     catch { }

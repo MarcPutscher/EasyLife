@@ -1,6 +1,7 @@
 ﻿using EasyLife.Helpers;
 using EasyLife.Interfaces;
 using EasyLife.Models;
+using EasyLife.Pages;
 using Microsoft.Extensions.DependencyModel;
 using Plugin.LocalNotification;
 using SQLite;
@@ -15,6 +16,7 @@ using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using static iText.Svg.SvgConstants;
@@ -249,9 +251,6 @@ namespace EasyLife.Services
             {
                 List<string> Backup_name = new List<string>();
 
-
-                string[] Button_name = null;
-
                 Dictionary<DateTime, string> dict_0 = new Dictionary<DateTime, string>();
 
                 Dictionary<string, string> dict = new Dictionary<string, string>();
@@ -280,11 +279,9 @@ namespace EasyLife.Services
 
                 Backup_name.Reverse();
 
-                Button_name = Backup_name.ToArray();
+                var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Vorhandene Backups",380, Backup_name));
 
-                string result = await Shell.Current.DisplayActionSheet("Vorhandene Backups", "Zurück", null, Button_name);
-
-                if (result == "Zurück")
+                if (result == null)
                 {
                     { return 2; }
                 }
@@ -296,7 +293,7 @@ namespace EasyLife.Services
                     }
                     else
                     {
-                        Preferences.Set("Restored_Backup_Path", dict[result]);
+                        Preferences.Set("Restored_Backup_Path", dict[(string)result]);
                     }
                 }
 
