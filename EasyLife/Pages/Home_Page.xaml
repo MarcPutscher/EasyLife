@@ -241,9 +241,9 @@
                     <ViewCell>
                         <Grid ColumnDefinitions="50,*,90" Padding="5">
                             <Grid ColumnDefinitions="20,50,20" Padding="0" Grid.Column="2">
-                                <Button Grid.Column="1" BackgroundColor="{DynamicResource Page_Backgroundcolor}" Text="X" TextColor="Black" HorizontalOptions="Fill" Command="{Binding Source={x:Reference SuggestionSwipeView}, Path=BindingContext.Delet_Suggestion}" CommandParameter="{Binding .}"/>
+                                <Button Grid.Column="1" BackgroundColor="{DynamicResource Hintergrund_Seite_Home}" Text="X" TextColor="Black" HorizontalOptions="Fill" Command="{Binding Source={x:Reference SuggestionSwipeView}, Path=BindingContext.Delet_Suggestion}" CommandParameter="{Binding .}"/>
                             </Grid>
-                            <Label Text="{Binding Suggestion_value}" TextColor="White" FontSize="Body" TextTransform="None" HeightRequest="10" VerticalTextAlignment="Center" Padding="0" HorizontalOptions= "FillAndExpand" HorizontalTextAlignment="Start" Grid.Column="1" BackgroundColor="{DynamicResource Page_Backgroundcolor}">
+                            <Label Text="{Binding Suggestion_value}" TextColor="White" FontSize="Body" TextTransform="None" HeightRequest="10" VerticalTextAlignment="Center" Padding="0" HorizontalOptions= "FillAndExpand" HorizontalTextAlignment="Start" Grid.Column="1" BackgroundColor="{DynamicResource Hintergrund_Seite_Home}">
                                 <Label.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding Source={x:Reference SuggestionSwipeView}, Path=BindingContext.Select_Suggestion}" CommandParameter="{Binding .}" />
                                 </Label.GestureRecognizers>
@@ -391,13 +391,17 @@
             </StackLayout>
         </StackLayout>
 
-        <Grid RowDefinitions="300,100,*" IsVisible="{Binding Kein_Ergebnis_Suggestion_Status}" BackgroundColor="{DynamicResource Page_Backgroundcolor}" VerticalOptions="FillAndExpand">
+        <Grid RowDefinitions="300,100,*" IsVisible="{Binding Kein_Ergebnis_Suggestion_Status}" BackgroundColor="{DynamicResource Hintergrund_Seite_Home}" VerticalOptions="FillAndExpand">
             <Label Grid.Row="1" Text="Keine Suchbegriff vorhanden!" TextColor="Black" FontSize="20" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="Center"/>
         </Grid>
 
         <Grid RowDefinitions="300,100,*" IsVisible="{Binding Kein_Ergebnis_Transaktion_Status}" VerticalOptions="FillAndExpand">
             <Label Grid.Row="1" Text="Keine Transaktionen vorhanden!" TextColor="Black" FontSize="20" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="Center"/>
-            <Button Command="{Binding Add_Command}" Grid.Row="2" FontSize="30" Text="+" TextColor="Orange" VerticalOptions="End" HorizontalOptions="End" CornerRadius="60" WidthRequest="55" HeightRequest="55" Padding="5" Margin="0,0,10,10"/>
+            <ImageButton Command="{Binding Add_Command}" Grid.Row="2" VerticalOptions="End" HorizontalOptions="End" WidthRequest="55" HeightRequest="55" Padding="0" BackgroundColor="Transparent" Margin="0,0,10,10">
+                <ImageButton.Source>
+                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.CirclePlus}" Color="{DynamicResource Vordergrund_Hinzufügen_Home}"/>
+                </ImageButton.Source>
+            </ImageButton>
         </Grid>
     </StackLayout>
 
