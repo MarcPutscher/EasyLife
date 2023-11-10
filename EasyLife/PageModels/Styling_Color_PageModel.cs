@@ -24,6 +24,7 @@ using EasyLife.Cells;
 using EasyLife.Cells.Styling;
 using ColorMine.ColorSpaces;
 using static SQLite.SQLite3;
+using EasyLife.CustomeEventArgs;
 
 namespace EasyLife.PageModels
 {
@@ -41,9 +42,13 @@ namespace EasyLife.PageModels
 
             Choose_Command = new AsyncCommand<List<object>>(Choose_Methode);
 
-            Colorsname.AddRange(PopupView.Popup_View_Item_List);
-
             Colorsname.AddRange(HomeView.Home_View_Item_List);
+
+            Colorsname.AddRange(HinzufügenView.Hinzufügen_View_Item_List);
+
+            Colorsname.AddRange(BilanzView.Bilanz_View_Item_List);
+
+            Colorsname.AddRange(PopupView.Popup_View_Item_List);
 
             Create_Default_Colordic();
         }
@@ -251,7 +256,13 @@ namespace EasyLife.PageModels
             {
                 if(CurrentCell != null)
                 {
-                    var result = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Zurücksetzen",300,300,"Ja","Nein","Wollen Sie wirklich die Änderungen zurücksetzen?"));
+                    string message = "Wollen Sie wirklich die Änderungen vom " + CurrentCell.Title + " zurücksetzen?";
+
+                    if (CurrentCell.Title == "Bilanz")
+                    {
+                        message = "Wollen Sie wirklich die Änderungen von der " + CurrentCell.Title + " zurücksetzen?";
+                    }
+                    var result = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Zurücksetzen",300,300,"Ja","Nein",message));
 
                     if(result == null)
                     {
@@ -299,6 +310,8 @@ namespace EasyLife.PageModels
                 Colordic.Add("Hintertgrund_Button_Popup", "#0b1c48");
                 Colordic.Add("Rand_Button_Popup", "#2b6ad0");
                 Colordic.Add("Text_Button_Popup", "#138b83");
+                Colordic.Add("Aktiv_Schalter_Popup", Color.ForestGreen.ToHex());
+                Colordic.Add("Deaktiv_Schalter_Popup", Color.DarkRed.ToHex());
 
                 //Home
                 Colordic.Add("Hintergrund_Seite_Home", Color.DarkSlateGray.ToHex());
@@ -324,6 +337,35 @@ namespace EasyLife.PageModels
                 Colordic.Add("Hintergrund_Saldo_Home", Color.Black.ToHex());
                 Colordic.Add("Text_Saldo_Home", Color.White.ToHex());
                 Colordic.Add("Vordergrund_Hinzufügen_Home", Color.Orange.ToHex());
+
+                //Hinzufügen/Bearbeiten
+                Colordic.Add("Hintergrund_Hinzufügen", Color.DarkSlateGray.ToHex());
+                Colordic.Add("Hintergrund_Eingabefeld_Hinzufügen", Color.Orange.ToHex());
+                Colordic.Add("Rand_Eingabefeld_Hinzufügen", Color.Coral.ToHex());
+                Colordic.Add("Title_Eingabefeld_Hinzufügen", Color.White.ToHex());
+                Colordic.Add("Text_Eingabefeld_Hinzufügen", Color.Black.ToHex());
+                Colordic.Add("Platzhater_Eingabefeld_Hinzufügen", "#525252");
+                Colordic.Add("Aktiv_Schalter_Eingabefeld_Hinzufügen", Color.ForestGreen.ToHex());
+                Colordic.Add("Deaktiv_Schalter_Eingabefeld_Hinzufügen", Color.DarkRed.ToHex());
+                Colordic.Add("Hintergrund_Wahlfeld_Hinzufügen", Color.Orange.ToHex());
+                Colordic.Add("Haubttext_Wahlfeld_Hinzufügen", Color.Black.ToHex());
+                Colordic.Add("Nebentext_Wahlfeld_Hinzufügen", Color.Black.ToHex());
+                Colordic.Add("Hintergrund_Option_Wahlfeld_Hinzufügen", Color.SkyBlue.ToHex());
+                Colordic.Add("Rand_Option_Wahlfeld_Hinzufügen", Color.Blue.ToHex());
+                Colordic.Add("Text_Option_Wahlfeld_Hinzufügen", Color.OrangeRed.ToHex());
+                Colordic.Add("Hintergrund_Schalter_Hinzufügen", Color.SkyBlue.ToHex());
+                Colordic.Add("Rand_Schalter_Hinzufügen", Color.Blue.ToHex());
+                Colordic.Add("Text_Schalter_Hinzufügen", Color.OrangeRed.ToHex());
+
+                //Bilanz
+                Colordic.Add("Hintergrund_Bilanz", Color.DarkSlateGray.ToHex());
+                Colordic.Add("Hintergrund_Kopfzeile_Bilanz", Color.DarkGray.ToHex());
+                Colordic.Add("Text_Kopfzeile_Bilanz", Color.Black.ToHex());
+                Colordic.Add("Hintergrund_Fußzeile_Bilanz", Color.DarkGray.ToHex());
+                Colordic.Add("Text_Fußzeile_Bilanz", Color.Black.ToHex());
+                Colordic.Add("Text_Zusammenfassung_Bilanz", Color.Black.ToHex());
+                Colordic.Add("Text_Zweck_Stack_Bilanz", Color.White.ToHex());
+                Colordic.Add("Text_Anzahl_Stack_Bilanz", Color.White.ToHex());
             }
             catch
             {
@@ -370,6 +412,8 @@ namespace EasyLife.PageModels
 
                 SelectedColor = Color.FromHex(App.Current.Resources[CurrentColorname].ToString());
 
+                RaiseMessage(App.Current.Resources[CurrentColorname].ToString());
+
                 ColorWheel_State = true;
 
                 CurrentItem = input3;
@@ -409,8 +453,24 @@ namespace EasyLife.PageModels
             }
         }
 
+        private void RaiseMessage (string message)
+        {
+            OnMessageRaised?.Invoke(this, new StylingMessageEventArgs(message));
+        }
+
         public string CurrentItem { get; set; }
-        public StylingCell CurrentCell { get; set; }
+
+        public StylingCell currentcell;
+        public StylingCell CurrentCell
+        {
+            get { return currentcell; }
+            set
+            {
+                if (CurrentCell == value)
+                    return;
+                currentcell = value; RaisePropertyChanged();
+            }
+        }
         public string CurrentColorname { get; set; }
 
         public List<string> CurrentItemList = new List<string>();
@@ -454,5 +514,7 @@ namespace EasyLife.PageModels
         public AsyncCommand View_IsAppering_Command { get; }
         public AsyncCommand<object> CurrentItemChangedCommand_Command { get; }
         public AsyncCommand<List<object>> Choose_Command { get; }
+
+        public EventHandler<StylingMessageEventArgs> OnMessageRaised;
     }
 }

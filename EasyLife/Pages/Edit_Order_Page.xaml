@@ -4,7 +4,7 @@
              x:Class="EasyLife.Pages.Edit_Order_Page"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              Title="Auftrag bearbeiten"
-             BackgroundColor ="{DynamicResource Page_Backgroundcolor}"
+             BackgroundColor ="{DynamicResource Hintergrund_Hinzufügen}"
              xmlns:pagemodels="clr-namespace:EasyLife.PageModels"
              x:DataType="pagemodels:Edit_Order_PageModel"
              Shell.NavBarIsVisible="False">
@@ -22,259 +22,664 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="ButtonA" TargetType="Button">
-                <Setter Property="TextColor" Value="{DynamicResource Button_Textcolor}"/>
+                <Setter Property="TextColor" Value="{DynamicResource Text_Schalter_Hinzufügen}"/>
                 <Setter Property="HeightRequest" Value="70"/>
                 <Setter Property="WidthRequest" Value="800"/>
                 <Setter Property ="FontAttributes" Value="Bold"/>
                 <Setter Property="HorizontalOptions" Value="Center"/>
                 <Setter Property="FontSize" Value="Large"/>
-                <Setter Property="BorderColor" Value="{DynamicResource Button_Bordercolor}"/>
+                <Setter Property="BorderColor" Value="{DynamicResource Rand_Schalter_Hinzufügen}"/>
                 <Setter Property="BorderWidth" Value="2"/>
                 <Setter Property="CornerRadius" Value="10"/>
-                <Setter Property="BackgroundColor" Value="{DynamicResource Button_Backgroundcolor}"/>
+                <Setter Property="BackgroundColor" Value="{DynamicResource Hintergrund_Schalter_Hinzufügen}"/>
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <StackLayout VerticalOptions="Fill">
         <Grid RowDefinitions="5,Auto,5,Auto,5,Auto,Auto" Padding="5">
-            <Frame  Grid.Row="1" CornerRadius="10" BackgroundColor="{DynamicResource EntryFrame_Backgroundcolor}" BorderColor="{DynamicResource EntryFrame_Bordercolor}" HorizontalOptions="Fill" Padding="0">
+            <Frame  Grid.Row="1" CornerRadius="10" BackgroundColor="{DynamicResource Hintergrund_Eingabefeld_Hinzufügen}" BorderColor="{DynamicResource Rand_Eingabefeld_Hinzufügen}" HorizontalOptions="Fill" Padding="0">
                 <StackLayout>
                     <Grid RowDefinitions="5,Auto,5" ColumnDefinitions="5,*,5">
                         <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1" HeightRequest="50" HorizontalOptions="Fill">
-                            <Label Text="Auftrags Option:" FontSize="Medium" TextColor="{DynamicResource EntryFrame_Textcolor}" VerticalOptions="Center" HorizontalOptions="Center"/>
-                            <Picker ItemsSource="{Binding Option_Source}" Title="Option" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="{DynamicResource EntryFrame_Textcolor}" SelectedItem="{Binding Option_Item}" WidthRequest="200"/>
+                            <Label Text="Auftrags Option:" FontSize="Medium" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" VerticalOptions="Center" HorizontalOptions="Center"/>
+                            <Picker ItemsSource="{Binding Option_Source}" Title="Option" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" TitleColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}" SelectedItem="{Binding Option_Item}" WidthRequest="200"/>
                         </StackLayout>
                     </Grid>
                 </StackLayout>
             </Frame>
-            <Frame Grid.Row="3" CornerRadius="10" BackgroundColor="{DynamicResource EntryFrame_Backgroundcolor}" BorderColor="{DynamicResource EntryFrame_Bordercolor}" HorizontalOptions="Fill" IsVisible="{Binding Onc_Option_Visibility}" Padding="0">
+            <Frame Grid.Row="3" CornerRadius="10" BackgroundColor="{DynamicResource Hintergrund_Eingabefeld_Hinzufügen}" BorderColor="{DynamicResource Rand_Eingabefeld_Hinzufügen}" HorizontalOptions="Fill" IsVisible="{Binding Onc_Option_Visibility}" Padding="0">
                 <StackLayout >
                     <Grid RowDefinitions="5,Auto,5" ColumnDefinitions="5,*,5" VerticalOptions="Center" HorizontalOptions="Center">
                         <StackLayout Grid.Row="1" Grid.Column="1" HeightRequest="50">
-                            <Picker ItemsSource="{Binding Kind_Source}" Title="Art" HorizontalTextAlignment="Center" TextColor="{DynamicResource EntryFrame_Textcolor}" FontAttributes="Bold" SelectedItem="{Binding Kind_Item}"/>
+                            <Picker ItemsSource="{Binding Kind_Source}" Title="Art" HorizontalTextAlignment="Center" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" TitleColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}" FontAttributes="Bold" SelectedItem="{Binding Kind_Item}"/>
                         </StackLayout>
                     </Grid>
                 </StackLayout>
             </Frame>
-            <Frame Grid.Row="3" CornerRadius="10" BackgroundColor="{DynamicResource EntryFrame_Backgroundcolor}" BorderColor="{DynamicResource EntryFrame_Bordercolor}" HorizontalOptions="Fill" IsVisible="{Binding Amount_Option_Visibility}" Padding="0">
+            <Frame Grid.Row="3" CornerRadius="10" BackgroundColor="{DynamicResource Hintergrund_Eingabefeld_Hinzufügen}" BorderColor="{DynamicResource Rand_Eingabefeld_Hinzufügen}" HorizontalOptions="Fill" IsVisible="{Binding Amount_Option_Visibility}" Padding="0">
                 <StackLayout >
                     <Grid RowDefinitions="5,Auto,5" ColumnDefinitions="5,*,5,*,5">
                         <StackLayout Grid.Row="1" Grid.Column="1" HeightRequest="50">
-                            <Picker ItemsSource="{Binding Count_Source}" Title="Anzahl" HorizontalTextAlignment="Center" TextColor="{DynamicResource EntryFrame_Textcolor}" FontAttributes="Bold" SelectedItem="{Binding Count_Item}"/>
+                            <Picker ItemsSource="{Binding Count_Source}" Title="Anzahl" HorizontalTextAlignment="Center" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" TitleColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}" FontAttributes="Bold" SelectedItem="{Binding Count_Item}"/>
                         </StackLayout>
                         <StackLayout Grid.Row="1" Grid.Column="3" HeightRequest="50">
-                            <Picker ItemsSource="{Binding Kind_Source}" Title="Art" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="{DynamicResource EntryFrame_Textcolor}" SelectedItem="{Binding Kind_Item}"/>
+                            <Picker ItemsSource="{Binding Kind_Source}" Title="Art" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" TitleColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}" SelectedItem="{Binding Kind_Item}"/>
                         </StackLayout>
                     </Grid>
                 </StackLayout>
             </Frame>
-            <Frame Grid.Row="3" CornerRadius="10" BackgroundColor="{DynamicResource EntryFrame_Backgroundcolor}" BorderColor="{DynamicResource EntryFrame_Bordercolor}" HorizontalOptions="Fill" IsVisible="{Binding Date_Option_Visibility}" Padding="0">
+            <Frame Grid.Row="3" CornerRadius="10" BackgroundColor="{DynamicResource Hintergrund_Eingabefeld_Hinzufügen}" BorderColor="{DynamicResource Rand_Eingabefeld_Hinzufügen}" HorizontalOptions="Fill" IsVisible="{Binding Date_Option_Visibility}" Padding="0">
                 <StackLayout >
                     <Grid RowDefinitions="5,Auto,5" ColumnDefinitions="5,Auto,5,*,5">
                         <StackLayout Grid.Row="1" Grid.Column="1" HeightRequest="50">
-                            <DatePicker HorizontalOptions="Fill" FontAttributes="Bold" Format="dddd,  dd.M.yyyy" TextColor="{DynamicResource EntryFrame_Textcolor}" WidthRequest="220" Date="{Binding Date}" FontSize="Medium" MinimumDate="{Binding Minimum_Date}"/>
+                            <DatePicker HorizontalOptions="Fill" FontAttributes="Bold" Format="dddd,  dd.M.yyyy" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" WidthRequest="220" Date="{Binding Date}" FontSize="Medium" MinimumDate="{Binding Minimum_Date}"/>
                         </StackLayout>
                         <StackLayout Grid.Row="1" Grid.Column="3" HeightRequest="50">
-                            <Picker ItemsSource="{Binding Kind_Source}" Title="Art" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="{DynamicResource EntryFrame_Textcolor}" SelectedItem="{Binding Kind_Item}"/>
+                            <Picker ItemsSource="{Binding Kind_Source}" Title="Art" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" TitleColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}" SelectedItem="{Binding Kind_Item}"/>
                         </StackLayout>
                     </Grid>
                 </StackLayout>
             </Frame>
-            <Frame Grid.Row="5" IsVisible="{Binding Days_Visibility}" CornerRadius="10" BackgroundColor="{DynamicResource Order_Backgroundcolor}" BorderColor="{DynamicResource Order_Bordercolor}" Padding="0">
+            <Frame Grid.Row="5" IsVisible="{Binding Days_Visibility}" CornerRadius="10" BackgroundColor="{DynamicResource Hintergrund_Eingabefeld_Hinzufügen}" BorderColor="{DynamicResource Rand_Eingabefeld_Hinzufügen}" Padding="0">
                 <StackLayout >
                     <Grid RowDefinitions="5,Auto,5" ColumnDefinitions="5,*,5,*,5" Padding="5" >
                         <StackLayout Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Padding="3">
                             <StackLayout>
                                 <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Montag" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
+                                    <Label Text="Montag" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
                                     <Switch IsToggled="{Binding Monday_Switch}" Grid.Column="3"/>
                                 </Grid>
                             </StackLayout>
                             <StackLayout>
                                 <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Dienstag" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding Tuesday_Switch}" Grid.Column="3"/>
+                                    <Label Text="Dienstag" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding Tuesday_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
                                 </Grid>
                             </StackLayout>
                             <StackLayout>
                                 <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Mittwoch" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding Wednesday_Switch}" Grid.Column="3"/>
+                                    <Label Text="Mittwoch" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding Wednesday_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
                                 </Grid>
                             </StackLayout>
                             <StackLayout>
                                 <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Donnerstag" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding Thursday_Switch}" Grid.Column="3"/>
+                                    <Label Text="Donnerstag" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding Thursday_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
                                 </Grid>
                             </StackLayout>
                             <StackLayout>
                                 <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Freitag" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding Friday_Switch}" Grid.Column="3"/>
+                                    <Label Text="Freitag" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding Friday_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
                                 </Grid>
                             </StackLayout>
                             <StackLayout>
                                 <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Samstag" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding Saturday_Switch}" Grid.Column="3"/>
+                                    <Label Text="Samstag" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding Saturday_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
                                 </Grid>
                             </StackLayout>
                             <StackLayout>
                                 <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Sonntag" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding Sunday_Switch}" Grid.Column="3"/>
+                                    <Label Text="Sonntag" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding Sunday_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
                                 </Grid>
                             </StackLayout>
                         </StackLayout>
                     </Grid>
                 </StackLayout>
             </Frame>
-            <Frame IsVisible="{Binding Week_Visibility}" Grid.Row="5" CornerRadius="10" BackgroundColor="{DynamicResource Order_Backgroundcolor}" BorderColor="{DynamicResource Order_Bordercolor}" Padding="0">
+            <Frame IsVisible="{Binding Week_Visibility}" Grid.Row="5" CornerRadius="10" BackgroundColor="{DynamicResource Hintergrund_Eingabefeld_Hinzufügen}" BorderColor="{DynamicResource Rand_Eingabefeld_Hinzufügen}" Padding="0">
                 <StackLayout >
                     <Grid RowDefinitions="5,Auto,5" ColumnDefinitions="5,*,5,*,5" Padding="5" >
                         <StackLayout Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Padding="3">
                             <StackLayout>
                                 <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Jede Woche" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding Ever_Week_Switch}" Grid.Column="3"/>
+                                    <Label Text="Jede Woche" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding Ever_Week_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
                                 </Grid>
                             </StackLayout>
                             <StackLayout>
                                 <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Jede zweite Woche" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding Ever_Second_Week_Switch}" Grid.Column="3"/>
+                                    <Label Text="Jede zweite Woche" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding Ever_Second_Week_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
                                 </Grid>
                             </StackLayout>
                             <StackLayout>
                                 <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Jede dritte Woche" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding Ever_Third_Week_Switch}" Grid.Column="3"/>
+                                    <Label Text="Jede dritte Woche" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding Ever_Third_Week_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
                                 </Grid>
                             </StackLayout>
                             <StackLayout>
                                 <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Jede vierte Woche" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding Ever_Fourth_Week_Switch}" Grid.Column="3"/>
-                                </Grid>
-                            </StackLayout>
-                        </StackLayout>
-                    </Grid>
-                </StackLayout>
-            </Frame>
-            <Frame IsVisible="{Binding Month_Visibility}" Grid.Row="5" CornerRadius="10" BackgroundColor="{DynamicResource Order_Backgroundcolor}" BorderColor="{DynamicResource Order_Bordercolor}" Padding="0">
-                <StackLayout>
-                    <Grid RowDefinitions="5,Auto,5" ColumnDefinitions="5,*,5,*,5" Padding="5" >
-                        <StackLayout Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Padding="3">
-                            <StackLayout>
-                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Januar" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding January_Switch}" Grid.Column="3"/>
-                                </Grid>
-                            </StackLayout>
-                            <StackLayout>
-                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Februar" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding February_Switch}" Grid.Column="3"/>
-                                </Grid>
-                            </StackLayout>
-                            <StackLayout>
-                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="März" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding March_Switch}" Grid.Column="3"/>
-                                </Grid>
-                            </StackLayout>
-                            <StackLayout>
-                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="April" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding April_Switch}" Grid.Column="3"/>
-                                </Grid>
-                            </StackLayout>
-                            <StackLayout>
-                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Mai" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding May_Switch}" Grid.Column="3"/>
-                                </Grid>
-                            </StackLayout>
-                            <StackLayout>
-                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Juni" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding June_Switch}" Grid.Column="3"/>
-                                </Grid>
-                            </StackLayout>
-                            <StackLayout>
-                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Juli" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding July_Switch}" Grid.Column="3"/>
-                                </Grid>
-                            </StackLayout>
-                            <StackLayout>
-                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="August" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding August_Switch}" Grid.Column="3"/>
-                                </Grid>
-                            </StackLayout>
-                            <StackLayout>
-                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="September" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding September_Switch}" Grid.Column="3"/>
-                                </Grid>
-                            </StackLayout>
-                            <StackLayout>
-                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Oktober" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding October_Switch}" Grid.Column="3"/>
-                                </Grid>
-                            </StackLayout>
-                            <StackLayout>
-                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="November" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding November_Switch}" Grid.Column="3"/>
-                                </Grid>
-                            </StackLayout>
-                            <StackLayout>
-                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Dezember" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding December_Switch}" Grid.Column="3"/>
+                                    <Label Text="Jede vierte Woche" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding Ever_Fourth_Week_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
                                 </Grid>
                             </StackLayout>
                         </StackLayout>
                     </Grid>
                 </StackLayout>
             </Frame>
-            <Frame  IsVisible="{Binding Year_Visibility}" Grid.Row="5" CornerRadius="10" BackgroundColor="{DynamicResource Order_Backgroundcolor}" BorderColor="{DynamicResource Order_Bordercolor}" Padding="0">
+            <Frame IsVisible="{Binding Month_Visibility}" Grid.Row="5" CornerRadius="10" BackgroundColor="{DynamicResource Hintergrund_Eingabefeld_Hinzufügen}" BorderColor="{DynamicResource Rand_Eingabefeld_Hinzufügen}" Padding="0">
                 <StackLayout>
                     <Grid RowDefinitions="5,Auto,5" ColumnDefinitions="5,*,5,*,5" Padding="5" >
                         <StackLayout Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Padding="3">
                             <StackLayout>
                                 <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Jedes Jahr" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding Ever_Year_Switch}" Grid.Column="3"/>
+                                    <Label Text="Januar" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding January_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
                                 </Grid>
                             </StackLayout>
                             <StackLayout>
                                 <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Jedes zweite Jahr" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding Ever_Second_Year_Switch}" Grid.Column="3"/>
+                                    <Label Text="Februar" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding February_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
                                 </Grid>
                             </StackLayout>
                             <StackLayout>
                                 <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Jedes dritte Jahr" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding Ever_Third_Year_Switch}" Grid.Column="3"/>
+                                    <Label Text="März" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding March_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
                                 </Grid>
                             </StackLayout>
                             <StackLayout>
                                 <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Jedes vierte Jahr" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding Ever_Fourth_Year_Switch}" Grid.Column="3"/>
+                                    <Label Text="April" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding April_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
                                 </Grid>
                             </StackLayout>
                             <StackLayout>
                                 <Grid ColumnDefinitions="5,Auto,*,Auto,5">
-                                    <Label Text="Jedes fünfte Jahr" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Order_Textcolor}"/>
-                                    <Switch IsToggled="{Binding Ever_Fifth_Year_Switch}" Grid.Column="3"/>
+                                    <Label Text="Mai" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding May_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
+                                </Grid>
+                            </StackLayout>
+                            <StackLayout>
+                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
+                                    <Label Text="Juni" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding June_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
+                                </Grid>
+                            </StackLayout>
+                            <StackLayout>
+                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
+                                    <Label Text="Juli" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding July_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
+                                </Grid>
+                            </StackLayout>
+                            <StackLayout>
+                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
+                                    <Label Text="August" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding August_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
+                                </Grid>
+                            </StackLayout>
+                            <StackLayout>
+                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
+                                    <Label Text="September" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding September_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
+                                </Grid>
+                            </StackLayout>
+                            <StackLayout>
+                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
+                                    <Label Text="Oktober" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding October_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
+                                </Grid>
+                            </StackLayout>
+                            <StackLayout>
+                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
+                                    <Label Text="November" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding November_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
+                                </Grid>
+                            </StackLayout>
+                            <StackLayout>
+                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
+                                    <Label Text="Dezember" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding December_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
+                                </Grid>
+                            </StackLayout>
+                        </StackLayout>
+                    </Grid>
+                </StackLayout>
+            </Frame>
+            <Frame  IsVisible="{Binding Year_Visibility}" Grid.Row="5" CornerRadius="10" BackgroundColor="{DynamicResource Hintergrund_Eingabefeld_Hinzufügen}" BorderColor="{DynamicResource Rand_Eingabefeld_Hinzufügen}" Padding="0">
+                <StackLayout>
+                    <Grid RowDefinitions="5,Auto,5" ColumnDefinitions="5,*,5,*,5" Padding="5" >
+                        <StackLayout Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Padding="3">
+                            <StackLayout>
+                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
+                                    <Label Text="Jedes Jahr" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding Ever_Year_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
+                                </Grid>
+                            </StackLayout>
+                            <StackLayout>
+                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
+                                    <Label Text="Jedes zweite Jahr" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding Ever_Second_Year_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
+                                </Grid>
+                            </StackLayout>
+                            <StackLayout>
+                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
+                                    <Label Text="Jedes dritte Jahr" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding Ever_Third_Year_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
+                                </Grid>
+                            </StackLayout>
+                            <StackLayout>
+                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
+                                    <Label Text="Jedes vierte Jahr" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding Ever_Fourth_Year_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
+                                </Grid>
+                            </StackLayout>
+                            <StackLayout>
+                                <Grid ColumnDefinitions="5,Auto,*,Auto,5">
+                                    <Label Text="Jedes fünfte Jahr" FontSize="Medium" Grid.Column="1" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"/>
+                                    <Switch IsToggled="{Binding Ever_Fifth_Year_Switch}" Grid.Column="3">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="On">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Off">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Switch>
                                 </Grid>
                             </StackLayout>
                         </StackLayout>
@@ -282,7 +687,7 @@
                 </StackLayout>
             </Frame>
             <StackLayout Grid.Row="6">
-                <Button Style="{StaticResource ButtonA}" Text="Anwenden" Command="{Binding Return_Command}" xct:ShadowEffect.Color="{DynamicResource Button_Bordercolor}"/>
+                <Button Style="{StaticResource ButtonA}" Text="Anwenden" Command="{Binding Return_Command}" xct:ShadowEffect.Color="{DynamicResource Rand_Schalter_Hinzufügen}"/>
             </StackLayout>
         </Grid>
     </StackLayout>

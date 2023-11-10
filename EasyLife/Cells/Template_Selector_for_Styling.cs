@@ -12,18 +12,27 @@ namespace EasyLife.Cells
         public Dictionary<string, DataTemplate> datatemplatedic = new Dictionary<string, DataTemplate>();
         public DataTemplate Popup { get; set; }
         public DataTemplate Home { get; set; }
+        public DataTemplate Hinzufügen { get; set; }
+        public DataTemplate Bilanz { get; set; }
         public DataTemplate Error { get; set; }
 
 
         public Template_Selector_for_Styling()
         {
             Popup = new DataTemplate(typeof(PopupView));
-            Home = new DataTemplate(typeof(HomeView));
-            Error = new DataTemplate(typeof(ErrorView));
 
+            Home = new DataTemplate(typeof(HomeView));
+
+            Hinzufügen = new DataTemplate(typeof(HinzufügenView));
+
+            Bilanz = new DataTemplate(typeof(BilanzView));
+
+            Error = new DataTemplate(typeof(ErrorView));
 
             datatemplatedic.Add("Popup_View", Popup);
             datatemplatedic.Add("Home_View", Home);
+            datatemplatedic.Add("Hinzufügen_View", Hinzufügen);
+            datatemplatedic.Add("Bilanz_View", Bilanz);
         }
 
         /// <summary>
@@ -50,5 +59,7 @@ namespace EasyLife.Cells
         public string Cellname { get; set; }
 
         public List<string> Items { get; set; }
+
+        public string Title { get; set; }
     }
 }

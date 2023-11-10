@@ -49,6 +49,15 @@
     <Compile Update="Cells\GroupeTotal_Cell.xaml.cs">
       <DependentUpon>GroupeTotal_Cell.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Cells\Styling\HinzufügenView.xaml.cs">
+      <DependentUpon>HinzufügenView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Cells\Styling\BilanzView.xaml.cs">
+      <DependentUpon>BilanzView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Popup\CustomeColorSheet_Popup.xaml.cs">
+      <DependentUpon>CustomeColorSheet_Popup.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\Popup\CustomePromt_Popup.xaml.cs">
       <DependentUpon>CustomePromt_Popup.xaml</DependentUpon>
     </Compile>

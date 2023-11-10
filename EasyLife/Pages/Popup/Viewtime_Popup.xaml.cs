@@ -136,11 +136,11 @@ namespace EasyLife.Pages
                 OptionSwitch.IsToggled = switch_istoggled;
                 if(Switch_IsToggled == false)
                 {
-                    ViewTime_Popup.Size = new Size(320, 290);
+                    ViewTime_Popup.Size = new Size(250, 320);
                 }
                 else
                 {
-                    ViewTime_Popup.Size = new Size(320, 250);
+                    ViewTime_Popup.Size = new Size(250, 280);
                 }
             }
         }
@@ -185,7 +185,7 @@ namespace EasyLife.Pages
                 Month_Control_Status = false;
                 Switch_IsToggled = true;
                 Month = null;
-                ViewTime_Popup.Size = new Size(320, 250);
+                ViewTime_Popup.Size = new Size(250, 280);
             }
             else
             {
@@ -193,7 +193,7 @@ namespace EasyLife.Pages
                 Month_Control_Status = true;
                 Switch_IsToggled = false;
                 Month = Current_Viewtime.Month;
-                ViewTime_Popup.Size = new Size(320, 290);
+                ViewTime_Popup.Size = new Size(250, 320);
             }
 
             years_list.Clear();

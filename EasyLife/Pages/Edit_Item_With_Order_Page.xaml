@@ -5,7 +5,7 @@
              xmlns:pagemodels="clr-namespace:EasyLife.PageModels"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              Title="Transaktionen bearbeiten"
-             BackgroundColor="{DynamicResource Page_Backgroundcolor}"
+             BackgroundColor="{DynamicResource Hintergrund_Hinzufügen}"
              x:DataType="pagemodels:Edit_Item_With_Order_PageModel">
 
     <ContentPage.BindingContext>
@@ -21,28 +21,28 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="FrameA" TargetType="Frame">
-                <Setter Property="BackgroundColor" Value="{DynamicResource EntryFrame_Backgroundcolor}"/>
+                <Setter Property="BackgroundColor" Value="{DynamicResource Hintergrund_Eingabefeld_Hinzufügen}"/>
                 <Setter Property="CornerRadius" Value="20"/>
                 <Setter Property="HasShadow" Value="True"/>
                 <Setter Property="Padding" Value="5"/>
-                <Setter Property="BorderColor" Value="{DynamicResource EntryFrame_Bordercolor}"/>
+                <Setter Property="BorderColor" Value="{DynamicResource Rand_Eingabefeld_Hinzufügen}"/>
             </Style>
             <Style x:Key="FrameB" TargetType="Frame">
-                <Setter Property="BackgroundColor" Value="{DynamicResource EntryFrame_Backgroundcolor}"/>
+                <Setter Property="BackgroundColor" Value="{DynamicResource Hintergrund_Eingabefeld_Hinzufügen}"/>
                 <Setter Property="CornerRadius" Value="20"/>
                 <Setter Property="HasShadow" Value="True"/>
                 <Setter Property="Padding" Value="5"/>
-                <Setter Property="BorderColor" Value="{DynamicResource EntryFrame_Bordercolor}"/>
+                <Setter Property="BorderColor" Value="{DynamicResource Rand_Eingabefeld_Hinzufügen}"/>
             </Style>
             <Style x:Key="LabelA" TargetType="Label">
-                <Setter Property="TextColor" Value="{DynamicResource Label_Textcolor}"/>
+                <Setter Property="TextColor" Value="{DynamicResource Title_Eingabefeld_Hinzufügen}"/>
                 <Setter Property="Padding" Value="2"/>
                 <Setter Property ="FontAttributes" Value="Bold"/>
                 <Setter Property="HorizontalOptions" Value="Start"/>
                 <Setter Property="FontSize" Value="Medium"/>
             </Style>
             <Style x:Key="LabelB" TargetType="Label">
-                <Setter Property="TextColor" Value="{DynamicResource Label_Textcolor}"/>
+                <Setter Property="TextColor" Value="{DynamicResource Title_Eingabefeld_Hinzufügen}"/>
                 <Setter Property="Padding" Value="2"/>
                 <Setter Property="FontSize" Value="Small"/>
                 <Setter Property ="FontAttributes" Value="Bold"/>
@@ -50,15 +50,15 @@
                 <Setter Property="VerticalOptions" Value="Center"/>
             </Style>
             <Style x:Key="ButtonA" TargetType="Button">
-                <Setter Property="TextColor" Value="{DynamicResource Button_Textcolor}"/>
+                <Setter Property="TextColor" Value="{DynamicResource Text_Schalter_Hinzufügen}"/>
                 <Setter Property="Padding" Value="20"/>
                 <Setter Property ="FontAttributes" Value="Bold"/>
                 <Setter Property="HorizontalOptions" Value="Center"/>
                 <Setter Property="FontSize" Value="Large"/>
-                <Setter Property="BorderColor" Value="{DynamicResource Button_Bordercolor}"/>
+                <Setter Property="BorderColor" Value="{DynamicResource Rand_Schalter_Hinzufügen}"/>
                 <Setter Property="BorderWidth" Value="2"/>
                 <Setter Property="CornerRadius" Value="10"/>
-                <Setter Property="BackgroundColor" Value="{DynamicResource Button_Backgroundcolor}"/>
+                <Setter Property="BackgroundColor" Value="{DynamicResource Hintergrund_Schalter_Hinzufügen}"/>
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -71,7 +71,8 @@
             <Frame Style="{StaticResource FrameA}">
                 <Picker
                     Title="Zweck"
-                    TextColor="{DynamicResource EntryFrame_Textcolor}"
+                    TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"
+                    TitleColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}"
                     HorizontalTextAlignment="Center"
                     HorizontalOptions="Fill"
                     FontSize="Medium"
@@ -82,13 +83,13 @@
             </Frame>
             <Label Text="Betrag" Style="{StaticResource LabelA}"/>
             <Frame Style="{StaticResource FrameA}">
-                <Entry Placeholder="Betrag hier eingeben" Keyboard="Telephone" Text="{Binding Betrag}" TextColor="{DynamicResource EntryFrame_Textcolor}" HorizontalTextAlignment="Center" BackgroundColor="Transparent" IsTextPredictionEnabled="False" FontSize="Medium"/>
+                <Entry Placeholder="Betrag hier eingeben" Keyboard="Telephone" Text="{Binding Betrag}" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" PlaceholderColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}" HorizontalTextAlignment="Center" BackgroundColor="Transparent" IsTextPredictionEnabled="False" FontSize="Medium"/>
             </Frame>
             <Label Text="Datum" Style="{StaticResource LabelA}"/>
             <Frame Style="{StaticResource FrameA}">
                 <DatePicker
                     Format="dddd,  dd.M.yyyy"
-                    TextColor="{DynamicResource EntryFrame_Textcolor}"
+                    TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"
                     Date="{Binding Datum}"
                     FontSize="Medium"
                     HorizontalOptions="CenterAndExpand"               
@@ -98,34 +99,64 @@
             </Frame>
             <Label Text="Notiz" Style="{StaticResource LabelA}"/>
             <Frame Style="{StaticResource FrameA}">
-                <Entry Placeholder="Notiz hier eingeben" Text="{Binding Notiz}" TextColor="{DynamicResource EntryFrame_Textcolor}" HorizontalTextAlignment="Center" VerticalOptions="Start" FontSize="Medium"/>
+                <Entry Placeholder="Notiz hier eingeben" Text="{Binding Notiz}" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" PlaceholderColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}" HorizontalTextAlignment="Center" VerticalOptions="Start" FontSize="Medium"/>
             </Frame>
             <Frame Style="{StaticResource FrameA}" Margin="0,0,0,0" VerticalOptions="Center">
                 <Grid ColumnDefinitions="Auto,*" HorizontalOptions="Fill" VerticalOptions="Center">
-                    <Label Text="Transaktion in der Bilanz anzeigen :" FontSize="Medium" TextColor="{DynamicResource EntryFrame_Textcolor}" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="0" Margin="10,0,0,0"/>
-                    <Switch IsToggled="{Binding Show_Hide_Balance}" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1" Margin="0,0,10,0"/>
+                    <Label Text="Transaktion in der Bilanz anzeigen :" FontSize="Medium" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="0" Margin="10,0,0,0"/>
+                    <Switch IsToggled="{Binding Show_Hide_Balance}" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1" Margin="0,0,10,0">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="On">
+                                    <VisualState.Setters>
+                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Off">
+                                    <VisualState.Setters>
+                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Switch>
                 </Grid>
             </Frame>
             <Frame Style="{StaticResource FrameA}" Margin="0,0,0,0" VerticalOptions="Center" IsVisible="{Binding Revive_Visibility}">
                 <Grid ColumnDefinitions="Auto,*" HorizontalOptions="Fill" VerticalOptions="Center">
-                    <Label Text="Originaler Auftrag wiederherstellen :" FontSize="Medium" TextColor="{DynamicResource EntryFrame_Textcolor}" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="0" Margin="10,0,0,0"/>
-                    <Switch IsToggled="{Binding Revive_Switch}" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1" Margin="0,0,10,0"/>
+                    <Label Text="Originaler Auftrag wiederherstellen :" FontSize="Medium" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="0" Margin="10,0,0,0"/>
+                    <Switch IsToggled="{Binding Revive_Switch}" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1" Margin="0,0,10,0">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="On">
+                                    <VisualState.Setters>
+                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Off">
+                                    <VisualState.Setters>
+                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Switch>
                 </Grid>
             </Frame>
             <Frame Style="{StaticResource FrameB}">
                 <Grid ColumnDefinitions="Auto,0,*" Padding="5" VerticalOptions="CenterAndExpand">
                     <Label Text="Auftrags ID :" Style="{StaticResource LabelB}" Grid.Column="0" Grid.Row="0"/>
-                    <Label Text="{Binding OrderId}" HorizontalTextAlignment="Center" TextColor="{DynamicResource EntryFrame_Textcolor}" VerticalOptions="Center" Grid.Column="2" Grid.Row="0"/>
+                    <Label Text="{Binding OrderId}" HorizontalTextAlignment="Center" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" VerticalOptions="Center" Grid.Column="2" Grid.Row="0"/>
                     <Label Text="Art der Wiederholung :" Style="{StaticResource LabelB}" Grid.Column="0" Grid.Row="1"/>
-                    <Label Text="{Binding Art_an_Wiederholungen}" HorizontalTextAlignment="Center" TextColor="{DynamicResource EntryFrame_Textcolor}" VerticalOptions="Center" Grid.Column="2" Grid.Row="1"/>
+                    <Label Text="{Binding Art_an_Wiederholungen}" HorizontalTextAlignment="Center" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" VerticalOptions="Center" Grid.Column="2" Grid.Row="1"/>
                     <Label Text="{Binding Amount_Text}" Style="{StaticResource LabelB}"  Grid.Column="0" Grid.Row="2"/>
-                    <Label Text="{Binding Anzahl_an_Wiederholungen}" HorizontalOptions="Center" TextColor="{DynamicResource EntryFrame_Textcolor}" VerticalOptions="Center" Grid.Column="2" Grid.Row="2"/>
+                    <Label Text="{Binding Anzahl_an_Wiederholungen}" HorizontalOptions="Center" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" VerticalOptions="Center" Grid.Column="2" Grid.Row="2"/>
                     <Label Text="Speziell :" Style="{StaticResource LabelB}" Grid.Column="0" IsVisible="{Binding Days_Visibility}" Grid.Row="3"/>
-                    <Label Text="{Binding Speziell}" HorizontalTextAlignment="Center" TextColor="{DynamicResource EntryFrame_Textcolor}" VerticalOptions="Center" Grid.Column="2" Grid.Row="3" IsVisible="{Binding Days_Visibility}"/>
+                    <Label Text="{Binding Speziell}" HorizontalTextAlignment="Center" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" VerticalOptions="Center" Grid.Column="2" Grid.Row="3" IsVisible="{Binding Days_Visibility}"/>
                 </Grid>
             </Frame>
-            <Button Text="{Binding Order_Button_Text}" Style="{StaticResource ButtonA}" Command="{Binding Edit_Order_Command}" IsVisible="{Binding Edit_Order_Visibility}" xct:ShadowEffect.Color="{DynamicResource Button_Bordercolor}"/>
-            <Button Text="Bearbeitung speichern" Style="{StaticResource ButtonA}" Command="{Binding Edit_Item_Command}" xct:ShadowEffect.Color="{DynamicResource Button_Bordercolor}"/>
+            <Button Text="{Binding Order_Button_Text}" Style="{StaticResource ButtonA}" Command="{Binding Edit_Order_Command}" IsVisible="{Binding Edit_Order_Visibility}" xct:ShadowEffect.Color="{DynamicResource Rand_Schalter_Hinzufügen}"/>
+            <Button Text="Bearbeitung speichern" Style="{StaticResource ButtonA}" Command="{Binding Edit_Item_Command}" xct:ShadowEffect.Color="{DynamicResource Rand_Schalter_Hinzufügen}"/>
         </FlexLayout>
     </ScrollView>
 </ContentPage>

@@ -5,20 +5,25 @@
     x:Class="EasyLife.Pages.MetaData_Popup"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
     xmlns:customrenderer="clr-namespace:EasyLife.CustomRenderer"
+    xmlns:fontAwesome="clr-namespace:FontAwesome" 
     IsLightDismissEnabled="False"
     HorizontalOptions="FillAndExpand"
     VerticalOptions="Fill"
     Color="Black"
     Size="380,700">
 
-    <Frame Padding="20" CornerRadius="50" HasShadow="True" BorderColor="Blue" BackgroundColor="Transparent">
+    <Frame Padding="20" CornerRadius="50" HasShadow="True" BorderColor="{DynamicResource Rand_Content_Popup}" BackgroundColor="{DynamicResource Hintergrund_Content_Popup}">
         <Grid RowDefinitions="Auto,*" RowSpacing="5" ColumnSpacing="5" ColumnDefinitions="*,Auto">
-            <Label Grid.Row="0" Grid.Column="0" Text="Metadaten" TextDecorations="Underline" TextColor="Red" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,10,0,1"/>
-            <Button Grid.Row="0" Grid.Column="1" Clicked="CancelButton_Clicked" HorizontalOptions="End" VerticalOptions="Start" Text="X" FontSize="20" FontAttributes="Bold" BackgroundColor="Red" BorderColor="DarkRed" Padding="5" CornerRadius="100" WidthRequest="50" Margin="0,0,0,5"/>
+            <Label Grid.Row="0" Grid.Column="0" Text="Metadaten" TextDecorations="Underline" TextColor="{DynamicResource Text_Titel_Popup}" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,10,0,1"/>
+            <ImageButton Grid.Row="0" Grid.Column="1" Clicked="CancelButton_Clicked" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="{DynamicResource Hintergrund_Cancel_Popup}" CornerRadius="50" Padding="0">
+                <ImageButton.Source>
+                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.CircleXmark}" Color="{DynamicResource Vordergrund_Cancel_Popup}" Size="50"/>
+                </ImageButton.Source>
+            </ImageButton>
             <Frame BackgroundColor="Transparent" Padding="0" HorizontalOptions="Fill" Grid.Row="1" Grid.ColumnSpan="2">
                 <ScrollView BackgroundColor="Transparent" HorizontalOptions="Fill" VerticalScrollBarVisibility="Never">
                     <StackLayout Orientation="Vertical" Spacing="5" HorizontalOptions="Center" BackgroundColor="Transparent">
-                        <Label Text="Transaktionen :" TextDecorations="Underline" TextColor="Green" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" Margin="0,10,0,1"/>
+                        <Label Text="Transaktionen :" TextDecorations="Underline" TextColor="{DynamicResource Text_Content_Popup}" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" Margin="0,10,0,1"/>
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
                             <customrenderer:AutoFontSizeLabel 
                                                     AutoSizeMaxTextSize="20"
@@ -33,9 +38,9 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der erstellten Transaktionen :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_generated_Transaktion" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_generated_Transaktion" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
@@ -52,9 +57,9 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der gelöschten Transaktionen :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_deleted_Transaktion" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_deleted_Transaktion" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
@@ -71,9 +76,9 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der benutzten Transaktionen :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_use_Transaktion" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_use_Transaktion" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
@@ -90,9 +95,9 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der unbenutzten Transaktionen :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_unuse_Transaktion" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_unuse_Transaktion" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
@@ -109,13 +114,13 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der Transaktionen in Aufträgen:" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_Transaktion_in_Orders" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_Transaktion_in_Orders" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
 
-                        <Label Text="Aufträge :" TextDecorations="Underline" TextColor="Green" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" Margin="0,10,0,1"/>
+                        <Label Text="Aufträge :" TextDecorations="Underline" TextColor="{DynamicResource Text_Content_Popup}" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" Margin="0,10,0,1"/>
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
                             <customrenderer:AutoFontSizeLabel 
                                                     AutoSizeMaxTextSize="20"
@@ -130,9 +135,9 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der erstellten Aufträge :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_generated_Order" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_generated_Order" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
@@ -149,9 +154,9 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der gelöschten Aufträge :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_deleted_Order" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_deleted_Order" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
@@ -168,9 +173,9 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der benutzten Aufträge :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_use_Order" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_use_Order" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
@@ -187,13 +192,13 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der unbenutzten Aufträge :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_unuse_Order" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_unuse_Order" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
 
-                        <Label Text="Zwecke :" TextDecorations="Underline" TextColor="Green" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" Margin="0,10,0,1"/>
+                        <Label Text="Zwecke :" TextDecorations="Underline" TextColor="{DynamicResource Text_Content_Popup}" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" Margin="0,10,0,1"/>
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
                             <customrenderer:AutoFontSizeLabel 
                                                     AutoSizeMaxTextSize="20"
@@ -208,9 +213,9 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der erstellten Zwecke :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_generated_Reason" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_generated_Reason" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
@@ -227,9 +232,9 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der benutzten Zwecke :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_use_Reason" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_use_Reason" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
@@ -246,13 +251,13 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der unbenutzten Zwecke :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_unuse_Reason" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_unuse_Reason" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
 
-                        <Label Text="Benachrichtigungen :" TextDecorations="Underline" TextColor="Green" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" Margin="0,10,0,1"/>
+                        <Label Text="Benachrichtigungen :" TextDecorations="Underline" TextColor="{DynamicResource Text_Content_Popup}" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" Margin="0,10,0,1"/>
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
                             <customrenderer:AutoFontSizeLabel 
                                                     AutoSizeMaxTextSize="20"
@@ -267,9 +272,9 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der erstellten Benachrichtigungen :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_generated_Notification" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_generated_Notification" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
@@ -286,9 +291,9 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der gelöschten Benachrichtigungen :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_deleted_Notification" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_deleted_Notification" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
@@ -305,9 +310,9 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der kommenden Benachrichtigungen :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_use_Notification" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_use_Notification" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
@@ -324,13 +329,13 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der eingetretenen Benachrichtigungen :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_unuse_Notification" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_unuse_Notification" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
 
-                        <Label Text="Suchbegriffe :" TextDecorations="Underline" TextColor="Green" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" Margin="0,10,0,1"/>
+                        <Label Text="Suchbegriffe :" TextDecorations="Underline" TextColor="{DynamicResource Text_Content_Popup}" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" Margin="0,10,0,1"/>
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
                             <customrenderer:AutoFontSizeLabel 
                                                     AutoSizeMaxTextSize="20"
@@ -345,9 +350,9 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der erstellten Suchbegriffe :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_generated_Suggestion" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_generated_Suggestion" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
@@ -364,9 +369,9 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der gelöschten Suchbegriffe :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_deleted_Suggestion" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_deleted_Suggestion" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
@@ -383,13 +388,13 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der benutzten Suchbegriffe :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_use_Suggestion" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_use_Suggestion" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
 
-                        <Label Text="Bilanzprofile :" TextDecorations="Underline" TextColor="Green" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" Margin="0,10,0,1"/>
+                        <Label Text="Bilanzprofile :" TextDecorations="Underline" TextColor="{DynamicResource Text_Content_Popup}" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" Margin="0,10,0,1"/>
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
                             <customrenderer:AutoFontSizeLabel 
                                                     AutoSizeMaxTextSize="20"
@@ -404,9 +409,9 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der erstellten Bilanzprofile :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_generated_Balanceprofile" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_generated_Balanceprofile" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
@@ -423,9 +428,9 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der gelöschten Bilanzprofile :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_deleted_Balanceprofile" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_deleted_Balanceprofile" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
@@ -442,13 +447,13 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der benutzten Bilanzprofile :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_use_Balanceprofile" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_use_Balanceprofile" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
 
-                        <Label Text="Budgets :" TextDecorations="Underline" TextColor="Green" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" Margin="0,10,0,1"/>
+                        <Label Text="Budgets :" TextDecorations="Underline" TextColor="{DynamicResource Text_Content_Popup}" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" Margin="0,10,0,1"/>
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
                             <customrenderer:AutoFontSizeLabel 
                                                     AutoSizeMaxTextSize="20"
@@ -463,9 +468,9 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der erstellten Budgets :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_generated_Budgets" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_generated_Budgets" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
@@ -482,9 +487,9 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der gelöschten Budgets :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_deleted_Budgets" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_deleted_Budgets" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
@@ -501,9 +506,30 @@
                                                     MaxLines="1"
                                                     Padding="0"
                                                     Text="Anzahl der benutzten Budgets :" 
-                                                    TextColor="White"
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
                                                     FontAttributes="None"/>
-                            <Label x:Name="Amount_of_use_Budgets" TextColor="Blue" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <Label x:Name="Amount_of_use_Budgets" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                        </Grid>
+
+                        
+                        <Label Text="Stylingprofile :" TextDecorations="Underline" TextColor="{DynamicResource Text_Content_Popup}" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" Margin="0,10,0,1"/>
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                            <customrenderer:AutoFontSizeLabel 
+                                                    AutoSizeMaxTextSize="20"
+                                                    AutoSizeMinTextSize="8"
+                                                    AutoSizeStepGranularity="1"
+                                                    HeightRequest="30"
+                                                    HorizontalTextAlignment="Start"
+                                                    VerticalTextAlignment="Center"
+                                                    VerticalOptions="Center"
+                                                    HorizontalOptions="Fill"
+                                                    Grid.Column="0"                                
+                                                    MaxLines="1"
+                                                    Padding="0"
+                                                    Text="Anzahl der erstellten Stylingprofile :" 
+                                                    TextColor="{DynamicResource Subtext_Content_Popup}"
+                                                    FontAttributes="None"/>
+                            <Label x:Name="Amount_of_generated_Stylingprofiles" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
                         <Label TextColor="Blue" Text=" " FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                     </StackLayout>

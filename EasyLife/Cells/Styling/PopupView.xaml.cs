@@ -18,7 +18,7 @@ namespace EasyLife.Cells.Styling
 
 			Cancel.CommandParameter = new List<object>() { new Dictionary<string,string>(){ { "Vordergrund", "Vordergrund_Cancel_Popup" }, { "Hintergrund",  "Hintergrund_Cancel_Popup" } }, "Zurück" ,"Popup_View" };
 
-			Content.CommandParameter = new List<object>() { new Dictionary<string, string>() { { "Hintergrund", "Hintergrund_Content_Popup" }, { "Rand", "Rand_Content_Popup" }, { "Haupttext", "Text_Content_Popup" }, { "Nebentext" , "Subtext_Content_Popup"} }, "Inhalt", "Popup_View" };
+			Content.CommandParameter = new List<object>() { new Dictionary<string, string>() { { "Hintergrund", "Hintergrund_Content_Popup" }, { "Rand", "Rand_Content_Popup" }, { "Haupttext", "Text_Content_Popup" }, { "Nebentext" , "Subtext_Content_Popup"}, { "Schalter aktiv", "Aktiv_Schalter_Popup" }, { "Schalter deaktiv", "Deaktiv_Schalter_Popup" } }, "Inhalt", "Popup_View" };
 
 			Button.CommandParameter = new List<object>() { new Dictionary<string, string>() { { "Hintergrund","Hintertgrund_Button_Popup" }, { "Rand", "Rand_Button_Popup" }, { "Text", "Text_Button_Popup"}, }, "Schaltfläche", "Popup_View" };
 
@@ -37,6 +37,8 @@ namespace EasyLife.Cells.Styling
             "Rand_Button_Popup",
             "Text_Button_Popup",
             "Text_Titel_Popup",
+            "Aktiv_Schalter_Popup",
+            "Deaktiv_Schalter_Popup"
         };
 	}
 }

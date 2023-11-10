@@ -95,7 +95,7 @@
                             Command="{Binding Source={RelativeSource AncestorType={x:Type pagemodels:Styling_Color_PageModel}}, Path=Choose_Command}"/>
                 </Frame>
 
-                <Grid ColumnDefinitions="*,Auto,*" HeightRequest="60" Padding="0" VerticalOptions="End" HorizontalOptions="Center" Margin="0,0,0,-10">
+                <Grid ColumnDefinitions="*,Auto,*" HeightRequest="60" Padding="0" VerticalOptions="End" HorizontalOptions="Center" Margin="0,0,0,10">
                     <Grid ColumnDefinitions="10,Auto,*" Grid.Column="0" Padding="0" VerticalOptions="Center" HeightRequest="80" Margin="0,0,0,0">
                         <ImageButton x:Name="Budget" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="45" HeightRequest="45" Padding="0"
                                      Command="{Binding Source={RelativeSource AncestorType={x:Type pagemodels:Styling_Color_PageModel}}, Path=Choose_Command}">

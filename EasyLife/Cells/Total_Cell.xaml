@@ -10,7 +10,7 @@
     Padding="0">
     
     <Grid ColumnDefinitions="*,Auto,3" Padding="1" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="Transparent">
-        <Label Text="{Binding Total_Text}" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
+        <Label Text="{Binding Total_Text}" TextColor="{DynamicResource Text_Zusammenfassung_Bilanz}" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
         <Grid ColumnDefinitions="*,10,20" HorizontalOptions="Fill" VerticalOptions="Center" Grid.Column="1" ColumnSpacing="3">
             <Label Text="{Binding Sum}" TextColor="{Binding Evaluation}" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
             <Label Text="€" TextColor="{Binding Evaluation}" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="1"/>

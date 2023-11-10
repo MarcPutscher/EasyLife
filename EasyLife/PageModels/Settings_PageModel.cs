@@ -84,11 +84,9 @@ namespace EasyLife.PageModels
                     return;
                 }
 
-                if ((int)result0 == 1)
+                if ((bool)result0 == true)
                 {
                     bool result = BackupService.Create_Backup(DateTime.Now.ToString("dd.MM.yyyy"));
-
-                    List<string> backup_list = new List<string>() { "Transaktionen", "Zwecken", "Benachrichtigungen", "Aufträgen", "Suchvorschlägen" };
 
                     if (result == false)
                     {
@@ -359,13 +357,23 @@ namespace EasyLife.PageModels
                                         }
                                         else
                                         {
-                                            contentlist.Add(new string[] { list[0].ToString(), "erstellt: " + list[1] + " | gelöscht: " + list[2] + "" });
+                                            if (list[0].ToString() == "Stylingprofile")
+                                            {
+                                                contentlist.Add(new string[] { list[0].ToString(), "erstellt: " + list[1] + "" });
 
-                                            contentdic.Add(list[0].ToString(), list[0].ToString());
+                                                contentdic.Add(list[0].ToString(), list[0].ToString());
 
-                                            content1dic.Add(list[0].ToString(), list[3]);
+                                                content1dic.Add(list[0].ToString(), list[2]);
+                                            }
+                                            else
+                                            {
+                                                contentlist.Add(new string[] { list[0].ToString(), "erstellt: " + list[1] + " | gelöscht: " + list[2] + "" });
+
+                                                contentdic.Add(list[0].ToString(), list[0].ToString());
+
+                                                content1dic.Add(list[0].ToString(), list[3]);
+                                            }
                                         }
-
                                     }
 
                                     bool indikator2 = false;
@@ -469,8 +477,6 @@ namespace EasyLife.PageModels
 
                                                 if (contentdic[result2string] == "Bilanzprofile")
                                                 {
-                                                    string[] resultarray = { };
-
                                                     List<string> resultlist = new List<string>();
 
                                                     List<Balanceprofile> objektlist = (List<Balanceprofile>)content1dic[contentdic[result2string]];
@@ -481,8 +487,6 @@ namespace EasyLife.PageModels
                                                         {
                                                             resultlist.Add("Bilanzprofil " + objekt.Id + "");
                                                         }
-
-                                                        resultarray = resultlist.ToArray();
 
                                                         bool indikator3 = false;
 
@@ -616,6 +620,53 @@ namespace EasyLife.PageModels
                                                         }
 
                                                         await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Benachrichtigungen", 350, 0, null, null, resultstring));
+                                                    }
+                                                }
+
+                                                if (contentdic[result2string] == "Stylingprofile")
+                                                {
+                                                    List<string> resultlist = new List<string>();
+
+                                                    List<Stylingprofile> objektlist = (List<Stylingprofile>)content1dic[contentdic[result2string]];
+
+                                                    if (objektlist.Count() != 0)
+                                                    {
+                                                        foreach (Stylingprofile objekt in objektlist)
+                                                        {
+                                                            resultlist.Add("Stylingprofil " + objekt.Id + "");
+                                                        }
+
+                                                        bool indikator3 = false;
+
+                                                        while (indikator3 == false)
+                                                        {
+                                                            var result3 = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Stylingprofile", 280, resultlist));
+
+                                                            if (result3 == null)
+                                                            {
+                                                                indikator3 = true;
+                                                            }
+                                                            else
+                                                            {
+                                                                string result3string = (string)result3;
+
+                                                                if (result3string == "Zurück")
+                                                                {
+                                                                    indikator3 = true;
+                                                                }
+                                                                else
+                                                                {
+                                                                    int id = int.Parse(result3string.ToString().Substring(13));
+
+                                                                    Stylingprofile ChoosenStylingprofil = objektlist.Where(bp => bp.Id == id).First();
+
+                                                                    if(ChoosenStylingprofil != null)
+                                                                    {
+                                                                        await Shell.Current.ShowPopupAsync(new CustomeColorSheet_Popup("Stylingprofil " + ChoosenStylingprofil.Id + "", 390, ChoosenStylingprofil));
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }
@@ -974,6 +1025,19 @@ namespace EasyLife.PageModels
                 amount_list.Add(amount_of_deleted_budgets);
 
                 amount_list.Add(amount_of_use_budgets);
+
+
+                var stylingprofilecontent = await StylingService.Get_all_Stylingprofile();
+
+                int amount_of_generated_stylingprofile = 0;
+
+                if (stylingprofilecontent.Count() != 0)
+                {
+                    amount_of_generated_stylingprofile = stylingprofilecontent.First().Id;
+                }
+
+                amount_list.Add(amount_of_generated_stylingprofile);
+
 
                 await Shell.Current.ShowPopupAsync(new MetaData_Popup(amount_list));
 

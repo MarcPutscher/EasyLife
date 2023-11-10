@@ -9,7 +9,7 @@
     xmlns:fontAwesome="clr-namespace:FontAwesome" 
     x:Class="EasyLife.Pages.Home_Page"
     Title="{Binding Title}"
-    BackgroundColor="{DynamicResource Page_Backgroundcolor}"
+    BackgroundColor="{DynamicResource Hintergrund_Seite_Home}"
     x:DataType="pagemodels:Home_PageModel">
 
     <ContentPage.BindingContext>

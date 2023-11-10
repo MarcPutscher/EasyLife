@@ -1,5 +1,6 @@
 ﻿using EasyLife.Cells;
 using EasyLife.Cells.Styling;
+using EasyLife.CustomeEventArgs;
 using EasyLife.Helpers;
 using EasyLife.PageModels;
 using EasyLife.Services;
@@ -24,10 +25,15 @@ namespace EasyLife.Pages
 
             InitializeComponent();
 
-            myCarousel.Add(new StylingCell { Cellname = "Popup_View" , Items = PopupView.Popup_View_Item_List});
+            Styling_Color_PageModel.OnMessageRaised += OnStylingMessageRaised;
 
-            myCarousel.Add(new StylingCell { Cellname = "Home_View" , Items = HomeView.Home_View_Item_List});
+            myCarousel.Add(new StylingCell { Cellname = "Home_View", Items = HomeView.Home_View_Item_List, Title = "Home" });
 
+            myCarousel.Add(new StylingCell { Cellname = "Hinzufügen_View", Items = HinzufügenView.Hinzufügen_View_Item_List, Title = "Hinzufügen/Bearbeiten" });
+
+            myCarousel.Add(new StylingCell { Cellname = "Bilanz_View", Items = BilanzView.Bilanz_View_Item_List, Title = "Bilanz" });
+
+            myCarousel.Add(new StylingCell { Cellname = "Popup_View" , Items = PopupView.Popup_View_Item_List , Title = "Popup"});
 
             carouselView.ItemsSource = myCarousel;           
         }
@@ -40,6 +46,14 @@ namespace EasyLife.Pages
         private void carouselView_CurrentItemChanged(object sender, CurrentItemChangedEventArgs e)
         {
             Styling_Color_PageModel.CurrentItemChangedCommand_CommandExecuted(sender, e);
+        }
+
+        private void OnStylingMessageRaised(object sender, StylingMessageEventArgs e)
+        {
+            if(e.Message != null)
+            {
+                ColorWheel1.SelectedColor = Color.FromHex(e.Message);
+            }
         }
     }
 }

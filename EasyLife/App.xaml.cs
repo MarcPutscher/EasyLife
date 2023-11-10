@@ -30,9 +30,12 @@ namespace EasyLife
             dictionary["Hintertgrund_Button_Popup"] = Preferences.Get("Hintertgrund_Button_Popup", "#0b1c48");
             dictionary["Rand_Button_Popup"] = Preferences.Get("Rand_Button_Popup", "#2b6ad0");
             dictionary["Text_Button_Popup"] = Preferences.Get("Text_Button_Popup", "#138b83");
+            dictionary["Aktiv_Schalter_Popup"] = Preferences.Get("Aktiv_Schalter_Popup", Color.ForestGreen.ToHex());
+            dictionary["Deaktiv_Schalter_Popup"] = Preferences.Get("Deaktiv_Schalter_Popup", Color.DarkRed.ToHex());
+
 
             //Home
-            dictionary["Hintergrund_Seite_Home"] = Preferences.Get("Hintergrund_Seite_Home", Color.DarkSlateGray.ToHex());
+            dictionary["Hintergrund_Hinzufügen"] = Preferences.Get("Hintergrund_Hinzufügen", Color.DarkSlateGray.ToHex());
             dictionary["Hintergrund_Bearbeiten_Home"] = Preferences.Get("Hintergrund_Bearbeiten_Home", Color.Green.ToHex());
             dictionary["Rand_Bearbeiten_Home"] = Preferences.Get("Rand_Bearbeiten_Home", Color.DarkGreen.ToHex());
             dictionary["Text_Bearbeiten_Home"] = Preferences.Get("Text_Bearbeiten_Home", Color.White.ToHex());
@@ -57,90 +60,41 @@ namespace EasyLife
             dictionary["Vordergrund_Hinzufügen_Home"] = Preferences.Get("Vordergrund_Hinzufügen_Home", Color.Orange.ToHex());
 
 
+            //Hinzufügen/Bearbeiten
+            dictionary["Hintergrund_Seite_Hinzufügen"] = Preferences.Get("Hintergrund_Seite_Hinzufügen", Color.DarkSlateGray.ToHex());
+            dictionary["Hintergrund_Eingabefeld_Hinzufügen"] = Preferences.Get("Hintergrund_Eingabefeld_Hinzufügen", Color.Orange.ToHex());
+            dictionary["Rand_Eingabefeld_Hinzufügen"] = Preferences.Get("Rand_Eingabefeld_Hinzufügen", Color.Coral.ToHex());
+            dictionary["Title_Eingabefeld_Hinzufügen"] = Preferences.Get("Title_Eingabefeld_Hinzufügen", Color.White.ToHex());
+            dictionary["Text_Eingabefeld_Hinzufügen"] = Preferences.Get("Text_Eingabefeld_Hinzufügen", Color.Black.ToHex());
+            dictionary["Platzhater_Eingabefeld_Hinzufügen"] = Preferences.Get("Platzhater_Eingabefeld_Hinzufügen", "#525252");
+            dictionary["Aktiv_Schalter_Eingabefeld_Hinzufügen"] = Preferences.Get("Aktiv_Schalter_Eingabefeld_Hinzufügen", Color.ForestGreen.ToHex());
+            dictionary["Deaktiv_Schalter_Eingabefeld_Hinzufügen"] = Preferences.Get("Deaktiv_Schalter_Eingabefeld_Hinzufügen", Color.DarkRed.ToHex());
+            dictionary["Hintergrund_Wahlfeld_Hinzufügen"] = Preferences.Get("Hintergrund_Wahlfeld_Hinzufügen", Color.Orange.ToHex());
+            dictionary["Haubttext_Wahlfeld_Hinzufügen"] = Preferences.Get("Haubttext_Wahlfeld_Hinzufügen", Color.Black.ToHex());
+            dictionary["Nebentext_Wahlfeld_Hinzufügen"] = Preferences.Get("Nebentext_Wahlfeld_Hinzufügen", Color.Black.ToHex());
+            dictionary["Hintergrund_Option_Wahlfeld_Hinzufügen"] = Preferences.Get("Hintergrund_Option_Wahlfeld_Hinzufügen", Color.SkyBlue.ToHex());
+            dictionary["Rand_Option_Wahlfeld_Hinzufügen"] = Preferences.Get("Rand_Option_Wahlfeld_Hinzufügen", Color.Blue.ToHex());
+            dictionary["Text_Option_Wahlfeld_Hinzufügen"] = Preferences.Get("Text_Option_Wahlfeld_Hinzufügen", Color.OrangeRed.ToHex());
+            dictionary["Hintergrund_Schalter_Hinzufügen"] = Preferences.Get("Hintergrund_Schalter_Hinzufügen", Color.SkyBlue.ToHex());
+            dictionary["Rand_Schalter_Hinzufügen"] = Preferences.Get("Rand_Schalter_Hinzufügen", Color.Blue.ToHex());
+            dictionary["Text_Schalter_Hinzufügen"] = Preferences.Get("Text_Schalter_Hinzufügen", Color.OrangeRed.ToHex());
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            //Bilanz
+            dictionary["Hintergrund_Bilanz"] = Preferences.Get("Hintergrund_Bilanz", Color.DarkSlateGray.ToHex());
+            dictionary["Hintergrund_Kopfzeile_Bilanz"] = Preferences.Get("Hintergrund_Kopfzeile_Bilanz", Color.DarkGray.ToHex());
+            dictionary["Text_Kopfzeile_Bilanz"] = Preferences.Get("Text_Kopfzeile_Bilanz", Color.Black.ToHex());
+            dictionary["Hintergrund_Fußzeile_Bilanz"] = Preferences.Get("Hintergrund_Fußzeile_Bilanz", Color.DarkGray.ToHex());
+            dictionary["Text_Fußzeile_Bilanz"] = Preferences.Get("Text_Fußzeile_Bilanz", Color.Black.ToHex());
+            dictionary["Text_Zusammenfassung_Bilanz"] = Preferences.Get("Text_Zusammenfassung_Bilanz", Color.Black.ToHex());
+            dictionary["Text_Zweck_Stack_Bilanz"] = Preferences.Get("Text_Zweck_Stack_Bilanz", Color.White.ToHex());
+            dictionary["Text_Anzahl_Stack_Bilanz"] = Preferences.Get("Text_Anzahl_Stack_Bilanz", Color.White.ToHex());
 
             dictionary["App_Backgroundcolor"] = Preferences.Get("App_Backgroundcolor", "#1d0e21");
-
-            dictionary["Page_Backgroundcolor"] = Preferences.Get("Page_Backgroundcolor", Color.DarkSlateGray.ToHex());
-
-            dictionary["Transaktion_Backgroundcolor"] = Preferences.Get("Transaktion_Backgroundcolor", Color.Gray.ToHex());
-            dictionary["Transaktion_Bordercolor"] = Preferences.Get("Transaktion_Bordercolor", Color.DarkGray.ToHex());
-            dictionary["Transaktion_Textcolor"] = Preferences.Get("Transaktion_Textcolor", Color.Black.ToHex());
-
-            dictionary["EntryFrame_Backgroundcolor"] = Preferences.Get("EntryFrame_Backgroundcolor", Color.Orange.ToHex());
-            dictionary["EntryFrame_Bordercolor"] = Preferences.Get("EntryFrame_Bordercolor", Color.Coral.ToHex());
-            dictionary["EntryFrame_Textcolor"] = Preferences.Get("EntryFrame_Textcolor", Color.Black.ToHex());
-
-            dictionary["Button_Backgroundcolor"] = Preferences.Get("Button_Backgroundcolor", Color.SkyBlue.ToHex());
-            dictionary["Button_Bordercolor"] = Preferences.Get("Button_Bordercolor", Color.Blue.ToHex());
-            dictionary["Button_Textcolor"] = Preferences.Get("Button_Textcolor", Color.OrangeRed.ToHex());
-
-            dictionary["Label_Textcolor"] = Preferences.Get("Label_Textcolor", Color.White.ToHex());
 
             dictionary["Grouping_Textcolor"] = Preferences.Get("Grouping_Textcolor", Color.White.ToHex());
 
             dictionary["Refresh_Color"] = Preferences.Get("Refresh_Color", Color.Blue.ToHex());
-
-            dictionary["Edit_Backgroundcolor"] = Preferences.Get("Edit_Backgroundcolor", Color.Green.ToHex());
-            dictionary["Edit_Bordercolor"] = Preferences.Get("Edit_Bordercolor", Color.DarkGreen.ToHex());
-            dictionary["Edit_Textcolor"] = Preferences.Get("Edit_Textcolor", Color.White.ToHex());
-
-            dictionary["Revive_Backgroundcolor"] = Preferences.Get("Revive_Backgroundcolor", Color.Blue.ToHex());
-            dictionary["Revive_Bordercolor"] = Preferences.Get("Revive_Bordercolor", Color.DarkBlue.ToHex());
-            dictionary["Revive_Textcolor"] = Preferences.Get("Revive_Textcolor", Color.White.ToHex());
-
-
-            dictionary["Remove_Backgroundcolor"] = Preferences.Get("Remove_Backgroundcolor", Color.Red.ToHex());
-            dictionary["Remove_Bordercolor"] = Preferences.Get("Remove_Bordercolor", Color.DarkRed.ToHex());
-            dictionary["Remove_Textcolor"] = Preferences.Get("Remove_Textcolor", Color.White.ToHex());
-
-            dictionary["Delete_Backgroundcolor"] = Preferences.Get("Delete_Backgroundcolor", Color.Red.ToHex());
-            dictionary["Delete_Bordercolor"] = Preferences.Get("Delete_Bordercolor", Color.DarkRed.ToHex());
-            dictionary["Delete_Textcolor"] = Preferences.Get("Delete_Textcolor", Color.White.ToHex());
-
-            dictionary["Order_Backgroundcolor"] = Preferences.Get("Order_Backgroundcolor", Color.Blue.ToHex());
-            dictionary["Order_Bordercolor"] = Preferences.Get("Order_Bordercolor", Color.DarkBlue.ToHex());
-            dictionary["Order_Textcolor"] = Preferences.Get("Order_Textcolor", Color.White.ToHex());
-
-            dictionary["Saldo_Backgroundcolor"] = Preferences.Get("Saldo_Backgroundcolor", Color.Black.ToHex());
-            dictionary["Saldo_Textcolor"] = Preferences.Get("Saldo_Textcolor", Color.White.ToHex());
 
             dictionary["Flyout_Backgroundcolor"] = Preferences.Get("Flyout_Backgroundcolor", Color.DarkGray.ToHex());
             dictionary["Flyout_Selectcolor"] = Preferences.Get("Flyout_Selectcolor", Color.LightGray.ToHex());

@@ -43,6 +43,8 @@ namespace EasyLife.Pages
             Amount_of_generated_Budgets.Text = amount_list[22].ToString();
             Amount_of_deleted_Budgets.Text = amount_list[23].ToString();
             Amount_of_use_Budgets.Text = amount_list[24].ToString();
+
+            Amount_of_generated_Stylingprofiles.Text = amount_list[25].ToString();
         }
 
         private void CancelButton_Clicked(object sender, EventArgs e)

@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="EasyLife.Pages.Budget_Popup"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+    xmlns:fontAwesome="clr-namespace:FontAwesome" 
     xmlns:model="clr-namespace:EasyLife.Models"
     x:Name="Budget_Popup_Size"
     IsLightDismissEnabled="False"
@@ -11,10 +12,14 @@
     VerticalOptions="Center"
     HorizontalOptions="Center">
 
-    <StackLayout VerticalOptions="Fill" BackgroundColor="Transparent" HorizontalOptions="Fill" Padding="0">
-        <Button Clicked="CancelButton_Clicked" HorizontalOptions="End" VerticalOptions="Start" Text="X" FontSize="20" FontAttributes="Bold" BackgroundColor="Red" BorderColor="DarkRed" Padding="5" CornerRadius="100" WidthRequest="50" Margin="0,0,0,5"/>
-        <StackLayout Orientation="Vertical" HorizontalOptions="Fill" VerticalOptions="Start" Padding="0">
-            <Label Text="Budgets" TextColor="White" FontSize="30" FontAttributes="Bold" HorizontalTextAlignment="Center" TextDecorations="Underline"/>
+    <Grid RowDefinitions="Auto,Auto" RowSpacing="0" ColumnDefinitions="Auto,*" ColumnSpacing="0" Padding="10" BackgroundColor="Transparent">
+        <ImageButton Grid.Row="0" Grid.Column="1" Clicked="CancelButton_Clicked" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="{DynamicResource Hintergrund_Cancel_Popup}" CornerRadius="50" Padding="0">
+            <ImageButton.Source>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.CircleXmark}" Color="{DynamicResource Vordergrund_Cancel_Popup}" Size="50"/>
+            </ImageButton.Source>
+        </ImageButton>
+        <Label Text="Budgets" TextColor="{DynamicResource Text_Titel_Popup}" FontSize="30" FontAttributes="Bold" HorizontalTextAlignment="Center" TextDecorations="Underline"/>
+        <StackLayout Grid.Row="1" Grid.ColumnSpan="2" Orientation="Vertical" HorizontalOptions="Fill" VerticalOptions="Start" Padding="0">
             <Frame Padding="0" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="Fill" x:Name="Rahmen">
                 <StackLayout Padding="0" BackgroundColor="Transparent">
                     <ListView
@@ -46,7 +51,7 @@
                                                     <AbsoluteLayout>
                                                         <ContentView AbsoluteLayout.LayoutFlags="All" 
                                                                     AbsoluteLayout.LayoutBounds="{Binding Progress}"
-                                                                    BackgroundColor="Red">
+                                                                    BackgroundColor="DarkRed">
                                                             <StackLayout Orientation="Horizontal" Spacing="0" HorizontalOptions="Center" IsVisible="{Binding Progress_visibility}">
                                                                 <Label Text="{Binding Budget.Current}" 
                                                                    FontSize="Small"  
@@ -64,7 +69,7 @@
                                                         </ContentView>
                                                         <ContentView AbsoluteLayout.LayoutFlags="All" 
                                                                      AbsoluteLayout.LayoutBounds="{Binding Rest_Progress}"
-                                                                     BackgroundColor="LimeGreen">
+                                                                     BackgroundColor="ForestGreen">
                                                             <StackLayout Orientation="Horizontal" Spacing="0" HorizontalOptions="Center" IsVisible="{Binding Rest_Progress_visibility}">
                                                                 <Label Text="{Binding Rest_Budget}" 
                                                                    FontSize="Small" 
@@ -104,9 +109,9 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-                    <Button Text="Budget hinzufügen" Clicked="Add_Budget" BackgroundColor="Gray" BorderColor="Black" xct:ShadowEffect.Radius="10" xct:ShadowEffect.Color="Blue" xct:ShadowEffect.Opacity="0.7" TextColor="White" CornerRadius="20" FontSize="Large" FontAttributes="Bold" Padding="0" HorizontalOptions="FillAndExpand"/>
+                    <Button Text="Budget hinzufügen" Clicked="Add_Budget" BackgroundColor="{DynamicResource Hintertgrund_Button_Popup}" BorderColor="{DynamicResource Rand_Button_Popup}" BorderWidth="1" xct:ShadowEffect.Radius="10" xct:ShadowEffect.Color="{DynamicResource Rand_Button_Popup}" xct:ShadowEffect.Opacity="0.7" TextColor="{DynamicResource Text_Button_Popup}" CornerRadius="20" FontSize="Large" FontAttributes="Bold" Padding="0" HorizontalOptions="FillAndExpand"/>
                 </StackLayout>
             </Frame>
         </StackLayout>
-    </StackLayout>
+    </Grid>
 </xct:Popup>

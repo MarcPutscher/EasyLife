@@ -5,7 +5,8 @@
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:colorpicker="clr-namespace:ColorPicker;assembly=ColorPicker"
              xmlns:cells="clr-namespace:EasyLife.Cells" 
-             xmlns:control="http://xamarin.com/schemas/2014/forms" xmlns:colorpicker21="https://github.com/avaloniaui"
+             xmlns:control="http://xamarin.com/schemas/2014/forms" xmlns:colorpicker21="https://github.com/avaloniaui" 
+             xmlns:helper="clr-namespace:EasyLife.Helpers"
              x:Class="EasyLife.Pages.Styling_Color_Page"
              BackgroundColor="Black"
              Title="Benutzerdefinierte Farben">
@@ -29,21 +30,25 @@
     <ContentPage.Content>
         <Grid RowDefinitions="*,Auto">
             <Frame Grid.Row="0" BorderColor="White" Margin="1,1,1,1" BackgroundColor="Transparent" Padding="0" CornerRadius="30">
-                <Grid RowDefinitions="*,Auto">
-                    <StackLayout Grid.Row="0" BackgroundColor="Transparent">
-                        <StackLayout BackgroundColor="Transparent" Padding="20">
-                            <control:CarouselView x:Name="carouselView" ItemTemplate="{StaticResource templateSelector}" CurrentItemChanged="carouselView_CurrentItemChanged"/>
+                <Grid RowDefinitions="*,Auto" RowSpacing="0">
+                    <StackLayout Grid.Row="0" BackgroundColor="Transparent" Padding="3">
+                        <StackLayout BackgroundColor="Transparent" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                            <control:CarouselView x:Name="carouselView" ItemTemplate="{StaticResource templateSelector}" Margin="10,10,10,10" CurrentItemChanged="carouselView_CurrentItemChanged" HorizontalOptions="Fill" VerticalOptions="Fill"/>
                         </StackLayout>              
                     </StackLayout>
                     <StackLayout Grid.Row="1" BackgroundColor="Transparent">
                         <Line BackgroundColor="White" HeightRequest="1" />
+                        <Label Text="{Binding CurrentCell.Title}" TextColor="White" FontSize="Large" FontAttributes="Bold" TextDecorations="Underline" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,0,0,0"/>
                         <colorpicker:ColorWheel x:Name="ColorWheel1" IsEnabled="{Binding ColorWheel_State}" WheelBackgroundColor="{Binding SelectedColor}" SelectedColorChanged="ColorWheel1_SelectedColorChanged" VerticalOptions="Center" HorizontalOptions="Center" SelectedColor="{Binding SelectedColor}" HeightRequest="300">
                         </colorpicker:ColorWheel>
                     </StackLayout>
+                    <BoxView Grid.Row="1" BackgroundColor="Black" Opacity="0.7" IsVisible="{Binding ColorWheel_State, Converter={helper:InverseBoolConverter}}" Margin="20,35,20,5">
+                        
+                    </BoxView>
                 </Grid>
             </Frame>
             <StackLayout Grid.Row="1">
-                <StackLayout Orientation="Horizontal" Spacing="10" HorizontalOptions="Center" VerticalOptions="Center" Margin="10">
+                <StackLayout Orientation="Horizontal" Spacing="10" HorizontalOptions="Center" VerticalOptions="Center" Margin="10,0,10,5">
                     <Button Text="Zurücksetzen" Command="{Binding Default_Command}" HorizontalOptions="Center" CornerRadius="30" xct:ShadowEffect.Color="White" VerticalOptions="Center" BorderWidth="2" BorderColor="White" BackgroundColor="Gray" Padding="20"/>
                     <Button Text="Speichern" Command="{Binding Save_Command}" HorizontalOptions="Center" CornerRadius="30" xct:ShadowEffect.Color="White" VerticalOptions="Center" BorderWidth="2" BorderColor="White" BackgroundColor="Gray" Padding="20"/>
                     <Button Text="Laden" Command="{Binding Load_Command}" HorizontalOptions="Center" CornerRadius="30" xct:ShadowEffect.Color="White" VerticalOptions="Center" BorderWidth="2" BorderColor="White" BackgroundColor="Gray" Padding="20"/>

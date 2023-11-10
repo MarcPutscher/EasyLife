@@ -28,10 +28,41 @@
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer x:Name="Content" Command="{Binding Source={RelativeSource AncestorType={x:Type pagemodels:Styling_Color_PageModel}}, Path=Choose_Command}"/>
                     </Frame.GestureRecognizers>
-                    <Grid RowDefinitions="Auto,Auto" RowSpacing="3" ColumnDefinitions="*,Auto,*" Padding="8" BackgroundColor="Transparent">
+                    <Grid RowDefinitions="Auto,Auto" RowSpacing="3" ColumnDefinitions="*,Auto,Auto,*" Padding="8" BackgroundColor="Transparent">
                         <Label Text="Wichtiger Text" TextColor="{DynamicResource Text_Content_Popup}" FontSize="20" FontAttributes="Italic" HorizontalOptions="Center" VerticalOptions="Center" Grid.Row="0" Grid.Column="1" />
-                        <Label Text="Unwichtiger Text" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="15" FontAttributes="None"  HorizontalOptions="Center" VerticalOptions="Center" Grid.Row="1" Grid.ColumnSpan="3"/>
-                    </Grid>
+                        <Label Text="Unwichtiger Text" TextColor="{DynamicResource Subtext_Content_Popup}" FontSize="15" FontAttributes="None"  HorizontalOptions="Center" VerticalOptions="Center" Grid.Row="1" Grid.Column="1"/>
+                        <Switch  HorizontalOptions="End" Grid.Row="0" Grid.Column="2" IsToggled="True" >
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="On">
+                                        <VisualState.Setters>
+                                            <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Popup}" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Off">
+                                        <VisualState.Setters>
+                                            <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Popup}" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Switch>
+                        <Switch  HorizontalOptions="End" Grid.Row="1" Grid.Column="2" IsToggled="False" >
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="On">
+                                        <VisualState.Setters>
+                                            <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Popup}" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Off">
+                                        <VisualState.Setters>
+                                            <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Popup}" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Switch>                    </Grid>
                 </Frame>
                 <Grid ColumnDefinitions="*,Auto,Auto" RowSpacing="5" Padding="0" HorizontalOptions="Fill" VerticalOptions="Center" BackgroundColor="Transparent">
                     <Button x:Name="Button" Text="Beispielknopf" Command="{Binding Source={RelativeSource AncestorType={x:Type pagemodels:Styling_Color_PageModel}}, Path=Choose_Command}" TextColor="{DynamicResource Text_Button_Popup}" FontSize="20" FontAttributes="Italic" HorizontalOptions="Center" VerticalOptions="Center" BackgroundColor="{DynamicResource Hintertgrund_Button_Popup}" CornerRadius="30" BorderColor="{DynamicResource Rand_Button_Popup}" BorderWidth="1" Grid.Column="1"/>

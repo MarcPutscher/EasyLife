@@ -313,7 +313,7 @@ namespace EasyLife.PageModels
                         message = "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag entfernen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
                     }
 
-                    var value = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Warnung!", 300, 550, "Ja", "Nein", message));
+                    var value = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Warnung!", 350, 550, "Ja", "Nein", message));
 
                     if(value ==  null)
                     {
@@ -467,7 +467,7 @@ namespace EasyLife.PageModels
                         message = "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag wiederherstellen?\n\nZweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "";
                     }
 
-                    var value = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Wiederherstellen", 300, 550, "Ja", "Nein", message));
+                    var value = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Wiederherstellen", 350, 550, "Ja", "Nein", message));
 
                     if (value == null)
                     {
