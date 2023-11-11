@@ -498,24 +498,113 @@ namespace EasyLife.PageModels
 
                 if (zwecke2.Count != 0)
                 {
-                    var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Entfernte Zwecke", 330, zwecke2));
+                    bool indikator = false;
 
-                    if (String.IsNullOrEmpty((string)result) == false)
+                    while (indikator == false)
                     {
-                        if (result == null)
+                        var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Entfernte Zwecke", 330, zwecke2));
+
+                        if (String.IsNullOrEmpty((string)result) == false)
                         {
-                            return;
+                            if (result == null)
+                            {
+                                indikator = true;
+                            }
+
+                            var result2 = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup((string)result, 350, new List<string>() { "wiederherstellen", "löschen" }));
+
+                            if (result2 != null)
+                            {
+                                if ((string)result2 == "Wiederherstellen")
+                                {
+                                    Zweck item = await ReasonService.Get_specific_Reason((string)result);
+
+                                    item.Reason_Visibility = true;
+
+                                    await ReasonService.Edit_Reason(item);
+
+                                    await Get_Reasons_Liste();
+
+
+                                    await Notificater("Der Zweck wurde erfolgreich wiederhergestellt.");
+                                }
+                                else
+                                {
+                                    Zweck item = await ReasonService.Get_specific_Reason((string)result);
+
+                                    Zweck zw = item;
+
+                                    await ReasonService.Remove_Reason(item);
+
+                                    List<Balanceprofile> balanceprofilesList = await BalanceService.Get_all_Balanceprofile();
+
+                                    if (balanceprofilesList.Count() != 0)
+                                    {
+                                        foreach (Balanceprofile balanceprofile in balanceprofilesList)
+                                        {
+                                            List<string> initreasons = new List<string>();
+
+                                            initreasons.AddRange(balanceprofile.Income_Account);
+
+                                            initreasons.AddRange(balanceprofile.Outcome_Account);
+
+                                            initreasons.AddRange(balanceprofile.Income_Cash);
+
+                                            initreasons.AddRange(balanceprofile.Outcome_Cash);
+
+                                            initreasons.AddRange(balanceprofile.Ignore);
+
+                                            List<string> openreason = new List<string>();
+
+                                            if (initreasons.Contains(zw.Benutzerdefinierter_Zweck) == false)
+                                            {
+                                                if (zw.Reason_Visibility == true)
+                                                {
+                                                    openreason.Add(zw.Benutzerdefinierter_Zweck);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (balanceprofile.Outcome_Account.Contains(zw.Benutzerdefinierter_Zweck) == true)
+                                                {
+                                                    balanceprofile.Outcome_Account.Remove(zw.Benutzerdefinierter_Zweck);
+                                                }
+
+                                                if (balanceprofile.Income_Account.Contains(zw.Benutzerdefinierter_Zweck) == true)
+                                                {
+                                                    balanceprofile.Income_Account.Remove(zw.Benutzerdefinierter_Zweck);
+                                                }
+
+                                                if (balanceprofile.Outcome_Cash.Contains(zw.Benutzerdefinierter_Zweck) == true)
+                                                {
+                                                    balanceprofile.Outcome_Cash.Remove(zw.Benutzerdefinierter_Zweck);
+                                                }
+
+                                                if (balanceprofile.Income_Cash.Contains(zw.Benutzerdefinierter_Zweck) == true)
+                                                {
+                                                    balanceprofile.Income_Cash.Remove(zw.Benutzerdefinierter_Zweck);
+                                                }
+
+                                                if (balanceprofile.Ignore.Contains(zw.Benutzerdefinierter_Zweck) == true)
+                                                {
+                                                    balanceprofile.Ignore.Remove(zw.Benutzerdefinierter_Zweck);
+                                                }
+                                            }
+
+                                            await BalanceService.Edit_Balanceprofile(balanceprofile);
+                                        }
+                                    }
+
+                                    await Notificater("Der Zweck wurde erfolgreich gelöscht.");
+                                }
+
+                                indikator = true;
+                            }
                         }
-
-                        Zweck item = await ReasonService.Get_specific_Reason((string)result);
-
-                        item.Reason_Visibility = true;
-
-                        await ReasonService.Edit_Reason(item);
-
-                        await Get_Reasons_Liste();
-
-                        await Notificater("Der Zweck wurde erfolgreich wiederhergestellt.");
+                        else
+                        {
+                            indikator = true;
+                        }
                     }
                 }
                 else

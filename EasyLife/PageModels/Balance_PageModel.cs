@@ -641,6 +641,8 @@ namespace EasyLife.PageModels
 
                     Bilanceprofile = placeholder;
 
+                    Preferences.Set("Blanceprofile", Bilanceprofile.Id);
+
                     return 1;
                 }
             }
