@@ -995,7 +995,7 @@ namespace EasyLife.PageModels
                         reorder_string = "Neuordnung des Bilanzprofiles " + Preferences.Get("Blanceprofile", 0) + "";
                     }
 
-                    var result0 = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Einstellungen", 350, new List<string>() { "Bilanzprofil auswählen", "Neues Bilanzprofil erstellen", "Bilanzprofil löschen", reorder_string }));
+                    var result0 = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Einstellungen", 380, new List<string>() { "Bilanzprofil auswählen", "Neues Bilanzprofil erstellen", "Bilanzprofil löschen", reorder_string }));
 
                     if (result0 == null)
                     {
