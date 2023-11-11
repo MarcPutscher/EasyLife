@@ -104,7 +104,7 @@ namespace EasyLife.Services
         }
 
         /// <summary>
-        /// Bearbeitet eine Zweck.
+        /// Bearbeitet einen Zweck.
         /// </summary>
         /// <param name="item">Der Zweck der in der Datenbank verändert werden soll.</param>
         /// <returns></returns>
@@ -113,6 +113,18 @@ namespace EasyLife.Services
             await Init();
 
             await db.UpdateAsync(item);
+        }
+
+        /// <summary>
+        /// Löscht einen Zweck.
+        /// </summary>
+        /// <param name="item">Der Zweck der in der Datenbank gelöscht werden soll.</param>
+        /// <returns></returns>
+        public static async Task Remove_Reason(Zweck item)
+        {
+            await Init();
+
+            await db.DeleteAsync<Zweck>(item.Id);
         }
 
         /// <summary>

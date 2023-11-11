@@ -70,6 +70,32 @@ namespace EasyLife.PageModels
 
                     ColorWheel_State = false;
                 }
+                else
+                {
+                    var result = await StylingService.Get_all_Stylingprofile();
+
+                    if(result.Count() != 0)
+                    {
+                        Currentstylingprofile = result.First();
+
+                        Dictionary<string,string> colors = Stylingprofile_Konverter.Deserilize(Currentstylingprofile);
+
+                        SelectedColor = Color.Black;
+
+                        if (colors.Count() != 0)
+                        {
+                            foreach (var color in colors)
+                            {
+                                App.Current.Resources[color.Key] = color.Value;
+                                Preferences.Set(color.Key, color.Value);
+                            }
+                        }
+
+                        Preferences.Set("Stylingprofil", Currentstylingprofile.Id);
+                    }
+
+                    ColorWheel_State = false;
+                }
             }
             catch (Exception ex)
             {

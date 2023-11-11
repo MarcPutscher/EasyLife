@@ -1081,7 +1081,7 @@ namespace EasyLife.PageModels
 
                             DateTime time = (DateTime)list_of_pending_notification.Where(t => t.NotificationId == notification.Notification_ID).First().Schedule.NotifyTime;
 
-                            await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Benachrichtigung " + resultstring + "", 400, 350, null, null, list_of_pending_notification.Where(t => t.NotificationId == notification.Notification_ID).First().Description + "\nDatum:" + time.ToString("dddd, d.M.yyyy,  H:mm", new CultureInfo("de-DE")) + "Uhr"));
+                            await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Benachrichtigung " + resultstring + "", 400, 400, null, null, list_of_pending_notification.Where(t => t.NotificationId == notification.Notification_ID).First().Description + "\nDatum:" + time.ToString("dddd, d.M.yyyy,  H:mm", new CultureInfo("de-DE")) + "Uhr"));
                         }
                     }
                     catch { }

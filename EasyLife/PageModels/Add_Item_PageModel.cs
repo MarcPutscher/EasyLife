@@ -506,24 +506,52 @@ namespace EasyLife.PageModels
 
                 if (zwecke2.Count != 0)
                 {
-                    var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Entfernte Zwecke", 330, zwecke2));
+                    bool indikator = false;
 
-                    if (String.IsNullOrEmpty((string)result) == false)
+                    while(indikator == false)
                     {
-                        if (result == null)
+                        var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Entfernte Zwecke", 330, zwecke2));
+
+                        if (String.IsNullOrEmpty((string)result) == false)
                         {
-                            return;
+                            if (result == null)
+                            {
+                                indikator = true;
+                            }
+
+                            var result2 = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup((string)result, 350, new List<string>() { "wiederherstellen", "löschen" }));
+
+                            if (result2 != null)
+                            {
+                                if((string)result2 == "Wiederherstellen")
+                                {
+                                    Zweck item = await ReasonService.Get_specific_Reason((string)result);
+
+                                    item.Reason_Visibility = true;
+
+                                    await ReasonService.Edit_Reason(item);
+
+                                    await Get_Reasons_Liste();
+
+
+                                    await Notificater("Der Zweck wurde erfolgreich wiederhergestellt.");
+                                }
+                                else
+                                {
+                                    Zweck item = await ReasonService.Get_specific_Reason((string)result);
+
+                                    await ReasonService.Remove_Reason(item);
+
+                                    await Notificater("Der Zweck wurde erfolgreich gelöscht.");
+                                }
+
+                                indikator = true;
+                            }
                         }
-
-                        Zweck item = await ReasonService.Get_specific_Reason((string)result);
-
-                        item.Reason_Visibility = true;
-
-                        await ReasonService.Edit_Reason(item);
-
-                        await Get_Reasons_Liste();
-
-                        await Notificater("Der Zweck wurde erfolgreich wiederhergestellt.");
+                        else
+                        {
+                            indikator = true;
+                        }
                     }
                 }
                 else

@@ -324,6 +324,8 @@ namespace EasyLife.Services
 
                 await Reset_Notification();
 
+                await Reset_Notification();
+
                 return 1;
             }
 
@@ -342,6 +344,8 @@ namespace EasyLife.Services
             indicator = 1;
 
             db_create = null;
+
+            await Reset_Notification();
 
             await Reset_Notification();
 
