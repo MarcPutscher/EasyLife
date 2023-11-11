@@ -726,16 +726,82 @@ namespace EasyLife.PageModels
 
                 List<Zweck> count = new List<Zweck>(await ReasonService.Get_Enable_ReasonList());
 
-                if ((Bilanceprofile.Outcome_Account.Count + Bilanceprofile.Income_Account.Count + Bilanceprofile.Outcome_Cash.Count + Bilanceprofile.Income_Cash.Count + Bilanceprofile.Ignore.Count + Bilanceprofile.Letter_Outcome.Count + Bilanceprofile.Letter_Income.Count) != count.Count)
+                List<string> checklist = new List<string>();
+
+                checklist.AddRange(Bilanceprofile.Ignore);
+
+                checklist.AddRange(Bilanceprofile.Outcome_Account);
+
+                checklist.AddRange(Bilanceprofile.Income_Account);
+
+                checklist.AddRange(Bilanceprofile.Outcome_Cash);
+
+                checklist.AddRange(Bilanceprofile.Outcome_Cash);
+
+                foreach (Zweck zw in count)
                 {
-                    return false;
+                    if (checklist.Contains(zw.Benutzerdefinierter_Zweck) == false)
+                    {
+                        if (zw.Reason_Visibility == true)
+                        {
+                            return false;
+                        }
+                    }
+                }
+
+                bool indikator = false;
+
+                foreach (string st in checklist)
+                {
+                    if (count.Where(zw => zw.Benutzerdefinierter_Zweck == st).Count() == 0)
+                    {
+                        if (Bilanceprofile.Outcome_Account.Contains(st) == true)
+                        {
+                            Bilanceprofile.Outcome_Account.Remove(st);
+
+                            indikator = true;
+                        }
+
+                        if (Bilanceprofile.Income_Account.Contains(st) == true)
+                        {
+                            Bilanceprofile.Income_Account.Remove(st);
+
+                            indikator = true;
+                        }
+
+                        if (Bilanceprofile.Outcome_Cash.Contains(st) == true)
+                        {
+                            Bilanceprofile.Outcome_Cash.Remove(st);
+
+                            indikator = true;
+                        }
+
+                        if (Bilanceprofile.Income_Cash.Contains(st) == true)
+                        {
+                            Bilanceprofile.Income_Cash.Remove(st);
+
+                            indikator = true;
+                        }
+
+                        if (Bilanceprofile.Ignore.Contains(st) == true)
+                        {
+                            Bilanceprofile.Ignore.Remove(st);
+
+                            indikator = true;
+                        }
+                    }
+                }
+
+                if (indikator == true)
+                {
+                    await BalanceService.Edit_Balanceprofile(Bilanceprofile);
                 }
 
                 return true;
             }
             catch (Exception ex)
             {
-                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Leere Bilanz", 350, 250, null, null, "Es kann keine PDF erstellt werden, wenn die Bilanz leer ist."));
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 return true;
             }
@@ -899,7 +965,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Leere Bilanz", 350, 250, null, null, "Es kann keine PDF erstellt werden, wenn die Bilanz leer ist."));
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -1026,6 +1092,67 @@ namespace EasyLife.PageModels
 
                         Balanceprofile ChoosenBilanceprofil = await BalanceService.Get_specific_Balanceprofile(id);
 
+                        List<Zweck> count = new List<Zweck>(await ReasonService.Get_Enable_ReasonList());
+
+                        List<string> checklist = new List<string>();
+
+                        checklist.AddRange(ChoosenBilanceprofil.Ignore);
+
+                        checklist.AddRange(ChoosenBilanceprofil.Outcome_Account);
+
+                        checklist.AddRange(ChoosenBilanceprofil.Income_Account);
+
+                        checklist.AddRange(ChoosenBilanceprofil.Outcome_Cash);
+
+                        checklist.AddRange(ChoosenBilanceprofil.Outcome_Cash);
+
+                        bool indikator2 = false;
+
+                        foreach (string st in checklist)
+                        {
+                            if (count.Where(zw => zw.Benutzerdefinierter_Zweck == st).Count() == 0)
+                            {
+                                if (ChoosenBilanceprofil.Outcome_Account.Contains(st) == true)
+                                {
+                                    ChoosenBilanceprofil.Outcome_Account.Remove(st);
+
+                                    indikator2 = true;
+                                }
+
+                                if (ChoosenBilanceprofil.Income_Account.Contains(st) == true)
+                                {
+                                    ChoosenBilanceprofil.Income_Account.Remove(st);
+
+                                    indikator2 = true;
+                                }
+
+                                if (ChoosenBilanceprofil.Outcome_Cash.Contains(st) == true)
+                                {
+                                    ChoosenBilanceprofil.Outcome_Cash.Remove(st);
+
+                                    indikator2 = true;
+                                }
+
+                                if (ChoosenBilanceprofil.Income_Cash.Contains(st) == true)
+                                {
+                                    ChoosenBilanceprofil.Income_Cash.Remove(st);
+
+                                    indikator2 = true;
+                                }
+
+                                if (ChoosenBilanceprofil.Ignore.Contains(st) == true)
+                                {
+                                    ChoosenBilanceprofil.Ignore.Remove(st);
+
+                                    indikator2 = true;
+                                }
+                            }
+                        }
+
+                        if (indikator2 == true)
+                        {
+                            await BalanceService.Edit_Balanceprofile(ChoosenBilanceprofil);
+                        }
 
                         List<string[]> resultstring = new List<string[]>();
 
@@ -1180,7 +1307,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Leere Bilanz", 350, 250, null, null, "Es kann keine PDF erstellt werden, wenn die Bilanz leer ist."));
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 

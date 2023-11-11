@@ -489,6 +489,7 @@ namespace EasyLife.PageModels
 
         private async Task Revive_Reason_Methode()
         {
+
             try
             {
                 Dictionary<string, string> zwecke = (Dictionary<string, string>)await ReasonService.Get_Disable_ReasonDictionary();
@@ -562,41 +563,29 @@ namespace EasyLife.PageModels
 
                                             initreasons.AddRange(balanceprofile.Ignore);
 
-                                            List<string> openreason = new List<string>();
-
-                                            if (initreasons.Contains(zw.Benutzerdefinierter_Zweck) == false)
+                                            if (balanceprofile.Outcome_Account.Contains(zw.Benutzerdefinierter_Zweck) == true)
                                             {
-                                                if (zw.Reason_Visibility == true)
-                                                {
-                                                    openreason.Add(zw.Benutzerdefinierter_Zweck);
-                                                }
+                                                balanceprofile.Outcome_Account.Remove(zw.Benutzerdefinierter_Zweck);
                                             }
-                                            else
+
+                                            if (balanceprofile.Income_Account.Contains(zw.Benutzerdefinierter_Zweck) == true)
                                             {
-                                                if (balanceprofile.Outcome_Account.Contains(zw.Benutzerdefinierter_Zweck) == true)
-                                                {
-                                                    balanceprofile.Outcome_Account.Remove(zw.Benutzerdefinierter_Zweck);
-                                                }
+                                                balanceprofile.Income_Account.Remove(zw.Benutzerdefinierter_Zweck);
+                                            }
 
-                                                if (balanceprofile.Income_Account.Contains(zw.Benutzerdefinierter_Zweck) == true)
-                                                {
-                                                    balanceprofile.Income_Account.Remove(zw.Benutzerdefinierter_Zweck);
-                                                }
+                                            if (balanceprofile.Outcome_Cash.Contains(zw.Benutzerdefinierter_Zweck) == true)
+                                            {
+                                                balanceprofile.Outcome_Cash.Remove(zw.Benutzerdefinierter_Zweck);
+                                            }
 
-                                                if (balanceprofile.Outcome_Cash.Contains(zw.Benutzerdefinierter_Zweck) == true)
-                                                {
-                                                    balanceprofile.Outcome_Cash.Remove(zw.Benutzerdefinierter_Zweck);
-                                                }
+                                            if (balanceprofile.Income_Cash.Contains(zw.Benutzerdefinierter_Zweck) == true)
+                                            {
+                                                balanceprofile.Income_Cash.Remove(zw.Benutzerdefinierter_Zweck);
+                                            }
 
-                                                if (balanceprofile.Income_Cash.Contains(zw.Benutzerdefinierter_Zweck) == true)
-                                                {
-                                                    balanceprofile.Income_Cash.Remove(zw.Benutzerdefinierter_Zweck);
-                                                }
-
-                                                if (balanceprofile.Ignore.Contains(zw.Benutzerdefinierter_Zweck) == true)
-                                                {
-                                                    balanceprofile.Ignore.Remove(zw.Benutzerdefinierter_Zweck);
-                                                }
+                                            if (balanceprofile.Ignore.Contains(zw.Benutzerdefinierter_Zweck) == true)
+                                            {
+                                                balanceprofile.Ignore.Remove(zw.Benutzerdefinierter_Zweck);
                                             }
 
                                             await BalanceService.Edit_Balanceprofile(balanceprofile);
