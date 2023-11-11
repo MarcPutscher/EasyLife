@@ -7,7 +7,7 @@
              x:Class="EasyLife.Cells.Styling.HomeView">
     
   <ContentView.Content>
-        <Frame BackgroundColor="{DynamicResource Hintergrund_Seite_Home}" CornerRadius="20" Padding="0">
+        <Frame BackgroundColor="{DynamicResource Hintergrund_Home}" CornerRadius="20" Padding="0">
             <Frame.GestureRecognizers>
                 <TapGestureRecognizer x:Name="Seite" Command="{Binding Source={RelativeSource AncestorType={x:Type pagemodels:Styling_Color_PageModel}}, Path=Choose_Command}"/>
             </Frame.GestureRecognizers>

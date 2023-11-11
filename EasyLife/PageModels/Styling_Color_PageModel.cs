@@ -314,7 +314,7 @@ namespace EasyLife.PageModels
                 Colordic.Add("Deaktiv_Schalter_Popup", Color.DarkRed.ToHex());
 
                 //Home
-                Colordic.Add("Hintergrund_Seite_Home", Color.DarkSlateGray.ToHex());
+                Colordic.Add("Hintergrund_Home", Color.DarkSlateGray.ToHex());
                 Colordic.Add("Hintergrund_Bearbeiten_Home", Color.Green.ToHex());
                 Colordic.Add("Rand_Bearbeiten_Home", Color.DarkGreen.ToHex());
                 Colordic.Add("Text_Bearbeiten_Home", Color.White.ToHex());

@@ -8,7 +8,7 @@
     x:Class="EasyLife.Pages.Trashcan_Page"    
     xmlns:pagemodels="clr-namespace:EasyLife.PageModels" 
     Title="Papierkorb"
-    BackgroundColor="{DynamicResource Hintergrund_Seite_Home}"
+    BackgroundColor="{DynamicResource Hintergrund_Home}"
     x:DataType="pagemodels:Trashcan_PageModel">
 
     <ContentPage.BindingContext>

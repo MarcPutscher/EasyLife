@@ -35,7 +35,7 @@ namespace EasyLife
 
 
             //Home
-            dictionary["Hintergrund_Hinzufügen"] = Preferences.Get("Hintergrund_Hinzufügen", Color.DarkSlateGray.ToHex());
+            dictionary["Hintergrund_Home"] = Preferences.Get("Hintergrund_Home", Color.DarkSlateGray.ToHex());
             dictionary["Hintergrund_Bearbeiten_Home"] = Preferences.Get("Hintergrund_Bearbeiten_Home", Color.Green.ToHex());
             dictionary["Rand_Bearbeiten_Home"] = Preferences.Get("Rand_Bearbeiten_Home", Color.DarkGreen.ToHex());
             dictionary["Text_Bearbeiten_Home"] = Preferences.Get("Text_Bearbeiten_Home", Color.White.ToHex());
@@ -61,7 +61,7 @@ namespace EasyLife
 
 
             //Hinzufügen/Bearbeiten
-            dictionary["Hintergrund_Seite_Hinzufügen"] = Preferences.Get("Hintergrund_Seite_Hinzufügen", Color.DarkSlateGray.ToHex());
+            dictionary["Hintergrund_Hinzufügen"] = Preferences.Get("Hintergrund_Hinzufügen", Color.DarkSlateGray.ToHex());
             dictionary["Hintergrund_Eingabefeld_Hinzufügen"] = Preferences.Get("Hintergrund_Eingabefeld_Hinzufügen", Color.Orange.ToHex());
             dictionary["Rand_Eingabefeld_Hinzufügen"] = Preferences.Get("Rand_Eingabefeld_Hinzufügen", Color.Coral.ToHex());
             dictionary["Title_Eingabefeld_Hinzufügen"] = Preferences.Get("Title_Eingabefeld_Hinzufügen", Color.White.ToHex());
@@ -89,6 +89,7 @@ namespace EasyLife
             dictionary["Text_Zusammenfassung_Bilanz"] = Preferences.Get("Text_Zusammenfassung_Bilanz", Color.Black.ToHex());
             dictionary["Text_Zweck_Stack_Bilanz"] = Preferences.Get("Text_Zweck_Stack_Bilanz", Color.White.ToHex());
             dictionary["Text_Anzahl_Stack_Bilanz"] = Preferences.Get("Text_Anzahl_Stack_Bilanz", Color.White.ToHex());
+
 
             dictionary["App_Backgroundcolor"] = Preferences.Get("App_Backgroundcolor", "#1d0e21");
 

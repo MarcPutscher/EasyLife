@@ -16,7 +16,7 @@ namespace EasyLife.Cells.Styling
 		{
 			InitializeComponent ();
 
-            Seite.CommandParameter = new List<object>() { new Dictionary<string, string>() { {"Hintergrund", "Hintergrund_Seite_Home" } }, "Seite", "Home_View" };
+            Seite.CommandParameter = new List<object>() { new Dictionary<string, string>() { {"Hintergrund", "Hintergrund_Home" } }, "Seite", "Home_View" };
 
             Transaktion_Positiv.CommandParameter = new List<object>() { new Dictionary<string, string>() { { "Hintergrund", "Hintergrund_Transaktion_Home" }, { "Rand", "Rand_Transaktion_Home" }, { "Text", "Text_Transaktion_Home" }, { "Hintergrund der Details", "Hintergrund_Detail_Transaktion_Home" }, { "Text der Details", "Text_Detail_Transaktion_Home" }, { "Hintergrund des Betrag","Hintergrund_Positiver_Betrag_Transaktion_Home" }, { "Rand des Betrages" ,"Rand_Positiver_Betrag_Transaktion_Home"}, { "Text des Betrages", "Text_Positiver_Betrag_Transaktion_Home" } }, "Einkommen", "Home_View" };
 
@@ -38,7 +38,7 @@ namespace EasyLife.Cells.Styling
 
         public static List<string> Home_View_Item_List = new List<string>()
         {
-            "Hintergrund_Seite_Home",
+            "Hintergrund_Home",
             "Hintergrund_Bearbeiten_Home",
             "Rand_Bearbeiten_Home",
             "Text_Bearbeiten_Home",

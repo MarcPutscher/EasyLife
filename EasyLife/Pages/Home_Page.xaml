@@ -9,7 +9,7 @@
     xmlns:fontAwesome="clr-namespace:FontAwesome" 
     x:Class="EasyLife.Pages.Home_Page"
     Title="{Binding Title}"
-    BackgroundColor="{DynamicResource Hintergrund_Seite_Home}"
+    BackgroundColor="{DynamicResource Hintergrund_Home}"
     x:DataType="pagemodels:Home_PageModel">
 
     <ContentPage.BindingContext>
@@ -234,16 +234,16 @@
             SelectionMode="None"
             SeparatorVisibility="None"
             IsVisible="{Binding List_of_Suggestion_Status}"
-            BackgroundColor="{DynamicResource Page_Backgroundcolor}"
+            BackgroundColor="{DynamicResource Hintergrund_Home}"
             VerticalOptions="FillAndExpand">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="model:Suggestion">
                     <ViewCell>
                         <Grid ColumnDefinitions="50,*,90" Padding="5">
                             <Grid ColumnDefinitions="20,50,20" Padding="0" Grid.Column="2">
-                                <Button Grid.Column="1" BackgroundColor="{DynamicResource Hintergrund_Seite_Home}" Text="X" TextColor="Black" HorizontalOptions="Fill" Command="{Binding Source={x:Reference SuggestionSwipeView}, Path=BindingContext.Delet_Suggestion}" CommandParameter="{Binding .}"/>
+                                <Button Grid.Column="1" BackgroundColor="{DynamicResource Hintergrund_Home}" Text="X" TextColor="Black" HorizontalOptions="Fill" Command="{Binding Source={x:Reference SuggestionSwipeView}, Path=BindingContext.Delet_Suggestion}" CommandParameter="{Binding .}"/>
                             </Grid>
-                            <Label Text="{Binding Suggestion_value}" TextColor="White" FontSize="Body" TextTransform="None" HeightRequest="10" VerticalTextAlignment="Center" Padding="0" HorizontalOptions= "FillAndExpand" HorizontalTextAlignment="Start" Grid.Column="1" BackgroundColor="{DynamicResource Hintergrund_Seite_Home}">
+                            <Label Text="{Binding Suggestion_value}" TextColor="White" FontSize="Body" TextTransform="None" HeightRequest="10" VerticalTextAlignment="Center" Padding="0" HorizontalOptions= "FillAndExpand" HorizontalTextAlignment="Start" Grid.Column="1" BackgroundColor="{DynamicResource Hintergrund_Home}">
                                 <Label.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding Source={x:Reference SuggestionSwipeView}, Path=BindingContext.Select_Suggestion}" CommandParameter="{Binding .}" />
                                 </Label.GestureRecognizers>
@@ -391,7 +391,7 @@
             </StackLayout>
         </StackLayout>
 
-        <Grid RowDefinitions="300,100,*" IsVisible="{Binding Kein_Ergebnis_Suggestion_Status}" BackgroundColor="{DynamicResource Hintergrund_Seite_Home}" VerticalOptions="FillAndExpand">
+        <Grid RowDefinitions="300,100,*" IsVisible="{Binding Kein_Ergebnis_Suggestion_Status}" BackgroundColor="{DynamicResource Hintergrund_Home}" VerticalOptions="FillAndExpand">
             <Label Grid.Row="1" Text="Keine Suchbegriff vorhanden!" TextColor="Black" FontSize="20" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="Center"/>
         </Grid>
 

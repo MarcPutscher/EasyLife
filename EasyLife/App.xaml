@@ -20,7 +20,7 @@
             <Color x:Key="Deaktiv_Schalter_Popup">DarkRed</Color>
 
 
-            <Color x:Key="Hintergrund_Seite_Home">DarkSlateGray</Color>
+            <Color x:Key="Hintergrund_Home">DarkSlateGray</Color>
             <Color x:Key="Hintergrund_Bearbeiten_Home">Green</Color>
             <Color x:Key="Rand_Bearbeiten_Home">DarkGreen</Color>
             <Color x:Key="Text_Bearbeiten_Home">White</Color>
