@@ -5,7 +5,8 @@
     x:Class="EasyLife.Pages.Add_Order_Page"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     BackgroundColor ="{DynamicResource Hintergrund_Hinzufügen}"
-    xmlns:pagemodels="clr-namespace:EasyLife.PageModels"
+    xmlns:pagemodels="clr-namespace:EasyLife.PageModels" 
+    xmlns:customecontrole="clr-namespace:EasyLife.CustomeControle"
     x:DataType="pagemodels:Add_Order_PageModel"
     Shell.PresentationMode="Modal"
     Shell.NavBarIsVisible="False">
@@ -19,7 +20,7 @@
                 EventName="Appearing"
                 Command="{Binding ViewIsAppearing_Command}" />
     </ContentPage.Behaviors>
-    
+
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="ButtonA" TargetType="Button">
@@ -36,7 +37,7 @@
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
-    
+
     <StackLayout>
         <StackLayout BackgroundColor="#1d0e21" HeightRequest="50">
             <Label Text="Auftrag erstellen" FontSize="Large" FontAttributes="Bold" TextColor="White" VerticalOptions="CenterAndExpand" Margin="10,0,0,0"/>
@@ -45,9 +46,15 @@
             <Frame  Grid.Row="1" CornerRadius="10" BackgroundColor="{DynamicResource Hintergrund_Eingabefeld_Hinzufügen}" BorderColor="{DynamicResource Rand_Eingabefeld_Hinzufügen}" HorizontalOptions="Fill" Padding="0">
                 <StackLayout>
                     <Grid RowDefinitions="5,Auto,5" ColumnDefinitions="5,*,5">
-                        <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1" HeightRequest="50" HorizontalOptions="Fill">
+                        <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1" HorizontalOptions="Fill">
                             <Label Text="Auftrags Option:" FontSize="Medium" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" VerticalOptions="Center" HorizontalOptions="Center"/>
-                            <Picker ItemsSource="{Binding Option_Source}" Title="Option" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" TitleColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}" SelectedItem="{Binding Option_Item}" WidthRequest="200"/>
+                            <customecontrole:CustomePicker 
+                                Titel="Optionen"
+                                ItemText="{Binding Option_Item}"
+                                ItemColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"
+                                PlaceholderText="Option auswählen"
+                                PlaceholderColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}"
+                                ItemSource="{Binding Option_Source}"/>
                         </StackLayout>
                     </Grid>
                 </StackLayout>
@@ -55,8 +62,14 @@
             <Frame Grid.Row="3" CornerRadius="10" BackgroundColor="{DynamicResource Hintergrund_Eingabefeld_Hinzufügen}" BorderColor="{DynamicResource Rand_Eingabefeld_Hinzufügen}" HorizontalOptions="Fill" IsVisible="{Binding Onc_Option_Visibility}" Padding="0">
                 <StackLayout >
                     <Grid RowDefinitions="5,Auto,5" ColumnDefinitions="5,*,5" VerticalOptions="Center" HorizontalOptions="Center">
-                        <StackLayout Grid.Row="1" Grid.Column="1" HeightRequest="50">
-                            <Picker ItemsSource="{Binding Kind_Source}" Title="Art" HorizontalTextAlignment="Center" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" TitleColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}" FontAttributes="Bold" SelectedItem="{Binding Kind_Item}"/>
+                        <StackLayout Grid.Row="1" Grid.Column="1">
+                            <customecontrole:CustomePicker 
+                                Titel="Art"
+                                ItemText="{Binding Kind_Item}"
+                                ItemColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"
+                                PlaceholderText="Art auswählen"
+                                PlaceholderColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}"
+                                ItemSource="{Binding Kind_Source}"/>
                         </StackLayout>
                     </Grid>
                 </StackLayout>
@@ -64,11 +77,23 @@
             <Frame Grid.Row="3" CornerRadius="10" BackgroundColor="{DynamicResource Hintergrund_Eingabefeld_Hinzufügen}" BorderColor="{DynamicResource Rand_Eingabefeld_Hinzufügen}" HorizontalOptions="Fill" IsVisible="{Binding Amount_Option_Visibility}" Padding="0">
                 <StackLayout >
                     <Grid RowDefinitions="5,Auto,5" ColumnDefinitions="5,*,5,*,5">
-                        <StackLayout Grid.Row="1" Grid.Column="1" HeightRequest="50">
-                            <Picker ItemsSource="{Binding Count_Source}" Title="Anzahl" HorizontalTextAlignment="Center" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" TitleColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}" FontAttributes="Bold" SelectedItem="{Binding Count_Item}"/>
+                        <StackLayout Grid.Row="1" Grid.Column="1">
+                            <customecontrole:CustomePicker 
+                                Titel="Anzahl"
+                                ItemText="{Binding Count_Item}"
+                                ItemColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"
+                                PlaceholderText="Anzahl auswählen"
+                                PlaceholderColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}"
+                                ItemSource="{Binding Count_Source}"/>
                         </StackLayout>
-                        <StackLayout Grid.Row="1" Grid.Column="3" HeightRequest="50">
-                            <Picker ItemsSource="{Binding Kind_Source}" Title="Art" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" TitleColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}" SelectedItem="{Binding Kind_Item}"/>
+                        <StackLayout Grid.Row="1" Grid.Column="3">
+                            <customecontrole:CustomePicker 
+                                Titel="Art"
+                                ItemText="{Binding Kind_Item}"
+                                ItemColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"
+                                PlaceholderText="Art auswählen"
+                                PlaceholderColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}"
+                                ItemSource="{Binding Kind_Source}"/>
                         </StackLayout>
                     </Grid>
                 </StackLayout>
@@ -76,18 +101,24 @@
             <Frame Grid.Row="3" CornerRadius="10" BackgroundColor="{DynamicResource Hintergrund_Eingabefeld_Hinzufügen}" BorderColor="{DynamicResource Rand_Eingabefeld_Hinzufügen}" HorizontalOptions="Fill" IsVisible="{Binding Date_Option_Visibility}" Padding="0">
                 <StackLayout >
                     <Grid RowDefinitions="5,Auto,5" ColumnDefinitions="5,Auto,5,*,5">
-                        <StackLayout Grid.Row="1" Grid.Column="1" HeightRequest="50">
+                        <StackLayout Grid.Row="1" Grid.Column="1" >
                             <DatePicker HorizontalOptions="Fill" FontAttributes="Bold" Format="dddd,  dd.M.yyyy" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" WidthRequest="220" Date="{Binding Date}" FontSize="Medium" MinimumDate="{Binding Minimum_Date}"/>
                         </StackLayout>
-                        <StackLayout Grid.Row="1" Grid.Column="3" HeightRequest="50">
-                            <Picker ItemsSource="{Binding Kind_Source}" Title="Art" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" TitleColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}" SelectedItem="{Binding Kind_Item}"/>
+                        <StackLayout Grid.Row="1" Grid.Column="3" >
+                            <customecontrole:CustomePicker 
+                                Titel="Art"
+                                ItemText="{Binding Kind_Item}"
+                                ItemColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"
+                                PlaceholderText="Art auswählen"
+                                PlaceholderColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}"
+                                ItemSource="{Binding Kind_Source}"/>
                         </StackLayout>
                     </Grid>
                 </StackLayout>
             </Frame>
             <Frame Grid.Row="5" IsVisible="{Binding Days_Visibility}" CornerRadius="10" BackgroundColor="{DynamicResource Hintergrund_Eingabefeld_Hinzufügen}" BorderColor="{DynamicResource Rand_Eingabefeld_Hinzufügen}" Padding="0">
                 <StackLayout >
-                    <Grid RowDefinitions="5,Auto,5" ColumnDefinitions="5,*,5,*,5" Padding="5" >
+                    <Grid RowDefinitions="5,Auto,5" ColumnDefinitions="5,*,5,*,5"  Padding="5" >
                         <StackLayout Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Padding="3">
                             <StackLayout>
                                 <Grid ColumnDefinitions="5,Auto,*,Auto,5">

@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="EasyLife.Pages.Edit_Item_With_Order_Page"
              xmlns:pagemodels="clr-namespace:EasyLife.PageModels"
-             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+             xmlns:customecontrole="clr-namespace:EasyLife.CustomeControle"
              Title="Transaktionen bearbeiten"
              BackgroundColor="{DynamicResource Hintergrund_Hinzufügen}"
              x:DataType="pagemodels:Edit_Item_With_Order_PageModel">
@@ -69,17 +70,13 @@
             JustifyContent="SpaceEvenly">
             <Label Text="Zweck" Style="{StaticResource LabelA}"/>
             <Frame Style="{StaticResource FrameA}">
-                <Picker
-                    Title="Zweck"
-                    TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"
-                    TitleColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}"
-                    HorizontalTextAlignment="Center"
-                    HorizontalOptions="Fill"
-                    FontSize="Medium"
-                    IsEnabled="{Binding Zweck_IsEnable}"
-                    ItemsSource="{Binding Zweck_Liste}"
-                    SelectedItem="{Binding Zweck}">
-                </Picker>
+                <customecontrole:CustomePicker 
+                    Titel="Zweck"
+                    ItemText="{Binding Zweck}"
+                    ItemColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"
+                    PlaceholderText="Zweck auswählen"
+                    PlaceholderColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}"
+                    ItemSource="{Binding Zweck_Liste}"/>
             </Frame>
             <Label Text="Betrag" Style="{StaticResource LabelA}"/>
             <Frame Style="{StaticResource FrameA}">

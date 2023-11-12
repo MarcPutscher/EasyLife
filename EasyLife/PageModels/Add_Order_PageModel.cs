@@ -22,7 +22,7 @@ namespace EasyLife.PageModels
     {
         public Add_Order_PageModel()
         {
-            Count_Source = new ObservableRangeCollection<int>(Enumerable.Range(1, 365).ToList());
+            Count_Source = new ObservableRangeCollection<string>(Enumerable.Range(1, 356).Select(n => n.ToString()).ToList());
             Return_Command = new AsyncCommand(Return_Methode);
             ViewIsAppearing_Command = new AsyncCommand(ViewIsAppearing);
             Kind_Source = new ObservableRangeCollection<string>() { "Tag", "Woche", "Monat", "Jahr" };
@@ -362,7 +362,7 @@ namespace EasyLife.PageModels
                         {
                             Option_Item = "Einmalig";
 
-                            Count_Item = -1;
+                            Count_Item = null;
                         }
                         if (auftrag.Option == 2)
                         {
@@ -370,7 +370,7 @@ namespace EasyLife.PageModels
 
                             Amount_Option_Visibility = true;
 
-                            Count_Item = int.Parse(auftrag.Anzahl_an_Wiederholungen);
+                            Count_Item = auftrag.Anzahl_an_Wiederholungen;
                         }
                         if (auftrag.Option == 3)
                         {
@@ -378,7 +378,7 @@ namespace EasyLife.PageModels
 
                             Date = DateTime.ParseExact(auftrag.Anzahl_an_Wiederholungen, "dddd, d.M.yyyy", new CultureInfo("de-DE"));
 
-                            Count_Item = -1;
+                            Count_Item = null;
                         }
                     }
 
@@ -786,7 +786,7 @@ namespace EasyLife.PageModels
                 }
                 else
                 {
-                    Count_Item = -1;
+                    Count_Item = null;
                 }
             }
             catch (Exception ex)
@@ -800,7 +800,7 @@ namespace EasyLife.PageModels
         public string TransaktionID { get; set; }
         public string OrderID { get; set; }
 
-        public ObservableRangeCollection<int> Count_Source { get; set; }
+        public ObservableRangeCollection<string> Count_Source { get; set; }
 
         public ObservableRangeCollection<string> Kind_Source { get; set; }
 
@@ -1338,8 +1338,8 @@ namespace EasyLife.PageModels
             }
         }
 
-        public int count_item;
-        public int Count_Item
+        public string count_item;
+        public string Count_Item
         {
             get { return count_item; }
             set

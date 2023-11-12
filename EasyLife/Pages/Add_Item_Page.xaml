@@ -6,6 +6,7 @@
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
     xmlns:pagemodels="clr-namespace:EasyLife.PageModels"
     xmlns:fontAwesome="clr-namespace:FontAwesome" 
+    xmlns:customecontrole="clr-namespace:EasyLife.CustomeControle"
     x:DataType="pagemodels:Add_Item_PageModel"
     Title="Transaktion hinzufügen"
     BackgroundColor="{DynamicResource Hintergrund_Hinzufügen}">
@@ -75,17 +76,13 @@
             <ActivityIndicator Color="{DynamicResource Refresh_Color}" IsRunning="{Binding ActivityIndicator_IsRunning}" IsVisible="{Binding ActivityIndicator_IsRunning}"/>
             <Label Text="Zweck" Style="{StaticResource LabelA}"/>
             <Frame Style="{StaticResource FrameA}">
-                <Picker
-                    Title="Zweck"
-                    TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"
-                    SelectedItem="{Binding Zweck}"
-                    TitleColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}"
-                    HorizontalTextAlignment="Center"
-                    HorizontalOptions="Fill"
-                    FontSize="Medium"
-                    IsEnabled="{Binding Zweck_IsEnable}"
-                    ItemsSource="{Binding Zweck_Liste}">
-                </Picker>
+                <customecontrole:CustomePicker 
+                    Titel="Zweck"
+                    ItemText="{Binding Zweck}"
+                    ItemColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"
+                    PlaceholderText="Zweck auswählen"
+                    PlaceholderColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}"
+                    ItemSource="{Binding Zweck_Liste}"/>
             </Frame>
             <Label Text="Betrag" Style="{StaticResource LabelA}"/>
             <Frame Style="{StaticResource FrameA}">

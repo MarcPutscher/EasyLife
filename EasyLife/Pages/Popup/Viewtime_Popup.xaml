@@ -5,13 +5,14 @@
     x:Class="EasyLife.Pages.Viewtime_Popup"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     xmlns:fontAwesome="clr-namespace:FontAwesome" 
+    xmlns:customecontrole="clr-namespace:EasyLife.CustomeControle"
     IsLightDismissEnabled="False"
     x:Name="ViewTime_Popup"
     Color="Transparent"
-    HorizontalOptions="Center"
+    HorizontalOptions="FillAndExpand"
     VerticalOptions="Center">
 
-    <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="15" ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="10" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="Center">
+    <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="15" ColumnDefinitions="*,Auto" ColumnSpacing="5" Padding="10" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="Fill">
         <ImageButton Grid.Row="0" Grid.Column="1" Clicked="CancelButton_Clicked" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="{DynamicResource Hintergrund_Cancel_Popup}" CornerRadius="50" Padding="0">
             <ImageButton.Source>
                 <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.CircleXmark}" Color="{DynamicResource Vordergrund_Cancel_Popup}" Size="50"/>
@@ -22,9 +23,13 @@
             <StackLayout>
                 <StackLayout Orientation="Horizontal" Spacing="10">
                     <Label Text="Jahr :" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" TextColor="{DynamicResource Text_Content_Popup}" FontSize="Medium" FontAttributes="Bold" />
-                    <Picker x:Name="YearPicker" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" Title="Jahre" 
-                        TextColor="{DynamicResource Subtext_Content_Popup}" FontAttributes="Bold" TitleColor="{DynamicResource Subtext_Content_Popup}" SelectedIndexChanged="Year_Changed_Methode">
-                    </Picker>
+                    <customecontrole:CustomePicker 
+                        x:Name="YearPicker"
+                        Titel="Jahre"
+                        ItemColor="{DynamicResource Subtext_Content_Popup}"
+                        PlaceholderText="Jahr auswählen"
+                        PlaceholderColor="{DynamicResource Subtext_Content_Popup}"
+                        ItemChanged="Year_Changed_Methode"/>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Spacing="10">
                     <Label Text="Gesamtes Jahr " FontAttributes="Bold" FontSize="Body" TextColor="{DynamicResource Text_Content_Popup}" HorizontalTextAlignment="Start" VerticalOptions="Center" HorizontalOptions="Center"/>
@@ -47,8 +52,13 @@
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Spacing="10">
                     <Label  x:Name="MonthLabel" Text="Monat :"  VerticalTextAlignment="Center" HorizontalTextAlignment="Start" TextColor="{DynamicResource Text_Content_Popup}" FontSize="Medium" FontAttributes="Bold"/>
-                    <Picker x:Name="MonthPicker" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" Title="Monate" 
-                             TextColor="{DynamicResource Subtext_Content_Popup}" FontAttributes="Bold" TitleColor="{DynamicResource Subtext_Content_Popup}" SelectedIndexChanged="Month_Changed_Methode"/>
+                    <customecontrole:CustomePicker 
+                        x:Name="MonthPicker"
+                        Titel="Monate"
+                        ItemColor="{DynamicResource Subtext_Content_Popup}"
+                        PlaceholderText="Monat auswählen"
+                        PlaceholderColor="{DynamicResource Subtext_Content_Popup}"
+                        ItemChanged="Month_Changed_Methode"/>
                 </StackLayout>
             </StackLayout>
         </Frame>
