@@ -23,27 +23,13 @@ namespace EasyLife.Pages
             Create_Picker_Year_Items();
         }
 
-
-
         public ObservableRangeCollection<Transaktion> List_of_all_transaktion = new ObservableRangeCollection<Transaktion>();
-
-        public Command Set_Month_Control_Visibility_to_true_Command { get; set; }
-
-        public Command Set_Month_Control_Visibility_to_false_Command { get; set; }
-
-        public AsyncCommand Return_Command { get; }
-
-        public AsyncCommand Year_Changed { get; }
-
-        public AsyncCommand ViewIsAppearing_Command { get; }
-
-        public Command ViewIsDisappearing_Command { get; }
 
         public Viewtime Current_Viewtime { get; set; }
 
-        List<int> existing_years = new List<int>();
+        List<string> existing_years = new List<string>();
 
-        List<int> years_list = new List<int>();
+        List<string> years_list = new List<string>();
 
         int year;
         public int Year
@@ -54,7 +40,7 @@ namespace EasyLife.Pages
                 if (year == value)
                     return;
                 year = value;
-                YearPicker.SelectedItem = year;
+                YearPicker.ItemText = year.ToString();
             }
         }
 
@@ -67,12 +53,12 @@ namespace EasyLife.Pages
                 if (month == value)
                     return;
                 month = value;
-                MonthPicker.SelectedItem = month;
+                MonthPicker.ItemText = month;
             }
         }
 
-        List<int> all_years;
-        public List<int> All_Years
+        List<string> all_years;
+        public List<string> All_Years
         {
             get { return all_years; }
             set
@@ -80,7 +66,7 @@ namespace EasyLife.Pages
                 if (all_years == value)
                     return;
                 all_years = value;
-                YearPicker.ItemsSource = all_years;
+                YearPicker.ItemSource= all_years;
             }
         }
 
@@ -93,7 +79,7 @@ namespace EasyLife.Pages
                 if (all_months == value)
                     return;
                 all_months = value;
-                MonthPicker.ItemsSource = all_months;
+                MonthPicker.ItemSource = all_months;
             }
         }
 
@@ -136,36 +122,36 @@ namespace EasyLife.Pages
                 OptionSwitch.IsToggled = switch_istoggled;
                 if (Switch_IsToggled == false)
                 {
-                    ViewTime_Popup.Size = new Size(250, 320);
+                    ViewTime_Popup.Size = new Size(300, 320);
                 }
                 else
                 {
-                    ViewTime_Popup.Size = new Size(250, 280);
+                    ViewTime_Popup.Size = new Size(300, 280);
                 }
             }
         }
 
 
-        private async void Year_Changed_Methode(object sender, EventArgs e)
+        private async void Year_Changed_Methode(object sender, CustomeEventArgs.ItemChangedEventArgs e)
         {
             if (Month_Control_Visibility == true)
             {
-                Year = (int)YearPicker.SelectedItem;
+                Year = int.Parse(YearPicker.ItemText);
                 Month_Control_Status = false;
                 await Show_Months_Methode(Year);
                 Month_Control_Status = true;
             }
             else
             {
-                Year = (int)YearPicker.SelectedItem;
+                Year = int.Parse(YearPicker.ItemText);
             }
         }
 
-        private void Month_Changed_Methode(object sender, EventArgs e)
+        private void Month_Changed_Methode(object sender, CustomeEventArgs.ItemChangedEventArgs e)
         {
             try
             {
-                Month = MonthPicker.SelectedItem.ToString();
+                Month = MonthPicker.ItemText.ToString();
             }
             catch
             {
@@ -175,17 +161,13 @@ namespace EasyLife.Pages
 
         public async void Create_Picker_Year_Items()
         {
-            YearPicker.IsEnabled = false;
-
-            MonthPicker.IsEnabled = false;
-
             if (String.IsNullOrEmpty(Current_Viewtime.Month) == true)
             {
                 Month_Control_Visibility = false;
                 Month_Control_Status = false;
                 Switch_IsToggled = true;
                 Month = null;
-                ViewTime_Popup.Size = new Size(250, 280);
+                ViewTime_Popup.Size = new Size(300, 280);
             }
             else
             {
@@ -193,7 +175,7 @@ namespace EasyLife.Pages
                 Month_Control_Status = true;
                 Switch_IsToggled = false;
                 Month = Current_Viewtime.Month;
-                ViewTime_Popup.Size = new Size(250, 320);
+                ViewTime_Popup.Size = new Size(300, 320);
             }
 
             years_list.Clear();
@@ -206,10 +188,10 @@ namespace EasyLife.Pages
 
             foreach (Transaktion tr in List_of_all_transaktion)
             {
-                if (existing_years.Contains(tr.Datum.Year) == false)
+                if (existing_years.Contains(tr.Datum.Year.ToString()) == false)
                 {
-                    years_list.Add(tr.Datum.Year);
-                    existing_years.Add(tr.Datum.Year);
+                    years_list.Add(tr.Datum.Year.ToString());
+                    existing_years.Add(tr.Datum.Year.ToString());
                 }
             }
 
@@ -227,10 +209,6 @@ namespace EasyLife.Pages
             {
                 Current_Viewtime.Month = null;
             }
-
-            YearPicker.IsEnabled = true;
-
-            MonthPicker.IsEnabled = true;
 
             Month = Current_Viewtime.Month;
         }
