@@ -28,7 +28,7 @@ namespace EasyLife.PageModels
 
             Kind_Source = new ObservableRangeCollection<string>() { "Tag", "Woche", "Monat", "Jahr" };
 
-            Count_Source = new ObservableRangeCollection<int>(Enumerable.Range(transaktion_Position, 365).ToList());
+            Count_Source = new ObservableRangeCollection<string>(Enumerable.Range(1, 356).Select(n => n.ToString()).ToList());
 
             Option_Source = new ObservableRangeCollection<string>() { "Einmalig", "Nach einer Anzahl", "Bis zu einem Datum" };
         }
@@ -114,7 +114,7 @@ namespace EasyLife.PageModels
 
                         Viertueller_Auftrag.Art_an_Wiederholungen = "Spezielle Tage";
 
-                        if (Daylist.Count() == 7 && Viertueller_Auftrag.Option == 2  && Count_Item == 364)
+                        if (Daylist.Count() == 7 && Viertueller_Auftrag.Option == 2  && Count_Item == "364")
                         {
                             Viertueller_Auftrag.Art_an_Wiederholungen = "Jeden Tag";
 
@@ -162,7 +162,7 @@ namespace EasyLife.PageModels
 
                         Viertueller_Auftrag.Art_an_Wiederholungen = "Spezielle Wochen";
 
-                        if(week == "derselbe Tag in jeder Woche" && Viertueller_Auftrag.Option == 2 && Count_Item == 51)
+                        if(week == "derselbe Tag in jeder Woche" && Viertueller_Auftrag.Option == 2 && Count_Item == "51")
                         {
                             Viertueller_Auftrag.Art_an_Wiederholungen = "Jede Woche";
                         }
@@ -261,7 +261,7 @@ namespace EasyLife.PageModels
 
                         Viertueller_Auftrag.Art_an_Wiederholungen = "Spezielle Monate";
 
-                        if (Monthlist.Count() == 12 && Viertueller_Auftrag.Option == 2 && Count_Item == 11)
+                        if (Monthlist.Count() == 12 && Viertueller_Auftrag.Option == 2 && Count_Item == "11")
                         {
                             Viertueller_Auftrag.Art_an_Wiederholungen = "Jeden Monat";
 
@@ -314,7 +314,7 @@ namespace EasyLife.PageModels
 
                         Viertueller_Auftrag.Art_an_Wiederholungen = "Spezielle Jahre";
 
-                        if (year == "derselbe Tag in jedem Jahr" && Viertueller_Auftrag.Option == 2 && Count_Item == 4)
+                        if (year == "derselbe Tag in jedem Jahr" && Viertueller_Auftrag.Option == 2 && Count_Item == "4")
                         {
                             Viertueller_Auftrag.Art_an_Wiederholungen = "Jedes Jahr";
 
@@ -387,7 +387,7 @@ namespace EasyLife.PageModels
                         {
                             Option_Item = "Einmalig";
 
-                            Count_Item = -1;
+                            Count_Item = null;
                         }
                         if (Viertueller_Auftrag.Option == 2)
                         {
@@ -395,7 +395,7 @@ namespace EasyLife.PageModels
 
                             Amount_Option_Visibility = true;
 
-                            Count_Item = int.Parse(Viertueller_Auftrag.Anzahl_an_Wiederholungen);
+                            Count_Item = Viertueller_Auftrag.Anzahl_an_Wiederholungen;
                         }
                         if (Viertueller_Auftrag.Option == 3)
                         {
@@ -403,7 +403,7 @@ namespace EasyLife.PageModels
 
                             Date = DateTime.ParseExact(Viertueller_Auftrag.Anzahl_an_Wiederholungen, "dddd, d.M.yyyy", new CultureInfo("de-DE"));
 
-                            Count_Item = -1;
+                            Count_Item = null;
                         }
                     }
 
@@ -926,8 +926,8 @@ namespace EasyLife.PageModels
             }
         }
 
-        public int count_item;
-        public int Count_Item
+        public string count_item;
+        public string Count_Item
         {
             get { return count_item; }
             set
@@ -974,8 +974,8 @@ namespace EasyLife.PageModels
             }
         }
 
-        public ObservableRangeCollection<int> count_source;
-        public ObservableRangeCollection<int> Count_Source
+        public ObservableRangeCollection<string> count_source;
+        public ObservableRangeCollection<string> Count_Source
         {
             get { return count_source; }
             set

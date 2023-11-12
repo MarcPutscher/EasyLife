@@ -42,7 +42,7 @@
             <Frame  Grid.Row="1" CornerRadius="10" BackgroundColor="{DynamicResource Hintergrund_Eingabefeld_Hinzufügen}" BorderColor="{DynamicResource Rand_Eingabefeld_Hinzufügen}" HorizontalOptions="Fill" Padding="0">
                 <StackLayout>
                     <Grid RowDefinitions="5,Auto,5" ColumnDefinitions="5,*,5">
-                        <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1" HeightRequest="50" HorizontalOptions="Fill">
+                        <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1" HorizontalOptions="Fill">
                             <Label Text="Auftrags Option:" FontSize="Medium" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" VerticalOptions="Center" HorizontalOptions="Center"/>
                             <customecontrole:CustomePicker 
                                 Titel="Option"
@@ -58,7 +58,7 @@
             <Frame Grid.Row="3" CornerRadius="10" BackgroundColor="{DynamicResource Hintergrund_Eingabefeld_Hinzufügen}" BorderColor="{DynamicResource Rand_Eingabefeld_Hinzufügen}" HorizontalOptions="Fill" IsVisible="{Binding Onc_Option_Visibility}" Padding="0">
                 <StackLayout >
                     <Grid RowDefinitions="5,Auto,5" ColumnDefinitions="5,*,5" VerticalOptions="Center" HorizontalOptions="Center">
-                        <StackLayout Grid.Row="1" Grid.Column="1" HeightRequest="50">
+                        <StackLayout Grid.Row="1" Grid.Column="1" >
                             <customecontrole:CustomePicker 
                                 Titel="Art"
                                 ItemText="{Binding Kind_Item}"
@@ -73,7 +73,7 @@
             <Frame Grid.Row="3" CornerRadius="10" BackgroundColor="{DynamicResource Hintergrund_Eingabefeld_Hinzufügen}" BorderColor="{DynamicResource Rand_Eingabefeld_Hinzufügen}" HorizontalOptions="Fill" IsVisible="{Binding Amount_Option_Visibility}" Padding="0">
                 <StackLayout >
                     <Grid RowDefinitions="5,Auto,5" ColumnDefinitions="5,*,5,*,5">
-                        <StackLayout Grid.Row="1" Grid.Column="1" HeightRequest="50">
+                        <StackLayout Grid.Row="1" Grid.Column="1">
                             <customecontrole:CustomePicker 
                                 Titel="Anzahl"
                                 ItemText="{Binding Count_Item}"
@@ -82,7 +82,7 @@
                                 PlaceholderColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}"
                                 ItemSource="{Binding Count_Source}"/>
                         </StackLayout>
-                        <StackLayout Grid.Row="1" Grid.Column="3" HeightRequest="50">
+                        <StackLayout Grid.Row="1" Grid.Column="3">
                             <customecontrole:CustomePicker 
                                 Titel="Art"
                                 ItemText="{Binding Kind_Item}"
@@ -97,10 +97,10 @@
             <Frame Grid.Row="3" CornerRadius="10" BackgroundColor="{DynamicResource Hintergrund_Eingabefeld_Hinzufügen}" BorderColor="{DynamicResource Rand_Eingabefeld_Hinzufügen}" HorizontalOptions="Fill" IsVisible="{Binding Date_Option_Visibility}" Padding="0">
                 <StackLayout >
                     <Grid RowDefinitions="5,Auto,5" ColumnDefinitions="5,Auto,5,*,5">
-                        <StackLayout Grid.Row="1" Grid.Column="1" HeightRequest="50">
+                        <StackLayout Grid.Row="1" Grid.Column="1">
                             <DatePicker HorizontalOptions="Fill" FontAttributes="Bold" Format="dddd,  dd.M.yyyy" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" WidthRequest="220" Date="{Binding Date}" FontSize="Medium" MinimumDate="{Binding Minimum_Date}"/>
                         </StackLayout>
-                        <StackLayout Grid.Row="1" Grid.Column="3" HeightRequest="50">
+                        <StackLayout Grid.Row="1" Grid.Column="3">
                             <customecontrole:CustomePicker 
                                 Titel="Art"
                                 ItemText="{Binding Kind_Item}"
