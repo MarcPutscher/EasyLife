@@ -2112,7 +2112,11 @@ namespace EasyLife.PageModels
             {
                 if(String.IsNullOrEmpty(Search_Text) == true)
                 {
-                    var result = await Shell.Current.ShowPopupAsync(new Viewtime_Popup(Current_Viewtime));
+                    var transaktionscontent = await ContentService.Get_all_enabeled_Transaktion();
+
+                    Haushaltsbücher Haushaltsbucher = new Haushaltsbücher(transaktionscontent.ToList());
+
+                    var result = await Shell.Current.ShowPopupAsync(new Viewtime_Popup(Current_Viewtime, Haushaltsbucher));
 
                     if (result == null)
                     {

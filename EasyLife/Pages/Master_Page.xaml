@@ -9,14 +9,13 @@
        FlyoutBackgroundColor="{DynamicResource Flyout_Backgroundcolor}"
        FlyoutWidth="300">
 
+
     <Shell.FlyoutHeader>
         <Frame BackgroundColor="#1d0e21">
             <Image Source="@drawable/ic_launcher"/>
         </Frame>
     </Shell.FlyoutHeader>
-
-
-
+    
     <Shell.ItemTemplate>
         <DataTemplate>
             <Grid ColumnDefinitions="10,50,*" Padding="10">
@@ -60,6 +59,12 @@
                 <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.ScaleBalanced}" />
             </Tab.FlyoutIcon>
             <ShellContent IsTabStop="True" ContentTemplate="{DataTemplate local:Balance_Page}" />
+        </Tab>
+        <Tab Title="Vergleichen">
+            <Tab.FlyoutIcon>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.RightLeft}" />
+            </Tab.FlyoutIcon>
+            <ShellContent IsTabStop="True" ContentTemplate="{DataTemplate local:Compare_Page}" />
         </Tab>
         <Tab Title="Papierkorb">
             <Tab.FlyoutIcon>

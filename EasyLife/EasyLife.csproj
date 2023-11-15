@@ -73,6 +73,9 @@
     <Compile Update="Pages\Popup\MetaData_Popup.xaml.cs">
       <DependentUpon>MetaData_Popup.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Pages\Compare_Page.xaml.cs">
+      <DependentUpon>Compare_Page.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\Edit_Item_With_Order_Page.xaml.cs">
       <DependentUpon>Edit_Item_With_Order_Page.xaml</DependentUpon>
     </Compile>

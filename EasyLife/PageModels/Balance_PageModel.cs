@@ -270,6 +270,8 @@ namespace EasyLife.PageModels
 
                 var transaktionscontent = await ContentService.Get_all_enabeled_Transaktion();
 
+                Haushaltsbucher = new Haushaltsbücher(transaktionscontent.ToList());
+
                 List<Transaktion> sorted_after_month_transaktionscontent = new List<Transaktion>();
 
                 foreach (var trans in transaktionscontent)
@@ -1513,7 +1515,7 @@ namespace EasyLife.PageModels
         {
             try
             {
-                var result = await Shell.Current.ShowPopupAsync(new Viewtime_Popup(Current_Viewtime));
+                var result = await Shell.Current.ShowPopupAsync(new Viewtime_Popup(Current_Viewtime, Haushaltsbucher));
 
                 if (result == null)
                 {
@@ -1799,6 +1801,8 @@ namespace EasyLife.PageModels
         }
 
         public List<Balanceprofile> Bilanceprofiles_List = new List<Balanceprofile>();
+
+        public Haushaltsbücher Haushaltsbucher = null;
 
         public bool stackholder_bundle_visibility = false;
         public bool Stackholder_Bundle_Visibility

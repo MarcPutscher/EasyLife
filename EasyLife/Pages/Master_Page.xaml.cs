@@ -1,4 +1,6 @@
-﻿using EasyLife.PageModels;
+﻿using ColorPicker;
+using EasyLife.CustomeEventArgs;
+using EasyLife.PageModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +30,7 @@ namespace EasyLife.Pages
             Routing.RegisterRoute(nameof(Add_Order_Page), typeof(Add_Order_Page));
             Routing.RegisterRoute(nameof(Balance_Page), typeof(Balance_Page));
             Routing.RegisterRoute(nameof(Styling_Color_Page), typeof(Styling_Color_Page));
+            Routing.RegisterRoute(nameof(Compare_Page), typeof(Compare_Page));
         }
     }
 }

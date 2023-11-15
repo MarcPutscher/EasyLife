@@ -27,6 +27,7 @@ using Xamarin.Forms.PlatformConfiguration;
 using System.Linq;
 using EasyLife.PageModels;
 using System.Globalization;
+using EasyLife.Pages;
 
 [assembly: Dependency(typeof(CloseApplication))]
 [assembly: Dependency(typeof(AccessFileImplement))]
@@ -119,6 +120,7 @@ namespace EasyLife.Droid
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+
         public override Resources Resources
         {
             get
