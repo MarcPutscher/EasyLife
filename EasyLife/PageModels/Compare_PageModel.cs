@@ -358,19 +358,19 @@ namespace EasyLife.PageModels
                 }
 
 
-                Diff_Outcome_Account = Math.Round(output1[0].Value - output2[0].Value, 2).ToString().Replace(".", ",") + " €";
+                Diff_Outcome_Account = Math.Abs(Math.Round(output1[0].Value - output2[0].Value, 2)).ToString().Replace(".", ",") + " €";
 
-                Diff_Income_Account = Math.Round(output1[1].Value - output2[1].Value, 2).ToString().Replace(".", ",") + " €";
+                Diff_Income_Account = Math.Abs(Math.Round(output1[1].Value - output2[1].Value, 2)).ToString().Replace(".", ",") + " €";
 
-                Diff_Account_Result = Math.Round(output1[5].Value - output2[5].Value, 2).ToString().Replace(".", ",") + " €";
+                Diff_Account_Result = Math.Abs(Math.Round(output1[5].Value - output2[5].Value, 2)).ToString().Replace(".", ",") + " €";
 
-                Diff_Outcome_Cash = Math.Round(output1[2].Value - output2[2].Value, 2).ToString().Replace(".", ",") + " €";
+                Diff_Outcome_Cash = Math.Abs(Math.Round(output1[2].Value - output2[2].Value, 2)).ToString().Replace(".", ",") + " €";
 
-                Diff_Income_Cash = Math.Round(output1[3].Value - output2[3].Value, 2).ToString().Replace(".", ",") + " €";
+                Diff_Income_Cash = Math.Abs(Math.Round(output1[3].Value - output2[3].Value, 2)).ToString().Replace(".", ",") + " €";
 
-                Diff_Cash_Result = Math.Round(output1[6].Value - output2[6].Value, 2).ToString().Replace(".", ",") + " €";
+                Diff_Cash_Result = Math.Abs(Math.Round(output1[6].Value - output2[6].Value, 2)).ToString().Replace(".", ",") + " €";
 
-                Diff_Result = Math.Round(output1[4].Value - output2[4].Value, 2).ToString().Replace(".", ",") + " €";
+                Diff_Result = Math.Abs(Math.Round(output1[4].Value - output2[4].Value, 2)).ToString().Replace(".", ",") + " €";
             }
             catch (Exception ex)
             {
@@ -666,7 +666,7 @@ namespace EasyLife.PageModels
                                 i++;
                             }
 
-                            DetailList.Add(new string[] { result2[input].ButonReasonList[count], whitspaceleft1+Detail+whitspaceright1+ " | " +whitspaceright2+DetailList1[count]+whitspaceleft2 });
+                            DetailList.Add(new string[] { result2[input].ButonReasonList[count], whitspaceright2 + DetailList1[count] + whitspaceleft2 + " | " + whitspaceleft1 + Detail + whitspaceright1 });
 
                             count++;
                         }

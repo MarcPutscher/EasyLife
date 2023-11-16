@@ -40,14 +40,9 @@
                         <TapGestureRecognizer Command="{Binding Set_Item1_Command}"/>
                     </Label.GestureRecognizers>
                 </Label>
-                <ImageButton Grid.Row="0" Grid.Column="1"  HorizontalOptions="FillAndExpand" VerticalOptions="Center" IsVisible="{Binding ISSwitched, Converter={helper:InverseBoolConverter}}" BackgroundColor="{DynamicResource Hintergrund_Bilanz}" Command="{Binding Switch_Diff_Command}">
+                <ImageButton Grid.Row="0" Grid.Column="1"  HorizontalOptions="FillAndExpand" VerticalOptions="Center" BackgroundColor="{DynamicResource Hintergrund_Bilanz}">
                     <ImageButton.Source>
-                        <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.ArrowLeft}" Color="{DynamicResource Text_Zusammenfassung_Bilanz}" />
-                    </ImageButton.Source>
-                </ImageButton>
-                <ImageButton Grid.Row="0" Grid.Column="1"  HorizontalOptions="FillAndExpand" VerticalOptions="Center" IsVisible="{Binding ISSwitched}" BackgroundColor="{DynamicResource Hintergrund_Bilanz}" Command="{Binding Switch_Diff_Command}">
-                    <ImageButton.Source>
-                        <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.ArrowRight}" Color="{DynamicResource Text_Zusammenfassung_Bilanz}" />
+                        <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.RightLeft}" Color="{DynamicResource Text_Zusammenfassung_Bilanz}" />
                     </ImageButton.Source>
                 </ImageButton>
                 <Label Text="{Binding Item2_Name}" FontSize="Title" TextColor="{DynamicResource Text_Zusammenfassung_Bilanz}" Grid.Row="0" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
@@ -74,7 +69,7 @@
                     </StackLayout>
                 </Grid>
 
-                <Label Text="Einnhamen Konto" FontSize="Title" TextColor="{DynamicResource Text_Zusammenfassung_Bilanz}" Grid.Row="2" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                <Label Text="Einnahmen Konto" FontSize="Title" TextColor="{DynamicResource Text_Zusammenfassung_Bilanz}" Grid.Row="2" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
                 <Grid Grid.Row="3" Grid.ColumnSpan="3" ColumnDefinitions="7*,6*,7*" RowDefinitions="*">
                     <BoxView Grid.Column="0" BackgroundColor="Black" Opacity="0.1" CornerRadius="20"/>
                     <Button Text="{Binding Item1_Income_Account}" FontSize="Medium" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" Grid.Column="0" BackgroundColor="Transparent"/>

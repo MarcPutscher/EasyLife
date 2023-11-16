@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -169,15 +170,15 @@ namespace EasyLife.Pages
 
                 while(indicator == false)
                 {
-                    var result = await Shell.Current.DisplayPromptAsync("Budget ändern", "Das aktuelle Budget liegt bei " + budget.Budget.Goal.ToString().Replace(".", ",") + " €.", "Verändern", "Abbrechen", "Hier das neue Budget eingeben.", 20, null, null);
+                    var result = await Shell.Current.ShowPopupAsync(new CustomePromt_Popup("Budget ändern",350,320, "Verändern", "Abbrechen", "Das aktuelle Budget liegt bei " + budget.Budget.Goal.ToString().Replace(".", ",") + " €."));
 
                     if (result != null)
                     {
-                        if (double.TryParse(result, NumberStyles.Any, new CultureInfo("de-DE"), out double result1) == true)
+                        if (double.TryParse((string)result, NumberStyles.Any, new CultureInfo("de-DE"), out double result1) == true)
                         {
-                            result = result1.ToString("F2");
+                            string resultstring = result1.ToString("F2");
 
-                            double result0 = double.Parse(result.Replace(".", ","), NumberStyles.Any, new CultureInfo("de-DE"));
+                            double result0 = double.Parse(resultstring.Replace(".", ","), NumberStyles.Any, new CultureInfo("de-DE"));
 
                             if (result0 <= 0)
                             {
@@ -317,36 +318,31 @@ namespace EasyLife.Pages
                 }
             }
 
-            budget_name_list = budget_names.ToArray();
-
-            var result0 = await Shell.Current.DisplayActionSheet("Budget benennen","Verwerfen",null,budget_name_list);
+            var result0 = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Budget benennen",400, budget_names));
 
             if(result0 == null)
             {
                 return;
             }
-
-            if(result0 == "Verwerfen")
-            {
-                return;
-            }
             else
             {
-                new_budget.Name = result0;
+                new_budget.Name = (string)result0;
 
                 bool indicator = false;
 
                 while(indicator == false)
                 {
-                    var result = await Shell.Current.DisplayPromptAsync("Budget festlegen", "Das Budget sollte größer 0 € sein.", "Hinzufügen", "Verwerfen", "Hier das Budget eingeben.", 20, null, null);
+                    var result = await Shell.Current.ShowPopupAsync(new CustomePromt_Popup("Budget festlegen", 350, 320, "Hinzufügen", "Verwerfen", "Hier das Budget eingeben."));
 
                     if (result != null)
                     {
-                        if (double.TryParse(result, NumberStyles.Any, new CultureInfo("de-DE"), out double result1) == true)
+                        string resultstring = (string)result;
+
+                        if (double.TryParse(resultstring, NumberStyles.Any, new CultureInfo("de-DE"), out double result1) == true)
                         {
                             result = result1.ToString("F2");
 
-                            double result2 = double.Parse(result.Replace(".", ","), NumberStyles.Any, new CultureInfo("de-DE"));
+                            double result2 = double.Parse(resultstring.Replace(".", ","), NumberStyles.Any, new CultureInfo("de-DE"));
 
                             if (result2 <= 0)
                             {

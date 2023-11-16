@@ -36,7 +36,7 @@ namespace EasyLife.Droid
     [Activity(Label = "EasyLife", Icon = "@mipmap/ic_launcher", Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize, ScreenOrientation = ScreenOrientation.Portrait)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
-        protected override void OnCreate(Bundle savedInstanceState)
+        protected override async void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
@@ -49,7 +49,7 @@ namespace EasyLife.Droid
             {
                 if(DateTime.ParseExact(Preferences.Get("Next_Backup_Date", ""), "dd.MM.yyyy" , new CultureInfo("de-DE")).Date <= DateTime.Now.Date)
                 {
-                    var result = Services.BackupService.Create_Backup(Preferences.Get("Next_Backup_Date", ""));
+                    var result = await Services.BackupService.Create_Backup(Preferences.Get("Next_Backup_Date", ""));
 
                     if(result == true)
                     {

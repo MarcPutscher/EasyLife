@@ -86,7 +86,7 @@ namespace EasyLife.PageModels
 
                 if ((bool)result0 == true)
                 {
-                    bool result = BackupService.Create_Backup(DateTime.Now.ToString("dd.MM.yyyy"));
+                    bool result = await BackupService.Create_Backup(DateTime.Now.ToString("dd.MM.yyyy"));
 
                     if (result == false)
                     {

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;
@@ -165,7 +166,14 @@ namespace EasyLife.Pages
                 }
                 else
                 {
-                    Month = Current_Viewtime.Month;
+                    if(Year == Current_Viewtime.Year.ToString())
+                    {
+                        Month = Current_Viewtime.Month;
+                    }
+                    else
+                    {
+                        Month = null;
+                    }
                 }
             }
             catch
@@ -216,7 +224,8 @@ namespace EasyLife.Pages
             {
                 if (String.IsNullOrWhiteSpace(Year) == true || Month == null)
                 {
-                    await Shell.Current.DisplayAlert("Fehler!", "Es wurde kein Monat ausgewählt.", "OK");
+                    await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler!",300,300,null,null, "Es wurde kein Monat ausgewählt."));
+
                     return;
                 }
 
@@ -232,7 +241,8 @@ namespace EasyLife.Pages
             {
                 if (String.IsNullOrWhiteSpace(Year) == true)
                 {
-                    await Shell.Current.DisplayAlert("Fehler!", "Es wurde kein Jahr ausgewählt.", "OK");
+                    await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler!", 300, 300, null, null, "Es wurde kein Jahr ausgewählt."));
+
                     return;
                 }
 
