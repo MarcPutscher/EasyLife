@@ -28,9 +28,9 @@ namespace EasyLife.Pages
 
             Bareinnahmen.CommandParameter = (int)3;
 
-            Ausgaben_Briefumschlag.CommandParameter = (int)7;
+            Ausgaben_Briefumschlag.CommandParameter = (int)4;
 
-            Einnahmen_Briefumschlag.CommandParameter = (int)8;
+            Einnahmen_Briefumschlag.CommandParameter = (int)5;
         }
     }
 }
