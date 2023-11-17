@@ -22,305 +22,6 @@ namespace EasyLife.PageModels
     [QueryProperty(nameof(OrderID), nameof(OrderID))]
     public class Add_Item_PageModel : FreshBasePageModel
     {
-        public string TransaktionID { get; set; }
-
-        public string orderid;
-        public string OrderID
-        {
-            get
-            {
-                return orderid;
-            }
-            set
-            {
-                orderid = value;
-                if(String.IsNullOrEmpty(value) == false)
-                {
-                    Return_from_Repeat_Customized();
-                }
-                else
-                {
-                    Is_Expended = false;
-
-                    Height = 50;
-
-                    Wiederholungs_Text = string.Empty;
-
-                    ActivityIndicator_IsRunning = false;
-
-                    Wiederholungs_Text_Visibility = false;
-
-                    Wiederholungs_Text_Visibility_2 = false;
-
-                    Virtueller_Auftrag = null;
-
-                    Wiederholungs_Header = "Auftrag hinzufügen";
-                }
-            }
-        }
-
-        public AsyncCommand Add_Item { get; }
-
-        public AsyncCommand Repeat_Every_Day_Command { get; }
-
-        public AsyncCommand Repeat_Every_Week_Command { get; }
-
-        public AsyncCommand Repeat_Every_Month_Command { get; }
-
-        public AsyncCommand Repeat_Every_Year_Command { get; }
-
-        public AsyncCommand Repeat_Customised_Command { get; }
-
-        public AsyncCommand Repeat_Never_Command { get; }
-
-        public AsyncCommand ViewIsAppearing_Command { get; }
-
-        public AsyncCommand Reasons_Settings_Command { get; }
-
-        public Transaktion transaktion;
-        public Transaktion Transaktion
-        {
-            get { return transaktion; }
-            set
-            {
-                if (Transaktion == value)
-                    return;
-                transaktion = value; RaisePropertyChanged();
-            }
-        }
-
-        string zweck;
-        public string Zweck
-        {
-            get { return zweck; }
-            set
-            {
-                if (Zweck == value)
-                    return;
-                zweck = value; RaisePropertyChanged();
-            }
-        }
-
-        string betrag;
-        public string Betrag
-        {
-            get { return betrag; }
-            set
-            {
-                if (Betrag == value)
-                    return;
-                if (double.TryParse(value, out double result) == true)
-                {
-                    betrag = value.Replace(".", ",").Trim();
-                }
-                else
-                {
-                    if (value == null)
-                    {
-                        betrag = "";
-                    }
-                    else
-                    {
-                        Betrag = betrag;
-                    }
-                }
-
-                RaisePropertyChanged();
-            }
-        }
-
-        DateTime datum = DateTime.Now;
-        public DateTime Datum
-        {
-            get { return datum; }
-            set
-            {
-                if (Datum == value)
-                    return;
-                datum = value; RaisePropertyChanged();
-            }
-        }
-
-        string notiz;
-        public string Notiz
-        {
-            get { return notiz; }
-            set
-            {
-                if (Notiz == value)
-                    return;
-                notiz = value; RaisePropertyChanged();
-            }
-        }
-
-        Auftrag auftrag;
-        public Auftrag Virtueller_Auftrag
-        {
-            get { return auftrag; }
-            set
-            {
-                if (Virtueller_Auftrag == value)
-                    return;
-                auftrag = value; RaisePropertyChanged();
-            }
-        }
-
-        string wiederholungs_text;
-        public string Wiederholungs_Text
-        {
-            get { return wiederholungs_text; }
-            set
-            {
-                if (Wiederholungs_Text == value)
-                    return;
-                wiederholungs_text = value; RaisePropertyChanged();
-            }
-        }
-
-        string wiederholungs_header = "Auftrag hinzufügen";
-        public string Wiederholungs_Header
-        {
-            get { return wiederholungs_header; }
-            set
-            {
-                if (Wiederholungs_Header == value)
-                    return;
-                wiederholungs_header = value; RaisePropertyChanged();
-            }
-        }
-
-        bool is_expended = false;
-        public bool Is_Expended
-        {
-            get { return is_expended; }
-            set
-            {
-                if (Is_Expended == value)
-                    return;
-                is_expended = value; RaisePropertyChanged();
-            }
-        }
-
-        TextAlignment horizontaltextalignment = TextAlignment.End;
-        public TextAlignment HorizontalTextAlignment
-        {
-            get { return horizontaltextalignment; }
-            set
-            {
-                if (HorizontalTextAlignment == value)
-                    return;
-                horizontaltextalignment = value; RaisePropertyChanged();
-            }
-        }
-
-        int height = 50;
-        public int Height
-        {
-            get { return height; }
-            set
-            {
-                if (Height == value)
-                    return;
-                height = value; RaisePropertyChanged();
-            }
-        }
-
-        public bool activityindicator_isrunning = false;
-        public bool ActivityIndicator_IsRunning
-        {
-            get { return activityindicator_isrunning; }
-            set
-            {
-                if (ActivityIndicator_IsRunning == value)
-                    return;
-                activityindicator_isrunning = value; RaisePropertyChanged();
-            }
-        }
-
-        public bool wiederholungs_text_visibility;
-        public bool Wiederholungs_Text_Visibility
-        {
-            get { return wiederholungs_text_visibility; }
-            set
-            {
-                if (Wiederholungs_Text_Visibility == value)
-                    return;
-                wiederholungs_text_visibility = value; RaisePropertyChanged();
-                Wiederholungs_Text_Visibility_2 = !value;
-            }
-        }
-
-        public bool wiederholungs_text_visibility_2;
-        public bool Wiederholungs_Text_Visibility_2
-        {
-            get { return wiederholungs_text_visibility_2; }
-            set
-            {
-                if (Wiederholungs_Text_Visibility_2 == value)
-                    return;
-                wiederholungs_text_visibility_2 = value; RaisePropertyChanged();
-            }
-        }
-
-        public bool zweck_isEnable = true;
-        public bool Zweck_IsEnable
-        {
-            get { return zweck_isEnable; }
-            set
-            {
-                if (Zweck_IsEnable == value)
-                    return;
-                zweck_isEnable = value; RaisePropertyChanged();
-            }
-        }
-
-        public int placeholder_Auftrag = 0;
-
-        public int placeholder_Transaktion = 0;
-
-        public static Dictionary<string, string> Entscheider_ob_Einnahme_oder_Ausgabe = new Dictionary<string, string>();
-
-        public ObservableRangeCollection<string> zweck_liste;
-
-        public ObservableRangeCollection<string> Zweck_Liste
-        {
-            get { return zweck_liste; }
-            set
-            {
-                if (zweck_liste == value)
-                {
-                    return;
-                }
-                zweck_liste = value; RaisePropertyChanged();
-            }
-        }
-
-        public bool show_hide_balance = true;
-        public bool Show_Hide_Balance
-        {
-            get { return show_hide_balance; }
-            set
-            {
-                if (show_hide_balance == value)
-                    return;
-                show_hide_balance = value; RaisePropertyChanged();
-            }
-        }
-
-        public bool show_hide_saldo = true;
-        public bool Show_Hide_Saldo
-        {
-            get { return show_hide_saldo; }
-            set
-            {
-                if (Show_Hide_Saldo == value)
-                    return;
-                show_hide_saldo = value; RaisePropertyChanged();
-            }
-        }
-
-
-
         public Add_Item_PageModel()
         {
             Add_Item = new AsyncCommand(Add);
@@ -332,6 +33,7 @@ namespace EasyLife.PageModels
             Repeat_Every_Year_Command = new AsyncCommand(Repeat_Every_Year_Methode);
             Repeat_Customised_Command = new AsyncCommand(Repeat_Customised_Methode);
             Reasons_Settings_Command = new AsyncCommand(Reasons_Settings_Methode);
+            Add_Second_Item_Command = new AsyncCommand(Add_Second_Item);
 
             ViewIsAppearing_Command = new AsyncCommand(Get_Reasons_Liste);
 
@@ -687,6 +389,9 @@ namespace EasyLife.PageModels
 
                     Auftrag order = new Auftrag();
 
+                    Auftrag secondorder = new Auftrag();
+
+
                     if (Entscheider_ob_Einnahme_oder_Ausgabe[Zweck] == "Einnahmen")
                     {
                         result = Math.Abs(result);
@@ -716,6 +421,8 @@ namespace EasyLife.PageModels
 
                         Virtueller_Auftrag.Id = 0;
 
+                        secondorder = new Auftrag() { Anzahl_an_Wiederholungen = Virtueller_Auftrag.Anzahl_an_Wiederholungen, Art_an_Wiederholungen = Virtueller_Auftrag.Art_an_Wiederholungen, Option = Virtueller_Auftrag.Option, Speziell = Virtueller_Auftrag.Speziell };
+
                         Transaktion transaktion = new Transaktion() { Betrag = result.ToString(), Datum = Datum.Date, Zweck = Zweck, Notiz = Notiz, Auftrags_id = Virtueller_Auftrag.Id.ToString() , Anzahl_an_Wiederholungen = Virtueller_Auftrag.Anzahl_an_Wiederholungen , Art_an_Wiederholungen = Virtueller_Auftrag.Art_an_Wiederholungen, Speziell = Virtueller_Auftrag.Speziell, Order_Visibility = true, Content_Visibility = true , Balance_Visibility = Show_Hide_Balance , Saldo_Visibility = Show_Hide_Saldo};
 
                         await OrderService.Add_Order(Virtueller_Auftrag);
@@ -744,6 +451,78 @@ namespace EasyLife.PageModels
                         if(false == await NotificationHelper.RequestNotification(Virtueller_Auftrag,trans))
                         {
                             await Notificater("Es konnte keine Benachrichtigung erstellt werden");
+                        }
+                    }
+
+                    if (Create_Second_Item == true)
+                    {
+                        if(Reason_of_Second_Item != null)
+                        {
+                            order = new Auftrag();
+
+                            if (Entscheider_ob_Einnahme_oder_Ausgabe[Reason_of_Second_Item] == "Einnahmen")
+                            {
+                                result = Math.Abs(result);
+                            }
+                            else
+                            {
+                                result = -Math.Abs(result);
+                            }
+
+                            if (result == 0)
+                            {
+                                await Notificater("Es wurde kein Betrag eingegeben.");
+                                return;
+                            }
+
+                            if (secondorder == null)
+                            {
+                                Transaktion transaktion = new Transaktion() { Betrag = result.ToString(), Datum = Datum.Date, Zweck = Reason_of_Second_Item, Notiz = Notiz, Auftrags_id = null, Anzahl_an_Wiederholungen = null, Art_an_Wiederholungen = null, Speziell = null, Order_Visibility = false, Content_Visibility = true, Balance_Visibility = Show_Hide_Balance, Saldo_Visibility = Show_Hide_Saldo };
+
+                                await ContentService.Add_Transaktion(transaktion);
+
+                                placeholder_Transaktion = ContentService.Get_last_Transaktion().Id;
+                            }
+                            else
+                            {
+                                ActivityIndicator_IsRunning = true;
+
+                                secondorder.Id = 0;
+
+                                Transaktion transaktion = new Transaktion() { Betrag = result.ToString(), Datum = Datum.Date, Zweck = Reason_of_Second_Item, Notiz = Notiz, Auftrags_id = secondorder.Id.ToString(), Anzahl_an_Wiederholungen = secondorder.Anzahl_an_Wiederholungen, Art_an_Wiederholungen = secondorder.Art_an_Wiederholungen, Speziell = secondorder.Speziell, Order_Visibility = true, Content_Visibility = true, Balance_Visibility = Show_Hide_Balance, Saldo_Visibility = Show_Hide_Saldo };
+
+                                await OrderService.Add_Order(secondorder);
+
+                                bool result1 = await AddRange(transaktion, secondorder);
+
+                                if (result1 == false)
+                                {
+                                    ActivityIndicator_IsRunning = false;
+
+                                    await OrderService.Remove_Order(secondorder);
+
+                                    Virtueller_Auftrag = await PassingOrderService.Get_specific_Order(int.Parse(OrderID));
+
+                                    await Notificater("Es gab ein Logikfehler.");
+
+                                    return;
+                                }
+
+                                await OrderService.Edit_Order(secondorder);
+
+                                ActivityIndicator_IsRunning = false;
+
+                                Transaktion trans = await ContentService.Get_last_Transaktion();
+
+                                if (false == await NotificationHelper.RequestNotification(secondorder, trans))
+                                {
+                                    await Notificater("Es konnte keine Benachrichtigung erstellt werden");
+                                }
+                            }
+
+                            Create_Second_Item = false;
+
+                            Reason_of_Second_Item = null;
                         }
                     }
 
@@ -819,6 +598,44 @@ namespace EasyLife.PageModels
                     }
                     catch { }
                 }
+
+                Fehler();
+            }
+        }
+
+        public async Task Add_Second_Item()
+        {
+            try
+            {
+                if(Create_Second_Item == false)
+                {
+                    var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Zweiter Zweck", 400, Zweck_Liste.ToList()));
+
+                    if (result == null)
+                    {
+                        Create_Second_Item = false;
+
+                        Reason_of_Second_Item = null;
+
+                        return;
+                    }
+                    else
+                    {
+                        Create_Second_Item = true;
+
+                        Reason_of_Second_Item = (string)result;
+                    }
+                }
+                else
+                {
+                    Create_Second_Item = false;
+
+                    Reason_of_Second_Item = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 Fehler();
             }
@@ -1720,6 +1537,10 @@ namespace EasyLife.PageModels
             Show_Hide_Saldo = true;
 
             Virtueller_Auftrag = null;
+
+            Create_Second_Item = false;
+
+            Reason_of_Second_Item = null;
         }
 
         private async Task Notificater(string v)
@@ -1909,6 +1730,332 @@ namespace EasyLife.PageModels
                 await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
                 Fehler();
+            }
+        }
+
+
+
+
+        public string TransaktionID { get; set; }
+
+        public string orderid;
+        public string OrderID
+        {
+            get
+            {
+                return orderid;
+            }
+            set
+            {
+                orderid = value;
+                if (String.IsNullOrEmpty(value) == false)
+                {
+                    Return_from_Repeat_Customized();
+                }
+                else
+                {
+                    Is_Expended = false;
+
+                    Height = 50;
+
+                    Wiederholungs_Text = string.Empty;
+
+                    ActivityIndicator_IsRunning = false;
+
+                    Wiederholungs_Text_Visibility = false;
+
+                    Wiederholungs_Text_Visibility_2 = false;
+
+                    Virtueller_Auftrag = null;
+
+                    Wiederholungs_Header = "Auftrag hinzufügen";
+                }
+            }
+        }
+
+        public AsyncCommand Add_Item { get; }
+
+        public AsyncCommand Repeat_Every_Day_Command { get; }
+
+        public AsyncCommand Repeat_Every_Week_Command { get; }
+
+        public AsyncCommand Repeat_Every_Month_Command { get; }
+
+        public AsyncCommand Repeat_Every_Year_Command { get; }
+
+        public AsyncCommand Repeat_Customised_Command { get; }
+
+        public AsyncCommand Repeat_Never_Command { get; }
+
+        public AsyncCommand ViewIsAppearing_Command { get; }
+
+        public AsyncCommand Reasons_Settings_Command { get; }
+
+        public AsyncCommand Add_Second_Item_Command { get; }
+
+        public bool create_second_item = false;
+        public bool Create_Second_Item
+        {
+            get { return create_second_item; }
+            set
+            {
+                if (Create_Second_Item == value)
+                    return;
+                create_second_item = value; RaisePropertyChanged();
+            }
+        }
+
+        string reason_of_second_item;
+        public string Reason_of_Second_Item
+        {
+            get { return reason_of_second_item; }
+            set
+            {
+                if (Reason_of_Second_Item == value)
+                    return;
+                reason_of_second_item = value; RaisePropertyChanged();
+            }
+        }
+
+        public Transaktion transaktion;
+        public Transaktion Transaktion
+        {
+            get { return transaktion; }
+            set
+            {
+                if (Transaktion == value)
+                    return;
+                transaktion = value; RaisePropertyChanged();
+            }
+        }
+
+        string zweck;
+        public string Zweck
+        {
+            get { return zweck; }
+            set
+            {
+                if (Zweck == value)
+                    return;
+                zweck = value; RaisePropertyChanged();
+            }
+        }
+
+        string betrag;
+        public string Betrag
+        {
+            get { return betrag; }
+            set
+            {
+                if (Betrag == value)
+                    return;
+                if (double.TryParse(value, out double result) == true)
+                {
+                    betrag = value.Replace(".", ",").Trim();
+                }
+                else
+                {
+                    if (value == null)
+                    {
+                        betrag = "";
+                    }
+                    else
+                    {
+                        Betrag = betrag;
+                    }
+                }
+
+                RaisePropertyChanged();
+            }
+        }
+
+        DateTime datum = DateTime.Now;
+        public DateTime Datum
+        {
+            get { return datum; }
+            set
+            {
+                if (Datum == value)
+                    return;
+                datum = value; RaisePropertyChanged();
+            }
+        }
+
+        string notiz;
+        public string Notiz
+        {
+            get { return notiz; }
+            set
+            {
+                if (Notiz == value)
+                    return;
+                notiz = value; RaisePropertyChanged();
+            }
+        }
+
+        Auftrag auftrag;
+        public Auftrag Virtueller_Auftrag
+        {
+            get { return auftrag; }
+            set
+            {
+                if (Virtueller_Auftrag == value)
+                    return;
+                auftrag = value; RaisePropertyChanged();
+            }
+        }
+
+        string wiederholungs_text;
+        public string Wiederholungs_Text
+        {
+            get { return wiederholungs_text; }
+            set
+            {
+                if (Wiederholungs_Text == value)
+                    return;
+                wiederholungs_text = value; RaisePropertyChanged();
+            }
+        }
+
+        string wiederholungs_header = "Auftrag hinzufügen";
+        public string Wiederholungs_Header
+        {
+            get { return wiederholungs_header; }
+            set
+            {
+                if (Wiederholungs_Header == value)
+                    return;
+                wiederholungs_header = value; RaisePropertyChanged();
+            }
+        }
+
+        bool is_expended = false;
+        public bool Is_Expended
+        {
+            get { return is_expended; }
+            set
+            {
+                if (Is_Expended == value)
+                    return;
+                is_expended = value; RaisePropertyChanged();
+            }
+        }
+
+        TextAlignment horizontaltextalignment = TextAlignment.End;
+        public TextAlignment HorizontalTextAlignment
+        {
+            get { return horizontaltextalignment; }
+            set
+            {
+                if (HorizontalTextAlignment == value)
+                    return;
+                horizontaltextalignment = value; RaisePropertyChanged();
+            }
+        }
+
+        int height = 50;
+        public int Height
+        {
+            get { return height; }
+            set
+            {
+                if (Height == value)
+                    return;
+                height = value; RaisePropertyChanged();
+            }
+        }
+
+        public bool activityindicator_isrunning = false;
+        public bool ActivityIndicator_IsRunning
+        {
+            get { return activityindicator_isrunning; }
+            set
+            {
+                if (ActivityIndicator_IsRunning == value)
+                    return;
+                activityindicator_isrunning = value; RaisePropertyChanged();
+            }
+        }
+
+        public bool wiederholungs_text_visibility;
+        public bool Wiederholungs_Text_Visibility
+        {
+            get { return wiederholungs_text_visibility; }
+            set
+            {
+                if (Wiederholungs_Text_Visibility == value)
+                    return;
+                wiederholungs_text_visibility = value; RaisePropertyChanged();
+                Wiederholungs_Text_Visibility_2 = !value;
+            }
+        }
+
+        public bool wiederholungs_text_visibility_2;
+        public bool Wiederholungs_Text_Visibility_2
+        {
+            get { return wiederholungs_text_visibility_2; }
+            set
+            {
+                if (Wiederholungs_Text_Visibility_2 == value)
+                    return;
+                wiederholungs_text_visibility_2 = value; RaisePropertyChanged();
+            }
+        }
+
+        public bool zweck_isEnable = true;
+        public bool Zweck_IsEnable
+        {
+            get { return zweck_isEnable; }
+            set
+            {
+                if (Zweck_IsEnable == value)
+                    return;
+                zweck_isEnable = value; RaisePropertyChanged();
+            }
+        }
+
+        public int placeholder_Auftrag = 0;
+
+        public int placeholder_Transaktion = 0;
+
+        public static Dictionary<string, string> Entscheider_ob_Einnahme_oder_Ausgabe = new Dictionary<string, string>();
+
+        public ObservableRangeCollection<string> zweck_liste;
+
+        public ObservableRangeCollection<string> Zweck_Liste
+        {
+            get { return zweck_liste; }
+            set
+            {
+                if (zweck_liste == value)
+                {
+                    return;
+                }
+                zweck_liste = value; RaisePropertyChanged();
+            }
+        }
+
+        public bool show_hide_balance = true;
+        public bool Show_Hide_Balance
+        {
+            get { return show_hide_balance; }
+            set
+            {
+                if (show_hide_balance == value)
+                    return;
+                show_hide_balance = value; RaisePropertyChanged();
+            }
+        }
+
+        public bool show_hide_saldo = true;
+        public bool Show_Hide_Saldo
+        {
+            get { return show_hide_saldo; }
+            set
+            {
+                if (Show_Hide_Saldo == value)
+                    return;
+                show_hide_saldo = value; RaisePropertyChanged();
             }
         }
     }

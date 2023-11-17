@@ -105,8 +105,8 @@
                 <Entry Placeholder="Notiz hier eingeben" Text="{Binding Notiz}" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" PlaceholderColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}" HorizontalTextAlignment="Center" VerticalOptions="Start" FontSize="Medium"/>
             </Frame>
             <Frame Style="{StaticResource FrameA}" Margin="0,20,0,0" VerticalOptions="Center">
-                <Grid ColumnDefinitions="Auto,*" HorizontalOptions="Fill" RowSpacing="5" VerticalOptions="Center">
-                    <Label Text="Transaktion in der Bilanz anzeigen :" FontSize="Medium" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="0" Margin="10,0,0,0"/>
+                <Grid ColumnDefinitions="*,Auto" HorizontalOptions="Fill" RowSpacing="5" VerticalOptions="Center">
+                    <Label Text="Transaktion in der Bilanz anzeigen :" FontSize="Medium" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" HorizontalOptions="Start" VerticalOptions="Center" Grid.Column="0" Margin="10,0,0,0"/>
                     <Switch IsToggled="{Binding Show_Hide_Balance}" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1" Margin="0,0,10,0">
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
@@ -123,8 +123,38 @@
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                     </Switch>
-                    <Label Text="Betrag zum Stand hinzufügen :" FontSize="Medium" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="0" Grid.Row="1" Margin="10,0,0,0"/>
+                    <Label Text="Betrag zum Stand hinzufügen :" FontSize="Medium" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" HorizontalOptions="Start" VerticalOptions="Center" Grid.Column="0" Grid.Row="1" Margin="10,0,0,0"/>
                     <Switch IsToggled="{Binding Show_Hide_Saldo}" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1" Grid.Row="1" Margin="0,0,10,0">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="On">
+                                    <VisualState.Setters>
+                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Off">
+                                    <VisualState.Setters>
+                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Eingabefeld_Hinzufügen}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Switch>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="5" Grid.Column="0" Grid.Row="2" Padding="0">
+                        <Label Text="Zweiter Zweck:" FontSize="Medium" TextColor="{DynamicResource Text_Eingabefeld_Hinzufügen}" HorizontalOptions="Start" VerticalOptions="Center" Grid.Column="0"  Margin="10,0,0,0"/>
+                        <customecontrole:CustomePicker 
+                            Titel="Zweiter Zweck"
+                            ItemText="{Binding Reason_of_Second_Item}"
+                            ItemColor="{DynamicResource Text_Eingabefeld_Hinzufügen}"
+                            PlaceholderText=""
+                            PlaceholderColor="{DynamicResource Platzhater_Eingabefeld_Hinzufügen}"
+                            ItemSource="{Binding Zweck_Liste}"
+                            Grid.Column="1"/>
+                    </Grid>
+                    <Switch HorizontalOptions="Center" IsToggled="False" VerticalOptions="Center" Grid.Column="1" Grid.Row="2" Margin="0,0,10,0">
+                        <Switch.Behaviors>
+                            <xct:EventToCommandBehavior EventName="Toggled" Command="{Binding Add_Second_Item_Command}"/>
+                        </Switch.Behaviors>
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualState x:Name="On">
