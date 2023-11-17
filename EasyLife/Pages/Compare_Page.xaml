@@ -40,9 +40,14 @@
                         <TapGestureRecognizer Command="{Binding Set_Item1_Command}"/>
                     </Label.GestureRecognizers>
                 </Label>
-                <ImageButton Grid.Row="0" Grid.Column="1"  HorizontalOptions="FillAndExpand" VerticalOptions="Center" BackgroundColor="{DynamicResource Hintergrund_Bilanz}">
+                <ImageButton Grid.Row="0" Grid.Column="1"  HorizontalOptions="FillAndExpand" VerticalOptions="Center" IsVisible="{Binding ISSwitched}" Command="{Binding Switch_Diff_Command}" BackgroundColor="{DynamicResource Hintergrund_Bilanz}">
                     <ImageButton.Source>
-                        <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.RightLeft}" Color="{DynamicResource Text_Zusammenfassung_Bilanz}" />
+                        <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.ArrowLeft}" Color="{DynamicResource Text_Zusammenfassung_Bilanz}" />
+                    </ImageButton.Source>
+                </ImageButton>
+                <ImageButton Grid.Row="0" Grid.Column="1"  HorizontalOptions="FillAndExpand" VerticalOptions="Center" IsVisible="{Binding ISSwitched, Converter={helper:InverseBoolConverter}}" Command="{Binding Switch_Diff_Command}" BackgroundColor="{DynamicResource Hintergrund_Bilanz}">
+                    <ImageButton.Source>
+                        <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.ArrowRight}" Color="{DynamicResource Text_Zusammenfassung_Bilanz}" />
                     </ImageButton.Source>
                 </ImageButton>
                 <Label Text="{Binding Item2_Name}" FontSize="Title" TextColor="{DynamicResource Text_Zusammenfassung_Bilanz}" Grid.Row="0" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
