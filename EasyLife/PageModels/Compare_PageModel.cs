@@ -3,238 +3,38 @@ using EasyLife.Models;
 using EasyLife.Pages;
 using EasyLife.Services;
 using FreshMvvm;
-using iText.Kernel.Colors;
-using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Draw;
-using iText.Layout;
+using iText.Kernel.Pdf;
 using iText.Layout.Borders;
 using iText.Layout.Element;
-using iText.Layout.Properties;
-using iText.StyledXmlParser.Jsoup.Nodes;
-using MvvmHelpers;
 using MvvmHelpers.Commands;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Essentials;
 using Xamarin.Forms;
-using Xamarin.Forms.PlatformConfiguration;
-using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
-using static SQLite.SQLite3;
-using Cell = iText.Layout.Element.Cell;
-using Document = iText.Layout.Document;
-using TextAlignment = iText.Layout.Properties.TextAlignment;
+using MvvmHelpers;
+using System.Transactions;
+using static iText.Svg.SvgConstants;
 
 namespace EasyLife.PageModels
 {
-    class Balance_PageModel : FreshBasePageModel
+    class Compare_PageModel : FreshBasePageModel
     {
-        public Balance_PageModel()
+        public Compare_PageModel()
         {
-            Bundles = new ObservableRangeCollection<StackholderBundle>();
-
-            Stackholderbundel_Outcome_Account = new ObservableRangeCollection<Stackholder>();
-            Stackholderbundel_Income_Account = new ObservableRangeCollection<Stackholder>();
-            Stackholderbundel_Outcome_Cash = new ObservableRangeCollection<Stackholder>();
-            Stackholderbundel_Income_Cash = new ObservableRangeCollection<Stackholder>();
-
-
             Load_Command = new AsyncCommand(Load);
-            Period_Command = new AsyncCommand(Period_Popup);
+            Set_Item1_Command = new AsyncCommand(Set_Item1_Methode);
+            Set_Item2_Command = new AsyncCommand(Set_Item2_Methode);
             Settings_Command = new AsyncCommand(Settings_Methode);
-            Create_PDF_Command = new AsyncCommand(Create_PDF_Methode);
-        }
-
-        private async Task Create_PDF_Methode()
-        {
-            try
-            {
-                if (Bundles.Count() != 0)
-                {
-                    var result0 = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("PDF erstellen", 300, 250, "Ja", "Nein", "Wollen Sie wirklich eine PDF von der Bilanz " + Current_Viewtime.Month + " " + Current_Viewtime.Year + " erstellen?"));
-
-                    if (result0 == null)
-                    {
-                        return;
-                    }
-                    if ((bool)result0 == true)
-                    {
-                        string pdf_filename = "Bilanz " + Current_Viewtime.Month + " " + Current_Viewtime.Year + ".pdf";
-
-                        string pdf_path = DependencyService.Get<IAccessFile>().CreateFile(pdf_filename);
-
-                        if (File.Exists(pdf_path) == true)
-                        {
-                            var result = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Datei existiert schon", 380, 300, "Ja", "Nein, neue Datei anlegen", "Diese Bilanz existiert schon auf ihrem Gerät. Wollen Sie diese Bilanz mit der jetzigen Bilanz übeschreiben?"));
-
-                            if (result == null)
-                            {
-                                return;
-                            }
-                            if ((bool)result == false)
-                            {
-                                bool indicator = false;
-
-                                int identifier = 1;
-
-                                while (indicator == false)
-                                {
-                                    pdf_filename = "Bilanz " + Current_Viewtime.Month + " " + Current_Viewtime.Year + " (" + identifier + ").pdf";
-
-                                    if (File.Exists(DependencyService.Get<IAccessFile>().CreateFile(pdf_filename)) == false)
-                                    {
-                                        indicator = true;
-
-                                        pdf_path = DependencyService.Get<IAccessFile>().CreateFile(pdf_filename);
-                                    }
-
-                                    identifier++;
-                                }
-                            }
-                        }
-
-                        FileStream pdf_stream = new FileStream(pdf_path, FileMode.OpenOrCreate);
-
-                        PdfWriter writer = new PdfWriter(pdf_stream);
-
-                        PdfDocument pdfDocument = new PdfDocument(writer);
-
-                        Document doc = new Document(pdfDocument);
-
-                        Paragraph header = new Paragraph("Haushaltsbuchbilanz").SetTextAlignment((iText.Layout.Properties.TextAlignment?)TextAlignment.CENTER).SetFontSize(20);
-                        doc.Add(header);
-
-                        Paragraph subheader = new Paragraph("vom " + Current_Viewtime.Month + " " + Current_Viewtime.Year + "").SetTextAlignment((iText.Layout.Properties.TextAlignment?)TextAlignment.CENTER).SetFontSize(15);
-                        doc.Add(subheader);
-
-                        LineSeparator ls = new LineSeparator(new SolidLine());
-                        doc.Add(ls);
-
-                        Paragraph spacerow = new Paragraph("       ").SetHeight(20);
-                        doc.Add(spacerow);
-
-                        Table table = new Table(new float[] { 300, 50, 120, 30 }).SetWidth(500).SetPadding(0).SetFontColor(ColorConstants.BLACK).SetFontSize(15).SetHorizontalAlignment(iText.Layout.Properties.HorizontalAlignment.CENTER);
-
-                        Border borderbottomheader = new SolidBorder(ColorConstants.BLACK, 1);
-
-                        Cell cell1 = new Cell(1, 1).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderRight(Border.NO_BORDER).SetBorderBottom(borderbottomheader).SetBorderLeft(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("Zweck"));
-                        table.AddHeaderCell(cell1);
-
-                        Cell cell2 = new Cell(1, 1).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderBottom(borderbottomheader).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("Anzahl"));
-                        table.AddHeaderCell(cell2);
-
-                        Cell cell3 = new Cell(1, 1).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT).SetBold().SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderBottom(borderbottomheader).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("Summe"));
-                        table.AddHeaderCell(cell3);
-
-                        Cell cell4 = new Cell(1, 1).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderBottom(borderbottomheader);
-                        table.AddHeaderCell(cell4);
-
-                        int follower = 0;
-
-                        foreach (var stackholderbundle in Bundles)
-                        {
-                            if (stackholderbundle.Visibility == true)
-                            {
-                                if (stackholderbundle.StackholderSource.Count() == 0)
-                                {
-                                    if (stackholderbundle.Total_Sum == null)
-                                    {
-                                        Cell cellsubsum = new Cell(1, 3).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT).SetBold().SetUnderline(2, -4).SetBorderBottom(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("" + stackholderbundle.Total_Text + " " + stackholderbundle.Sum + " €     "));
-                                        table.AddCell(cellsubsum);
-
-                                        Cell cell_space = new Cell(1, 1).SetBorderBottom(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER);
-                                        table.AddCell(cell_space);
-
-                                        Cell cell_spacerow = new Cell(1, 4).SetBorderBottom(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetHeight(5);
-                                        table.AddCell(cell_spacerow);
-                                    }
-                                    else
-                                    {
-                                        if (follower == 0)
-                                        {
-                                            Cell cellsubsum = new Cell(1, 3).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT).SetBold().SetUnderline(2, -3).SetUnderline(2, -6).SetBorderBottom(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("" + stackholderbundle.Total_Text + " " + stackholderbundle.Total_Sum + " €     "));
-                                            table.AddCell(cellsubsum);
-
-                                            Cell cell_space = new Cell(1, 1).SetBorderBottom(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER);
-                                            table.AddCell(cell_space);
-
-                                            Cell cell_line = new Cell(1, 4).SetBorderBottom(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetBackgroundColor(ColorConstants.GRAY).SetHeight((float)0.5);
-                                            table.AddCell(cell_line);
-
-                                            Cell cell_spacerow = new Cell(1, 4).SetBorderBottom(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetHeight(5);
-                                            table.AddCell(cell_spacerow);
-
-                                            follower++;
-                                        }
-                                        else
-                                        {
-                                            Cell cellsubsum = new Cell(1, 3).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT).SetBold().SetUnderline(2, -3).SetUnderline(2, -6).SetBorderBottom(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("" + stackholderbundle.Total_Text + " " + stackholderbundle.Total_Sum + " €     "));
-                                            table.AddCell(cellsubsum);
-
-                                            Cell cell_space = new Cell(1, 1).SetBorderBottom(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER);
-                                            table.AddCell(cell_space);
-
-                                            Cell cell_spacerow = new Cell(1, 4).SetBorderBottom(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetHeight(5);
-                                            table.AddCell(cell_spacerow);
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    foreach (var stackholder in stackholderbundle.StackholderSource)
-                                    {
-
-                                        Cell cell_spacerow = new Cell(1, 4).SetBorderBottom(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetHeight(5);
-                                        table.AddCell(cell_spacerow);
-
-                                        Cell cell_1 = new Cell(1, 1).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderBottom(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("" + stackholder.Reason + ""));
-                                        table.AddCell(cell_1);
-
-                                        Cell cell_2 = new Cell(1, 1).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderBottom(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("" + stackholder.Count + ""));
-                                        table.AddCell(cell_2);
-
-                                        Cell cell_3 = new Cell(1, 1).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT).SetBold().SetBorderBottom(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("" + stackholder.Value + " €     "));
-                                        table.AddCell(cell_3);
-
-                                        Cell cell_4 = new Cell(1, 1).SetBorderBottom(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER);
-                                        table.AddCell(cell_4);
-                                    }
-                                }
-                            }
-                        }
-
-                        doc.Add(table);
-
-                        Table table2 = new Table(new float[] { 300, 50, 120, 30 }).SetWidth(500).SetPadding(0).SetFontColor(ColorConstants.BLACK).SetFontSize(15).SetHorizontalAlignment(iText.Layout.Properties.HorizontalAlignment.CENTER);
-
-                        Cell cell0 = new Cell(1, 3).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT).SetBold().SetBorderBottom(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("Restgeld : " + Total + " €     "));
-                        table2.AddHeaderCell(cell0);
-
-                        Cell cell04 = new Cell(1, 1).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetBorderBottom(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER);
-                        table2.AddHeaderCell(cell04);
-
-                        doc.Add(table2);
-
-                        doc.Close();
-
-                        await Notificater("Die Bilanz wurder erfolgreich zu der PDF (" + pdf_filename + ") exportiert.\nSie finden diese PDF im Ordner Phone/Documents oder Interner Speicher/Documents.");
-                    }
-                }
-                else
-                {
-                    await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Leere Bilanz", 350, 250, null, null, "Es kann keine PDF erstellt werden, wenn die Bilanz leer ist."));
-                }
-
-            }
-            catch (Exception ex)
-            {
-                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Leere Bilanz", 350, 250, null, null, "Es kann keine PDF erstellt werden, wenn die Bilanz leer ist."));
-            }
+            Switch_Diff_Command = new AsyncCommand(Switch_Diff_Methode);
+            Detail_Command = new AsyncCommand<int>(Detail_Methode);
         }
 
         public async Task Load()
@@ -243,49 +43,426 @@ namespace EasyLife.PageModels
             {
                 int result0 = await Check_for_existing_Balanceprofile();
 
-                if(result0 == 0)
+                if (result0 == 0)
                 {
                     await Add_to_Balanceprofile();
                 }
-                if(result0 == -1)
+                if (result0 == -1)
                 {
                     return;
                 }
-                if(result0 == 1)
+                if (result0 == 1)
                 {
                     await Add_to_Balanceprofile();
                 }
-                if(result0 == 2)
+                if (result0 == 2)
                 {
                     await Create_Balanceprofile();
                 }
 
-
-                List<Stackholder> stackholderList = new List<Stackholder>();
-
                 var transaktionscontent = await ContentService.Get_all_enabeled_Transaktion();
 
-                Haushaltsbucher = new Haushaltsbücher(transaktionscontent.ToList());
+                List<Transaktion> transaktions = new List<Transaktion>();
+
+                foreach (Transaktion transaction in transaktionscontent)
+                {
+                    if (transaction != null)
+                    {
+                        if (transaction.Balance_Visibility == true)
+                        {
+                            transaktions.Add(transaction);
+                        }
+                    }
+                }
+
+                Transaktion_List = transaktions;
+
+                Haushaltsbucher = new Haushaltsbücher(Transaktion_List);
+
+                if (result1.Count() != 0)
+                {
+                    await LoadItem1();
+                }
+
+                if (result2.Count() != 0)
+                {
+                    await LoadItem2();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+            }
+        }
+
+        public async Task LoadCompare()
+        {
+            try
+            {
+                if (Bilanceprofile == null)
+                {
+                    return;
+                }
+
+                if (Item1_Viewtime != null && Item2_Viewtime != null)
+                {
+                    if (result1.Count() != 0 && result2.Count() != 0)
+                    {
+                        await LoadDiff(result1, result2);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+            }
+        }
+
+        public async Task<List<HelperComparer>> LoadItem1()
+        {
+            try
+            {
+                List<Stackholder> stackholderList = new List<Stackholder>();
 
                 List<Transaktion> sorted_after_month_transaktionscontent = new List<Transaktion>();
 
-                foreach (var trans in transaktionscontent)
+                foreach (Transaktion trans in Transaktion_List)
                 {
                     if (trans.Balance_Visibility == true)
                     {
-                        if (trans.Datum.Year == Current_Viewtime.Year)
+                        if (trans.Datum.Year == Item1_Viewtime.Year)
                         {
-                            if (trans.Datum.ToString("MMMM", new CultureInfo("de-DE")) == Current_Viewtime.Month)
+                            if (trans.Datum.ToString("MMMM", new CultureInfo("de-DE")) == Item1_Viewtime.Month)
                             {
                                 sorted_after_month_transaktionscontent.Add(trans);
                             }
-                            if (Current_Viewtime.Month == "")
+                            if (Item1_Viewtime.Month == "")
                             {
                                 sorted_after_month_transaktionscontent.Add(trans);
                             }
                         }
                     }
                 }
+
+                List<HelperComparer> output = await GetItem(sorted_after_month_transaktionscontent);
+
+                output.Add(new HelperComparer { Value = output[0].Value + output[1].Value, ButonValueList = new List<string>() });
+
+                output.Add(new HelperComparer { Value = output[2].Value + output[3].Value, ButonValueList = new List<string>() });
+
+                output.Add(new HelperComparer { Value = output[4].Value + output[5].Value, ButonValueList = new List<string>() });
+
+
+                Item1_Outcome_Account = Math.Round(output[0].Value, 2).ToString().Replace(".", ",") + " €";
+
+                Item1_Income_Account = Math.Round(output[1].Value, 2).ToString().Replace(".", ",") + " €";
+
+                Item1_Account_Result = Math.Round(output[7].Value, 2).ToString().Replace(".", ",") + " €";
+
+                Item1_Outcome_Cash = Math.Round(output[2].Value, 2).ToString().Replace(".", ",") + " €";
+
+                Item1_Income_Cash = Math.Round(output[3].Value, 2).ToString().Replace(".", ",") + " €";
+
+                Item1_Cash_Result = Math.Round(output[8].Value, 2).ToString().Replace(".", ",") + " €";
+
+                Item1_Outcome_Letter = Math.Round(output[4].Value, 2).ToString().Replace(".", ",") + " €";
+
+                Item1_Income_Letter = Math.Round(output[5].Value, 2).ToString().Replace(".", ",") + " €";
+
+                Item1_Letter_Result = Math.Round(output[9].Value, 2).ToString().Replace(".", ",") + " €";
+
+                Item1_Result = Math.Round(output[6].Value, 2).ToString().Replace(".", ",") + " €";
+
+                return output;
+            }
+            catch (Exception ex)
+            {
+                return null;
+
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+            }
+        }
+
+        public async Task<List<HelperComparer>> LoadItem2()
+        {
+            try
+            {
+                List<Stackholder> stackholderList = new List<Stackholder>();
+
+                List<Transaktion> sorted_after_month_transaktionscontent = new List<Transaktion>();
+
+                foreach (Transaktion trans in Transaktion_List)
+                {
+                    if (trans.Balance_Visibility == true)
+                    {
+                        if (trans.Datum.Year == Item2_Viewtime.Year)
+                        {
+                            if (trans.Datum.ToString("MMMM", new CultureInfo("de-DE")) == Item2_Viewtime.Month)
+                            {
+                                sorted_after_month_transaktionscontent.Add(trans);
+                            }
+                            if (Item2_Viewtime.Month == "")
+                            {
+                                sorted_after_month_transaktionscontent.Add(trans);
+                            }
+                        }
+                    }
+                }
+
+                List<HelperComparer> output = await GetItem(sorted_after_month_transaktionscontent);
+
+                output.Add(new HelperComparer { Value = output[0].Value + output[1].Value, ButonValueList = new List<string>() });
+
+                output.Add(new HelperComparer { Value = output[2].Value + output[3].Value, ButonValueList = new List<string>() });
+
+                output.Add(new HelperComparer { Value = output[4].Value + output[5].Value, ButonValueList = new List<string>() });
+
+
+                Item2_Outcome_Account = Math.Round(output[0].Value, 2).ToString().Replace(".", ",") + " €";
+
+                Item2_Income_Account = Math.Round(output[1].Value, 2).ToString().Replace(".", ",") + " €";
+
+                Item2_Account_Result = Math.Round(output[7].Value, 2).ToString().Replace(".", ",") + " €";
+
+                Item2_Outcome_Cash = Math.Round(output[2].Value, 2).ToString().Replace(".", ",") + " €";
+
+                Item2_Income_Cash = Math.Round(output[3].Value, 2).ToString().Replace(".", ",") + " €";
+
+                Item2_Cash_Result = Math.Round(output[8].Value, 2).ToString().Replace(".", ",") + " €";
+
+                Item2_Outcome_Letter = Math.Round(output[4].Value, 2).ToString().Replace(".", ",") + " €";
+
+                Item2_Income_Letter = Math.Round(output[5].Value, 2).ToString().Replace(".", ",") + " €";
+
+                Item2_Letter_Result = Math.Round(output[9].Value, 2).ToString().Replace(".", ",") + " €";
+
+                Item2_Result = Math.Round(output[6].Value, 2).ToString().Replace(".", ",") + " €";
+
+                return output;
+            }
+            catch (Exception ex)
+            {
+                return null;
+
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+            }
+        }
+
+        public async Task LoadDiff(List<HelperComparer> output1, List<HelperComparer> output2)
+        {
+            try
+            {
+                if (Math.Round(output1[0].Value - output2[0].Value, 2) < 0)
+                {
+                    Diff_Outcome_Account_Color = Color.Red;
+                }
+                else
+                {
+                    if (Math.Round(output1[0].Value - output2[0].Value, 2) == 0)
+                    {
+                        Diff_Outcome_Account_Color = Color.Gray;
+                    }
+                    else
+                    {
+                        Diff_Outcome_Account_Color = Color.ForestGreen;
+                    }
+                }
+
+
+
+                if (Math.Round(output1[1].Value - output2[1].Value, 2) < 0)
+                {
+                    Diff_Income_Account_Color = Color.Red;
+                }
+                else
+                {
+                    if (Math.Round(output1[1].Value - output2[1].Value, 2) == 0)
+                    {
+                        Diff_Income_Account_Color = Color.Gray;
+                    }
+                    else
+                    {
+                        Diff_Income_Account_Color = Color.ForestGreen;
+                    }
+                }
+
+
+
+                if (Math.Round(output1[2].Value - output2[2].Value, 2) < 0)
+                {
+                    Diff_Outcome_Cash_Color = Color.Red;
+                }
+                else
+                {
+                    if (Math.Round(output1[2].Value - output2[2].Value, 2) == 0)
+                    {
+                        Diff_Outcome_Cash_Color = Color.Gray;
+                    }
+                    else
+                    {
+                        Diff_Outcome_Cash_Color = Color.ForestGreen;
+                    }
+                }
+
+
+
+                if (Math.Round(output1[3].Value - output2[3].Value, 2) < 0)
+                {
+                    Diff_Income_Cash_Color = Color.Red;
+                }
+                else
+                {
+                    if (Math.Round(output1[3].Value - output2[3].Value, 2) == 0)
+                    {
+                        Diff_Income_Cash_Color = Color.Gray;
+                    }
+                    else
+                    {
+                        Diff_Income_Cash_Color = Color.ForestGreen;
+                    }
+                }
+
+                if (Math.Round(output1[4].Value - output2[4].Value, 2) < 0)
+                {
+                    Diff_Outcome_Letter_Color = Color.Red;
+                }
+                else
+                {
+                    if (Math.Round(output1[4].Value - output2[4].Value, 2) == 0)
+                    {
+                        Diff_Outcome_Letter_Color = Color.Gray;
+                    }
+                    else
+                    {
+                        Diff_Outcome_Letter_Color = Color.ForestGreen;
+                    }
+                }
+
+
+
+                if (Math.Round(output1[5].Value - output2[5].Value, 2) < 0)
+                {
+                    Diff_Income_Letter_Color = Color.Red;
+                }
+                else
+                {
+                    if (Math.Round(output1[5].Value - output2[5].Value, 2) == 0)
+                    {
+                        Diff_Income_Letter_Color = Color.Gray;
+                    }
+                    else
+                    {
+                        Diff_Income_Letter_Color = Color.ForestGreen;
+                    }
+                }
+
+
+
+                if (Math.Round(output1[6].Value - output2[6].Value, 2) < 0)
+                {
+                    Diff_Result_Color = Color.Red;
+                }
+                else
+                {
+                    if (Math.Round(output1[6].Value - output2[6].Value, 2) == 0)
+                    {
+                        Diff_Result_Color = Color.Gray;
+                    }
+                    else
+                    {
+                        Diff_Result_Color = Color.ForestGreen;
+                    }
+                }
+
+                if (Math.Round(output1[7].Value - output2[7].Value, 2) < 0)
+                {
+                    Diff_Account_Result_Color = Color.Red;
+                }
+                else
+                {
+                    if (Math.Round(output1[7].Value - output2[7].Value, 2) == 0)
+                    {
+                        Diff_Account_Result_Color = Color.Gray;
+                    }
+                    else
+                    {
+                        Diff_Account_Result_Color = Color.ForestGreen;
+                    }
+                }
+
+                if (Math.Round(output1[8].Value - output2[8].Value, 2) < 0)
+                {
+                    Diff_Cash_Result_Color = Color.Red;
+                }
+                else
+                {
+                    if (Math.Round(output1[8].Value - output2[8].Value, 2) == 0)
+                    {
+                        Diff_Cash_Result_Color = Color.Gray;
+                    }
+                    else
+                    {
+                        Diff_Cash_Result_Color = Color.ForestGreen;
+                    }
+                }
+
+                if (Math.Round(output1[9].Value - output2[9].Value, 2) < 0)
+                {
+                    Diff_Letter_Result_Color = Color.Red;
+                }
+                else
+                {
+                    if (Math.Round(output1[9].Value - output2[9].Value, 2) == 0)
+                    {
+                        Diff_Letter_Result_Color = Color.Gray;
+                    }
+                    else
+                    {
+                        Diff_Letter_Result_Color = Color.ForestGreen;
+                    }
+                }
+
+
+                Diff_Outcome_Account = Math.Abs(Math.Round(output1[0].Value - output2[0].Value, 2)).ToString().Replace(".", ",") + " €";
+
+                Diff_Income_Account = Math.Abs(Math.Round(output1[1].Value - output2[1].Value, 2)).ToString().Replace(".", ",") + " €";
+
+                Diff_Account_Result = Math.Abs(Math.Round(output1[7].Value - output2[7].Value, 2)).ToString().Replace(".", ",") + " €";
+
+                Diff_Outcome_Cash = Math.Abs(Math.Round(output1[2].Value - output2[2].Value, 2)).ToString().Replace(".", ",") + " €";
+
+                Diff_Income_Cash = Math.Abs(Math.Round(output1[3].Value - output2[3].Value, 2)).ToString().Replace(".", ",") + " €";
+
+                Diff_Cash_Result = Math.Abs(Math.Round(output1[8].Value - output2[8].Value, 2)).ToString().Replace(".", ",") + " €";
+
+                Diff_Outcome_Letter = Math.Abs(Math.Round(output1[4].Value - output2[4].Value, 2)).ToString().Replace(".", ",") + " €";
+
+                Diff_Income_Letter = Math.Abs(Math.Round(output1[5].Value - output2[5].Value, 2)).ToString().Replace(".", ",") + " €";
+
+                Diff_Letter_Result = Math.Abs(Math.Round(output1[9].Value - output2[9].Value, 2)).ToString().Replace(".", ",") + " €";
+
+                Diff_Result = Math.Abs(Math.Round(output1[6].Value - output2[6].Value, 2)).ToString().Replace(".", ",") + " €";
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+            }
+        }
+
+        public async Task<List<HelperComparer>> GetItem(List<Transaktion> transaktionslist)
+        {
+            try
+            {
+                List<HelperComparer> values = new List<HelperComparer>()
+                {
+                    new HelperComparer(){Value = 0, ButonValueList = new List<string>(), ButonReasonList = new List<string>()},
+                    new HelperComparer(){Value = 0, ButonValueList = new List<string>(), ButonReasonList = new List<string>()},
+                    new HelperComparer(){Value = 0, ButonValueList = new List<string>(), ButonReasonList = new List<string>()},
+                    new HelperComparer(){Value = 0, ButonValueList = new List<string>(), ButonReasonList = new List<string>()},
+                    new HelperComparer(){Value = 0, ButonValueList = new List<string>(), ButonReasonList = new List<string>()},
+                    new HelperComparer(){Value = 0, ButonValueList = new List<string>(), ButonReasonList = new List<string>()},
+                };
 
                 List<List<string>> balanceprofile = new List<List<string>>
                 {
@@ -297,61 +474,7 @@ namespace EasyLife.PageModels
                     Bilanceprofile.Letter_Income
                 };
 
-                List<ObservableRangeCollection<Stackholder>> bundle = new List<ObservableRangeCollection<Stackholder>>
-                {
-                    new ObservableRangeCollection<Stackholder>(),
-                    new ObservableRangeCollection<Stackholder>(),
-                    new ObservableRangeCollection<Stackholder>(),
-                    new ObservableRangeCollection<Stackholder>(),
-                    new ObservableRangeCollection<Stackholder>(),
-                    new ObservableRangeCollection<Stackholder>()
-                };
-
-                List<string> total_value_bundle = new List<string>
-                {
-                   null,
-                   null,
-                   null,
-                   null,
-                   null,
-                   null
-                };
-
-                List<Xamarin.Forms.Color> evaluating_of_total_bundle = new List<Xamarin.Forms.Color>
-                {
-                    new Xamarin.Forms.Color(),
-                    new Xamarin.Forms.Color(),
-                    new Xamarin.Forms.Color(),
-                    new Xamarin.Forms.Color(),
-                    new Xamarin.Forms.Color(),
-                    new Xamarin.Forms.Color()
-                };
-
-                List<bool> stackholder_visivility_bundle = new List<bool>
-                {
-                    false,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false
-                };
-
-                List<string> total_text = new List<string>()
-                {
-                    "Ausgaben Konto Gesamt : ",
-                    "Einnahmen Konto Gesamt : ",
-                    "Barausgaben Gesamt : ",
-                    "Bareinnahmen Gesamt : ",
-                    "Ausgaben Briefumschlag Gesamt : ",
-                    "Einnahmen Briefumschlag Gesamt : "
-                };
-
-                List<StackholderBundle> bundles = new List<StackholderBundle>();
-
                 int h = 0;
-
-                Bundles.Clear();
 
                 foreach (var placeholder in balanceprofile)
                 {
@@ -364,286 +487,348 @@ namespace EasyLife.PageModels
 
                     reasons.Sort();
 
-                    double total_value = 0;
+                    double total_value1 = 0;
 
                     foreach (string st in reasons)
                     {
-                        if (sorted_after_month_transaktionscontent.Where(ts => ts.Zweck == st).Count() != 0)
+                        double reasonvalue = 0;
+
+                        if (transaktionslist.Where(ts => ts.Zweck == st).Count() != 0)
                         {
                             double value = 0;
 
-                            foreach (Transaktion trans in sorted_after_month_transaktionscontent)
+                            foreach (Transaktion trans in transaktionslist)
                             {
                                 if (trans.Zweck == st)
                                 {
                                     value += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
                                 }
                             }
+                            reasonvalue = value;
 
-                            Xamarin.Forms.Color color = Xamarin.Forms.Color.White;
-
-                            if (value < 0)
-                            {
-                                color = Xamarin.Forms.Color.Red;
-                            }
-                            if (value > 0)
-                            {
-                                color = Xamarin.Forms.Color.Green;
-                            }
-                            if (value == 0)
-                            {
-                                color = Xamarin.Forms.Color.DarkGray;
-                            }
-
-                            total_value += value;
-
-                            bundle[h].Add(new Stackholder { Reason = st, Count = sorted_after_month_transaktionscontent.Where(ts => ts.Zweck == st).Count(), Value = Math.Round(value, 2).ToString().Replace(".", ","), Evaluating = color, Detail = sorted_after_month_transaktionscontent.Where(ts => ts.Zweck == st).ToList(), });
+                            total_value1 += value;
                         }
+
+                        values[h].ButonReasonList.Add(st);
+                        values[h].ButonValueList.Add("" + reasonvalue + " €");
                     }
 
-                    if (total_value < 0)
-                    {
-                        evaluating_of_total_bundle[h] = Xamarin.Forms.Color.Red;
-                    }
-                    if (total_value > 0)
-                    {
-                        evaluating_of_total_bundle[h] = Xamarin.Forms.Color.Green;
-                    }
-                    if (total_value == 0)
-                    {
-                        evaluating_of_total_bundle[h] = Xamarin.Forms.Color.DarkGray;
-                    }
-
-                    total_value_bundle[h] = Math.Round(total_value, 2).ToString().Replace(".", ",");
-
-                    if (bundle[h].Count() != 0)
-                    {
-                        stackholder_visivility_bundle[h] = true;
-                    }
-                    else
-                    {
-                        stackholder_visivility_bundle[h] = false;
-                    }
-
-
-                    bundles.Add(new StackholderBundle()
-                    {
-                        StackholderSource = bundle[h],
-                        Visibility = stackholder_visivility_bundle[h],
-                        Evaluation = Xamarin.Forms.Color.White,
-                        Height = bundle[h].Count() * 38,
-                        Definition = 0
-                    });
-
-                    bundles.Add(new StackholderBundle()
-                    {
-                        Visibility = stackholder_visivility_bundle[h],
-                        Evaluation = evaluating_of_total_bundle[h],
-                        Sum = total_value_bundle[h],
-                        Total_Text = total_text[h],
-                        Definition = 1
-                    });
-
-                    if (h == 1)
-                    {
-                        bool total_visibility = false;
-
-                        Xamarin.Forms.Color total_color = Xamarin.Forms.Color.White;
-
-                        double totalsum = 0;
-
-                        if (String.IsNullOrEmpty(bundles[1].Sum) == false)
-                        {
-                            totalsum += double.Parse(bundles[1].Sum, NumberStyles.Any, new CultureInfo("de-DE"));
-                        }
-
-                        if (String.IsNullOrEmpty(bundles[3].Sum) == false)
-                        {
-                            totalsum += double.Parse(bundles[3].Sum, NumberStyles.Any, new CultureInfo("de-DE"));
-                        }
-
-                        if (bundles[1].Visibility == true && bundles[3].Visibility == true)
-                        {
-                            total_visibility = true;
-                        }
-
-                        if (totalsum < 0)
-                        {
-                            total_color = Xamarin.Forms.Color.Red;
-                        }
-                        if (totalsum > 0)
-                        {
-                            total_color = Xamarin.Forms.Color.Green;
-                        }
-                        if (totalsum == 0)
-                        {
-                            total_color = Xamarin.Forms.Color.DarkGray;
-                        }
-
-                        bundles.Add(new StackholderBundle()
-                        {
-                            Visibility = total_visibility,
-                            Evaluation = total_color,
-                            Total_Sum = Math.Round(totalsum, 2).ToString().Replace(".", ","),
-                            Total_Text = "Rest Konto : ",
-                            Definition = 2
-                        });
-                    }
-
-                    if (h == 3)
-                    {
-                        bool total_visibility = false;
-
-                        Xamarin.Forms.Color total_color = Xamarin.Forms.Color.White;
-
-                        double totalsum = 0;
-
-                        if (String.IsNullOrEmpty(bundles[6].Sum) == false)
-                        {
-                            totalsum += double.Parse(bundles[6].Sum, NumberStyles.Any, new CultureInfo("de-DE"));
-                        }
-
-                        if (String.IsNullOrEmpty(bundles[8].Sum) == false)
-                        {
-                            totalsum += double.Parse(bundles[8].Sum, NumberStyles.Any, new CultureInfo("de-DE"));
-                        }
-
-                        if (bundles[6].Visibility == true && bundles[8].Visibility == true)
-                        {
-                            total_visibility = true;
-                        }
-
-                        if (totalsum < 0)
-                        {
-                            total_color = Xamarin.Forms.Color.Red;
-                        }
-                        if (totalsum > 0)
-                        {
-                            total_color = Xamarin.Forms.Color.Green;
-                        }
-                        if (totalsum == 0)
-                        {
-                            total_color = Xamarin.Forms.Color.DarkGray;
-                        }
-
-                        bundles.Add(new StackholderBundle()
-                        {
-                            Visibility = total_visibility,
-                            Evaluation = total_color,
-                            Total_Sum = Math.Round(totalsum, 2).ToString().Replace(".", ","),
-                            Total_Text = "Rest Bar : ",
-                            Definition = 2
-                        });
-                    }
-
-                    if (h == 5)
-                    {
-                        bool total_visibility = false;
-
-                        Xamarin.Forms.Color total_color = Xamarin.Forms.Color.White;
-
-                        double totalsum = 0;
-
-                        if (String.IsNullOrEmpty(bundles[11].Sum) == false)
-                        {
-                            totalsum += double.Parse(bundles[11].Sum, NumberStyles.Any, new CultureInfo("de-DE"));
-                        }
-
-                        if (String.IsNullOrEmpty(bundles[13].Sum) == false)
-                        {
-                            totalsum += double.Parse(bundles[13].Sum, NumberStyles.Any, new CultureInfo("de-DE"));
-                        }
-
-                        if (bundles[11].Visibility == true && bundles[13].Visibility == true)
-                        {
-                            total_visibility = true;
-                        }
-
-                        if (totalsum < 0)
-                        {
-                            total_color = Xamarin.Forms.Color.Red;
-                        }
-                        if (totalsum > 0)
-                        {
-                            total_color = Xamarin.Forms.Color.Green;
-                        }
-                        if (totalsum == 0)
-                        {
-                            total_color = Xamarin.Forms.Color.DarkGray;
-                        }
-
-                        bundles.Add(new StackholderBundle()
-                        {
-                            Visibility = total_visibility,
-                            Evaluation = total_color,
-                            Total_Sum = Math.Round(totalsum, 2).ToString().Replace(".", ","),
-                            Total_Text = "Rest Briefumschlag : ",
-                            Definition = 2
-                        });
-                    }
+                    values[h].Value += total_value1;
 
                     h++;
                 }
 
-                foreach (StackholderBundle sb in bundles)
+                double totalvalue1 = 0;
+
+                h = 0;
+
+                while ( h < 4)
                 {
-                    if (sb.Visibility == true)
-                    {
-                        Bundles.Add(sb);
-                    }
+                    totalvalue1 += values[h].Value;
+
+                    h++;
                 }
 
-                if (Bundles.Count() == 0)
+
+                values.Add(new HelperComparer() { Value = totalvalue1 });
+
+                return values;
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+
+                return null;
+            }
+        }
+
+        public async Task Set_Item1_Methode()
+        {
+            try
+            {
+                var result = await Shell.Current.ShowPopupAsync(new Viewtime_Popup(Item1_Viewtime, Haushaltsbucher));
+
+                if (result == null)
                 {
-                    Stackholder_Bundle_Visibility = false;
-                    Kein_Ergebnis_Stackholder_Status = true;
-                    Title = "Bilanz";
+                    return;
+                }
+
+                Item1_Viewtime = (Viewtime)result;
+
+                if (Item1_Viewtime.Month == "")
+                {
+                    Item1_Name = "" + Item1_Viewtime.Year;
                 }
                 else
                 {
+                    Item1_Name = Item1_Viewtime.Month.ToString() + "\n" + Item1_Viewtime.Year;
+                }
 
-                    double total_value = 0;
+                result1 = await LoadItem1();
 
-                    int g = 0;
+                await LoadCompare();
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
 
-                    foreach (string st in total_value_bundle)
+                Item1_Viewtime = new Viewtime() { Year = DateTime.Now.Year, Month = DateTime.Now.ToString("MMMM", new CultureInfo("de-DE")) };
+
+                await LoadCompare();
+            }
+        }
+
+        public async Task Set_Item2_Methode()
+        {
+            try
+            {
+                var result = await Shell.Current.ShowPopupAsync(new Viewtime_Popup(Item2_Viewtime, Haushaltsbucher));
+
+                if (result == null)
+                {
+                    return;
+                }
+
+                Item2_Viewtime = (Viewtime)result;
+
+                if (Item2_Viewtime.Month == "")
+                {
+                    Item2_Name = "" + Item2_Viewtime.Year;
+                }
+                else
+                {
+                    Item2_Name = Item2_Viewtime.Month.ToString() + "\n" + Item2_Viewtime.Year;
+                }
+
+                result2 = await LoadItem2();
+
+                await LoadCompare();
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+
+                Item2_Viewtime = new Viewtime() { Year = DateTime.Now.Year, Month = DateTime.Now.ToString("MMMM", new CultureInfo("de-DE")) };
+
+                await LoadCompare();
+            }
+        }
+
+        public async Task Switch_Diff_Methode()
+        {
+            try
+            {
+                if (Bilanceprofile == null)
+                {
+                    return;
+                }
+
+                if (Item1_Viewtime != null && Item2_Viewtime != null)
+                {
+
+                    if (result1.Count() != 0 && result2.Count() != 0)
                     {
-                        if (double.TryParse(st, NumberStyles.Any, new CultureInfo("de-DE"), out double result) == true)
+                        ISSwitched = !ISSwitched;
+
+                        if (ISSwitched == false)
                         {
-                            if(g != 4 && g != 5)
-                            {
-                                total_value += result;
-                            }
+                            await LoadDiff(result1, result2);
                         }
-
-                        g++;
+                        else
+                        {
+                            await LoadDiff(result2, result1);
+                        }
                     }
-
-                    Total = Math.Round(total_value, 2).ToString().Replace(".", ",");
-
-                    if (total_value < 0)
-                    {
-                        Evaluating_of_Totoal = Xamarin.Forms.Color.Red;
-                    }
-                    if (total_value > 0)
-                    {
-                        Evaluating_of_Totoal = Xamarin.Forms.Color.Green;
-                    }
-                    if (total_value == 0)
-                    {
-                        Evaluating_of_Totoal = Xamarin.Forms.Color.DarkGray;
-                    }
-
-                    Stackholder_Bundle_Visibility = true;
-                    Kein_Ergebnis_Stackholder_Status = false;
-                    Title = "" + Current_Viewtime.Month + " " + Current_Viewtime.Year + "";
                 }
             }
             catch (Exception ex)
             {
-                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Leere Bilanz", 350, 250, null, null, "Es kann keine PDF erstellt werden, wenn die Bilanz leer ist."));
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
+
+        public async Task Detail_Methode(int input)
+        {
+            try
+            {
+                if (result1.Count() != 0 || result2.Count() != 0)
+                {
+                    List<string> Titel = new List<string>() { "Ausgaben Konto", "Einnahmen Konto", "Barausgaben", "Bareinnahmen" , "Ausgaben Briefumschlag" , "Einnahmen Briefumschlag" };
+
+                    List<string> DetailList1 = new List<string>();
+
+                    List<string> DetailList2 = new List<string>();
+
+                    List<string[]> DetailList = new List<string[]> { };
+
+                    int length = 13;
+
+                    if (result1.Count() != 0)
+                    {
+                        try
+                        {
+                            DetailList1 = result1[input].ButonValueList;
+                        }
+                        catch
+                        { return; }
+                    }
+
+                    if (result2.Count() != 0)
+                    {
+                        try
+                        {
+                            DetailList2 = result2[input].ButonValueList;
+                        }
+                        catch
+                        { return; }
+                    }
+
+                    if (DetailList1.Count() < DetailList2.Count())
+                    {
+                        while (DetailList1.Count() < DetailList2.Count())
+                        {
+                            DetailList1.Add("0 €");
+                        }
+
+                        int count = 0;
+
+                        foreach (string Detail in DetailList2)
+                        {
+                            int length1left = (int)Math.Round((length - Detail.Length) * 0.5, 0);
+
+                            int length1right = (length - Detail.Length) - length1left;
+
+                            string whitspaceleft1 = "";
+
+                            string whitspaceright1 = "";
+
+                            int i = 0;
+
+                            while (i < length1left)
+                            {
+                                whitspaceleft1 += " ";
+
+                                i++;
+                            }
+
+                            i = 0;
+
+                            while (i < length1right)
+                            {
+                                whitspaceright1 += " ";
+
+                                i++;
+                            }
+
+                            int length2left = (int)Math.Round((length - DetailList1[count].Length) * 0.5, 0);
+
+                            int length2right = (length - DetailList1[count].Length) - length1left;
+
+                            string whitspaceleft2 = "";
+
+                            string whitspaceright2 = "";
+
+                            i = 0;
+
+                            while (i < length2left)
+                            {
+                                whitspaceleft2 += " ";
+
+                                i++;
+                            }
+
+                            i = 0;
+
+                            while (i < length2right)
+                            {
+                                whitspaceright2 += " ";
+
+                                i++;
+                            }
+
+                            DetailList.Add(new string[] { result2[input].ButonReasonList[count], whitspaceright2 + DetailList1[count] + whitspaceleft2 + " | " + whitspaceleft1 + Detail + whitspaceright1 });
+
+                            count++;
+                        }
+                    }
+                    else
+                    {
+                        while (DetailList2.Count() < DetailList1.Count())
+                        {
+                            DetailList2.Add("0 €");
+                        }
+
+                        int count = 0;
+
+                        foreach (string Detail in DetailList1)
+                        {
+                            int length1left = (int)Math.Round((length - Detail.Length) * 0.5, 0);
+
+                            int length1right = (length - Detail.Length) - length1left;
+
+                            string whitspaceleft1 = "";
+
+                            string whitspaceright1 = "";
+
+                            int i = 0;
+
+                            while (i < length1left)
+                            {
+                                whitspaceleft1 += " ";
+
+                                i++;
+                            }
+
+                            i = 0;
+
+                            while (i < length1right)
+                            {
+                                whitspaceright1 += " ";
+
+                                i++;
+                            }
+
+                            int length2left = (int)Math.Round((length - DetailList2[count].Length) * 0.5, 0);
+
+                            int length2right = (length - DetailList2[count].Length) - length1left;
+
+                            string whitspaceleft2 = "";
+
+                            string whitspaceright2 = "";
+
+                            i = 0;
+
+                            while (i < length2left)
+                            {
+                                whitspaceleft2 += " ";
+
+                                i++;
+                            }
+
+                            i = 0;
+
+                            while (i < length2right)
+                            {
+                                whitspaceright2 += " ";
+
+                                i++;
+                            }
+
+                            DetailList.Add(new string[] { result1[input].ButonReasonList[count], whitspaceleft1 + Detail + whitspaceright1 + " | " + whitspaceright2 + DetailList2[count] + whitspaceleft2 });
+
+                            count++;
+                        }
+                    }
+
+                    await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup(Titel[input], 400, DetailList));
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+            }
+        }
+
 
         public async Task Get_BalanceprofileList()
         {
@@ -663,7 +848,7 @@ namespace EasyLife.PageModels
         {
             try
             {
-                if(Bilanceprofile != null)
+                if (Bilanceprofile != null)
                 {
                     return 0;
                 }
@@ -679,18 +864,18 @@ namespace EasyLife.PageModels
 
                         validate = true;
                     }
-                    catch 
+                    catch
                     {
                         validate = false;
                     }
 
-                    if(validate == false)
+                    if (validate == false)
                     {
                         await Get_BalanceprofileList();
 
                         placeholder = Bilanceprofiles_List.FirstOrDefault();
 
-                        if(placeholder == null)
+                        if (placeholder == null)
                         {
                             return 2;
                         }
@@ -868,7 +1053,7 @@ namespace EasyLife.PageModels
                     {
                         if (initreasons.Contains(zw.Benutzerdefinierter_Zweck) == false)
                         {
-                            if(zw.Reason_Visibility == true)
+                            if (zw.Reason_Visibility == true)
                             {
                                 openreason.Add(zw.Benutzerdefinierter_Zweck);
                             }
@@ -980,7 +1165,7 @@ namespace EasyLife.PageModels
                         }
                     }
 
-                    await BalanceService.Edit_Balanceprofile(Bilanceprofile); 
+                    await BalanceService.Edit_Balanceprofile(Bilanceprofile);
                 }
             }
             catch (Exception ex)
@@ -995,7 +1180,7 @@ namespace EasyLife.PageModels
             {
                 bool indikator = false;
 
-                while(indikator == false)
+                while (indikator == false)
                 {
                     var result = await Check_for_existing_Balanceprofile();
 
@@ -1275,7 +1460,7 @@ namespace EasyLife.PageModels
 
                     while (indikator == false)
                     {
-                        var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("" + reason.Benutzerdefinierter_Zweck + " zuordnen", 400, new List<string>() { "Ausgaben Konto", "Einnahmen Konto", "Barausgaben", "Bareinnahmen", "Ausgaben Briefumschlag", "Einnahmen Briefumschlag" , "ignorieren" }));
+                        var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("" + reason.Benutzerdefinierter_Zweck + " zuordnen", 400, new List<string>() { "Ausgaben Konto", "Einnahmen Konto", "Barausgaben", "Bareinnahmen", "Ausgaben Briefumschlag", "Einnahmen Briefumschlag", "ignorieren" }));
 
                         if (result == null)
                         {
@@ -1331,7 +1516,7 @@ namespace EasyLife.PageModels
                             indikator = true;
                         }
 
-                        if((string)result == "Verwerfen")
+                        if ((string)result == "Verwerfen")
                         {
                             return;
                         }
@@ -1524,7 +1709,7 @@ namespace EasyLife.PageModels
                 {
                     return;
                 }
-                if(result0 == 2)
+                if (result0 == 2)
                 {
                     return;
                 }
@@ -1698,210 +1883,50 @@ namespace EasyLife.PageModels
             }
         }
 
-        public async Task Period_Popup()
-        {
-            try
-            {
-                var result = await Shell.Current.ShowPopupAsync(new Viewtime_Popup(Current_Viewtime, Haushaltsbucher));
-
-                if (result == null)
-                {
-                    return;
-                }
-
-                Current_Viewtime = (Viewtime)result;
-
-                await Load();
-            }
-            catch (Exception ex)
-            {
-                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
-
-                Current_Viewtime = new Viewtime() { Year = DateTime.Now.Year, Month = DateTime.Now.ToString("MMMM", new CultureInfo("de-DE")) };
-
-                await Load();
-            }
-        }
-
         private async Task Notificater(string v)
         {
             await Shell.Current.DisplayToastAsync(v, 5000);
         }
 
-        public ObservableRangeCollection<StackholderBundle> Bundles { get; set; }
-
-
-        public ObservableRangeCollection<Stackholder> stackholderbundel_outcome_account;
-        public ObservableRangeCollection<Stackholder> Stackholderbundel_Outcome_Account
-        {
-            get { return stackholderbundel_outcome_account; }
-            set
-            {
-                if (stackholderbundel_outcome_account == value)
-                {
-                    return;
-                }
-                stackholderbundel_outcome_account = value; RaisePropertyChanged();
-            }
-        }
-
-        public ObservableRangeCollection<Stackholder> stackholderbundel_income_account;
-        public ObservableRangeCollection<Stackholder> Stackholderbundel_Income_Account
-        {
-            get { return stackholderbundel_income_account; }
-            set
-            {
-                if (stackholderbundel_income_account == value)
-                {
-                    return;
-                }
-                stackholderbundel_income_account = value; RaisePropertyChanged();
-            }
-        }
-
-        public ObservableRangeCollection<Stackholder> stackholderbundel_outcome_cash;
-        public ObservableRangeCollection<Stackholder> Stackholderbundel_Outcome_Cash
-        {
-            get { return stackholderbundel_outcome_cash; }
-            set
-            {
-                if (stackholderbundel_outcome_cash == value)
-                {
-                    return;
-                }
-                stackholderbundel_outcome_cash = value; RaisePropertyChanged();
-            }
-        }
-
-        public ObservableRangeCollection<Stackholder> stackholderbundel_income_cash;
-        public ObservableRangeCollection<Stackholder> Stackholderbundel_Income_Cash
-        {
-            get { return stackholderbundel_income_cash; }
-            set
-            {
-                if (stackholderbundel_income_cash == value)
-                {
-                    return;
-                }
-                stackholderbundel_income_cash = value; RaisePropertyChanged();
-            }
-        }
-
-        public Balanceprofile balanceprofile;
-        public Balanceprofile Bilanceprofile
-        {
-            get { return balanceprofile; }
-            set
-            {
-                if (balanceprofile == value)
-                {
-                    return;
-                }
-                balanceprofile = value; RaisePropertyChanged();
-            }
-        }
+        public Balanceprofile Bilanceprofile = null;
 
         public List<Balanceprofile> Bilanceprofiles_List = new List<Balanceprofile>();
 
+        public Viewtime Item1_Viewtime = new Viewtime();
+
+        public Viewtime Item2_Viewtime = new Viewtime();
+
+        public List<Transaktion> Transaktion_List = new List<Transaktion>();
+
         public Haushaltsbücher Haushaltsbucher = null;
 
-        public bool stackholder_bundle_visibility = false;
-        public bool Stackholder_Bundle_Visibility
+        public List<HelperComparer> result1 = new List<HelperComparer> { };
+
+        public List<HelperComparer> result2 = new List<HelperComparer> { };
+
+        public bool ssswitched = false;
+        public bool ISSwitched
         {
-            get { return stackholder_bundle_visibility; }
+            get { return ssswitched; }
             set
             {
-
-                if (stackholder_bundle_visibility == value)
+                if (ISSwitched == value)
                 {
                     return;
                 }
 
-                stackholder_bundle_visibility = value; RaisePropertyChanged();
+                ssswitched = value; RaisePropertyChanged();
             }
         }
+        public AsyncCommand Load_Command { get; }
+        public AsyncCommand Period_Command { get; }
+        public AsyncCommand Settings_Command { get; }
+        public AsyncCommand Set_Item1_Command { get; }
+        public AsyncCommand Set_Item2_Command { get; }
+        public AsyncCommand Switch_Diff_Command { get; }
+        public AsyncCommand<int> Detail_Command { get; }
 
-        public bool stackholder_outcome_account_visibility = false;
-        public bool Stackholder_Outcome_Account_Visibility
-        {
-            get { return stackholder_outcome_account_visibility; }
-            set
-            {
-
-                if (stackholder_outcome_account_visibility == value)
-                {
-                    return;
-                }
-
-                stackholder_outcome_account_visibility = value; RaisePropertyChanged();
-            }
-        }
-
-        public bool stackholder_income_account_visibility = false;
-        public bool Stackholder_Income_Account_Visibility
-        {
-            get { return stackholder_income_account_visibility; }
-            set
-            {
-
-                if (stackholder_income_account_visibility == value)
-                {
-                    return;
-                }
-
-                stackholder_income_account_visibility = value; RaisePropertyChanged();
-            }
-        }
-
-        public bool stackholder_outcome_cash_visibility = false;
-        public bool Stackholder_Outcome_Cash_Visibility
-        {
-            get { return stackholder_outcome_cash_visibility; }
-            set
-            {
-
-                if (stackholder_outcome_cash_visibility == value)
-                {
-                    return;
-                }
-
-                stackholder_outcome_cash_visibility = value; RaisePropertyChanged();
-            }
-        }
-
-        public bool stackholder_income_cash_visibility = false;
-        public bool Stackholder_Income_Cash_Visibility
-        {
-            get { return stackholder_income_cash_visibility; }
-            set
-            {
-
-                if (stackholder_income_cash_visibility == value)
-                {
-                    return;
-                }
-
-                stackholder_income_cash_visibility = value; RaisePropertyChanged();
-            }
-        }
-
-        public bool kein_ergebnis_stackholder_Status = false;
-        public bool Kein_Ergebnis_Stackholder_Status
-        {
-            get { return kein_ergebnis_stackholder_Status; }
-            set
-            {
-                if (Kein_Ergebnis_Stackholder_Status == value)
-                    return;
-                kein_ergebnis_stackholder_Status = value; RaisePropertyChanged();
-                if (kein_ergebnis_stackholder_Status == true)
-                {
-                    Title = "Bilanz";
-                }
-            }
-        }
-
-        public string title = "Bilanz";
+        public string title = "Vergleichen";
         public string Title
         {
             get { return title; }
@@ -1916,198 +1941,645 @@ namespace EasyLife.PageModels
             }
         }
 
-        public Viewtime current_viewtime = new Viewtime() { Year = DateTime.Now.Year, Month = DateTime.Now.ToString("MMMM", new CultureInfo("de-DE")) };
-        public Viewtime Current_Viewtime
+
+        public string item1_outcome_account = "0 €";
+        public string Item1_Outcome_Account
         {
-            get { return current_viewtime; }
+            get { return item1_outcome_account; }
             set
             {
-                if (current_viewtime == value)
+                if (Item1_Outcome_Account == value)
                 {
                     return;
                 }
 
-                current_viewtime = value; RaisePropertyChanged();
+                item1_outcome_account = value; RaisePropertyChanged();
             }
         }
 
-        public AsyncCommand Load_Command { get; }
-
-        public AsyncCommand Period_Command { get; }
-
-        public AsyncCommand Settings_Command { get; }
-        public AsyncCommand Create_PDF_Command { get; }
-
-        public Xamarin.Forms.Color evaluating_of_totoal_outcome_account;
-        public Xamarin.Forms.Color Evaluating_of_Totoal_Outcome_Account
+        public string item2_outcome_account = "0 €";
+        public string Item2_Outcome_Account
         {
-            get { return evaluating_of_totoal_outcome_account; }
+            get { return item2_outcome_account; }
             set
             {
-                if (evaluating_of_totoal_outcome_account == value)
+                if (Item2_Outcome_Account == value)
                 {
                     return;
                 }
 
-                evaluating_of_totoal_outcome_account = value; RaisePropertyChanged();
+                item2_outcome_account = value; RaisePropertyChanged();
             }
         }
 
-        public Xamarin.Forms.Color evaluating_of_totoal_income_account;
-        public Xamarin.Forms.Color Evaluating_of_Totoal_Income_Account
+        public string diff_outcome_account = "0 €";
+        public string Diff_Outcome_Account
         {
-            get { return evaluating_of_totoal_income_account; }
+            get { return diff_outcome_account; }
             set
             {
-                if (evaluating_of_totoal_income_account == value)
+                if (Diff_Outcome_Account == value)
                 {
                     return;
                 }
 
-                evaluating_of_totoal_income_account = value; RaisePropertyChanged();
+                diff_outcome_account = value; RaisePropertyChanged();
             }
         }
 
-        public Xamarin.Forms.Color evaluating_of_totoal_outcome_cash;
-        public Xamarin.Forms.Color Evaluating_of_Totoal_Outcome_Cash
+        public string item1_income_account = "0 €";
+        public string Item1_Income_Account
         {
-            get { return evaluating_of_totoal_outcome_cash; }
+            get { return item1_income_account; }
             set
             {
-                if (evaluating_of_totoal_outcome_cash == value)
+                if (Item1_Income_Account == value)
                 {
                     return;
                 }
 
-                evaluating_of_totoal_outcome_cash = value; RaisePropertyChanged();
+                item1_income_account = value; RaisePropertyChanged();
             }
         }
 
-        public Xamarin.Forms.Color evaluating_of_totoal_income_cash;
-        public Xamarin.Forms.Color Evaluating_of_Totoal_Income_Cash
+        public string item2_income_account = "0 €";
+        public string Item2_Income_Account
         {
-            get { return evaluating_of_totoal_income_cash; }
+            get { return item2_income_account; }
             set
             {
-                if (evaluating_of_totoal_income_cash == value)
+                if (Item2_Income_Account == value)
                 {
                     return;
                 }
 
-                evaluating_of_totoal_income_cash = value; RaisePropertyChanged();
+                item2_income_account = value; RaisePropertyChanged();
             }
         }
 
-        public Xamarin.Forms.Color evaluating_of_totoal;
-        public Xamarin.Forms.Color Evaluating_of_Totoal
+        public string diff_income_account = "0 €";
+        public string Diff_Income_Account
         {
-            get { return evaluating_of_totoal; }
+            get { return diff_income_account; }
             set
             {
-                if (evaluating_of_totoal == value)
+                if (Diff_Income_Account == value)
                 {
                     return;
                 }
 
-                evaluating_of_totoal = value; RaisePropertyChanged();
+                diff_income_account = value; RaisePropertyChanged();
             }
         }
 
-        public string total_outcome_accaount;
-        public string Total_Outcome_Account
+        public string item1_account_result = "0 €";
+        public string Item1_Account_Result
         {
-            get { return total_outcome_accaount; }
+            get { return item1_account_result; }
             set
             {
-                if (total_outcome_accaount == value)
+                if (Item1_Account_Result == value)
                 {
                     return;
                 }
 
-                total_outcome_accaount = value; RaisePropertyChanged();
+                item1_account_result = value; RaisePropertyChanged();
             }
         }
 
-        public string total_income_accaount;
-        public string Total_Income_Account
+        public string item2_account_result = "0 €";
+        public string Item2_Account_Result
         {
-            get { return total_income_accaount; }
+            get { return item2_account_result; }
             set
             {
-                if (total_income_accaount == value)
+                if (Item2_Account_Result == value)
                 {
                     return;
                 }
 
-                total_income_accaount = value; RaisePropertyChanged();
+                item2_account_result = value; RaisePropertyChanged();
             }
         }
 
-        public string total_outcome_cash;
-        public string Total_Outcome_Cash
+        public string diff_account_result = "0 €";
+        public string Diff_Account_Result
         {
-            get { return total_outcome_cash; }
+            get { return diff_account_result; }
             set
             {
-                if (total_outcome_cash == value)
+                if (Diff_Account_Result == value)
                 {
                     return;
                 }
 
-                total_outcome_cash = value; RaisePropertyChanged();
+                diff_account_result = value; RaisePropertyChanged();
             }
         }
 
-        public string total_income_cash;
-        public string Total_Income_Cash
+        public string item1_outcome_cash = "0 €";
+        public string Item1_Outcome_Cash
         {
-            get { return total_income_cash; }
+            get { return item1_outcome_cash; }
             set
             {
-                if (total_income_cash == value)
+                if (Item1_Outcome_Cash == value)
                 {
                     return;
                 }
 
-                total_income_cash = value; RaisePropertyChanged();
+                item1_outcome_cash = value; RaisePropertyChanged();
             }
         }
 
-        public string total;
-        public string Total
+        public string item2_outcome_cash = "0 €";
+        public string Item2_Outcome_Cash
         {
-            get { return total; }
+            get { return item2_outcome_cash; }
             set
             {
-                if (total == value)
+                if (Item2_Outcome_Cash == value)
                 {
                     return;
                 }
 
-                total = value; RaisePropertyChanged();
+                item2_outcome_cash = value; RaisePropertyChanged();
+            }
+        }
+
+        public string diff_outcome_cash = "0 €";
+        public string Diff_Outcome_Cash
+        {
+            get { return diff_outcome_cash; }
+            set
+            {
+                if (Diff_Outcome_Cash == value)
+                {
+                    return;
+                }
+
+                diff_outcome_cash = value; RaisePropertyChanged();
+            }
+        }
+
+        public string item1_income_cash = "0 €";
+        public string Item1_Income_Cash
+        {
+            get { return item1_income_cash; }
+            set
+            {
+                if (Item1_Income_Cash == value)
+                {
+                    return;
+                }
+
+                item1_income_cash = value; RaisePropertyChanged();
+            }
+        }
+
+        public string item2_income_cash = "0 €";
+        public string Item2_Income_Cash
+        {
+            get { return item2_income_cash; }
+            set
+            {
+                if (Item2_Income_Cash == value)
+                {
+                    return;
+                }
+
+                item2_income_cash = value; RaisePropertyChanged();
+            }
+        }
+
+        public string diff_income_cash = "0 €";
+        public string Diff_Income_Cash
+        {
+            get { return diff_income_cash; }
+            set
+            {
+                if (Diff_Income_Cash == value)
+                {
+                    return;
+                }
+
+                diff_income_cash = value; RaisePropertyChanged();
+            }
+        }
+
+        public string item1_cash_result = "0 €";
+        public string Item1_Cash_Result
+        {
+            get { return item1_cash_result; }
+            set
+            {
+                if (Item1_Cash_Result == value)
+                {
+                    return;
+                }
+
+                item1_cash_result = value; RaisePropertyChanged();
+            }
+        }
+
+        public string item2_cash_result = "0 €";
+        public string Item2_Cash_Result
+        {
+            get { return item2_cash_result; }
+            set
+            {
+                if (Item2_Cash_Result == value)
+                {
+                    return;
+                }
+
+                item2_cash_result = value; RaisePropertyChanged();
+            }
+        }
+
+        public string diff_cash_result = "0 €";
+        public string Diff_Cash_Result
+        {
+            get { return diff_cash_result; }
+            set
+            {
+                if (Diff_Cash_Result == value)
+                {
+                    return;
+                }
+
+                diff_cash_result = value; RaisePropertyChanged();
+            }
+        }
+
+        public string item1_result = "0 €";
+        public string Item1_Result
+        {
+            get { return item1_result; }
+            set
+            {
+                if (Item1_Result == value)
+                {
+                    return;
+                }
+
+                item1_result = value; RaisePropertyChanged();
+            }
+        }
+
+        public string item2_result = "0 €";
+        public string Item2_Result
+        {
+            get { return item2_result; }
+            set
+            {
+                if (Item2_Result == value)
+                {
+                    return;
+                }
+
+                item2_result = value; RaisePropertyChanged();
+            }
+        }
+
+        public string diff_result = "0 €";
+        public string Diff_Result
+        {
+            get { return diff_result; }
+            set
+            {
+                if (Diff_Result == value)
+                {
+                    return;
+                }
+
+                diff_result = value; RaisePropertyChanged();
+            }
+        }
+
+        public string item1_name = "Bilanz 1";
+        public string Item1_Name
+        {
+            get { return item1_name; }
+            set
+            {
+                if (Item1_Name == value)
+                {
+                    return;
+                }
+
+                item1_name = value; RaisePropertyChanged();
+            }
+        }
+
+        public string item2_name = "Bilanz 2";
+        public string Item2_Name
+        {
+            get { return item2_name; }
+            set
+            {
+                if (Item2_Name == value)
+                {
+                    return;
+                }
+
+                item2_name = value; RaisePropertyChanged();
+            }
+        }
+
+        public Color diff_outcome_account_color = Color.Gray;
+        public Color Diff_Outcome_Account_Color
+        {
+            get { return diff_outcome_account_color; }
+            set
+            {
+                if (Diff_Outcome_Account_Color == value)
+                {
+                    return;
+                }
+
+                diff_outcome_account_color = value; RaisePropertyChanged();
+            }
+        }
+
+        public Color diff_intcome_account_color = Color.Gray;
+        public Color Diff_Income_Account_Color
+        {
+            get { return diff_intcome_account_color; }
+            set
+            {
+                if (Diff_Income_Account_Color == value)
+                {
+                    return;
+                }
+
+                diff_intcome_account_color = value; RaisePropertyChanged();
+            }
+        }
+
+        public Color diff_account_result_color = Color.Gray;
+        public Color Diff_Account_Result_Color
+        {
+            get { return diff_account_result_color; }
+            set
+            {
+                if (Diff_Account_Result_Color == value)
+                {
+                    return;
+                }
+
+                diff_account_result_color = value; RaisePropertyChanged();
+            }
+        }
+
+        public Color diff_outcome_cash_color = Color.Gray;
+        public Color Diff_Outcome_Cash_Color
+        {
+            get { return diff_outcome_cash_color; }
+            set
+            {
+                if (Diff_Outcome_Cash_Color == value)
+                {
+                    return;
+                }
+
+                diff_outcome_cash_color = value; RaisePropertyChanged();
+            }
+        }
+
+        public Color diff_intcome_cash_color = Color.Gray;
+        public Color Diff_Income_Cash_Color
+        {
+            get { return diff_intcome_cash_color; }
+            set
+            {
+                if (Diff_Income_Cash_Color == value)
+                {
+                    return;
+                }
+
+                diff_intcome_cash_color = value; RaisePropertyChanged();
+            }
+        }
+
+        public Color diff_cash_result_color = Color.Gray;
+        public Color Diff_Cash_Result_Color
+        {
+            get { return diff_cash_result_color; }
+            set
+            {
+                if (Diff_Cash_Result_Color == value)
+                {
+                    return;
+                }
+
+                diff_cash_result_color = value; RaisePropertyChanged();
+            }
+        }
+
+        public Color diff_result_color = Color.Gray;
+        public Color Diff_Result_Color
+        {
+            get { return diff_result_color; }
+            set
+            {
+                if (Diff_Result_Color == value)
+                {
+                    return;
+                }
+
+                diff_result_color = value; RaisePropertyChanged();
+            }
+        }
+
+
+        public string item1_outcome_letter = "0 €";
+        public string Item1_Outcome_Letter
+        {
+            get { return item1_outcome_letter; }
+            set
+            {
+                if (Item1_Outcome_Letter == value)
+                {
+                    return;
+                }
+
+                item1_outcome_letter = value; RaisePropertyChanged();
+            }
+        }
+
+        public string item2_outcome_letter = "0 €";
+        public string Item2_Outcome_Letter
+        {
+            get { return item2_outcome_letter; }
+            set
+            {
+                if (Item2_Outcome_Letter == value)
+                {
+                    return;
+                }
+
+                item2_outcome_letter = value; RaisePropertyChanged();
+            }
+        }
+
+        public string diff_outcome_letter = "0 €";
+        public string Diff_Outcome_Letter
+        {
+            get { return diff_outcome_letter; }
+            set
+            {
+                if (Diff_Outcome_Letter == value)
+                {
+                    return;
+                }
+
+                diff_outcome_letter = value; RaisePropertyChanged();
+            }
+        }
+
+        public string item1_income_letter = "0 €";
+        public string Item1_Income_Letter
+        {
+            get { return item1_income_letter; }
+            set
+            {
+                if (Item1_Income_Letter == value)
+                {
+                    return;
+                }
+
+                item1_income_letter = value; RaisePropertyChanged();
+            }
+        }
+
+        public string item2_income_letter = "0 €";
+        public string Item2_Income_Letter
+        {
+            get { return item2_income_letter; }
+            set
+            {
+                if (Item2_Income_Letter == value)
+                {
+                    return;
+                }
+
+                item2_income_letter = value; RaisePropertyChanged();
+            }
+        }
+
+        public string diff_income_letter = "0 €";
+        public string Diff_Income_Letter
+        {
+            get { return diff_income_letter; }
+            set
+            {
+                if (Diff_Income_Letter == value)
+                {
+                    return;
+                }
+
+                diff_income_letter = value; RaisePropertyChanged();
+            }
+        }
+
+        public string item1_letter_result = "0 €";
+        public string Item1_Letter_Result
+        {
+            get { return item1_letter_result; }
+            set
+            {
+                if (Item1_Letter_Result == value)
+                {
+                    return;
+                }
+
+                item1_letter_result = value; RaisePropertyChanged();
+            }
+        }
+
+        public string item2_letter_result = "0 €";
+        public string Item2_Letter_Result
+        {
+            get { return item2_letter_result; }
+            set
+            {
+                if (Item2_Letter_Result == value)
+                {
+                    return;
+                }
+
+                item2_letter_result = value; RaisePropertyChanged();
+            }
+        }
+
+        public string diff_letter_result = "0 €";
+        public string Diff_Letter_Result
+        {
+            get { return diff_letter_result; }
+            set
+            {
+                if (Diff_Letter_Result == value)
+                {
+                    return;
+                }
+
+                diff_letter_result = value; RaisePropertyChanged();
+            }
+        }
+
+        public Color diff_outcome_letter_color = Color.Gray;
+        public Color Diff_Outcome_Letter_Color
+        {
+            get { return diff_outcome_letter_color; }
+            set
+            {
+                if (Diff_Outcome_Letter_Color == value)
+                {
+                    return;
+                }
+
+                diff_outcome_letter_color = value; RaisePropertyChanged();
+            }
+        }
+
+        public Color diff_intcome_letter_color = Color.Gray;
+        public Color Diff_Income_Letter_Color
+        {
+            get { return diff_intcome_letter_color; }
+            set
+            {
+                if (Diff_Income_Letter_Color == value)
+                {
+                    return;
+                }
+
+                diff_intcome_letter_color = value; RaisePropertyChanged();
+            }
+        }
+
+        public Color diff_letter_result_color = Color.Gray;
+        public Color Diff_Letter_Result_Color
+        {
+            get { return diff_letter_result_color; }
+            set
+            {
+                if (Diff_Letter_Result_Color == value)
+                {
+                    return;
+                }
+
+                diff_letter_result_color = value; RaisePropertyChanged();
             }
         }
     }
 
-    public class Stackholderhelper
+    public class HelperComparer
     {
-        public string Reason { get; set; }
+        public double Value { get; set; }
 
-        public string Option { get; set; }
+        public List<string> ButonValueList { get; set; }
 
-        public string substring;
-        public string Substring 
-        {
-            get 
-            {
-                return substring = "" + Reason + " als " + Option + "";
-            }
-
-            set
-            {
-                 substring = value;
-            }
-        }
-
+        public List<string> ButonReasonList { get; set; }
     }
 }

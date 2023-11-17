@@ -126,9 +126,11 @@ namespace EasyLife.Services
         /// </summary>
         /// <param name="backup_date">Das Datum an dem das Backup erstellt wurde.</param>
         /// <returns>Wenn true, wurde erfolgreich ein Backup erstellt, falls false dann nicht. </returns>
-        public static bool Create_Backup(string backup_date)
+        public static async Task<bool> Create_Backup(string backup_date)
         {
             //Falls eine Datenbankverbindung noch geöffnet ist wird sie hier geschlossen.
+
+            await Create_AppPreferences();
 
             try
             {
@@ -279,7 +281,7 @@ namespace EasyLife.Services
 
                 Backup_name.Reverse();
 
-                var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Vorhandene Backups",380, Backup_name));
+                var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Vorhandene Backups", 380, Backup_name));
 
                 if (result == null)
                 {
@@ -322,6 +324,8 @@ namespace EasyLife.Services
 
                 db_create = null;
 
+                await Restore_AppPreferences();
+
                 await Reset_Notification();
 
                 await Reset_Notification();
@@ -344,6 +348,8 @@ namespace EasyLife.Services
             indicator = 1;
 
             db_create = null;
+
+            await Restore_AppPreferences();
 
             await Reset_Notification();
 
@@ -432,7 +438,352 @@ namespace EasyLife.Services
         }
 
         /// <summary>
-        /// Erstellt, aus den wiederhergestellt Daten, alle Benachrichtigungen wieder her. 
+        /// Erstellt, aus den wiederhergestellt Daten, alle App-Preferences wieder her. 
+        /// </summary>
+        /// <returns></returns>
+        public static async Task Restore_AppPreferences()
+        {
+            Init_Source();
+
+            await db_create.CreateTableAsync<AppPreferences>();
+
+            List<AppPreferences> AppPreferences_list = new List<AppPreferences>(await db_create.Table<AppPreferences>().ToListAsync());
+
+            List<string> Preferences_List_Bool = new List<string>()
+            {
+                "Is_Saldo_Date_Changed",
+                "Search_For_Transaktion_ID",
+                "Search_For_Auftrags_ID",
+                "Search_For_Datum",
+                "Search_For_Zweck",
+                "Search_For_Notiz",
+                "Search_For_Betrag",
+                "Quersuche",
+                "Filter_Activity",
+            };
+
+            List<string> Preferences_List_Other = new List<string>()
+            {
+                "Saldo_Date",
+                "Blanceprofile",
+                "Stylingprofil",
+                "Transaktion_per_load"
+            };
+
+            Dictionary<string, string> Colordic = new Dictionary<string, string>()
+            {
+                //Popup
+                { "Vordergrund_Cancel_Popup", "#710117" },
+                { "Hintergrund_Cancel_Popup", Color.Black.ToHex()},
+                { "Text_Titel_Popup", "#cbcdcb"},
+                { "Hintergrund_Content_Popup", "#0b1c48"},
+                { "Rand_Content_Popup", "#2b6ad0"},
+                { "Text_Content_Popup", "#ecd5bb"},
+                { "Subtext_Content_Popup", "#ecd5bb"},
+                { "Hintertgrund_Button_Popup", "#0b1c48"},
+                { "Rand_Button_Popup", "#2b6ad0"},
+                { "Text_Button_Popup", "#138b83"},
+                { "Aktiv_Schalter_Popup", Color.ForestGreen.ToHex()},
+                { "Deaktiv_Schalter_Popup", Color.DarkRed.ToHex()},
+
+                //Home
+                { "Hintergrund_Home", Color.DarkSlateGray.ToHex()},
+                { "Hintergrund_Bearbeiten_Home", Color.Green.ToHex()},
+                { "Rand_Bearbeiten_Home", Color.DarkGreen.ToHex()},
+                { "Text_Bearbeiten_Home", Color.White.ToHex()},
+                { "Hintergrund_Löschen_Home", Color.Red.ToHex()},
+                { "Rand_Löschen_Home", Color.DarkRed.ToHex()},
+                { "Text_Löschen_Home", Color.White.ToHex()},
+                { "Hintergrund_Transaktion_Home", Color.Gray.ToHex()},
+                { "Rand_Transaktion_Home", Color.DarkGray.ToHex()},
+                { "Text_Transaktion_Home", Color.Black.ToHex()},
+                { "Hintergrund_Detail_Transaktion_Home", Color.LightGray.ToHex()},
+                { "Text_Detail_Transaktion_Home", Color.Black.ToHex()},
+                { "Hintergrund_Positiver_Betrag_Transaktion_Home", Color.MediumSeaGreen.ToHex()},
+                { "Rand_Positiver_Betrag_Transaktion_Home", Color.ForestGreen.ToHex()},
+                { "Text_Positiver_Betrag_Transaktion_Home", Color.Black.ToHex()},
+                { "Hintergrund_Negativer_Betrag_Transaktion_Home", Color.Salmon.ToHex()},
+                { "Rand_Negativer_Betrag_Transaktion_Home", Color.Red.ToHex()},
+                { "Text_Negativer_Betrag_Transaktion_Home", Color.Black.ToHex()},
+                { "Text_MehrLaden_Home", Color.Black.ToHex()},
+                { "Vordergrund_Budget_Home", Color.SaddleBrown.ToHex()},
+                { "Hintergrund_Saldo_Home", Color.Black.ToHex()},
+                { "Text_Saldo_Home", Color.White.ToHex()},
+                { "Vordergrund_Hinzufügen_Home", Color.Orange.ToHex()},
+
+                //Hinzufügen/Bearbeiten
+                { "Hintergrund_Hinzufügen", Color.DarkSlateGray.ToHex()},
+                { "Hintergrund_Eingabefeld_Hinzufügen", Color.Orange.ToHex()},
+                { "Rand_Eingabefeld_Hinzufügen", Color.Coral.ToHex()},
+                { "Title_Eingabefeld_Hinzufügen", Color.White.ToHex()},
+                { "Text_Eingabefeld_Hinzufügen", Color.Black.ToHex()},
+                { "Platzhater_Eingabefeld_Hinzufügen", "#525252"},
+                { "Aktiv_Schalter_Eingabefeld_Hinzufügen", Color.ForestGreen.ToHex()},
+                { "Deaktiv_Schalter_Eingabefeld_Hinzufügen", Color.DarkRed.ToHex()},
+                { "Hintergrund_Wahlfeld_Hinzufügen", Color.Orange.ToHex()},
+                { "Haubttext_Wahlfeld_Hinzufügen", Color.Black.ToHex()},
+                { "Nebentext_Wahlfeld_Hinzufügen", Color.Black.ToHex()},
+                { "Hintergrund_Option_Wahlfeld_Hinzufügen", Color.SkyBlue.ToHex()},
+                { "Rand_Option_Wahlfeld_Hinzufügen", Color.Blue.ToHex()},
+                { "Text_Option_Wahlfeld_Hinzufügen", Color.OrangeRed.ToHex()},
+                { "Hintergrund_Schalter_Hinzufügen", Color.SkyBlue.ToHex()},
+                { "Rand_Schalter_Hinzufügen", Color.Blue.ToHex()},
+                { "Text_Schalter_Hinzufügen", Color.OrangeRed.ToHex()},
+
+                //Bilanz
+                { "Hintergrund_Bilanz", Color.DarkSlateGray.ToHex()},
+                { "Hintergrund_Kopfzeile_Bilanz", Color.DarkGray.ToHex()},
+                { "Text_Kopfzeile_Bilanz", Color.Black.ToHex()},
+                { "Hintergrund_Fußzeile_Bilanz", Color.DarkGray.ToHex()},
+                { "Text_Fußzeile_Bilanz", Color.Black.ToHex()},
+                { "Text_Zusammenfassung_Bilanz", Color.Black.ToHex()},
+                { "Text_Zweck_Stack_Bilanz", Color.White.ToHex()},
+                { "Text_Anzahl_Stack_Bilanz", Color.White.ToHex()}
+            };
+
+            if (AppPreferences_list.Count() != 0)
+            {
+                Dictionary<string, string> preferences = AppPreferences_Konverter.Deserilize(AppPreferences_list.First());
+
+                foreach (string ap in preferences.Keys)
+                {
+                    if (Preferences.ContainsKey(ap) == true)
+                    {
+                        if (Preferences_List_Other.Contains(ap) == true)
+                        {
+                            if (ap == "Saldo_Date")
+                            {
+                                Preferences.Set(ap, preferences[ap]);
+                            }
+                            if (ap == "Blanceprofile" || ap == "Stylingprofil")
+                            {
+                                Preferences.Set(ap, int.Parse(preferences[ap]));
+                            }
+                            if (ap == "Transaktion_per_load")
+                            {
+                                Preferences.Set(ap, double.Parse(preferences[ap]));
+                            }
+                        }
+                        if (Preferences_List_Bool.Contains(ap) == true)
+                        {
+                            Preferences.Set(ap, bool.Parse(preferences[ap]));
+                        }
+                        if (Colordic.ContainsKey(ap) == true)
+                        {
+                            App.Current.Resources[ap] = preferences[ap];
+
+                            Preferences.Set(ap, preferences[ap]);
+                        }
+                    }
+                }
+            }
+
+            await db_create.CloseAsync();
+        }
+
+        /// <summary>
+        /// Erstellt ein App-Preferences für das Backup. 
+        /// </summary>
+        /// <returns></returns>
+        public static async Task Create_AppPreferences()
+        {
+            Dictionary<string, string> Current_Preferences = new Dictionary<string, string>();
+
+            try
+            {
+                Current_Preferences.Add("Is_Saldo_Date_Changed", Preferences.Get("Is_Saldo_Date_Changed", false).ToString());
+            }
+            catch
+            { }
+
+            try
+            {
+                Current_Preferences.Add("Search_For_Transaktion_ID", Preferences.Get("Search_For_Transaktion_ID", false).ToString());
+            }
+            catch
+            { }
+
+            try
+            {
+                Current_Preferences.Add("Search_For_Auftrags_ID", Preferences.Get("Search_For_Auftrags_ID", false).ToString());
+            }
+            catch
+            { }
+
+            try
+            {
+                Current_Preferences.Add("Search_For_Datum", Preferences.Get("Search_For_Datum", false).ToString());
+            }
+            catch
+            { }
+
+            try
+            {
+                Current_Preferences.Add("Search_For_Zweck", Preferences.Get("Search_For_Zweck", false).ToString());
+            }
+            catch
+            { }
+
+            try
+            {
+                Current_Preferences.Add("Search_For_Notiz", Preferences.Get("Search_For_Notiz", false).ToString());
+            }
+            catch
+            { }
+
+            try
+            {
+                Current_Preferences.Add("Search_For_Betrag", Preferences.Get("Search_For_Betrag", false).ToString());
+            }
+            catch
+            { }
+
+            try
+            {
+                Current_Preferences.Add("Quersuche", Preferences.Get("Quersuche", false).ToString());
+            }
+            catch
+            { }
+
+            try
+            {
+                Current_Preferences.Add("Filter_Activity", Preferences.Get("Filter_Activity", false).ToString());
+            }
+            catch
+            { }
+
+            try
+            {
+                Current_Preferences.Add("Saldo_Date", Preferences.Get("Saldo_Date", DateTime.Now.ToString("dddd, d.M.yyyy", new CultureInfo("de-DE"))));
+            }
+            catch
+            { }
+
+            try
+            {
+                Current_Preferences.Add("Blanceprofile", Preferences.Get("Blanceprofile", 0).ToString());
+            }
+            catch
+            { }
+
+            try
+            {
+                Current_Preferences.Add("Stylingprofil", Preferences.Get("Stylingprofil", -1).ToString());
+            }
+            catch
+            { }
+
+            try
+            {
+                Current_Preferences.Add("Transaktion_per_load", Preferences.Get("Transaktion_per_load", 20.0).ToString());
+            }
+            catch
+            { }
+
+            Dictionary<string, string> Colordic = new Dictionary<string, string>()
+            {
+                //Popup
+                { "Vordergrund_Cancel_Popup", "#710117" },
+                { "Hintergrund_Cancel_Popup", Color.Black.ToHex()},
+                { "Text_Titel_Popup", "#cbcdcb"},
+                { "Hintergrund_Content_Popup", "#0b1c48"},
+                { "Rand_Content_Popup", "#2b6ad0"},
+                { "Text_Content_Popup", "#ecd5bb"},
+                { "Subtext_Content_Popup", "#ecd5bb"},
+                { "Hintertgrund_Button_Popup", "#0b1c48"},
+                { "Rand_Button_Popup", "#2b6ad0"},
+                { "Text_Button_Popup", "#138b83"},
+                { "Aktiv_Schalter_Popup", Color.ForestGreen.ToHex()},
+                { "Deaktiv_Schalter_Popup", Color.DarkRed.ToHex()},
+
+                //Home
+                { "Hintergrund_Home", Color.DarkSlateGray.ToHex()},
+                { "Hintergrund_Bearbeiten_Home", Color.Green.ToHex()},
+                { "Rand_Bearbeiten_Home", Color.DarkGreen.ToHex()},
+                { "Text_Bearbeiten_Home", Color.White.ToHex()},
+                { "Hintergrund_Löschen_Home", Color.Red.ToHex()},
+                { "Rand_Löschen_Home", Color.DarkRed.ToHex()},
+                { "Text_Löschen_Home", Color.White.ToHex()},
+                { "Hintergrund_Transaktion_Home", Color.Gray.ToHex()},
+                { "Rand_Transaktion_Home", Color.DarkGray.ToHex()},
+                { "Text_Transaktion_Home", Color.Black.ToHex()},
+                { "Hintergrund_Detail_Transaktion_Home", Color.LightGray.ToHex()},
+                { "Text_Detail_Transaktion_Home", Color.Black.ToHex()},
+                { "Hintergrund_Positiver_Betrag_Transaktion_Home", Color.MediumSeaGreen.ToHex()},
+                { "Rand_Positiver_Betrag_Transaktion_Home", Color.ForestGreen.ToHex()},
+                { "Text_Positiver_Betrag_Transaktion_Home", Color.Black.ToHex()},
+                { "Hintergrund_Negativer_Betrag_Transaktion_Home", Color.Salmon.ToHex()},
+                { "Rand_Negativer_Betrag_Transaktion_Home", Color.Red.ToHex()},
+                { "Text_Negativer_Betrag_Transaktion_Home", Color.Black.ToHex()},
+                { "Text_MehrLaden_Home", Color.Black.ToHex()},
+                { "Vordergrund_Budget_Home", Color.SaddleBrown.ToHex()},
+                { "Hintergrund_Saldo_Home", Color.Black.ToHex()},
+                { "Text_Saldo_Home", Color.White.ToHex()},
+                { "Vordergrund_Hinzufügen_Home", Color.Orange.ToHex()},
+
+                //Hinzufügen/Bearbeiten
+                { "Hintergrund_Hinzufügen", Color.DarkSlateGray.ToHex()},
+                { "Hintergrund_Eingabefeld_Hinzufügen", Color.Orange.ToHex()},
+                { "Rand_Eingabefeld_Hinzufügen", Color.Coral.ToHex()},
+                { "Title_Eingabefeld_Hinzufügen", Color.White.ToHex()},
+                { "Text_Eingabefeld_Hinzufügen", Color.Black.ToHex()},
+                { "Platzhater_Eingabefeld_Hinzufügen", "#525252"},
+                { "Aktiv_Schalter_Eingabefeld_Hinzufügen", Color.ForestGreen.ToHex()},
+                { "Deaktiv_Schalter_Eingabefeld_Hinzufügen", Color.DarkRed.ToHex()},
+                { "Hintergrund_Wahlfeld_Hinzufügen", Color.Orange.ToHex()},
+                { "Haubttext_Wahlfeld_Hinzufügen", Color.Black.ToHex()},
+                { "Nebentext_Wahlfeld_Hinzufügen", Color.Black.ToHex()},
+                { "Hintergrund_Option_Wahlfeld_Hinzufügen", Color.SkyBlue.ToHex()},
+                { "Rand_Option_Wahlfeld_Hinzufügen", Color.Blue.ToHex()},
+                { "Text_Option_Wahlfeld_Hinzufügen", Color.OrangeRed.ToHex()},
+                { "Hintergrund_Schalter_Hinzufügen", Color.SkyBlue.ToHex()},
+                { "Rand_Schalter_Hinzufügen", Color.Blue.ToHex()},
+                { "Text_Schalter_Hinzufügen", Color.OrangeRed.ToHex()},
+
+                //Bilanz
+                { "Hintergrund_Bilanz", Color.DarkSlateGray.ToHex()},
+                { "Hintergrund_Kopfzeile_Bilanz", Color.DarkGray.ToHex()},
+                { "Text_Kopfzeile_Bilanz", Color.Black.ToHex()},
+                { "Hintergrund_Fußzeile_Bilanz", Color.DarkGray.ToHex()},
+                { "Text_Fußzeile_Bilanz", Color.Black.ToHex()},
+                { "Text_Zusammenfassung_Bilanz", Color.Black.ToHex()},
+                { "Text_Zweck_Stack_Bilanz", Color.White.ToHex()},
+                { "Text_Anzahl_Stack_Bilanz", Color.White.ToHex()}
+            };
+
+            try
+            {
+                foreach (string colorname in Colordic.Keys)
+                {
+                    Current_Preferences.Add(colorname, Preferences.Get(colorname, Colordic[colorname]));
+                }
+            }
+            catch
+            { }
+
+            if (Current_Preferences.Count() == 0)
+            {
+                return;
+            }
+
+            AppPreferences New_AppPreferences = new AppPreferences() { Preferences = AppPreferences_Konverter.Serilize(Current_Preferences) };
+
+            List<AppPreferences> AppPreferences_list = await AppPreferencesService.Get_all_AppPreferences();
+
+            if (AppPreferences_list.Count() != 0)
+            {
+                New_AppPreferences.Id = AppPreferences_list.First().Id;
+
+                await AppPreferencesService.Edit_AppPreferences(New_AppPreferences);
+            }
+            else
+            {
+                await AppPreferencesService.Add_AppPreferences(New_AppPreferences);
+            }
+        }
+
+        /// <summary>
+        /// Erstellt eine Vorschau zu einem Backup. 
         /// </summary>
         /// <returns></returns>
         public static async Task<List<List<object>>> Show_Content_of_Backup(string path, DateTime saldo_date)
@@ -489,30 +840,20 @@ namespace EasyLife.Services
                     0,
                     0,
                     0,
-                    transaktion_list,
-                    0
+                    transaktion_list
                 });
             }
             else
             {
                 double saldo = 0;
 
-                double letter = 0;
-
                 foreach (var trans in transaktion_list)
                 {
-                    if (DateTime.Compare(trans.Datum, saldo_date.AddDays(1).AddSeconds(-1)) <= 0)
+                    if (trans.Content_Visibility == true)
                     {
-                        if(trans.Content_Visibility == true)
+                        if (DateTime.Compare(trans.Datum, saldo_date.AddDays(1).AddSeconds(-1)) <= 0)
                         {
-                            if(trans.Saldo_Visibility == true)
-                            {
-                                saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
-                            }
-                            else
-                            {
-                                letter += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
-                            }
+                            saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
                         }
                     }
                 }
@@ -523,8 +864,7 @@ namespace EasyLife.Services
                     transaktion_list.Last().Id,
                     transaktion_list.Last().Id - transaktion_list.Count(),
                     Math.Round(saldo,2),
-                    transaktion_list,
-                    letter
+                    transaktion_list
                 });
             }
 
@@ -610,7 +950,7 @@ namespace EasyLife.Services
             {
                 foreach (HelperBalanceprofile helperBalanceprofile in helperbalanceprofile_list)
                 {
-                    balanceprofiles_list.Add(Konverter.Deserilize(helperBalanceprofile));
+                    balanceprofiles_list.Add(Balanceprofile_Konverter.Deserilize(helperBalanceprofile));
                 }
 
                 Content.Add(new List<object>()

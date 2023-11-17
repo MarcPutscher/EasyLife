@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -130,7 +131,7 @@ namespace EasyLife.Pages
 
         private async void SwipeItemLeft_Invoked(object sender, EventArgs e)
         {
-            var input = sender as SwipeItem;
+            var input = sender as SwipeItemView;
 
             Budget_Progessbar budget = input.CommandParameter as Budget_Progessbar;
 
@@ -159,7 +160,7 @@ namespace EasyLife.Pages
 
         private async void SwipeItemRight_Invoked(object sender, EventArgs e)
         {
-            var input = sender as SwipeItem;
+            var input = sender as SwipeItemView;
 
             Budget_Progessbar budget = input.CommandParameter as Budget_Progessbar;
 
@@ -169,15 +170,15 @@ namespace EasyLife.Pages
 
                 while (indicator == false)
                 {
-                    var result = await Shell.Current.DisplayPromptAsync("Budget ändern", "Das aktuelle Budget liegt bei " + budget.Budget.Goal.ToString().Replace(".", ",") + " €.", "Verändern", "Abbrechen", "Hier das neue Budget eingeben.", 20, null, null);
+                    var result = await Shell.Current.ShowPopupAsync(new CustomePromt_Popup("Budget ändern", 350, 320, "Verändern", "Abbrechen", "Das Budget liegt bei " + budget.Budget.Goal.ToString().Replace(".", ",") + " €."));
 
                     if (result != null)
                     {
-                        if (double.TryParse(result, NumberStyles.Any, new CultureInfo("de-DE"), out double result1) == true)
+                        if (double.TryParse((string)result, NumberStyles.Any, new CultureInfo("de-DE"), out double result1) == true)
                         {
-                            result = result1.ToString("F2");
+                            string resultstring = result1.ToString("F2");
 
-                            double result0 = double.Parse(result.Replace(".", ","), NumberStyles.Any, new CultureInfo("de-DE"));
+                            double result0 = double.Parse(resultstring.Replace(".", ","), NumberStyles.Any, new CultureInfo("de-DE"));
 
                             if (result0 <= 0)
                             {
@@ -293,6 +294,206 @@ namespace EasyLife.Pages
                     }
                 }
 
+                if (budget.Budget.Name == "Monat")
+                {
+                    Budget monat_budget = budget.Budget;
+
+                    if (monat_budget != null)
+                    {
+                        if (monat_budget.Name_Of_Enabled_Reasons == null || monat_budget.Name_Of_Enabled_Reasons == "leer")
+                        {
+                            var result0 = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Monat eingrenzen", 350, 250, "Ja", "Nein", "Wollen Sie bestimmte Zwecke aus dem Monats-Budget entfernen?"));
+
+                            List<string> diabled_reaons = new List<string>();
+
+                            if (result0 != null)
+                            {
+                                if ((bool)result0 == true)
+                                {
+                                    var enablereason = await ReasonService.Get_Enable_ReasonDictionary();
+
+                                    List<string> enablereasonlist = new List<string>();
+
+                                    if (enablereason.Count() != 0)
+                                    {
+                                        foreach (var value in enablereason)
+                                        {
+                                            if (value.Value == "Ausgaben")
+                                            {
+                                                enablereasonlist.Add(value.Key);
+                                            }
+                                        }
+                                    }
+
+                                    bool indkator = false;
+
+                                    while (indkator == false)
+                                    {
+                                        var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Zweck der ausgeschlossen werden sollen", 400, enablereasonlist));
+
+                                        if (result == null)
+                                        {
+                                            indkator = true; break;
+                                        }
+                                        else
+                                        {
+                                            if (diabled_reaons.Contains((string)result) == true)
+                                            {
+                                                var result1 = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup((string)result, 350, 300, "Ja", "Nein", "Wollen Sie den Zweck " + (string)result + " wieder in das Monats-Budget einführen?"));
+
+                                                if (result1 != null)
+                                                {
+                                                    if ((bool)result1 == true)
+                                                    {
+                                                        diabled_reaons.Remove((string)result);
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                diabled_reaons.Add((string)result);
+                                            }
+                                        }
+                                    }
+
+                                    if (diabled_reaons.Count() != 0)
+                                    {
+                                        monat_budget.Name_Of_Enabled_Reasons = Budget_Konverter.Serilize(diabled_reaons);
+                                    }
+                                    else
+                                    {
+                                        diabled_reaons.Add("leer");
+
+                                        monat_budget.Name_Of_Enabled_Reasons = Budget_Konverter.Serilize(diabled_reaons);
+                                    }
+                                }
+                                else
+                                {
+                                    monat_budget.Name_Of_Enabled_Reasons = Budget_Konverter.Serilize(new List<string>() { "leer" });
+                                }
+                            }
+                            else
+                            {
+                                monat_budget.Name_Of_Enabled_Reasons = Budget_Konverter.Serilize(new List<string>() { "leer" });
+                            }
+
+                            if (diabled_reaons.Count() != 0)
+                            {
+                                monat_budget.Current = 0.0;
+
+                                foreach (Transaktion trans in transaktionslist)
+                                {
+                                    if (double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE")) < 0)
+                                    {
+                                        if (diabled_reaons.Contains(trans.Zweck) == false)
+                                        {
+                                            monat_budget.Current += Math.Abs(double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE")));
+                                        }
+                                    }
+                                }
+                            }
+
+                            await BudgetService.Edit_Budget(monat_budget);
+                        }
+                        else
+                        {
+                            var result0 = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Monat eingrenzen", 350, 300, "Ja", "Nein", "Wollen Sie bestimmte Zwecke aus dem Monats-Budget entfernen oder wieder einführen?"));
+
+                            List<string> diabled_reaons = Budget_Konverter.Deserilize(monat_budget);
+
+                            if (result0 != null)
+                            {
+                                if ((bool)result0 == true)
+                                {
+                                    var enablereason = await ReasonService.Get_Enable_ReasonDictionary();
+
+                                    List<string> enablereasonlist = new List<string>();
+
+                                    if (enablereason.Count() != 0)
+                                    {
+                                        foreach (var value in enablereason)
+                                        {
+                                            if (value.Value == "Ausgaben")
+                                            {
+                                                enablereasonlist.Add(value.Key);
+                                            }
+                                        }
+                                    }
+
+                                    bool indkator = false;
+
+                                    while (indkator == false)
+                                    {
+                                        var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Zweck der ausgeschlossen oder eingeführt werden sollen", 400, enablereasonlist));
+
+                                        if (result == null)
+                                        {
+                                            indkator = true; break;
+                                        }
+                                        else
+                                        {
+                                            if (diabled_reaons.Contains((string)result) == true)
+                                            {
+                                                var result1 = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup((string)result, 300, 350, "Ja", "Nein", "Wollen Sie den Zweck " + (string)result + " wieder in das Monats-Budget einführen?"));
+
+                                                if (result1 != null)
+                                                {
+                                                    if ((bool)result1 == true)
+                                                    {
+                                                        diabled_reaons.Remove((string)result);
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                diabled_reaons.Add((string)result);
+                                            }
+                                        }
+                                    }
+
+                                    if (diabled_reaons.Count() != 0)
+                                    {
+                                        monat_budget.Name_Of_Enabled_Reasons = Budget_Konverter.Serilize(diabled_reaons);
+                                    }
+                                    else
+                                    {
+                                        diabled_reaons.Add("leer");
+
+                                        monat_budget.Name_Of_Enabled_Reasons = Budget_Konverter.Serilize(diabled_reaons);
+                                    }
+                                }
+                                else
+                                {
+                                    monat_budget.Name_Of_Enabled_Reasons = Budget_Konverter.Serilize(new List<string>() { "leer" });
+                                }
+                            }
+                            else
+                            {
+                                monat_budget.Name_Of_Enabled_Reasons = Budget_Konverter.Serilize(new List<string>() { "leer" });
+                            }
+
+                            if (diabled_reaons.Count() != 0)
+                            {
+                                monat_budget.Current = 0.0;
+
+                                foreach (Transaktion trans in transaktionslist)
+                                {
+                                    if (double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE")) < 0)
+                                    {
+                                        if (diabled_reaons.Contains(trans.Zweck) == false)
+                                        {
+                                            monat_budget.Current += Math.Abs(double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE")));
+                                        }
+                                    }
+                                }
+                            }
+
+                            await BudgetService.Edit_Budget(monat_budget);
+                        }
+                    }
+
+                    budget.Budget = monat_budget;
+                }
             }
         }
 
@@ -317,36 +518,31 @@ namespace EasyLife.Pages
                 }
             }
 
-            budget_name_list = budget_names.ToArray();
-
-            var result0 = await Shell.Current.DisplayActionSheet("Budget benennen", "Verwerfen", null, budget_name_list);
+            var result0 = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Budget benennen", 400, budget_names));
 
             if (result0 == null)
             {
                 return;
             }
-
-            if (result0 == "Verwerfen")
-            {
-                return;
-            }
             else
             {
-                new_budget.Name = result0;
+                new_budget.Name = (string)result0;
 
                 bool indicator = false;
 
                 while (indicator == false)
                 {
-                    var result = await Shell.Current.DisplayPromptAsync("Budget festlegen", "Das Budget sollte größer 0 € sein.", "Hinzufügen", "Verwerfen", "Hier das Budget eingeben.", 20, null, null);
+                    var result = await Shell.Current.ShowPopupAsync(new CustomePromt_Popup("Budget festlegen", 350, 320, "Hinzufügen", "Verwerfen", "Hier das Budget eingeben."));
 
                     if (result != null)
                     {
-                        if (double.TryParse(result, NumberStyles.Any, new CultureInfo("de-DE"), out double result1) == true)
+                        string resultstring = (string)result;
+
+                        if (double.TryParse(resultstring, NumberStyles.Any, new CultureInfo("de-DE"), out double result1) == true)
                         {
                             result = result1.ToString("F2");
 
-                            double result2 = double.Parse(result.Replace(".", ","), NumberStyles.Any, new CultureInfo("de-DE"));
+                            double result2 = double.Parse(resultstring.Replace(".", ","), NumberStyles.Any, new CultureInfo("de-DE"));
 
                             if (result2 <= 0)
                             {
@@ -355,6 +551,88 @@ namespace EasyLife.Pages
                             else
                             {
                                 new_budget.Goal = result2;
+
+                                if (new_budget.Name == "Monat")
+                                {
+                                    if (new_budget.Name_Of_Enabled_Reasons == null)
+                                    {
+                                        var result4 = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Monat eingrenzen", 350, 250, "Ja", "Nein", "Wollen Sie bestimmte Zwecke aus dem Monats-Budget entfernen?"));
+
+                                        List<string> diabled_reaons = new List<string>();
+
+                                        if (result4 != null)
+                                        {
+                                            if ((bool)result4 == true)
+                                            {
+                                                bool indkator = false;
+
+                                                while (indkator == false)
+                                                {
+                                                    var result5 = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Zweck der ausgeschlossen werden sollen", 400, budget_names));
+
+                                                    if (result5 == null)
+                                                    {
+                                                        indkator = true; break;
+                                                    }
+                                                    else
+                                                    {
+                                                        if (diabled_reaons.Contains((string)result5) == true)
+                                                        {
+                                                            var result6 = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup((string)result5, 350, 300, "Ja", "Nein", "Wollen Sie den Zweck " + (string)result5 + " wieder in das Monats-Budget einführen?"));
+
+                                                            if (result6 != null)
+                                                            {
+                                                                if ((bool)result6 == true)
+                                                                {
+                                                                    diabled_reaons.Remove((string)result5);
+                                                                }
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            diabled_reaons.Add((string)result5);
+                                                        }
+                                                    }
+                                                }
+
+                                                if (diabled_reaons.Count() != 0)
+                                                {
+                                                    new_budget.Name_Of_Enabled_Reasons = Budget_Konverter.Serilize(diabled_reaons);
+                                                }
+                                                else
+                                                {
+                                                    diabled_reaons.Add("leer");
+
+                                                    new_budget.Name_Of_Enabled_Reasons = Budget_Konverter.Serilize(diabled_reaons);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                new_budget.Name_Of_Enabled_Reasons = Budget_Konverter.Serilize(new List<string>() { "leer" });
+                                            }
+                                        }
+                                        else
+                                        {
+                                            new_budget.Name_Of_Enabled_Reasons = Budget_Konverter.Serilize(new List<string>() { "leer" });
+                                        }
+
+                                        if (diabled_reaons.Count() != 0)
+                                        {
+                                            new_budget.Current = 0.0;
+
+                                            foreach (Transaktion trans in transaktionslist)
+                                            {
+                                                if (double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE")) < 0)
+                                                {
+                                                    if (diabled_reaons.Contains(trans.Zweck) == false)
+                                                    {
+                                                        new_budget.Current += Math.Abs(double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE")));
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
 
                                 var result3 = await BudgetService.Add_Budget(new_budget);
 

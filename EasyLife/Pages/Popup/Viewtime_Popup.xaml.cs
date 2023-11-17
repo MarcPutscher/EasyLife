@@ -1,9 +1,12 @@
 ﻿using EasyLife.Models;
 using EasyLife.Services;
+using Org.BouncyCastle.Asn1.Cms;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
+using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;
@@ -14,9 +17,11 @@ namespace EasyLife.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Viewtime_Popup : Popup
     {
-        public Viewtime_Popup(Viewtime viewtime)
+        public Viewtime_Popup(Viewtime viewtime, Haushaltsbücher haushaltsbucher)
         {
             Current_Viewtime = viewtime;
+
+            Haushaltsbucher = haushaltsbucher;
 
             InitializeComponent();
 
@@ -27,12 +32,10 @@ namespace EasyLife.Pages
 
         public Viewtime Current_Viewtime { get; set; }
 
-        List<string> existing_years = new List<string>();
+        public Haushaltsbücher Haushaltsbucher { get; set; }
 
-        List<string> years_list = new List<string>();
-
-        int year;
-        public int Year
+        string year;
+        public string Year
         {
             get { return year; }
             set
@@ -40,7 +43,16 @@ namespace EasyLife.Pages
                 if (year == value)
                     return;
                 year = value;
-                YearPicker.ItemText = year.ToString();
+
+                if (year == "0")
+                {
+                    YearPicker.ItemText = null;
+                }
+                else
+                {
+                    YearPicker.ItemText = year;
+
+                }
             }
         }
 
@@ -66,7 +78,7 @@ namespace EasyLife.Pages
                 if (all_years == value)
                     return;
                 all_years = value;
-                YearPicker.ItemSource= all_years;
+                YearPicker.ItemSource = all_years;
             }
         }
 
@@ -97,19 +109,6 @@ namespace EasyLife.Pages
             }
         }
 
-        public bool month_control_status;
-        public bool Month_Control_Status
-        {
-            get { return month_control_status; }
-            set
-            {
-                if (month_control_status == value)
-                    return;
-                month_control_status = value;
-                MonthPicker.IsEnabled = month_control_status;
-            }
-        }
-
         public bool switch_istoggled;
         public bool Switch_IsToggled
         {
@@ -132,18 +131,28 @@ namespace EasyLife.Pages
         }
 
 
-        private async void Year_Changed_Methode(object sender, CustomeEventArgs.ItemChangedEventArgs e)
+        private void Year_Changed_Methode(object sender, CustomeEventArgs.ItemChangedEventArgs e)
         {
             if (Month_Control_Visibility == true)
             {
-                Year = int.Parse(YearPicker.ItemText);
-                Month_Control_Status = false;
-                await Show_Months_Methode(Year);
-                Month_Control_Status = true;
+                if (String.IsNullOrWhiteSpace(Year) == false)
+                {
+                    Year = YearPicker.ItemText;
+
+                    All_Months = Haushaltsbucher.Time[Year];
+
+                    Month = null;
+                }
+                else
+                {
+                    Year = Current_Viewtime.Year.ToString();
+
+                    Month = null;
+                }
             }
             else
             {
-                Year = int.Parse(YearPicker.ItemText);
+                Year = YearPicker.ItemText;
             }
         }
 
@@ -151,20 +160,33 @@ namespace EasyLife.Pages
         {
             try
             {
-                Month = MonthPicker.ItemText.ToString();
+                if (String.IsNullOrEmpty(MonthPicker.ItemText) == false)
+                {
+                    Month = MonthPicker.ItemText;
+                }
+                else
+                {
+                    if (Year == Current_Viewtime.Year.ToString())
+                    {
+                        Month = Current_Viewtime.Month;
+                    }
+                    else
+                    {
+                        Month = null;
+                    }
+                }
             }
             catch
             {
-                Month = null;
+                Month = Current_Viewtime.Month;
             }
         }
 
-        public async void Create_Picker_Year_Items()
+        public void Create_Picker_Year_Items()
         {
             if (String.IsNullOrEmpty(Current_Viewtime.Month) == true)
             {
                 Month_Control_Visibility = false;
-                Month_Control_Status = false;
                 Switch_IsToggled = true;
                 Month = null;
                 ViewTime_Popup.Size = new Size(300, 280);
@@ -172,38 +194,21 @@ namespace EasyLife.Pages
             else
             {
                 Month_Control_Visibility = true;
-                Month_Control_Status = true;
                 Switch_IsToggled = false;
                 Month = Current_Viewtime.Month;
                 ViewTime_Popup.Size = new Size(300, 320);
             }
 
-            years_list.Clear();
+            All_Years = Haushaltsbucher.Time.Keys.ToList();
 
-            List_of_all_transaktion.Clear();
-
-            var transaktionscontent = await ContentService.Get_all_enabeled_Transaktion();
-
-            List_of_all_transaktion.AddRange(transaktionscontent);
-
-            foreach (Transaktion tr in List_of_all_transaktion)
-            {
-                if (existing_years.Contains(tr.Datum.Year.ToString()) == false)
-                {
-                    years_list.Add(tr.Datum.Year.ToString());
-                    existing_years.Add(tr.Datum.Year.ToString());
-                }
-            }
-
-            years_list.Sort();
-
-            All_Years = years_list;
-
-            Year = Current_Viewtime.Year;
+            Year = Current_Viewtime.Year.ToString();
 
             if (Month_Control_Visibility == true)
             {
-                await Show_Months_Methode(Year);
+                if (String.IsNullOrWhiteSpace(Year) == false)
+                {
+                    All_Months = Haushaltsbucher.Time[Year];
+                }
             }
             else
             {
@@ -213,65 +218,20 @@ namespace EasyLife.Pages
             Month = Current_Viewtime.Month;
         }
 
-        public async Task<List<Transaktion>> Get_All_Transaktion_of_one_Year(int input)
-        {
-            List<Transaktion> all_transaktion_of_one_year = new List<Transaktion>();
-
-            all_transaktion_of_one_year.Clear();
-
-            await Get_All_Transaktion();
-
-            foreach (Transaktion tr in List_of_all_transaktion)
-            {
-                if (tr.Datum.Year == input)
-                {
-                    all_transaktion_of_one_year.Add(tr);
-                }
-            }
-
-            return all_transaktion_of_one_year;
-        }
-
-        public async Task Get_All_Transaktion()
-        {
-            List_of_all_transaktion.Clear();
-
-            var transaktionscontent = await ContentService.Get_all_enabeled_Transaktion();
-
-            List_of_all_transaktion.AddRange(transaktionscontent);
-        }
-
-        public async Task Show_Months_Methode(int input)
-        {
-
-            Haushaltsbücher haushaltsbuch = new Haushaltsbücher(await Get_All_Transaktion_of_one_Year(input));
-
-            All_Months = haushaltsbuch.Select_Month();
-        }
-
-        public void Set_Month_Control_to_true()
-        {
-            Month_Control_Visibility = true;
-        }
-
-        public void Set_Month_Control_to_false()
-        {
-            Month_Control_Visibility = false;
-        }
-
         public async void Return_Methode(object sender, EventArgs e)
         {
             if (Month_Control_Visibility == true)
             {
-                if (Year == 0 || Month == null)
+                if (String.IsNullOrWhiteSpace(Year) == true || Month == null)
                 {
-                    await Shell.Current.DisplayAlert("Fehler!", "Es wurde kein Monat ausgewählt.", "OK");
+                    await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler!", 300, 300, null, null, "Es wurde kein Monat ausgewählt."));
+
                     return;
                 }
 
                 Current_Viewtime.Month = Month;
 
-                Current_Viewtime.Year = Year;
+                Current_Viewtime.Year = int.Parse(Year);
 
                 Dismiss(Current_Viewtime);
 
@@ -279,13 +239,14 @@ namespace EasyLife.Pages
             }
             else
             {
-                if (Year == 0)
+                if (String.IsNullOrWhiteSpace(Year) == true)
                 {
-                    await Shell.Current.DisplayAlert("Fehler!", "Es wurde kein Jahr ausgewählt.", "OK");
+                    await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler!", 300, 300, null, null, "Es wurde kein Jahr ausgewählt."));
+
                     return;
                 }
 
-                Current_Viewtime.Year = Year;
+                Current_Viewtime.Year = int.Parse(Year);
 
                 Current_Viewtime.Month = "";
 
@@ -297,20 +258,25 @@ namespace EasyLife.Pages
             }
         }
 
-        private async void OptionSwitch_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void OptionSwitch_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             Switch_IsToggled = OptionSwitch.IsToggled;
+
             if (Switch_IsToggled == false)
             {
                 Month_Control_Visibility = true;
-                Month_Control_Status = true;
-                await Show_Months_Methode(Current_Viewtime.Year);
+
+                if (String.IsNullOrWhiteSpace(Year) == false)
+                {
+                    All_Months = Haushaltsbucher.Time[Year];
+                }
+
                 Month = null;
             }
             else
             {
                 Month_Control_Visibility = false;
-                Month_Control_Status = false;
+
                 Month = null;
             }
         }
@@ -323,60 +289,102 @@ namespace EasyLife.Pages
 
     public class Haushaltsbücher
     {
-        public List<Transaktion> Transaktion_of_one_year = new List<Transaktion>();
+        public readonly List<string> existing_months = new List<string>() { "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" };
 
-        List<string> existing_months = new List<string>() { "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" };
+        public Dictionary<string, List<string>> Time = new Dictionary<string, List<string>>();
 
         public Haushaltsbücher(List<Transaktion> transaktion)
         {
-            Transaktion_of_one_year = transaktion;
+            Create_Time_Dictionary(transaktion);
         }
 
-        public List<string> Select_Month()
+        public void Create_Time_Dictionary(List<Transaktion> transaktion)
+        {
+            Get_Years(transaktion);
+        }
+
+        public void Get_Years(List<Transaktion> transaktions)
+        {
+            List<string> years_list = new List<string>();
+
+            foreach (Transaktion tr in transaktions)
+            {
+                if (years_list.Contains(tr.Datum.Year.ToString()) == false)
+                {
+                    years_list.Add(tr.Datum.Year.ToString());
+                }
+            }
+
+            years_list.Sort();
+
+            foreach (string year in years_list)
+            {
+                Time.Add(year, new List<string>());
+            }
+
+            Add_Month(transaktions);
+        }
+
+        public void Add_Month(List<Transaktion> transaktions)
         {
             List<string> months = new List<string>();
 
-            foreach (Transaktion transaktion in Transaktion_of_one_year)
+            foreach (Transaktion transaktion in transaktions)
             {
-                if (!months.Contains(transaktion.Datum.ToString("MMMM", new CultureInfo("de-DE"))))
+                if (Time.Keys.ToList().Contains(transaktion.Datum.Year.ToString()) == true)
                 {
-                    months.Add(transaktion.Datum.ToString("MMMM", new CultureInfo("de-DE")));
+                    if (Time[transaktion.Datum.Year.ToString()].Contains(transaktion.Datum.ToString("MMMM", new CultureInfo("de-DE"))) == false)
+                    {
+                        Time[transaktion.Datum.Year.ToString()].Add(transaktion.Datum.ToString("MMMM", new CultureInfo("de-DE")));
+                    }
                 }
+
             }
 
-            return Sort_Months(months);
+            Sort_Months();
         }
 
-        public List<string> Sort_Months(List<string> list_of_months)
+        public void Sort_Months()
         {
-            List<string> sortet_list_of_months = new List<string>();
+            List<List<string>> months_list = Time.Values.ToList();
 
-            sortet_list_of_months.Clear();
+            List<string> years = Time.Keys.ToList();
 
-            List<int> months_in_int = new List<int>();
+            int h = 0;
 
-            months_in_int.Clear();
-
-            foreach (string month in list_of_months)
+            foreach (List<string> months in months_list)
             {
-                int k = 0;
+                List<string> sortet_list_of_months = new List<string>();
 
-                while (month != existing_months[k])
+                sortet_list_of_months.Clear();
+
+                List<int> months_in_int = new List<int>();
+
+                months_in_int.Clear();
+
+                foreach (string month in months)
                 {
-                    k++;
+                    int k = 0;
+
+                    while (month != existing_months[k])
+                    {
+                        k++;
+                    }
+
+                    months_in_int.Add(k);
                 }
 
-                months_in_int.Add(k);
+                months_in_int.Sort();
+
+                foreach (int k in months_in_int)
+                {
+                    sortet_list_of_months.Add(existing_months[k]);
+                }
+
+                Time[years[h]] = sortet_list_of_months;
+
+                h++;
             }
-
-            months_in_int.Sort();
-
-            foreach (int k in months_in_int)
-            {
-                sortet_list_of_months.Add(existing_months[k]);
-            }
-
-            return sortet_list_of_months;
         }
     }
 }

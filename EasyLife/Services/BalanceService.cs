@@ -49,7 +49,7 @@ namespace EasyLife.Services
 
             try
             {
-                HelperBalanceprofile convertedinput = Konverter.Serilize(input);
+                HelperBalanceprofile convertedinput = Balanceprofile_Konverter.Serilize(input);
 
                 await db.InsertAsync(convertedinput);
 
@@ -79,7 +79,7 @@ namespace EasyLife.Services
 
             try
             {
-                HelperBalanceprofile convertedinput = Konverter.Serilize(input);
+                HelperBalanceprofile convertedinput = Balanceprofile_Konverter.Serilize(input);
 
                 convertedinput.Id = input.Id;
 
@@ -135,7 +135,7 @@ namespace EasyLife.Services
                 {
                     if(helperBalanceprofile != null)
                     {
-                        balanceprofilesList.Add(Konverter.Deserilize(helperBalanceprofile));
+                        balanceprofilesList.Add(Balanceprofile_Konverter.Deserilize(helperBalanceprofile));
                     }
                 }
 
@@ -156,7 +156,7 @@ namespace EasyLife.Services
         {
             await Init();
 
-            return Konverter.Deserilize(await db.FindAsync<HelperBalanceprofile>(input));
+            return Balanceprofile_Konverter.Deserilize(await db.FindAsync<HelperBalanceprofile>(input));
         }
     }
 
@@ -185,7 +185,7 @@ namespace EasyLife.Services
     /// <summary>
     /// Ist eine Konvertierungsklasse um Bilanzprofile de-/serealisieren.
     /// </summary>
-    public class Konverter
+    public class Balanceprofile_Konverter
     {
         public static HelperBalanceprofile Serilize( Balanceprofile input)
         {

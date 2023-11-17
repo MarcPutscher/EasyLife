@@ -35,7 +35,7 @@ namespace EasyLife.Droid
     [Activity(Label = "EasyLife", Icon = "@mipmap/ic_launcher", Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize, ScreenOrientation = ScreenOrientation.Portrait)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
-        protected override void OnCreate(Bundle savedInstanceState)
+        protected override async void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
@@ -44,13 +44,13 @@ namespace EasyLife.Droid
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
 
-            if(Preferences.Get("Next_Backup_Date", "") != "")
+            if (Preferences.Get("Next_Backup_Date", "") != "")
             {
-                if(DateTime.ParseExact(Preferences.Get("Next_Backup_Date", ""), "dd.MM.yyyy" , new CultureInfo("de-DE")).Date <= DateTime.Now.Date)
+                if (DateTime.ParseExact(Preferences.Get("Next_Backup_Date", ""), "dd.MM.yyyy", new CultureInfo("de-DE")).Date <= DateTime.Now.Date)
                 {
-                    var result = Services.BackupService.Create_Backup(Preferences.Get("Next_Backup_Date", ""));
+                    var result = await Services.BackupService.Create_Backup(Preferences.Get("Next_Backup_Date", ""));
 
-                    if(result == true)
+                    if (result == true)
                     {
                         Preferences.Set("Next_Backup_Date", DateTime.Now.AddMonths(1).ToString("dd.MM.yyyy"));
                     }

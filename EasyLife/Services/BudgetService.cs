@@ -117,4 +117,56 @@ namespace EasyLife.Services
             }
         }
     }
+
+    public class Budget_Konverter
+    {
+        public static string Serilize(List<string> input)
+        {
+            string output = string.Empty;
+
+            if (input.Count() != 0)
+            {
+                foreach (var s in input)
+                {
+                    output += "" + s + "+";
+                }
+
+                output = output.Substring(0, output.LastIndexOf("+"));
+            }
+
+            return output;
+        }
+
+        public static List<string> Deserilize(Budget input)
+        {
+            List<string> output = new List<string>();
+
+            string preferences = input.Name_Of_Enabled_Reasons;
+
+            if (preferences != null)
+            {
+                while (preferences.Length > 0)
+                {
+                    if (preferences.Contains("+") == true)
+                    {
+                        string value = preferences.Substring(0, preferences.IndexOf("+"));
+
+                        output.Add(value);
+
+                        preferences = preferences.Substring(preferences.IndexOf("+") + 1);
+                    }
+                    else
+                    {
+                        string value = preferences;
+
+                        output.Add(value);
+
+                        preferences = "";
+                    }
+                }
+            }
+
+            return output;
+        }
+    }
 }

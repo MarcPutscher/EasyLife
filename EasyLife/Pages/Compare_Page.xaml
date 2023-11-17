@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:models="clr-namespace:EasyLife.Models" 
+    xmlns:pagemodels="clr-namespace:EasyLife.PageModels" 
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:fontAwesome="clr-namespace:FontAwesome"
+    xmlns:helper="clr-namespace:EasyLife.Helpers"
+    x:Class="EasyLife.Pages.Compare_Page"
+    xmlns:cells="clr-namespace:EasyLife.Cells"
+    Title="{Binding Title}"
+    BackgroundColor="{DynamicResource Hintergrund_Bilanz}"
+    x:Name="ComparePage">
+
+    <ContentPage.BindingContext>
+        <pagemodels:Compare_PageModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding Load_Command}" />
+    </ContentPage.Behaviors>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Order="Primary" Text="Bilanzprofil"  Command="{Binding Settings_Command}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Wrench}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+
+    <ContentPage.Content>
+        <Grid ColumnDefinitions="2*,*,2*" RowDefinitions="Auto,2,10,*" RowSpacing="1" Margin="10,10,10,10">
+            <Grid Grid.Row="0" Grid.ColumnSpan="3" ColumnDefinitions="2*,*,2*">
+                <Label Text="{Binding Item1_Name}" FontSize="Title" TextColor="{DynamicResource Text_Zusammenfassung_Bilanz}" Grid.Row="0" Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Set_Item1_Command}"/>
+                    </Label.GestureRecognizers>
+                </Label>
+                <ImageButton Grid.Row="0" Grid.Column="1"  HorizontalOptions="FillAndExpand" VerticalOptions="Center" IsVisible="{Binding ISSwitched}" Command="{Binding Switch_Diff_Command}" BackgroundColor="{DynamicResource Hintergrund_Bilanz}">
+                    <ImageButton.Source>
+                        <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.ArrowLeft}" Color="{DynamicResource Text_Zusammenfassung_Bilanz}" />
+                    </ImageButton.Source>
+                </ImageButton>
+                <ImageButton Grid.Row="0" Grid.Column="1"  HorizontalOptions="FillAndExpand" VerticalOptions="Center" IsVisible="{Binding ISSwitched, Converter={helper:InverseBoolConverter}}" Command="{Binding Switch_Diff_Command}" BackgroundColor="{DynamicResource Hintergrund_Bilanz}">
+                    <ImageButton.Source>
+                        <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.ArrowRight}" Color="{DynamicResource Text_Zusammenfassung_Bilanz}" />
+                    </ImageButton.Source>
+                </ImageButton>
+                <Label Text="{Binding Item2_Name}" FontSize="Title" TextColor="{DynamicResource Text_Zusammenfassung_Bilanz}" Grid.Row="0" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Set_Item2_Command}"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </Grid>
+            <Line BackgroundColor="{DynamicResource Text_Zusammenfassung_Bilanz}" WidthRequest="2" Grid.Row="1" Grid.ColumnSpan="3"/>
+            <Grid Grid.Row="3" Grid.ColumnSpan="3" ColumnDefinitions="7*,6*,7*" RowSpacing="1" RowDefinitions="Auto,*,Auto,*,Auto,*,Auto,*,Auto,*,Auto,*,Auto,*,Auto,*,Auto,*,Auto,*">
+
+                <Label Text="Ausgaben Konto" FontSize="Medium" FontAttributes="Bold" TextColor="{DynamicResource Text_Zusammenfassung_Bilanz}" Grid.Row="0" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                <Grid Grid.Row="1" Grid.ColumnSpan="3" ColumnDefinitions="7*,6*,7*" RowDefinitions="*">
+                    <BoxView Grid.Column="0" BackgroundColor="Black" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Item1_Outcome_Account}" FontSize="Medium" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" Grid.Column="0" BackgroundColor="Transparent"/>
+                    <BoxView Grid.Column="1" BackgroundColor="{Binding Diff_Outcome_Account_Color}" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Diff_Outcome_Account}" FontSize="Medium" TextColor="{Binding Diff_Outcome_Account_Color}" Grid.Column="1" BackgroundColor="Transparent"/>
+                    <BoxView Grid.Column="2" BackgroundColor="White" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Item2_Outcome_Account}" FontSize="Medium" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" Grid.Column="2" BackgroundColor="Transparent"/>
+                    <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.ColumnSpan="3" Grid.Row="0">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer x:Name="Ausgaben_Konto" Command="{Binding Detail_Command}"/>
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
+                </Grid>
+
+                <Label Text="Einnahmen Konto" FontSize="Medium" FontAttributes="Bold" TextColor="{DynamicResource Text_Zusammenfassung_Bilanz}" Grid.Row="2" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                <Grid Grid.Row="3" Grid.ColumnSpan="3" ColumnDefinitions="7*,6*,7*" RowDefinitions="*">
+                    <BoxView Grid.Column="0" BackgroundColor="Black" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Item1_Income_Account}" FontSize="Medium" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" Grid.Column="0" BackgroundColor="Transparent"/>
+                    <BoxView Grid.Column="1" BackgroundColor="{Binding Diff_Income_Account_Color}" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Diff_Income_Account}" FontSize="Medium" TextColor="{Binding Diff_Income_Account_Color}" Grid.Column="1" BackgroundColor="Transparent"/>
+                    <BoxView Grid.Column="2" BackgroundColor="White" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Item2_Income_Account}" FontSize="Medium" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" Grid.Column="2" BackgroundColor="Transparent"/>
+                    <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.ColumnSpan="3" Grid.Row="0">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer x:Name="Einnahmen_Konto" Command="{Binding Detail_Command}"/>
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
+                </Grid>
+
+                <Label Text="Rest Konto" FontSize="Medium" FontAttributes="Bold" TextColor="{DynamicResource Text_Zusammenfassung_Bilanz}" Grid.Row="4" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                <Grid Grid.Row="5" Grid.ColumnSpan="3" ColumnDefinitions="7*,6*,7*" RowDefinitions="*">
+                    <BoxView Grid.Column="0" BackgroundColor="Black" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Item1_Account_Result}" FontSize="Medium" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" Grid.Column="0" BackgroundColor="Transparent"/>
+                    <BoxView Grid.Column="1" BackgroundColor="{Binding Diff_Account_Result_Color}" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Diff_Account_Result}" FontSize="Medium" TextColor="{Binding Diff_Account_Result_Color}" Grid.Column="1" BackgroundColor="Transparent"/>
+                    <BoxView Grid.Column="2" BackgroundColor="White" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Item2_Account_Result}" FontSize="Medium" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" Grid.Column="2" BackgroundColor="Transparent"/>
+                </Grid>
+
+                <Label Text="Barausgaben" FontSize="Medium" FontAttributes="Bold" TextColor="{DynamicResource Text_Zusammenfassung_Bilanz}" Grid.Row="6" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                <Grid Grid.Row="7" Grid.ColumnSpan="3" ColumnDefinitions="7*,6*,7*" RowDefinitions="*">
+                    <BoxView Grid.Column="0" BackgroundColor="Black" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Item1_Outcome_Cash}" FontSize="Medium" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" Grid.Column="0" BackgroundColor="Transparent"/>
+                    <BoxView Grid.Column="1" BackgroundColor="{Binding Diff_Outcome_Cash_Color}" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Diff_Outcome_Cash}" FontSize="Medium" TextColor="{Binding Diff_Outcome_Cash_Color}" Grid.Column="1" BackgroundColor="Transparent"/>
+                    <BoxView Grid.Column="2" BackgroundColor="White" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Item2_Outcome_Cash}" FontSize="Medium" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" Grid.Column="2" BackgroundColor="Transparent"/>
+                    <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.ColumnSpan="3" Grid.Row="0">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer x:Name="Barausgaben" Command="{Binding Detail_Command}"/>
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
+                </Grid>
+
+                <Label Text="Bareinnahmen" FontSize="Medium" FontAttributes="Bold" TextColor="{DynamicResource Text_Zusammenfassung_Bilanz}" Grid.Row="8" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                <Grid Grid.Row="9" Grid.ColumnSpan="3" ColumnDefinitions="7*,6*,7*" RowDefinitions="*">
+                    <BoxView Grid.Column="0" BackgroundColor="Black" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Item1_Income_Cash}" FontSize="Medium" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" Grid.Column="0" BackgroundColor="Transparent"/>
+                    <BoxView Grid.Column="1" BackgroundColor="{Binding Diff_Income_Cash_Color}" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Diff_Income_Cash}" FontSize="Medium" TextColor="{Binding Diff_Income_Cash_Color}" Grid.Column="1" BackgroundColor="Transparent"/>
+                    <BoxView Grid.Column="2" BackgroundColor="White" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Item2_Income_Cash}" FontSize="Medium" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" Grid.Column="2" BackgroundColor="Transparent"/>
+                    <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.ColumnSpan="3" Grid.Row="0">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer x:Name="Bareinnahmen" Command="{Binding Detail_Command}"/>
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
+                </Grid>
+
+                <Label Text="Rest Bargeld" FontSize="Medium" FontAttributes="Bold" TextColor="{DynamicResource Text_Zusammenfassung_Bilanz}" Grid.Row="10" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                <Grid Grid.Row="11" Grid.ColumnSpan="3" ColumnDefinitions="7*,6*,7*" RowDefinitions="*">
+                    <BoxView Grid.Column="0" BackgroundColor="Black" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Item1_Cash_Result}" FontSize="Medium" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" Grid.Column="0" BackgroundColor="Transparent"/>
+                    <BoxView Grid.Column="1" BackgroundColor="{Binding Diff_Cash_Result_Color}" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Diff_Cash_Result}" FontSize="Medium" TextColor="{Binding Diff_Cash_Result_Color}" Grid.Column="1" BackgroundColor="Transparent"/>
+                    <BoxView Grid.Column="2" BackgroundColor="White" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Item2_Cash_Result}" FontSize="Medium" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" Grid.Column="2" BackgroundColor="Transparent"/>
+                </Grid>
+
+                <Label Text="Ausgaben Briefumschlag" FontSize="Medium" FontAttributes="Bold" TextColor="{DynamicResource Text_Zusammenfassung_Bilanz}" Grid.Row="12" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                <Grid Grid.Row="13" Grid.ColumnSpan="3" ColumnDefinitions="7*,6*,7*" RowDefinitions="*">
+                    <BoxView Grid.Column="0" BackgroundColor="Black" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Item1_Outcome_Letter}" FontSize="Medium" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" Grid.Column="0" BackgroundColor="Transparent"/>
+                    <BoxView Grid.Column="1" BackgroundColor="{Binding Diff_Outcome_Letter_Color}" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Diff_Outcome_Letter}" FontSize="Medium" TextColor="{Binding Diff_Outcome_Letter_Color}" Grid.Column="1" BackgroundColor="Transparent"/>
+                    <BoxView Grid.Column="2" BackgroundColor="White" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Item2_Outcome_Letter}" FontSize="Medium" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" Grid.Column="2" BackgroundColor="Transparent"/>
+                    <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.ColumnSpan="3" Grid.Row="0">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer x:Name="Ausgaben_Briefumschlag" Command="{Binding Detail_Command}"/>
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
+                </Grid>
+
+                <Label Text="Einnahmen Briefumschlag" FontSize="Medium" FontAttributes="Bold" TextColor="{DynamicResource Text_Zusammenfassung_Bilanz}" Grid.Row="14" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                <Grid Grid.Row="15" Grid.ColumnSpan="3" ColumnDefinitions="7*,6*,7*" RowDefinitions="*">
+                    <BoxView Grid.Column="0" BackgroundColor="Black" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Item1_Income_Letter}" FontSize="Medium" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" Grid.Column="0" BackgroundColor="Transparent"/>
+                    <BoxView Grid.Column="1" BackgroundColor="{Binding Diff_Income_Letter_Color}" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Diff_Income_Letter}" FontSize="Medium" TextColor="{Binding Diff_Income_Letter_Color}" Grid.Column="1" BackgroundColor="Transparent"/>
+                    <BoxView Grid.Column="2" BackgroundColor="White" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Item2_Income_Letter}" FontSize="Medium" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" Grid.Column="2" BackgroundColor="Transparent"/>
+                    <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.ColumnSpan="3" Grid.Row="0">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer x:Name="Einnahmen_Briefumschlag" Command="{Binding Detail_Command}"/>
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
+                </Grid>
+
+                <Label Text="Rest Briefumschlag" FontSize="Medium" FontAttributes="Bold" TextColor="{DynamicResource Text_Zusammenfassung_Bilanz}" Grid.Row="16" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                <Grid Grid.Row="17" Grid.ColumnSpan="3" ColumnDefinitions="7*,6*,7*" RowDefinitions="*">
+                    <BoxView Grid.Column="0" BackgroundColor="Black" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Item1_Letter_Result}" FontSize="Medium" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" Grid.Column="0" BackgroundColor="Transparent"/>
+                    <BoxView Grid.Column="1" BackgroundColor="{Binding Diff_Letter_Result_Color}" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Diff_Letter_Result}" FontSize="Medium" TextColor="{Binding Diff_Letter_Result_Color}" Grid.Column="1" BackgroundColor="Transparent"/>
+                    <BoxView Grid.Column="2" BackgroundColor="White" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Item2_Letter_Result}" FontSize="Medium" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" Grid.Column="2" BackgroundColor="Transparent"/>
+                </Grid>
+
+                <Label Text="Restgeld" FontSize="Medium" FontAttributes="Bold" TextColor="{DynamicResource Text_Zusammenfassung_Bilanz}" Grid.Row="18" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                <Grid Grid.Row="19" Grid.ColumnSpan="3" ColumnDefinitions="7*,6*,7*" RowDefinitions="*">
+                    <BoxView Grid.Column="0" BackgroundColor="Black" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Item1_Result}" FontSize="Medium" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" Grid.Column="0" BackgroundColor="Transparent"/>
+                    <BoxView Grid.Column="1" BackgroundColor="{Binding Diff_Result_Color}" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Diff_Result}" FontSize="Medium" TextColor="{Binding Diff_Result_Color}" Grid.Column="1" BackgroundColor="Transparent"/>
+                    <BoxView Grid.Column="2" BackgroundColor="White" Opacity="0.1" CornerRadius="20"/>
+                    <Button Text="{Binding Item2_Result}" FontSize="Medium" TextColor="{DynamicResource Text_Anzahl_Stack_Bilanz}" Grid.Column="2" BackgroundColor="Transparent"/>
+                </Grid>
+
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

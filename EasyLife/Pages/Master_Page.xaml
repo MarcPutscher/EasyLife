@@ -61,6 +61,12 @@
             </Tab.FlyoutIcon>
             <ShellContent IsTabStop="True" ContentTemplate="{DataTemplate local:Balance_Page}" />
         </Tab>
+        <Tab Title="Vergleichen">
+            <Tab.FlyoutIcon>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.RightLeft}" />
+            </Tab.FlyoutIcon>
+            <ShellContent IsTabStop="True" ContentTemplate="{DataTemplate local:Compare_Page}" />
+        </Tab>
         <Tab Title="Papierkorb">
             <Tab.FlyoutIcon>
                 <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.TrashCan}" />

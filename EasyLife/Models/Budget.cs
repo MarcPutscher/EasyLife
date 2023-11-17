@@ -51,6 +51,18 @@ namespace EasyLife.Models
         }
 
         public double Current { get; set; }
+
+        string name_of_enabled_reasons;
+        public string Name_Of_Enabled_Reasons
+        {
+            get { return name_of_enabled_reasons; }
+            set
+            {
+                if (Name_Of_Enabled_Reasons == value)
+                    return;
+                name_of_enabled_reasons = value; OnPropertyChanged(nameof(Name_Of_Enabled_Reasons));
+            }
+        }
     }
 
     public class Budget_Progessbar

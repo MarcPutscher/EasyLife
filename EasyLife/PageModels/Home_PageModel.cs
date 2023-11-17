@@ -22,463 +22,12 @@ using PermissionStatus = Xamarin.Essentials.PermissionStatus;
 using Xamarin.Forms.Internals;
 using System.ComponentModel;
 using static SQLite.SQLite3;
+using System.Transactions;
 
 namespace EasyLife.PageModels
 {
     public class Home_PageModel : FreshBasePageModel
     {
-        public ObservableRangeCollection<Suggestion> suggestions;
-
-        public ObservableRangeCollection<Suggestion> SuggestionCollection
-        {
-            get { return suggestions; }
-            set
-            {
-                if (suggestions == value)
-                {
-                    return;
-                }
-                suggestions = value; RaisePropertyChanged();
-            }
-        }
-
-        public ObservableRangeCollection<Transaktion> transaktions;
-
-        public ObservableRangeCollection<Transaktion> Transaktion
-        {
-            get { return transaktions; }
-            set
-            {
-                if (transaktions == value)
-                {
-                    return;
-                }
-                transaktions = value; RaisePropertyChanged();
-            }
-        }
-
-        public ObservableRangeCollection<Grouping<string, Transaktion>> transaktionGroups { get; }
-
-        public AsyncCommand ViewIsAppearing_Command { get; }
-
-        public AsyncCommand RefreshCommand { get; }
-        public Command ViewIsDisappearing_Command { get; }
-        public AsyncCommand<Transaktion> EditCommand { get; }
-
-        public AsyncCommand<Transaktion> RemoveCommand { get; }
-
-        public AsyncCommand GroupingOption_Command { get; }
-
-        public AsyncCommand Search_Command { get; }
-
-        public AsyncCommand Search_Command2 { get; }
-
-        public AsyncCommand Add_Command { get; }
-
-        public AsyncCommand Set_Searchbar_Visibility_Command { get; }
-
-        public AsyncCommand The_Searchbar_is_Tapped { get; }
-
-        public AsyncCommand<Suggestion> Delet_Suggestion { get; }
-
-        public AsyncCommand<Suggestion> Select_Suggestion { get; }
-
-        public AsyncCommand Clear_SearchText_Command { get; }
-
-        public AsyncCommand Period_Command { get; }
-
-        public AsyncCommand Filter_Command {  get; }
-
-        public AsyncCommand<Transaktion> Calculator_Addition_Command {  get; }
-
-        public AsyncCommand<Transaktion> Calculator_Substraction_Command { get; }
-
-        public Command ShowCalculator_Command { get; }
-
-        public AsyncCommand Calculator_RemoveLast_Command { get; }
-
-        public AsyncCommand Calculator_RemoveAll_Command { get; }
-
-        public AsyncCommand ShowCalculator_List_Command { get; }
-
-        public Command Show_Letter_Saldo_Command { get; }
-
-        public AsyncCommand<string> Load_on_demand_Command { get; }
-
-        public AsyncCommand Load_Ratio_Command { get; }
-
-        public AsyncCommand Add_Catchphrase_To_Search_Command { get; }
-
-        public AsyncCommand Budget_Command { get; }
-
-        public AsyncCommand Change_Saldo_Date_Command { get; }
-
-        public bool serchbar_visibility = false;
-        public bool Serchbar_Visibility
-        {
-            get { return serchbar_visibility; }
-            set
-            {
-
-                if (serchbar_visibility == value)
-                {
-                    return;
-                }
-
-                serchbar_visibility = value; RaisePropertyChanged();
-            }
-        }
-
-        public Viewtime current_viewtime = new Viewtime() { Year = DateTime.Now.Year, Month = DateTime.Now.ToString("MMMM", new CultureInfo("de-DE")) };
-        public Viewtime Current_Viewtime
-        {
-            get { return current_viewtime; }
-            set
-            {
-                if (current_viewtime == value)
-                {
-                    return;
-                }
-
-                current_viewtime = value; RaisePropertyChanged();
-            }
-        }
-
-        public bool isbusy = false;
-        public bool IsBusy
-        {
-            get { return isbusy; }
-            set
-            {
-                if (isbusy == value)
-                {
-                    return;
-                }
-
-                isbusy = value; RaisePropertyChanged();
-            }
-        }
-
-        public bool is_aktiv = false;
-        public bool Is_Aktiv
-        {
-            get { return is_aktiv; }
-            set
-            {
-                if (Is_Aktiv == value)
-                {
-                    return;
-                }
-
-                is_aktiv = value; RaisePropertyChanged();
-            }
-        }
-
-        public int groupingoption = 0;
-        public int GroupingOption
-        {
-            get { return groupingoption; }
-            set
-            {
-                if (groupingoption == value)
-                {
-                    return;
-                }
-
-                groupingoption = value; RaisePropertyChanged();
-            }
-        }
-
-        public string title = "Haushaltsbuch";
-        public string Title
-        {
-            get { return title; }
-            set
-            {
-                if (title == value)
-                {
-                    return;
-                }
-
-                title = value; RaisePropertyChanged();
-            }
-        }
-
-        public string search_text;
-        public string Search_Text
-        {
-            get { return search_text; }
-            set
-            {
-                if (search_text == value)
-                {
-                    return;
-                }
-
-                search_text = value; RaisePropertyChanged();
-            }
-        }
-
-        public string Last_Search_Text;
-
-        public string saldo_value = null;
-        public string Saldo_Value
-        {
-            get { return saldo_value; }
-            set
-            {
-                if (Saldo_Value == value)
-                {
-                    return;
-                }
-
-                saldo_value = value; RaisePropertyChanged();
-            }
-        }
-
-        public string letter_saldo_value = null;
-        public string Letter_Saldo_Value
-        {
-            get { return letter_saldo_value; }
-            set
-            {
-                if (Letter_Saldo_Value == value)
-                {
-                    return;
-                }
-
-                letter_saldo_value = value; RaisePropertyChanged();
-            }
-        }
-
-        public string saldo_date = Preferences.Get("Saldo_Date", DateTime.Now.ToString("dddd, d.M.yyyy", new CultureInfo("de-DE"))); public string Saldo_Date
-        {
-            get { return saldo_date; }
-            set
-            {
-                if (Saldo_Date == value)
-                {
-                    return;
-                }
-
-                saldo_date = value; RaisePropertyChanged();
-            }
-        }
-
-        public string calculator_value = null;
-        public string Calculator_Value
-        {
-            get { return calculator_value; }
-            set
-            {
-                if (Calculator_Value == value)
-                {
-                    return;
-                }
-
-                calculator_value = value; RaisePropertyChanged();
-            }
-        }
-
-        public Color calculator_evaluate = Color.White;
-        public Color Calculator_Evaluate
-        {
-            get { return calculator_evaluate; }
-            set
-            {
-                if (Calculator_Evaluate == value)
-                {
-                    return;
-                }
-
-                calculator_evaluate = value; RaisePropertyChanged();
-            }
-        }
-
-        public Color saldo_evaluate = Color.White;
-        public Color Saldo_Evaluate
-        {
-            get { return saldo_evaluate; }
-            set
-            {
-                if (Saldo_Evaluate == value)
-                {
-                    return;
-                }
-
-                saldo_evaluate = value; RaisePropertyChanged();
-            }
-        }
-
-        public Color letter_saldo_evaluate = Color.White;
-        public Color Letter_Saldo_Evaluate
-        {
-            get { return letter_saldo_evaluate; }
-            set
-            {
-                if (Letter_Saldo_Evaluate == value)
-                {
-                    return;
-                }
-
-                letter_saldo_evaluate = value; RaisePropertyChanged();
-            }
-        }
-
-        public Color filter_activitycolor = Color.White;
-
-        public Color Filter_ActivityColor
-        {
-            get { return filter_activitycolor; }
-            set
-            {
-                if (Filter_ActivityColor == value)
-                {
-                    return;
-                }
-
-                filter_activitycolor = value; RaisePropertyChanged();
-            }
-        }
-
-        public bool list_of_suggestion_Status = false;
-        public bool List_of_Suggestion_Status
-        {
-            get { return list_of_suggestion_Status; }
-            set
-            {
-                if (List_of_Suggestion_Status == value)
-                    return;
-                list_of_suggestion_Status = value; RaisePropertyChanged();
-                if (list_of_suggestion_Status == true)
-                {
-                    Title = "Suchverlauf";
-                }
-            }
-        }
-
-        public bool list_of_transaktion_Status = true;
-        public bool List_of_Transaktion_Status
-        {
-            get { return list_of_transaktion_Status; }
-            set
-            {
-                if (List_of_Transaktion_Status == value)
-                    return;
-                list_of_transaktion_Status = value; RaisePropertyChanged();
-                if (list_of_transaktion_Status == true)
-                {
-                    Title = "Haushaltsbuch";
-                }
-            }
-        }
-
-        public bool kein_ergebnis_suggestion_Status = false;
-        public bool Kein_Ergebnis_Suggestion_Status
-        {
-            get { return kein_ergebnis_suggestion_Status; }
-            set
-            {
-                if (Kein_Ergebnis_Suggestion_Status == value)
-                    return;
-                kein_ergebnis_suggestion_Status = value; RaisePropertyChanged();
-                if (kein_ergebnis_suggestion_Status == true)
-                {
-                    Title = "Suchverlauf";
-                }
-            }
-        }
-
-        public bool kein_ergebnis_transaktion_Status = false;
-        public bool Kein_Ergebnis_Transaktion_Status
-        {
-            get { return kein_ergebnis_transaktion_Status; }
-            set
-            {
-                if (Kein_Ergebnis_Transaktion_Status == value)
-                    return;
-                kein_ergebnis_transaktion_Status = value; RaisePropertyChanged();
-                if (kein_ergebnis_transaktion_Status == true)
-                {
-                    Title = "Haushaltsbuch";
-                }
-            }
-        }
-
-        public bool issaldovisibility = false;
-        public bool IsSaldoVisibility
-        {
-            get { return issaldovisibility; }
-            set
-            {
-                if (IsSaldoVisibility == value)
-                    return;
-                issaldovisibility = value; RaisePropertyChanged();
-            }
-        }
-
-        public bool islettersaldovisibility = false;
-        public bool IsLetterSaldoVisibility
-        {
-            get { return islettersaldovisibility; }
-            set
-            {
-                if (IsLetterSaldoVisibility == value)
-                    return;
-                islettersaldovisibility = value; RaisePropertyChanged();
-            }
-        }
-
-        public bool calculator_state = false;
-        public bool Calculator_State
-        {
-            get { return calculator_state; }
-            set
-            {
-                if (Calculator_State == value)
-                    return;
-                calculator_state = value; RaisePropertyChanged();
-            }
-        }
-
-        public bool normal_state = true;
-        public bool Normal_State
-        {
-            get { return normal_state; }
-            set
-            {
-                if (Normal_State == value)
-                    return;
-                normal_state = value; RaisePropertyChanged();
-            }
-        }
-
-        public int height = 80;
-        public int Height
-        {
-            get { return height; }
-            set
-            {
-                if (Height == value)
-                    return;
-                height = value; RaisePropertyChanged();
-            }
-        }
-
-        public List<Transaktion> Calculator_List = new List<Transaktion>();
-
-        public List<double[]> Load_Progress = new List<double[]>() { new double[] { -1, -1 } };
-
-        public List<Transaktion> All_Transaktion_List_for_Load = new List<Transaktion>();
-
-        public List<Transaktion> Transaktion_List_Load_for_Load = new List<Transaktion>();
-
-        public List<Transaktion> Transaktion_List_from_Load = new List<Transaktion>();
-
-        public List<string> used_reasons_list = new List<string>();
-
-
-
         public Home_PageModel()
         {
             Transaktion = new ObservableRangeCollection<Transaktion>();
@@ -2195,7 +1744,11 @@ namespace EasyLife.PageModels
 
                 if (String.IsNullOrEmpty(Search_Text) == true)
                 {
-                    var result = await Shell.Current.ShowPopupAsync(new Viewtime_Popup(Current_Viewtime));
+                    var transaktionscontent = await ContentService.Get_all_enabeled_Transaktion();
+
+                    Haushaltsbücher Haushaltsbucher = new Haushaltsbücher(transaktionscontent.ToList());
+
+                    var result = await Shell.Current.ShowPopupAsync(new Viewtime_Popup(Current_Viewtime, Haushaltsbucher));
 
                     if (result == null)
                     {
@@ -2728,6 +2281,98 @@ namespace EasyLife.PageModels
                                 }
                             }
                         }
+
+
+                        if (allbudget.Where(bg => bg.Name == "Monat").Count() != 0)
+                        {
+                            if (allbudget.Where(bg => bg.Name == "Monat").First() != null)
+                            {
+                                List<string> diabled_reaons = new List<string>();
+
+                                if (allbudget.Where(bg => bg.Name == "Monat").First().Name_Of_Enabled_Reasons == null)
+                                {
+                                    var result0 = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Monat eingrenzen", 350, 250, "Ja", "Nein", "Wollen Sie bestimmte Zwecke aus dem Monats-Budget entfernen?"));
+
+                                    if (result0 != null)
+                                    {
+                                        if ((bool)result0 == true)
+                                        {
+                                            bool indkator = false;
+
+                                            while (indkator == false)
+                                            {
+                                                var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Zweck der ausgeschlossen werden sollen", 400, enablereasonlist));
+
+                                                if (result == null)
+                                                {
+                                                    indkator = true; break;
+                                                }
+                                                else
+                                                {
+                                                    if (diabled_reaons.Contains((string)result) == true)
+                                                    {
+                                                        var result1 = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup((string)result, 300, 300, "Ja", "Nein", "Wollen Sie den Zweck " + (string)result + " wieder in das Monats-Budget einführen?"));
+
+                                                        if (result1 != null)
+                                                        {
+                                                            if ((bool)result1 == true)
+                                                            {
+                                                                diabled_reaons.Remove((string)result);
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        diabled_reaons.Add((string)result);
+                                                    }
+                                                }
+                                            }
+
+                                            if (diabled_reaons.Count() != 0)
+                                            {
+                                                allbudget.Where(bg => bg.Name == "Monat").First().Name_Of_Enabled_Reasons = Budget_Konverter.Serilize(diabled_reaons);
+                                            }
+                                            else
+                                            {
+                                                diabled_reaons.Add("leer");
+
+                                                allbudget.Where(bg => bg.Name == "Monat").First().Name_Of_Enabled_Reasons = Budget_Konverter.Serilize(diabled_reaons);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            allbudget.Where(bg => bg.Name == "Monat").First().Name_Of_Enabled_Reasons = Budget_Konverter.Serilize(new List<string>() { "leer" });
+                                        }
+                                    }
+                                    else
+                                    {
+                                        allbudget.Where(bg => bg.Name == "Monat").First().Name_Of_Enabled_Reasons = Budget_Konverter.Serilize(new List<string>() { "leer" });
+                                    }
+                                }
+                                else
+                                {
+                                    diabled_reaons = Budget_Konverter.Deserilize(allbudget.Where(bg => bg.Name == "Monat").First());
+                                }
+
+                                if (diabled_reaons.Count() != 0)
+                                {
+                                    allbudget.Where(bg => bg.Name == "Monat").First().Current = 0.0;
+
+                                    foreach (Transaktion trans in transaktionlist)
+                                    {
+                                        if (double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE")) < 0)
+                                        {
+                                            if (diabled_reaons.Contains(trans.Zweck) == false)
+                                            {
+                                                allbudget.Where(bg => bg.Name == "Monat").First().Current += Math.Abs(double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE")));
+                                            }
+                                        }
+                                    }
+                                }
+
+                                await BudgetService.Edit_Budget(allbudget.Where(bg => bg.Name == "Monat").First());
+                            }
+                        }
                     }
 
                     await Shell.Current.ShowPopupAsync(new Budget_Popup(allbudget.ToList(), Current_Viewtime, transaktionlist));
@@ -2872,5 +2517,457 @@ namespace EasyLife.PageModels
         {
             await ToastHelper.ShowToast(v);
         }
+
+
+
+        public ObservableRangeCollection<Suggestion> suggestions;
+
+        public ObservableRangeCollection<Suggestion> SuggestionCollection
+        {
+            get { return suggestions; }
+            set
+            {
+                if (suggestions == value)
+                {
+                    return;
+                }
+                suggestions = value; RaisePropertyChanged();
+            }
+        }
+
+        public ObservableRangeCollection<Transaktion> transaktions;
+
+        public ObservableRangeCollection<Transaktion> Transaktion
+        {
+            get { return transaktions; }
+            set
+            {
+                if (transaktions == value)
+                {
+                    return;
+                }
+                transaktions = value; RaisePropertyChanged();
+            }
+        }
+
+        public ObservableRangeCollection<Grouping<string, Transaktion>> transaktionGroups { get; }
+
+        public AsyncCommand ViewIsAppearing_Command { get; }
+
+        public AsyncCommand RefreshCommand { get; }
+        public Command ViewIsDisappearing_Command { get; }
+        public AsyncCommand<Transaktion> EditCommand { get; }
+
+        public AsyncCommand<Transaktion> RemoveCommand { get; }
+
+        public AsyncCommand GroupingOption_Command { get; }
+
+        public AsyncCommand Search_Command { get; }
+
+        public AsyncCommand Search_Command2 { get; }
+
+        public AsyncCommand Add_Command { get; }
+
+        public AsyncCommand Set_Searchbar_Visibility_Command { get; }
+
+        public AsyncCommand The_Searchbar_is_Tapped { get; }
+
+        public AsyncCommand<Suggestion> Delet_Suggestion { get; }
+
+        public AsyncCommand<Suggestion> Select_Suggestion { get; }
+
+        public AsyncCommand Clear_SearchText_Command { get; }
+
+        public AsyncCommand Period_Command { get; }
+
+        public AsyncCommand Filter_Command { get; }
+
+        public AsyncCommand<Transaktion> Calculator_Addition_Command { get; }
+
+        public AsyncCommand<Transaktion> Calculator_Substraction_Command { get; }
+
+        public Command ShowCalculator_Command { get; }
+
+        public AsyncCommand Calculator_RemoveLast_Command { get; }
+
+        public AsyncCommand Calculator_RemoveAll_Command { get; }
+
+        public AsyncCommand ShowCalculator_List_Command { get; }
+
+        public Command Show_Letter_Saldo_Command { get; }
+
+        public AsyncCommand<string> Load_on_demand_Command { get; }
+
+        public AsyncCommand Load_Ratio_Command { get; }
+
+        public AsyncCommand Add_Catchphrase_To_Search_Command { get; }
+
+        public AsyncCommand Budget_Command { get; }
+
+        public AsyncCommand Change_Saldo_Date_Command { get; }
+
+        public bool serchbar_visibility = false;
+        public bool Serchbar_Visibility
+        {
+            get { return serchbar_visibility; }
+            set
+            {
+
+                if (serchbar_visibility == value)
+                {
+                    return;
+                }
+
+                serchbar_visibility = value; RaisePropertyChanged();
+            }
+        }
+
+        public Viewtime current_viewtime = new Viewtime() { Year = DateTime.Now.Year, Month = DateTime.Now.ToString("MMMM", new CultureInfo("de-DE")) };
+        public Viewtime Current_Viewtime
+        {
+            get { return current_viewtime; }
+            set
+            {
+                if (current_viewtime == value)
+                {
+                    return;
+                }
+
+                current_viewtime = value; RaisePropertyChanged();
+            }
+        }
+
+        public bool isbusy = false;
+        public bool IsBusy
+        {
+            get { return isbusy; }
+            set
+            {
+                if (isbusy == value)
+                {
+                    return;
+                }
+
+                isbusy = value; RaisePropertyChanged();
+            }
+        }
+
+        public bool is_aktiv = false;
+        public bool Is_Aktiv
+        {
+            get { return is_aktiv; }
+            set
+            {
+                if (Is_Aktiv == value)
+                {
+                    return;
+                }
+
+                is_aktiv = value; RaisePropertyChanged();
+            }
+        }
+
+        public int groupingoption = 0;
+        public int GroupingOption
+        {
+            get { return groupingoption; }
+            set
+            {
+                if (groupingoption == value)
+                {
+                    return;
+                }
+
+                groupingoption = value; RaisePropertyChanged();
+            }
+        }
+
+        public string title = "Haushaltsbuch";
+        public string Title
+        {
+            get { return title; }
+            set
+            {
+                if (title == value)
+                {
+                    return;
+                }
+
+                title = value; RaisePropertyChanged();
+            }
+        }
+
+        public string search_text;
+        public string Search_Text
+        {
+            get { return search_text; }
+            set
+            {
+                if (search_text == value)
+                {
+                    return;
+                }
+
+                search_text = value; RaisePropertyChanged();
+            }
+        }
+
+        public string Last_Search_Text;
+
+        public string saldo_value = null;
+        public string Saldo_Value
+        {
+            get { return saldo_value; }
+            set
+            {
+                if (Saldo_Value == value)
+                {
+                    return;
+                }
+
+                saldo_value = value; RaisePropertyChanged();
+            }
+        }
+
+        public string letter_saldo_value = null;
+        public string Letter_Saldo_Value
+        {
+            get { return letter_saldo_value; }
+            set
+            {
+                if (Letter_Saldo_Value == value)
+                {
+                    return;
+                }
+
+                letter_saldo_value = value; RaisePropertyChanged();
+            }
+        }
+
+        public string saldo_date = Preferences.Get("Saldo_Date", DateTime.Now.ToString("dddd, d.M.yyyy", new CultureInfo("de-DE"))); public string Saldo_Date
+        {
+            get { return saldo_date; }
+            set
+            {
+                if (Saldo_Date == value)
+                {
+                    return;
+                }
+
+                saldo_date = value; RaisePropertyChanged();
+            }
+        }
+
+        public string calculator_value = null;
+        public string Calculator_Value
+        {
+            get { return calculator_value; }
+            set
+            {
+                if (Calculator_Value == value)
+                {
+                    return;
+                }
+
+                calculator_value = value; RaisePropertyChanged();
+            }
+        }
+
+        public Color calculator_evaluate = Color.White;
+        public Color Calculator_Evaluate
+        {
+            get { return calculator_evaluate; }
+            set
+            {
+                if (Calculator_Evaluate == value)
+                {
+                    return;
+                }
+
+                calculator_evaluate = value; RaisePropertyChanged();
+            }
+        }
+
+        public Color saldo_evaluate = Color.White;
+        public Color Saldo_Evaluate
+        {
+            get { return saldo_evaluate; }
+            set
+            {
+                if (Saldo_Evaluate == value)
+                {
+                    return;
+                }
+
+                saldo_evaluate = value; RaisePropertyChanged();
+            }
+        }
+
+        public Color letter_saldo_evaluate = Color.White;
+        public Color Letter_Saldo_Evaluate
+        {
+            get { return letter_saldo_evaluate; }
+            set
+            {
+                if (Letter_Saldo_Evaluate == value)
+                {
+                    return;
+                }
+
+                letter_saldo_evaluate = value; RaisePropertyChanged();
+            }
+        }
+
+        public Color filter_activitycolor = Color.White;
+
+        public Color Filter_ActivityColor
+        {
+            get { return filter_activitycolor; }
+            set
+            {
+                if (Filter_ActivityColor == value)
+                {
+                    return;
+                }
+
+                filter_activitycolor = value; RaisePropertyChanged();
+            }
+        }
+
+        public bool list_of_suggestion_Status = false;
+        public bool List_of_Suggestion_Status
+        {
+            get { return list_of_suggestion_Status; }
+            set
+            {
+                if (List_of_Suggestion_Status == value)
+                    return;
+                list_of_suggestion_Status = value; RaisePropertyChanged();
+                if (list_of_suggestion_Status == true)
+                {
+                    Title = "Suchverlauf";
+                }
+            }
+        }
+
+        public bool list_of_transaktion_Status = true;
+        public bool List_of_Transaktion_Status
+        {
+            get { return list_of_transaktion_Status; }
+            set
+            {
+                if (List_of_Transaktion_Status == value)
+                    return;
+                list_of_transaktion_Status = value; RaisePropertyChanged();
+                if (list_of_transaktion_Status == true)
+                {
+                    Title = "Haushaltsbuch";
+                }
+            }
+        }
+
+        public bool kein_ergebnis_suggestion_Status = false;
+        public bool Kein_Ergebnis_Suggestion_Status
+        {
+            get { return kein_ergebnis_suggestion_Status; }
+            set
+            {
+                if (Kein_Ergebnis_Suggestion_Status == value)
+                    return;
+                kein_ergebnis_suggestion_Status = value; RaisePropertyChanged();
+                if (kein_ergebnis_suggestion_Status == true)
+                {
+                    Title = "Suchverlauf";
+                }
+            }
+        }
+
+        public bool kein_ergebnis_transaktion_Status = false;
+        public bool Kein_Ergebnis_Transaktion_Status
+        {
+            get { return kein_ergebnis_transaktion_Status; }
+            set
+            {
+                if (Kein_Ergebnis_Transaktion_Status == value)
+                    return;
+                kein_ergebnis_transaktion_Status = value; RaisePropertyChanged();
+                if (kein_ergebnis_transaktion_Status == true)
+                {
+                    Title = "Haushaltsbuch";
+                }
+            }
+        }
+
+        public bool issaldovisibility = false;
+        public bool IsSaldoVisibility
+        {
+            get { return issaldovisibility; }
+            set
+            {
+                if (IsSaldoVisibility == value)
+                    return;
+                issaldovisibility = value; RaisePropertyChanged();
+            }
+        }
+
+        public bool islettersaldovisibility = false;
+        public bool IsLetterSaldoVisibility
+        {
+            get { return islettersaldovisibility; }
+            set
+            {
+                if (IsLetterSaldoVisibility == value)
+                    return;
+                islettersaldovisibility = value; RaisePropertyChanged();
+            }
+        }
+
+        public bool calculator_state = false;
+        public bool Calculator_State
+        {
+            get { return calculator_state; }
+            set
+            {
+                if (Calculator_State == value)
+                    return;
+                calculator_state = value; RaisePropertyChanged();
+            }
+        }
+
+        public bool normal_state = true;
+        public bool Normal_State
+        {
+            get { return normal_state; }
+            set
+            {
+                if (Normal_State == value)
+                    return;
+                normal_state = value; RaisePropertyChanged();
+            }
+        }
+
+        public int height = 80;
+        public int Height
+        {
+            get { return height; }
+            set
+            {
+                if (Height == value)
+                    return;
+                height = value; RaisePropertyChanged();
+            }
+        }
+
+        public List<Transaktion> Calculator_List = new List<Transaktion>();
+
+        public List<double[]> Load_Progress = new List<double[]>() { new double[] { -1, -1 } };
+
+        public List<Transaktion> All_Transaktion_List_for_Load = new List<Transaktion>();
+
+        public List<Transaktion> Transaktion_List_Load_for_Load = new List<Transaktion>();
+
+        public List<Transaktion> Transaktion_List_from_Load = new List<Transaktion>();
+
+        public List<string> used_reasons_list = new List<string>();
     }
 }
