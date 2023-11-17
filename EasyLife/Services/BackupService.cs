@@ -445,7 +445,14 @@ namespace EasyLife.Services
         {
             Init_Source();
 
-            await db_create.CreateTableAsync<AppPreferences>();
+            try
+            {
+                await db_create.CreateTableAsync<AppPreferences>();
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist beim Senden des Backups ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+            }
 
             List<AppPreferences> AppPreferences_list = new List<AppPreferences>(await db_create.Table<AppPreferences>().ToListAsync());
 
