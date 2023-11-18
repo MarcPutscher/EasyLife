@@ -389,7 +389,7 @@ namespace EasyLife.PageModels
 
                     Auftrag order = new Auftrag();
 
-                    Auftrag secondorder = new Auftrag();
+                    Auftrag secondorder = null;
 
 
                     if (Entscheider_ob_Einnahme_oder_Ausgabe[Zweck] == "Einnahmen")
@@ -454,77 +454,81 @@ namespace EasyLife.PageModels
                         }
                     }
 
-                    if (Create_Second_Item == true)
+                    try
                     {
-                        if(Reason_of_Second_Item != null)
+                        if (Create_Second_Item == true)
                         {
-                            order = new Auftrag();
-
-                            if (Entscheider_ob_Einnahme_oder_Ausgabe[Reason_of_Second_Item] == "Einnahmen")
+                            if (Reason_of_Second_Item != null)
                             {
-                                result = Math.Abs(result);
-                            }
-                            else
-                            {
-                                result = -Math.Abs(result);
-                            }
+                                order = new Auftrag();
 
-                            if (result == 0)
-                            {
-                                await Notificater("Es wurde kein Betrag eingegeben.");
-                                return;
-                            }
-
-                            if (secondorder == null)
-                            {
-                                Transaktion transaktion = new Transaktion() { Betrag = result.ToString(), Datum = Datum.Date, Zweck = Reason_of_Second_Item, Notiz = Notiz, Auftrags_id = null, Anzahl_an_Wiederholungen = null, Art_an_Wiederholungen = null, Speziell = null, Order_Visibility = false, Content_Visibility = true, Balance_Visibility = Show_Hide_Balance, Saldo_Visibility = Show_Hide_Saldo };
-
-                                await ContentService.Add_Transaktion(transaktion);
-
-                                placeholder_Transaktion = ContentService.Get_last_Transaktion().Id;
-                            }
-                            else
-                            {
-                                ActivityIndicator_IsRunning = true;
-
-                                secondorder.Id = 0;
-
-                                Transaktion transaktion = new Transaktion() { Betrag = result.ToString(), Datum = Datum.Date, Zweck = Reason_of_Second_Item, Notiz = Notiz, Auftrags_id = secondorder.Id.ToString(), Anzahl_an_Wiederholungen = secondorder.Anzahl_an_Wiederholungen, Art_an_Wiederholungen = secondorder.Art_an_Wiederholungen, Speziell = secondorder.Speziell, Order_Visibility = true, Content_Visibility = true, Balance_Visibility = Show_Hide_Balance, Saldo_Visibility = Show_Hide_Saldo };
-
-                                await OrderService.Add_Order(secondorder);
-
-                                bool result1 = await AddRange(transaktion, secondorder);
-
-                                if (result1 == false)
+                                if (Entscheider_ob_Einnahme_oder_Ausgabe[Reason_of_Second_Item] == "Einnahmen")
                                 {
-                                    ActivityIndicator_IsRunning = false;
+                                    result = Math.Abs(result);
+                                }
+                                else
+                                {
+                                    result = -Math.Abs(result);
+                                }
 
-                                    await OrderService.Remove_Order(secondorder);
-
-                                    Virtueller_Auftrag = await PassingOrderService.Get_specific_Order(int.Parse(OrderID));
-
-                                    await Notificater("Es gab ein Logikfehler.");
-
+                                if (result == 0)
+                                {
+                                    await Notificater("Es wurde kein Betrag eingegeben.");
                                     return;
                                 }
 
-                                await OrderService.Edit_Order(secondorder);
-
-                                ActivityIndicator_IsRunning = false;
-
-                                Transaktion trans = await ContentService.Get_last_Transaktion();
-
-                                if (false == await NotificationHelper.RequestNotification(secondorder, trans))
+                                if (secondorder == null)
                                 {
-                                    await Notificater("Es konnte keine Benachrichtigung erstellt werden");
+                                    Transaktion transaktion = new Transaktion() { Betrag = result.ToString(), Datum = Datum.Date, Zweck = Reason_of_Second_Item, Notiz = Notiz, Auftrags_id = null, Anzahl_an_Wiederholungen = null, Art_an_Wiederholungen = null, Speziell = null, Order_Visibility = false, Content_Visibility = true, Balance_Visibility = Show_Hide_Balance, Saldo_Visibility = Show_Hide_Saldo };
+
+                                    await ContentService.Add_Transaktion(transaktion);
+
+                                    placeholder_Transaktion = ContentService.Get_last_Transaktion().Id;
                                 }
+                                else
+                                {
+                                    ActivityIndicator_IsRunning = true;
+
+                                    secondorder.Id = 0;
+
+                                    Transaktion transaktion = new Transaktion() { Betrag = result.ToString(), Datum = Datum.Date, Zweck = Reason_of_Second_Item, Notiz = Notiz, Auftrags_id = secondorder.Id.ToString(), Anzahl_an_Wiederholungen = secondorder.Anzahl_an_Wiederholungen, Art_an_Wiederholungen = secondorder.Art_an_Wiederholungen, Speziell = secondorder.Speziell, Order_Visibility = true, Content_Visibility = true, Balance_Visibility = Show_Hide_Balance, Saldo_Visibility = Show_Hide_Saldo };
+
+                                    await OrderService.Add_Order(secondorder);
+
+                                    bool result1 = await AddRange(transaktion, secondorder);
+
+                                    if (result1 == false)
+                                    {
+                                        ActivityIndicator_IsRunning = false;
+
+                                        await OrderService.Remove_Order(secondorder);
+
+                                        Virtueller_Auftrag = await PassingOrderService.Get_specific_Order(int.Parse(OrderID));
+
+                                        await Notificater("Es gab ein Logikfehler.");
+
+                                        return;
+                                    }
+
+                                    await OrderService.Edit_Order(secondorder);
+
+                                    ActivityIndicator_IsRunning = false;
+
+                                    Transaktion trans = await ContentService.Get_last_Transaktion();
+
+                                    if (false == await NotificationHelper.RequestNotification(secondorder, trans))
+                                    {
+                                        await Notificater("Es konnte keine Benachrichtigung erstellt werden");
+                                    }
+                                }
+
+                                Create_Second_Item = false;
+
+                                Reason_of_Second_Item = null;
                             }
-
-                            Create_Second_Item = false;
-
-                            Reason_of_Second_Item = null;
                         }
                     }
+                    catch { }
 
                     Virtueller_Auftrag = null;
 
