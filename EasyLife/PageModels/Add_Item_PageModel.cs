@@ -109,7 +109,7 @@ namespace EasyLife.PageModels
             {
                 if (Betrag == value)
                     return;
-                if (double.TryParse(value, out double result) == true)
+                if (double.TryParse(value, NumberStyles.Any, new CultureInfo("de-DE"), out double result) == true)
                 {
                     betrag = value.Replace(".", ",").Trim();
                 }
@@ -695,7 +695,7 @@ namespace EasyLife.PageModels
 
                     if (Virtueller_Auftrag == null)
                     {
-                        Transaktion transaktion = new Transaktion() { Betrag = result.ToString(), Datum = Datum.Date, Zweck = Zweck, Notiz = Notiz, Auftrags_id = null, Anzahl_an_Wiederholungen = null, Art_an_Wiederholungen = null, Speziell = null, Order_Visibility = false, Content_Visibility = true , Balance_Visibility = Show_Hide_Balance};
+                        Transaktion transaktion = new Transaktion() { Betrag = result.ToString("F2", new CultureInfo("de-DE")), Datum = Datum.Date, Zweck = Zweck, Notiz = Notiz, Auftrags_id = null, Anzahl_an_Wiederholungen = null, Art_an_Wiederholungen = null, Speziell = null, Order_Visibility = false, Content_Visibility = true , Balance_Visibility = Show_Hide_Balance};
 
                         await ContentService.Add_Transaktion(transaktion);
 
@@ -707,7 +707,7 @@ namespace EasyLife.PageModels
 
                         Virtueller_Auftrag.Id = 0;
 
-                        Transaktion transaktion = new Transaktion() { Betrag = result.ToString(), Datum = Datum.Date, Zweck = Zweck, Notiz = Notiz, Auftrags_id = Virtueller_Auftrag.Id.ToString() , Anzahl_an_Wiederholungen = Virtueller_Auftrag.Anzahl_an_Wiederholungen , Art_an_Wiederholungen = Virtueller_Auftrag.Art_an_Wiederholungen, Speziell = Virtueller_Auftrag.Speziell, Order_Visibility = true, Content_Visibility = true , Balance_Visibility = Show_Hide_Balance };
+                        Transaktion transaktion = new Transaktion() { Betrag = result.ToString("F2", new CultureInfo("de-DE")), Datum = Datum.Date, Zweck = Zweck, Notiz = Notiz, Auftrags_id = Virtueller_Auftrag.Id.ToString() , Anzahl_an_Wiederholungen = Virtueller_Auftrag.Anzahl_an_Wiederholungen , Art_an_Wiederholungen = Virtueller_Auftrag.Art_an_Wiederholungen, Speziell = Virtueller_Auftrag.Speziell, Order_Visibility = true, Content_Visibility = true , Balance_Visibility = Show_Hide_Balance };
 
                         await OrderService.Add_Order(Virtueller_Auftrag);
 

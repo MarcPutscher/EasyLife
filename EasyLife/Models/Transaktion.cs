@@ -44,7 +44,7 @@ namespace EasyLife.Models
 
                 if (double.TryParse(value, NumberStyles.Any, new CultureInfo("de-DE"), out double result) == true)
                 {
-                    value = result.ToString("F2");
+                    value = result.ToString("F2", new CultureInfo("de-DE"));
 
                     betrag = value.Replace(".", ","); OnPropertyChanged(nameof(Betrag));
                 }

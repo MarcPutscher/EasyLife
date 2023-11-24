@@ -67,7 +67,7 @@ namespace EasyLife.PageModels
                     if (0 > Math.Abs(result) || Math.Abs(result) > 9999999)
                     {
                         Zweck = Transaktion.Zweck;
-                        Betrag = double.Parse(Transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")).ToString();
+                        Betrag = double.Parse(Transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")).ToString("F2", new CultureInfo("de-DE"));
                         Datum = Transaktion.Datum;
                         Notiz = Transaktion.Notiz;
                         Show_Hide_Balance = Transaktion.Balance_Visibility;
@@ -180,7 +180,7 @@ namespace EasyLife.PageModels
                 else
                 {
                     Zweck = Transaktion.Zweck;
-                    Betrag = double.Parse(Transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")).ToString();
+                    Betrag = double.Parse(Transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")).ToString("F2", new CultureInfo("de-DE"));
                     Datum = Transaktion.Datum;
                     Notiz = Transaktion.Notiz;
                     Show_Hide_Balance = Transaktion.Balance_Visibility;
@@ -199,7 +199,7 @@ namespace EasyLife.PageModels
                 Virtuelle_Transaktion = Transaktion;
 
                 Zweck = Transaktion.Zweck;
-                Betrag = double.Parse(Transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")).ToString();
+                Betrag = double.Parse(Transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")).ToString("F2", new CultureInfo("de-DE"));
                 Datum = Transaktion.Datum;
                 Notiz = Transaktion.Notiz;
                 Show_Hide_Balance = Transaktion.Balance_Visibility;
@@ -1028,7 +1028,7 @@ namespace EasyLife.PageModels
             {
                 if (Betrag == value)
                     return;
-                if (double.TryParse(value, out double result) == true)
+                if (double.TryParse(value, NumberStyles.Any, new CultureInfo("de-DE"), out double result) == true)
                 {
                     betrag = value.Replace(".", ",").Trim();
                 }

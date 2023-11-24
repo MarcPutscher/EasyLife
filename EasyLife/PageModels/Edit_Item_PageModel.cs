@@ -64,7 +64,7 @@ namespace EasyLife.PageModels
             {
                 if (Betrag == value)
                     return;
-                if (double.TryParse(value, out double result) == true)
+                if (double.TryParse(value, NumberStyles.Any, new CultureInfo("de-DE"), out double result) == true)
                 {
                     betrag = value.Replace(".", ",").Trim();
                 }
@@ -184,7 +184,7 @@ namespace EasyLife.PageModels
                         return;
                     }
 
-                    Betrag = result.ToString();
+                    Betrag = result.ToString("F2", new CultureInfo("de-DE"));
 
                     Transaktion.Betrag = Betrag;
                     Transaktion.Zweck = Zweck;
