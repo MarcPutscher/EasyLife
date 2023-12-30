@@ -45,15 +45,59 @@ namespace EasyLife.Droid
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
 
-            if(Preferences.Get("Next_Backup_Date", "") != "")
+            if(Preferences.Get("App_first_Created",false) == false)
             {
-                if(DateTime.ParseExact(Preferences.Get("Next_Backup_Date", ""), "dd.MM.yyyy" , new CultureInfo("de-DE")).Date <= DateTime.Now.Date)
-                {
-                    var result = await Services.BackupService.Create_Backup(Preferences.Get("Next_Backup_Date", ""));
+                Preferences.Set("App_first_Created", true);
 
-                    if(result == true)
+                Preferences.Set("Next_Backup_Date", DateTime.Now.AddMonths(1).ToString("dd.MM.yyyy"));
+
+                await ToastHelper.ShowToast("Hallo");
+
+                const int requestLocationId = 2023;
+
+                string[] notiPermission = { Manifest.Permission.PostNotifications /*, Manifest.Permission.ReadMediaImages , Manifest.Permission.ReadMediaAudio , Manifest.Permission.ReadMediaVideo , Manifest.Permission.WriteExternalStorage , Manifest.Permission.ManageExternalStorage , Manifest.Permission.ReadExternalStorage*/};
+
+                if ((int)Build.VERSION.SdkInt < 33) return;
+
+                if (this.CheckSelfPermission(Manifest.Permission.PostNotifications) != Permission.Granted /*|| this.CheckSelfPermission(Manifest.Permission.ReadExternalStorage) != Permission.Granted || this.CheckSelfPermission(Manifest.Permission.ReadMediaImages) != Permission.Granted || this.CheckSelfPermission(Manifest.Permission.ManageExternalStorage) != Permission.Granted || this.CheckSelfPermission(Manifest.Permission.ReadMediaAudio) != Permission.Granted || this.CheckSelfPermission(Manifest.Permission.ReadMediaVideo) != Permission.Granted || this.CheckSelfPermission(Manifest.Permission.WriteExternalStorage) != Permission.Granted*/)
+                {
+                    this.RequestPermissions(notiPermission, requestLocationId);
+                }
+
+                if (Preferences.Get("Get_Backup", false) == false)
+                {
+                    try
                     {
-                        Preferences.Set("Next_Backup_Date", DateTime.Now.AddMonths(1).ToString("dd.MM.yyyy"));
+                        string[] files = Directory.GetFiles(DependencyService.Get<IAccessFile>().CreateFile(null), "EasyLife-Backup-*");
+
+                        if (files.Count() != 0)
+                        {
+                            var result = await Shell.Current.DisplayAlert("Daten wiederherstellen", "Wollen Sie die Daten aus einem Backup wiederhererstellen?", "Ja", "Nein");
+
+                            if (result == true)
+                            {
+                                var result1 = await BackupService.Restore_Backup();
+
+                                if (result1 == 1)
+                                {
+                                    Preferences.Set("Restored_Backup_Date", Preferences.Get("Restored_Backup_Path", "").Substring(Preferences.Get("Restored_Backup_Path", "").LastIndexOf("-") + 1).Substring(0, Preferences.Get("Restored_Backup_Path", "").Substring(Preferences.Get("Restored_Backup_Path", "").LastIndexOf("-")).LastIndexOf(".") - 1));
+                                }
+                            }
+                        }
+
+                        Preferences.Set("Get_Backup", true);
+                    }
+                    catch (Exception ex)
+                    {
+                        await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
+
+                        Preferences.Set("Last_Backup_Date", "");
+
+                        Preferences.Set("Last_Backup_Path", "");
+
+                        Preferences.Set("Restored_Backup_Date", "");
+
+                        Preferences.Set("Get_Backup", true);
                     }
                 }
             }
@@ -63,53 +107,16 @@ namespace EasyLife.Droid
         {
             base.OnStart();
 
-            Preferences.Set("Next_Backup_Date", DateTime.Now.AddMonths(1).ToString("dd.MM.yyyy"));
-
-            const int requestLocationId = 2023;
-
-            string[] notiPermission = { Manifest.Permission.PostNotifications /*, Manifest.Permission.ReadMediaImages , Manifest.Permission.ReadMediaAudio , Manifest.Permission.ReadMediaVideo , Manifest.Permission.WriteExternalStorage , Manifest.Permission.ManageExternalStorage , Manifest.Permission.ReadExternalStorage*/};
-
-            if ((int)Build.VERSION.SdkInt < 33) return;
-
-            if (this.CheckSelfPermission(Manifest.Permission.PostNotifications) != Permission.Granted /*|| this.CheckSelfPermission(Manifest.Permission.ReadExternalStorage) != Permission.Granted || this.CheckSelfPermission(Manifest.Permission.ReadMediaImages) != Permission.Granted || this.CheckSelfPermission(Manifest.Permission.ManageExternalStorage) != Permission.Granted || this.CheckSelfPermission(Manifest.Permission.ReadMediaAudio) != Permission.Granted || this.CheckSelfPermission(Manifest.Permission.ReadMediaVideo) != Permission.Granted || this.CheckSelfPermission(Manifest.Permission.WriteExternalStorage) != Permission.Granted*/)
+            if (Preferences.Get("Next_Backup_Date", "") != "")
             {
-                this.RequestPermissions(notiPermission, requestLocationId);
-            }
-
-            if (Preferences.Get("Get_Backup", false) == false)
-            {
-                try
+                if (DateTime.ParseExact(Preferences.Get("Next_Backup_Date", ""), "dd.MM.yyyy", new CultureInfo("de-DE")).Date <= DateTime.Now.Date)
                 {
-                    string[] files = Directory.GetFiles(DependencyService.Get<IAccessFile>().CreateFile(null), "EasyLife-Backup-*");
+                    var result = await Services.BackupService.Create_Backup(Preferences.Get("Next_Backup_Date", ""));
 
-                    if (files.Count() != 0)
+                    if (result == true)
                     {
-                        var result = await Shell.Current.DisplayAlert("Daten wiederherstellen", "Wollen Sie die Daten aus einem Backup wiederhererstellen?", "Ja", "Nein");
-
-                        if (result == true)
-                        {
-                            var result1 = await BackupService.Restore_Backup();
-
-                            if (result1 == 1)
-                            {
-                                Preferences.Set("Restored_Backup_Date", Preferences.Get("Restored_Backup_Path", "").Substring(Preferences.Get("Restored_Backup_Path", "").LastIndexOf("-") + 1).Substring(0, Preferences.Get("Restored_Backup_Path", "").Substring(Preferences.Get("Restored_Backup_Path", "").LastIndexOf("-")).LastIndexOf(".") - 1));
-                            }
-                        }
+                        Preferences.Set("Next_Backup_Date", DateTime.Now.AddMonths(1).ToString("dd.MM.yyyy"));
                     }
-
-                    Preferences.Set("Get_Backup", true);
-                }
-                catch (Exception ex)
-                {
-                    await Shell.Current.DisplayAlert("Fehler", "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + "", "Verstanden");
-
-                    Preferences.Set("Last_Backup_Date", "");
-
-                    Preferences.Set("Last_Backup_Path", "");
-
-                    Preferences.Set("Restored_Backup_Date", "");
-
-                    Preferences.Set("Get_Backup", true);
                 }
             }
         }
