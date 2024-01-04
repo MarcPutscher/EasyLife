@@ -51,8 +51,6 @@ namespace EasyLife.Droid
 
                 Preferences.Set("Next_Backup_Date", DateTime.Now.AddMonths(1).ToString("dd.MM.yyyy"));
 
-                await ToastHelper.ShowToast("Hallo");
-
                 const int requestLocationId = 2023;
 
                 string[] notiPermission = { Manifest.Permission.PostNotifications /*, Manifest.Permission.ReadMediaImages , Manifest.Permission.ReadMediaAudio , Manifest.Permission.ReadMediaVideo , Manifest.Permission.WriteExternalStorage , Manifest.Permission.ManageExternalStorage , Manifest.Permission.ReadExternalStorage*/};
@@ -111,11 +109,17 @@ namespace EasyLife.Droid
             {
                 if (DateTime.ParseExact(Preferences.Get("Next_Backup_Date", ""), "dd.MM.yyyy", new CultureInfo("de-DE")).Date <= DateTime.Now.Date)
                 {
+                    Preferences.Set("Next_Backup_Date", DateTime.Now.Date.ToString("dd.MM.yyyy"));
+
                     var result = await Services.BackupService.Create_Backup(Preferences.Get("Next_Backup_Date", ""));
 
                     if (result == true)
                     {
                         Preferences.Set("Next_Backup_Date", DateTime.Now.AddMonths(1).ToString("dd.MM.yyyy"));
+
+                        Preferences.Set("Last_Backup_Date", DateTime.Now.ToString("dd.MM.yyyy"));
+
+                        await ToastHelper.ShowToast("Es wurde erfolgreich ein automatisches Backup erstellt.");
                     }
                 }
             }
