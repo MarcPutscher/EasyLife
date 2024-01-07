@@ -847,12 +847,15 @@ namespace EasyLife.Services
                     0,
                     0,
                     0,
-                    transaktion_list
+                    transaktion_list,
+                    0
                 });
             }
             else
             {
                 double saldo = 0;
+
+                double letter = 0;
 
                 foreach (var trans in transaktion_list)
                 {
@@ -860,7 +863,14 @@ namespace EasyLife.Services
                     {
                         if (DateTime.Compare(trans.Datum, saldo_date.AddDays(1).AddSeconds(-1)) <= 0)
                         {
-                            saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                            if (trans.Saldo_Visibility == true)
+                            {
+                                saldo += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                            }
+                            else
+                            {
+                                letter += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                            }
                         }
                     }
                 }
@@ -871,7 +881,8 @@ namespace EasyLife.Services
                     transaktion_list.Last().Id,
                     transaktion_list.Last().Id - transaktion_list.Count(),
                     Math.Round(saldo,2),
-                    transaktion_list
+                    transaktion_list,
+                    Math.Round(letter,2)
                 });
             }
 

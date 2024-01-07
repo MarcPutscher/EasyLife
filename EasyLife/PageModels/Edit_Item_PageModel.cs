@@ -64,20 +64,31 @@ namespace EasyLife.PageModels
             {
                 if (Betrag == value)
                     return;
-                if (double.TryParse(value, out double result) == true)
+
+                switch (value)
                 {
-                    betrag = value.Replace(".", ",").Trim();
-                }
-                else
-                {
-                    if (value == null)
-                    {
+                    case ",":
+                        betrag = "0,";
+                        break;
+
+                    case ".":
+                        betrag = "0,";
+                        break;
+
+                    case "":
                         betrag = "";
-                    }
-                    else
-                    {
-                        Betrag = betrag;
-                    }
+                        break;
+
+                    default:
+                        if (double.TryParse(value, NumberStyles.Any, new CultureInfo("de-DE"), out double result) == true)
+                        {
+                            betrag = value.Replace(".", ",");
+                        }
+                        else
+                        {
+                            betrag = Betrag;
+                        }
+                        break;
                 }
 
                 RaisePropertyChanged();
@@ -144,6 +155,18 @@ namespace EasyLife.PageModels
             }
         }
 
+        public bool activityindicator_isrunning = false;
+        public bool ActivityIndicator_IsRunning
+        {
+            get { return activityindicator_isrunning; }
+            set
+            {
+                if (ActivityIndicator_IsRunning == value)
+                    return;
+                activityindicator_isrunning = value; RaisePropertyChanged();
+            }
+        }
+
         Transaktion placeholder = new Transaktion();
 
         public Edit_Item_PageModel()
@@ -181,6 +204,17 @@ namespace EasyLife.PageModels
 
                 if (double.TryParse(Betrag, NumberStyles.Any, new CultureInfo("de-DE"), out double result) == true)
                 {
+                    ActivityIndicator_IsRunning = true;
+
+                    if (0 > result || result > 9999999)
+                    {
+                        Betrag = null;
+
+                        await Notificater("Der Betrag ist nicht zwischen 0€ und 9999999€");
+
+                        return;
+                    }
+
                     if (Entscheider_ob_Einnahme_oder_Ausgabe[Zweck] == "Einnahmen")
                     {
                         result = Math.Abs(result);
@@ -192,6 +226,8 @@ namespace EasyLife.PageModels
 
                     if (result == 0)
                     {
+                        ActivityIndicator_IsRunning = false;
+
                         await Notificater("Es wurde kein Betrag eingegeben.");
                         return;
                     }
@@ -206,6 +242,8 @@ namespace EasyLife.PageModels
                     Transaktion.Saldo_Visibility = Show_Hide_Saldo;
 
                     await ContentService.Edit_Transaktion(Transaktion);
+
+                    ActivityIndicator_IsRunning = false;
 
                     await Notificater("Erfolgreich bearbeitet");
 
@@ -249,7 +287,7 @@ namespace EasyLife.PageModels
                 if (int.TryParse(TransaktionID, out var result) == true)
                 {
                     Transaktion = await ContentService.Get_specific_Transaktion(result);
-                    Betrag = Math.Abs(double.Parse(Transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE"))).ToString();
+                    Betrag = Math.Abs(double.Parse(Transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE"))).ToString(new CultureInfo("de-DE"));
                     Datum = Transaktion.Datum;
                     Notiz = Transaktion.Notiz;
                     Zweck = Transaktion.Zweck;

@@ -54,6 +54,8 @@ namespace EasyLife.PageModels
 
                 if (double.TryParse(Betrag, NumberStyles.Any, new CultureInfo("de-DE"), out double result) == true)
                 {
+                    ActivityIndicator_IsRunning = true;
+
                     if (Entscheider_ob_Einnahme_oder_Ausgabe[Zweck] == "Einnahmen")
                     {
                         result = Math.Abs(result);
@@ -67,7 +69,7 @@ namespace EasyLife.PageModels
                     if (0 > Math.Abs(result) || Math.Abs(result) > 9999999)
                     {
                         Zweck = Transaktion.Zweck;
-                        Betrag = double.Parse(Transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")).ToString();
+                        Betrag = double.Parse(Transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")).ToString(new CultureInfo("de-DE"));
                         Datum = Transaktion.Datum;
                         Notiz = Transaktion.Notiz;
                         Show_Hide_Balance = Transaktion.Balance_Visibility;
@@ -77,12 +79,19 @@ namespace EasyLife.PageModels
                         Art_an_Wiederholungen = Transaktion.Art_an_Wiederholungen;
                         Speziell = Transaktion.Speziell;
 
+                        ActivityIndicator_IsRunning = false;
+
                         await Notificater("Der Betrag ist nicht zwischen 0€ und 9999999€");
+
+                        return;
                     }
 
                     if (result == 0)
                     {
                         await Notificater("Es wurde kein Betrag eingegeben.");
+
+                        ActivityIndicator_IsRunning = false;
+
                         return;
                     }
 
@@ -120,12 +129,18 @@ namespace EasyLife.PageModels
                             if (result_Edit_Version2 == Errorhandler.Errors[0])
                             {
                                 await Notificater("Es gab ein Logikfehler.");
+
+                                ActivityIndicator_IsRunning = false;
+
                                 return;
                             }
 
                             if (result_Edit_Version2 == Errorhandler.Errors[1])
                             {
                                 await Notificater("Es konnte die Benachrichtigung nicht geändert werden");
+
+                                ActivityIndicator_IsRunning = false;
+
                                 return;
                             }
 
@@ -138,12 +153,18 @@ namespace EasyLife.PageModels
                             if (result_Edit_Version3 == Errorhandler.Errors[0])
                             {
                                 await Notificater("Es gab ein Logikfehler.");
+
+                                ActivityIndicator_IsRunning = false;
+
                                 return;
                             }
 
                             if (result_Edit_Version3 == Errorhandler.Errors[1])
                             {
                                 await Notificater("Es konnte die Benachrichtigung nicht geändert werden");
+
+                                ActivityIndicator_IsRunning = false;
+
                                 return;
                             }
                         }
@@ -152,6 +173,9 @@ namespace EasyLife.PageModels
                     else
                     {
                         await Notificater("Ein Fehler ist aufgetretten.");
+
+                        ActivityIndicator_IsRunning = false;
+
                         return;
                     }
 
@@ -175,6 +199,8 @@ namespace EasyLife.PageModels
 
                     OrderID = null;
 
+                    ActivityIndicator_IsRunning = false;
+
                     await Notificater("Erfolgreich bearbeitet");
 
                     Return();
@@ -183,7 +209,7 @@ namespace EasyLife.PageModels
                 else
                 {
                     Zweck = Transaktion.Zweck;
-                    Betrag = double.Parse(Transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")).ToString();
+                    Betrag = double.Parse(Transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")).ToString(new CultureInfo("de-DE"));
                     Datum = Transaktion.Datum;
                     Notiz = Transaktion.Notiz;
                     Show_Hide_Balance = Transaktion.Balance_Visibility;
@@ -203,7 +229,7 @@ namespace EasyLife.PageModels
                 Virtuelle_Transaktion = Transaktion;
 
                 Zweck = Transaktion.Zweck;
-                Betrag = double.Parse(Transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")).ToString();
+                Betrag = double.Parse(Transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")).ToString(new CultureInfo("de-DE"));
                 Datum = Transaktion.Datum;
                 Notiz = Transaktion.Notiz;
                 Show_Hide_Balance = Transaktion.Balance_Visibility;
@@ -314,7 +340,7 @@ namespace EasyLife.PageModels
                         Virtuelle_Transaktion = await PassingTransaktionService.Get_specific_Transaktion(result1);
                     }
 
-                    Betrag = double.Parse(Virtuelle_Transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")).ToString();
+                    Betrag = double.Parse(Virtuelle_Transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE")).ToString(new CultureInfo("de-DE"));
 
                     Datum = Virtuelle_Transaktion.Datum;
 
@@ -877,7 +903,7 @@ namespace EasyLife.PageModels
                     Min_Datum = transaktion_list2[0].Datum;
                 }
 
-                Betrag = Math.Abs(double.Parse(Virtuelle_Transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE"))).ToString();
+                Betrag = Math.Abs(double.Parse(Virtuelle_Transaktion.Betrag, NumberStyles.Any, new CultureInfo("de-DE"))).ToString(new CultureInfo("de-DE"));
                 Notiz = Virtuelle_Transaktion.Notiz;
                 Anzahl_an_Wiederholungen = Virtuelle_Transaktion.Anzahl_an_Wiederholungen;
                 Art_an_Wiederholungen = Virtuelle_Transaktion.Art_an_Wiederholungen;
@@ -1037,20 +1063,31 @@ namespace EasyLife.PageModels
             {
                 if (Betrag == value)
                     return;
-                if (double.TryParse(value, out double result) == true)
+
+                switch (value)
                 {
-                    betrag = value.Replace(".", ",").Trim();
-                }
-                else
-                {
-                    if (value == null)
-                    {
+                    case ",":
+                        betrag = "0,";
+                        break;
+
+                    case ".":
+                        betrag = "0,";
+                        break;
+
+                    case "":
                         betrag = "";
-                    }
-                    else
-                    {
-                        Betrag = betrag;
-                    }
+                        break;
+
+                    default:
+                        if (double.TryParse(value, NumberStyles.Any, new CultureInfo("de-DE"), out double result) == true)
+                        {
+                            betrag = value.Replace(".", ",");
+                        }
+                        else
+                        {
+                            betrag = Betrag;
+                        }
+                        break;
                 }
 
                 RaisePropertyChanged();
@@ -1277,6 +1314,18 @@ namespace EasyLife.PageModels
 
                     Speziell = Virtueller_Auftrag.Speziell;
                 }
+            }
+        }
+
+        public bool activityindicator_isrunning = false;
+        public bool ActivityIndicator_IsRunning
+        {
+            get { return activityindicator_isrunning; }
+            set
+            {
+                if (ActivityIndicator_IsRunning == value)
+                    return;
+                activityindicator_isrunning = value; RaisePropertyChanged();
             }
         }
     }

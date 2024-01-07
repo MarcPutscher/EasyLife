@@ -377,7 +377,7 @@ namespace EasyLife.PageModels
 
                 if (double.TryParse(Betrag, NumberStyles.Any, new CultureInfo("de-DE"), out double result) == true)
                 {
-                    if(0>result || result>9999999)
+                    if (0>result || result>9999999)
                     {
                         Betrag = null;
 
@@ -409,7 +409,7 @@ namespace EasyLife.PageModels
 
                     if (Virtueller_Auftrag == null)
                     {
-                        Transaktion transaktion = new Transaktion() { Betrag = result.ToString(), Datum = Datum.Date, Zweck = Zweck, Notiz = Notiz, Auftrags_id = null, Anzahl_an_Wiederholungen = null, Art_an_Wiederholungen = null, Speziell = null, Order_Visibility = false, Content_Visibility = true , Balance_Visibility = Show_Hide_Balance , Saldo_Visibility = Show_Hide_Saldo};
+                        Transaktion transaktion = new Transaktion() { Betrag = result.ToString(new CultureInfo("de-DE")), Datum = Datum.Date, Zweck = Zweck, Notiz = Notiz, Auftrags_id = null, Anzahl_an_Wiederholungen = null, Art_an_Wiederholungen = null, Speziell = null, Order_Visibility = false, Content_Visibility = true , Balance_Visibility = Show_Hide_Balance , Saldo_Visibility = Show_Hide_Saldo};
 
                         await ContentService.Add_Transaktion(transaktion);
 
@@ -423,7 +423,7 @@ namespace EasyLife.PageModels
 
                         secondorder = new Auftrag() { Anzahl_an_Wiederholungen = Virtueller_Auftrag.Anzahl_an_Wiederholungen, Art_an_Wiederholungen = Virtueller_Auftrag.Art_an_Wiederholungen, Option = Virtueller_Auftrag.Option, Speziell = Virtueller_Auftrag.Speziell };
 
-                        Transaktion transaktion = new Transaktion() { Betrag = result.ToString(), Datum = Datum.Date, Zweck = Zweck, Notiz = Notiz, Auftrags_id = Virtueller_Auftrag.Id.ToString() , Anzahl_an_Wiederholungen = Virtueller_Auftrag.Anzahl_an_Wiederholungen , Art_an_Wiederholungen = Virtueller_Auftrag.Art_an_Wiederholungen, Speziell = Virtueller_Auftrag.Speziell, Order_Visibility = true, Content_Visibility = true , Balance_Visibility = Show_Hide_Balance , Saldo_Visibility = Show_Hide_Saldo};
+                        Transaktion transaktion = new Transaktion() { Betrag = result.ToString(new CultureInfo("de-DE")), Datum = Datum.Date, Zweck = Zweck, Notiz = Notiz, Auftrags_id = Virtueller_Auftrag.Id.ToString() , Anzahl_an_Wiederholungen = Virtueller_Auftrag.Anzahl_an_Wiederholungen , Art_an_Wiederholungen = Virtueller_Auftrag.Art_an_Wiederholungen, Speziell = Virtueller_Auftrag.Speziell, Order_Visibility = true, Content_Visibility = true , Balance_Visibility = Show_Hide_Balance , Saldo_Visibility = Show_Hide_Saldo};
 
                         await OrderService.Add_Order(Virtueller_Auftrag);
 
@@ -479,7 +479,7 @@ namespace EasyLife.PageModels
 
                                 if (secondorder == null)
                                 {
-                                    Transaktion transaktion = new Transaktion() { Betrag = result.ToString(), Datum = Datum.Date, Zweck = Reason_of_Second_Item, Notiz = Notiz, Auftrags_id = null, Anzahl_an_Wiederholungen = null, Art_an_Wiederholungen = null, Speziell = null, Order_Visibility = false, Content_Visibility = true, Balance_Visibility = Show_Hide_Balance, Saldo_Visibility = Show_Hide_Saldo };
+                                    Transaktion transaktion = new Transaktion() { Betrag = result.ToString(new CultureInfo("de-DE")), Datum = Datum.Date, Zweck = Reason_of_Second_Item, Notiz = Notiz, Auftrags_id = null, Anzahl_an_Wiederholungen = null, Art_an_Wiederholungen = null, Speziell = null, Order_Visibility = false, Content_Visibility = true, Balance_Visibility = Show_Hide_Balance, Saldo_Visibility = Show_Hide_Saldo };
 
                                     await ContentService.Add_Transaktion(transaktion);
 
@@ -491,7 +491,7 @@ namespace EasyLife.PageModels
 
                                     secondorder.Id = 0;
 
-                                    Transaktion transaktion = new Transaktion() { Betrag = result.ToString(), Datum = Datum.Date, Zweck = Reason_of_Second_Item, Notiz = Notiz, Auftrags_id = secondorder.Id.ToString(), Anzahl_an_Wiederholungen = secondorder.Anzahl_an_Wiederholungen, Art_an_Wiederholungen = secondorder.Art_an_Wiederholungen, Speziell = secondorder.Speziell, Order_Visibility = true, Content_Visibility = true, Balance_Visibility = Show_Hide_Balance, Saldo_Visibility = Show_Hide_Saldo };
+                                    Transaktion transaktion = new Transaktion() { Betrag = result.ToString(new CultureInfo("de-DE")), Datum = Datum.Date, Zweck = Reason_of_Second_Item, Notiz = Notiz, Auftrags_id = secondorder.Id.ToString(), Anzahl_an_Wiederholungen = secondorder.Anzahl_an_Wiederholungen, Art_an_Wiederholungen = secondorder.Art_an_Wiederholungen, Speziell = secondorder.Speziell, Order_Visibility = true, Content_Visibility = true, Balance_Visibility = Show_Hide_Balance, Saldo_Visibility = Show_Hide_Saldo };
 
                                     await OrderService.Add_Order(secondorder);
 
@@ -1853,20 +1853,31 @@ namespace EasyLife.PageModels
             {
                 if (Betrag == value)
                     return;
-                if (double.TryParse(value, out double result) == true)
+
+                switch (value)
                 {
-                    betrag = value.Replace(".", ",").Trim();
-                }
-                else
-                {
-                    if (value == null)
-                    {
+                    case ",":
+                        betrag = "0,";
+                        break;
+
+                    case ".":
+                        betrag = "0,";
+                        break;
+
+                    case "":
                         betrag = "";
-                    }
-                    else
-                    {
-                        Betrag = betrag;
-                    }
+                        break;
+
+                    default:
+                        if (double.TryParse(value, NumberStyles.Any, new CultureInfo("de-DE"), out double result) == true)
+                        {
+                            betrag = value.Replace(".", ",");
+                        }
+                        else
+                        {
+                            betrag = Betrag;
+                        }
+                        break;
                 }
 
                 RaisePropertyChanged();

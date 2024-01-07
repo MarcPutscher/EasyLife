@@ -52,6 +52,7 @@
     <ScrollView Margin="20,0,20,0">
         <FlexLayout Direction="Column" 
                     JustifyContent="SpaceEvenly">
+            <ActivityIndicator Color="{DynamicResource Refresh_Color}" IsRunning="{Binding ActivityIndicator_IsRunning}" IsVisible="{Binding ActivityIndicator_IsRunning}"/>
             <Label Text="Zweck" Style="{StaticResource LabelA}"/>
             <Frame Style="{StaticResource FrameA}">
                 <customecontrole:CustomePicker 
