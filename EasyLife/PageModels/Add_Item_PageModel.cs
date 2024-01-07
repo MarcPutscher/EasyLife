@@ -1868,6 +1868,10 @@ namespace EasyLife.PageModels
                         betrag = "";
                         break;
 
+                    case null:
+                        betrag = "";
+                        break;
+
                     default:
                         if (double.TryParse(value, NumberStyles.Any, new CultureInfo("de-DE"), out double result) == true)
                         {
