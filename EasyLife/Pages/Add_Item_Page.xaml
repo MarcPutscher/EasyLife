@@ -151,7 +151,7 @@
                             ItemSource="{Binding Zweck_Liste}"
                             Grid.Column="1"/>
                     </Grid>
-                    <Switch HorizontalOptions="Center" IsToggled="False" VerticalOptions="Center" Grid.Column="1" Grid.Row="2" Margin="0,0,10,0">
+                    <Switch HorizontalOptions="Center" IsToggled="{Binding Create_Second_Item}" VerticalOptions="Center" Grid.Column="1" Grid.Row="2" Margin="0,0,10,0">
                         <Switch.Behaviors>
                             <xct:EventToCommandBehavior EventName="Toggled" Command="{Binding Add_Second_Item_Command}"/>
                         </Switch.Behaviors>

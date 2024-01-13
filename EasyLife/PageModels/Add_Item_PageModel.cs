@@ -611,7 +611,7 @@ namespace EasyLife.PageModels
         {
             try
             {
-                if(Create_Second_Item == false)
+                if(Create_Second_Item == true)
                 {
                     var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Zweiter Zweck", 400, Zweck_Liste.ToList()));
 
@@ -625,15 +625,11 @@ namespace EasyLife.PageModels
                     }
                     else
                     {
-                        Create_Second_Item = true;
-
                         Reason_of_Second_Item = (string)result;
                     }
                 }
                 else
                 {
-                    Create_Second_Item = false;
-
                     Reason_of_Second_Item = null;
                 }
             }
