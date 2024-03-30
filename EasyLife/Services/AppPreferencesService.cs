@@ -106,7 +106,7 @@ namespace EasyLife.Services
     }
 
     /// <summary>
-    /// Ist eine Konvertierungsklasse um Bilanzprofile de-/serealisieren.
+    /// Ist eine Konvertierungsklasse um AppPreferences de-/serealisieren.
     /// </summary>
     public class AppPreferences_Konverter
     {

@@ -57,7 +57,7 @@ namespace EasyLife.PageModels
         {
             try
             {
-                if(Preferences.Get("Stylingprofil",-1) != -1)
+                if (Preferences.Get("Stylingprofil",-1) != -1)
                 {
                     Stylingprofile stylingprofile = new Stylingprofile();
 
@@ -69,6 +69,26 @@ namespace EasyLife.PageModels
                     }
 
                     ColorWheel_State = false;
+                }
+                else
+                {
+                    try
+                    {
+                        var sl = await StylingService.Get_all_Stylingprofile();
+
+                        if(sl.Count() != 0 )
+                        {
+                            var rs = sl.First();
+
+                            if (rs != null)
+                            {
+                                Currentstylingprofile = rs;
+
+                                Preferences.Set("Stylingprofil", Currentstylingprofile.Id);
+                            }
+                        }
+                    }
+                    catch { }
                 }
             }
             catch (Exception ex)
