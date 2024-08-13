@@ -303,7 +303,7 @@ namespace EasyLife.Pages
 
             string[] budget_name_list = { };
 
-            var enablereason = (Dictionary<string, string>)await ReasonService.Get_Enable_ReasonDictionary();
+            var enablereason = (Dictionary<string, string>)await ReasonService.Get_Enable_ReasonDictionary_sorted();
 
             List<string> budget_names = new List<string>() {"Monat"};
 

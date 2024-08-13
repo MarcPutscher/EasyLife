@@ -89,6 +89,7 @@ namespace EasyLife.PageModels
 
                     Virtuelle_Transaktion.Betrag = Betrag;
                     Virtuelle_Transaktion.Notiz = Notiz;
+                    string previousReason = Virtuelle_Transaktion.Zweck;
                     Virtuelle_Transaktion.Zweck = Zweck;
                     Virtuelle_Transaktion.Anzahl_an_Wiederholungen = Anzahl_an_Wiederholungen;
                     Virtuelle_Transaktion.Art_an_Wiederholungen = Art_an_Wiederholungen;
@@ -122,7 +123,7 @@ namespace EasyLife.PageModels
 
                             if (result_Edit_Version2 == Errorhandler.Errors[1])
                             {
-                                await Notificater("Es konnte die Benachrichtigung nicht geändert werden");
+                                await Notificater("Der Auftrag konnte nicht geändert werden");
                                 return;
                             }
 
@@ -140,7 +141,7 @@ namespace EasyLife.PageModels
 
                             if (result_Edit_Version3 == Errorhandler.Errors[1])
                             {
-                                await Notificater("Es konnte die Benachrichtigung nicht geändert werden");
+                                await Notificater("Der Auftrag konnte nicht geändert werden");
                                 return;
                             }
                         }
@@ -165,6 +166,14 @@ namespace EasyLife.PageModels
 
                         await OrderService.Edit_Order(auftrag);
                     }
+
+                    List<Zweck> zwecks = await ReasonService.Get_Enable_ReasonList();
+                    Zweck zweck = zwecks.Where<Zweck>(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == previousReason).First();
+                    zweck.Benutzerdefinierter_Prevalence = zweck.Benutzerdefinierter_Prevalence - 1;
+                    await ReasonService.Edit_Reason(zweck);
+                    zweck = zwecks.Where<Zweck>(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == Virtuelle_Transaktion.Zweck).First();
+                    zweck.Benutzerdefinierter_Prevalence = zweck.Benutzerdefinierter_Prevalence + 1;
+                    await ReasonService.Edit_Reason(zweck);
 
                     Virtuelle_Transaktion = null;
 
@@ -268,7 +277,7 @@ namespace EasyLife.PageModels
             {
                 Zweck_IsEnable = false;
 
-                Entscheider_ob_Einnahme_oder_Ausgabe = (Dictionary<string, string>)await ReasonService.Get_Enable_ReasonDictionary();
+                Entscheider_ob_Einnahme_oder_Ausgabe = (Dictionary<string, string>)await ReasonService.Get_Enable_ReasonDictionary_sorted();
 
                 Zweck_Liste.Clear();
 

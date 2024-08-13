@@ -485,7 +485,7 @@ namespace EasyLife.PageModels
                 {
                     List<Transaktion> help = Transaktion.ToList();
 
-                    var groups1 = await ReasonService.Get_all_Reason();
+                    var groups1 = await ReasonService.Get_all_Reason_sorted();
 
                     Transaktion.Clear();
 
@@ -498,7 +498,7 @@ namespace EasyLife.PageModels
                         groups.Add((group.Benutzerdefinierter_Zweck.Substring(0, group.Benutzerdefinierter_Zweck.IndexOf(":"))));
                     }
 
-                    groups.Sort();
+                    //groups.Sort();
 
                     foreach (string st in groups)
                     {
@@ -2565,7 +2565,7 @@ namespace EasyLife.PageModels
 
                     var allbudget = await BudgetService.Get_all_Budget();
 
-                    var enablereason = await ReasonService.Get_Enable_ReasonDictionary();
+                    var enablereason = await ReasonService.Get_Enable_ReasonDictionary_sorted();
 
                     List<string> enablereasonlist = new List<string>();
 

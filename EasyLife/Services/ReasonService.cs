@@ -40,7 +40,8 @@ namespace EasyLife.Services
                 Zweck zweck0 = new Zweck
                 {
                     Benutzerdefinierter_Zweck = "Sonstiges:Ausgaben",
-                    Reason_Visibility = true
+                    Reason_Visibility = true,
+                    Benutzerdefinierter_Prevalence = 0
                 };
 
                 await db.InsertAsync(zweck0);
@@ -62,7 +63,7 @@ namespace EasyLife.Services
 
             await Init();
 
-            Zweck zweck = new Zweck() { Benutzerdefinierter_Zweck = ""+reason.Trim()+":"+value+"" , Reason_Visibility = true};
+            Zweck zweck = new Zweck() { Benutzerdefinierter_Zweck = ""+reason.Trim()+":"+value+"" , Reason_Visibility = true , Benutzerdefinierter_Prevalence = 0};
 
             var result = await Get_specific_Reason(zweck.Benutzerdefinierter_Zweck.ToUpper());
 
@@ -149,6 +150,26 @@ namespace EasyLife.Services
         }
 
         /// <summary>
+        /// Gibt alle Zwecke sortiert nach Häufigkeit in der Datenbank zurück.
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<IEnumerable<Zweck>> Get_all_Reason_sorted()
+        {
+            await Init();
+
+            try
+            {
+                List<Zweck> zwecke = new List<Zweck>(await Get_all_Reason());
+                List<Zweck> result = zwecke.OrderByDescending(zweck => zweck.Benutzerdefinierter_Prevalence).ToList();
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Gibt alle aktiven Zwecke in der Datenbank zurück. 
         /// </summary>
         /// <returns></returns>
@@ -161,6 +182,27 @@ namespace EasyLife.Services
             foreach (var re in zweckList1)
             {
                 if (re.Reason_Visibility == true)
+                {
+                    zweckList.Add(re);
+                }
+            }
+
+            return zweckList;
+        }
+
+        /// <summary>
+        /// Gibt alle deaktiven Zwecke in der Datenbank zurück. 
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<List<Zweck>> Get_Disable_ReasonList()
+        {
+            List<Zweck> zweckList1 = new List<Zweck>(await Get_all_Reason());
+
+            List<Zweck> zweckList = new List<Zweck>();
+
+            foreach (var re in zweckList1)
+            {
+                if (re.Reason_Visibility == false)
                 {
                     zweckList.Add(re);
                 }
@@ -238,7 +280,7 @@ namespace EasyLife.Services
 
             IDictionary<string, string> result = new Dictionary<string, string>();
 
-            Zweck sonstiges = new Zweck() { Benutzerdefinierter_Zweck = "Sonstiges:Ausgaben", Reason_Visibility = true };
+            Zweck sonstiges = new Zweck() { Benutzerdefinierter_Zweck = "Sonstiges:Ausgaben", Reason_Visibility = true , Benutzerdefinierter_Prevalence = 0};
 
             if (zweckList.Contains(sonstiges) == false)
             {
@@ -263,6 +305,42 @@ namespace EasyLife.Services
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Gibt alle aktiven Zwecke, sotiert nach Häufigkeit, in der Datenbank zurück.
+        /// </summary>
+        public static async Task<IDictionary<string, string>> Get_Enable_ReasonDictionary_sorted()
+        {
+            List<Zweck> zwecke = (List<Zweck>)await ReasonService.Get_Enable_ReasonList();
+            if (zwecke.Count() != 0)
+            {
+                List<Zweck> result = zwecke.OrderByDescending(zweck => zweck.Benutzerdefinierter_Prevalence).ToList();
+
+                return result.ToDictionary(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")), zw => zw.Benutzerdefinierter_Zweck.Substring(zw.Benutzerdefinierter_Zweck.IndexOf(":") + 1));
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Gibt alle deaktiven Zwecke, sotiert nach Häufigkeit, in der Datenbank zurück.
+        /// </summary>
+        public static async Task<IDictionary<string, string>> Get_Disable_ReasonDictionary_sorted()
+        {
+            List<Zweck> zwecke = (List<Zweck>)await ReasonService.Get_Disable_ReasonList();
+            if (zwecke.Count() != 0)
+            {
+                List<Zweck> result = zwecke.OrderByDescending(zweck => zweck.Benutzerdefinierter_Prevalence).ToList();
+
+                return result.ToDictionary(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")), zw => zw.Benutzerdefinierter_Zweck.Substring(zw.Benutzerdefinierter_Zweck.IndexOf(":") + 1));
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>

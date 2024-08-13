@@ -415,7 +415,7 @@ namespace EasyLife.PageModels
         {
             try
             {
-                Dictionary<string, string> zwecke = (Dictionary<string, string>)await ReasonService.Get_Enable_ReasonDictionary();
+                Dictionary<string, string> zwecke = (Dictionary<string, string>)await ReasonService.Get_Enable_ReasonDictionary_sorted();
 
                 List<string> zwecke2 = new List<string>();
 
@@ -483,7 +483,7 @@ namespace EasyLife.PageModels
         {
             try
             {
-                Dictionary<string, string> zwecke = (Dictionary<string, string>)await ReasonService.Get_Disable_ReasonDictionary();
+                Dictionary<string, string> zwecke = (Dictionary<string, string>)await ReasonService.Get_Disable_ReasonDictionary_sorted();
 
                 List<string> zwecke2 = new List<string>();
 
@@ -623,7 +623,7 @@ namespace EasyLife.PageModels
                     }
                 }
 
-                Entscheider_ob_Einnahme_oder_Ausgabe = (Dictionary<string, string>)await ReasonService.Get_Enable_ReasonDictionary();
+                Entscheider_ob_Einnahme_oder_Ausgabe = (Dictionary<string, string>)await ReasonService.Get_Enable_ReasonDictionary_sorted();
 
                 Zweck_Liste.Clear();
 
@@ -746,6 +746,10 @@ namespace EasyLife.PageModels
 
                     Datum = DateTime.Now;
 
+                    List<Zweck> zwecks = await ReasonService.Get_Enable_ReasonList();
+                    Zweck zweck = zwecks.Where<Zweck>(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == Zweck).First();
+                    zweck.Benutzerdefinierter_Prevalence = zweck.Benutzerdefinierter_Prevalence + 1;
+                    await ReasonService.Edit_Reason(zweck);
                     Zweck = null;
 
                     Notiz = null;
@@ -766,6 +770,7 @@ namespace EasyLife.PageModels
 
                     await PassingOrderService.Remove_All_Order();
                     await PassingTransaktionService.Remove_All_Transaktion();
+                    await Get_Reasons_Liste();
 
                     await Notificater("Erfolgreich hinzugefügt");
                 }
