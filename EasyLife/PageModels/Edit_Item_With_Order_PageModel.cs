@@ -99,6 +99,7 @@ namespace EasyLife.PageModels
 
                     Virtuelle_Transaktion.Betrag = Betrag;
                     Virtuelle_Transaktion.Notiz = Notiz;
+                    string previousReason = Virtuelle_Transaktion.Zweck;
                     Virtuelle_Transaktion.Zweck = Zweck;
                     Virtuelle_Transaktion.Anzahl_an_Wiederholungen = Anzahl_an_Wiederholungen;
                     Virtuelle_Transaktion.Art_an_Wiederholungen = Art_an_Wiederholungen;
@@ -192,6 +193,14 @@ namespace EasyLife.PageModels
 
                         await OrderService.Edit_Order(auftrag);
                     }
+
+                    List<Zweck> zwecks = await ReasonService.Get_Enable_ReasonList();
+                    Zweck zweck = zwecks.Where<Zweck>(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == previousReason).First();
+                    zweck.Benutzerdefinierter_Prevalence = zweck.Benutzerdefinierter_Prevalence - 1;
+                    await ReasonService.Edit_Reason(zweck);
+                    zweck = zwecks.Where<Zweck>(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == Virtuelle_Transaktion.Zweck).First();
+                    zweck.Benutzerdefinierter_Prevalence = zweck.Benutzerdefinierter_Prevalence + 1;
+                    await ReasonService.Edit_Reason(zweck);
 
                     Virtuelle_Transaktion = null;
 
@@ -300,7 +309,7 @@ namespace EasyLife.PageModels
             {
                 Zweck_IsEnable = false;
 
-                Entscheider_ob_Einnahme_oder_Ausgabe = (Dictionary<string, string>)await ReasonService.Get_Enable_ReasonDictionary();
+                Entscheider_ob_Einnahme_oder_Ausgabe = (Dictionary<string, string>)await ReasonService.Get_Enable_ReasonDictionary_sorted();
 
                 Zweck_Liste.Clear();
 

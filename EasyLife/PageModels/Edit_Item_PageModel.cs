@@ -239,6 +239,13 @@ namespace EasyLife.PageModels
                     Betrag = result.ToString();
 
                     Transaktion.Betrag = Betrag;
+                    List<Zweck> zwecks = await ReasonService.Get_Enable_ReasonList();
+                    Zweck zweck = zwecks.Where<Zweck>(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == Transaktion.Zweck).First();
+                    zweck.Benutzerdefinierter_Prevalence = zweck.Benutzerdefinierter_Prevalence - 1;
+                    await ReasonService.Edit_Reason(zweck);
+                    zweck = zwecks.Where<Zweck>(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == Zweck).First();
+                    zweck.Benutzerdefinierter_Prevalence = zweck.Benutzerdefinierter_Prevalence + 1;
+                    await ReasonService.Edit_Reason(zweck);
                     Transaktion.Zweck = Zweck;
                     Transaktion.Datum = Datum;
                     Transaktion.Notiz = Notiz;
@@ -318,7 +325,7 @@ namespace EasyLife.PageModels
             {
                 Zweck_IsEnable = false;
 
-                Entscheider_ob_Einnahme_oder_Ausgabe = (Dictionary<string, string>)await ReasonService.Get_Enable_ReasonDictionary();
+                Entscheider_ob_Einnahme_oder_Ausgabe = (Dictionary<string, string>)await ReasonService.Get_Enable_ReasonDictionary_sorted();
 
                 Zweck_Liste.Clear();
 

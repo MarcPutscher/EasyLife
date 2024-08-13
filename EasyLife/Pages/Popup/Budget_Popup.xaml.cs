@@ -310,7 +310,7 @@ namespace EasyLife.Pages
                             {
                                 if ((bool)result0 == true)
                                 {
-                                    var enablereason = await ReasonService.Get_Enable_ReasonDictionary();
+                                    var enablereason = await ReasonService.Get_Enable_ReasonDictionary_sorted();
 
                                     List<string> enablereasonlist = new List<string>();
 

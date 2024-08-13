@@ -582,7 +582,7 @@ namespace EasyLife.PageModels
                                                     {
                                                         foreach (Zweck objekt in objektlist)
                                                         {
-                                                            resultstring.Add(new string[] { "Zweck " + objekt.Id + "", "" + objekt.Benutzerdefinierter_Zweck.Substring(0, objekt.Benutzerdefinierter_Zweck.IndexOf(":")) + " als " + objekt.Benutzerdefinierter_Zweck.Substring(objekt.Benutzerdefinierter_Zweck.IndexOf(":") + 1) + "" });
+                                                            resultstring.Add(new string[] { "Zweck " + objekt.Id + "", "" + objekt.Benutzerdefinierter_Zweck.Substring(0, objekt.Benutzerdefinierter_Zweck.IndexOf(":")) + " als " + objekt.Benutzerdefinierter_Zweck.Substring(objekt.Benutzerdefinierter_Zweck.IndexOf(":") + 1) + "\nHäufigkeit: " + objekt.Benutzerdefinierter_Prevalence });
                                                         }
 
                                                         await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Zwecke", 320, 0, null, null, resultstring));

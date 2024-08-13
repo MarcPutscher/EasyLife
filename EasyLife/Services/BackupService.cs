@@ -330,6 +330,8 @@ namespace EasyLife.Services
 
                 await Reset_Notification();
 
+                await Patch_Reason(DateTime.ParseExact(Preferences.Get("Restored_Backup_Path", "").Substring(Preferences.Get("Restored_Backup_Path", "").LastIndexOf("-") + 1).Substring(0, Preferences.Get("Restored_Backup_Path", "").Substring(Preferences.Get("Restored_Backup_Path", "").LastIndexOf("-")).LastIndexOf(".") - 1), "dd.MM.yyyy", new CultureInfo("de-DE")));
+
                 return 1;
             }
 
@@ -354,6 +356,8 @@ namespace EasyLife.Services
             await Reset_Notification();
 
             await Reset_Notification();
+
+            await Patch_Reason(DateTime.ParseExact(Preferences.Get("Restored_Backup_Path", "").Substring(Preferences.Get("Restored_Backup_Path", "").LastIndexOf("-") + 1).Substring(0, Preferences.Get("Restored_Backup_Path", "").Substring(Preferences.Get("Restored_Backup_Path", "").LastIndexOf("-")).LastIndexOf(".") - 1), "dd.MM.yyyy", new CultureInfo("de-DE")));
 
             return 1;
         }
@@ -1029,6 +1033,61 @@ namespace EasyLife.Services
             }
             else
             {
+                List<object> objekt = Content[0].ToList();
+
+                List<Transaktion> transaktion = objekt[4] as List<Transaktion>;
+
+                List<Transaktion> transaktions_with_order_list = new List<Transaktion>();
+
+                List<Transaktion> transaktions_of_an_spezific_order = new List<Transaktion>();
+
+                List<Transaktion> last_transaktion_of_an_order_list = new List<Transaktion>();
+
+                foreach (Transaktion trans in transaktion_list)
+                {
+                    if (String.IsNullOrEmpty(trans.Auftrags_id) == false)
+                    {
+                        if (trans.Order_Visibility == true)
+                        {
+                            transaktions_with_order_list.Add(trans);
+                        }
+                    }
+                    else
+                    {
+                        reason_list.Where(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == trans.Zweck).First().Benutzerdefinierter_Prevalence = reason_list.Where(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == trans.Zweck).First().Benutzerdefinierter_Prevalence + 1;
+                    }
+                }
+
+                if (transaktions_with_order_list.Count() != 0)
+                {
+                    string order_id = transaktions_with_order_list.First().Auftrags_id.Substring(0, transaktions_with_order_list.First().Auftrags_id.IndexOf("."));
+
+                    foreach (Transaktion trans in transaktions_with_order_list)
+                    {
+                        if (trans.Auftrags_id.Substring(0, trans.Auftrags_id.IndexOf(".")) == order_id)
+                        {
+                            transaktions_of_an_spezific_order.Add(trans);
+                        }
+                        else
+                        {
+                            last_transaktion_of_an_order_list.Add(transaktions_of_an_spezific_order.OrderBy(d => d.Datum).ToList().Last());
+
+                            transaktions_of_an_spezific_order.Clear();
+
+                            order_id = trans.Auftrags_id.Substring(0, trans.Auftrags_id.IndexOf("."));
+
+                            transaktions_of_an_spezific_order.Add(trans);
+                        }
+                    }
+
+                    last_transaktion_of_an_order_list.Add(transaktions_of_an_spezific_order.OrderBy(d => d.Datum).ToList().Last());
+
+                    foreach (Transaktion trans in last_transaktion_of_an_order_list)
+                    {
+                        reason_list.Where(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == trans.Zweck).First().Benutzerdefinierter_Prevalence = reason_list.Where(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == trans.Zweck).First().Benutzerdefinierter_Prevalence + 1;
+                    }
+                }
+
                 Content.Add(new List<object>()
                 {
                     "Zwecke",
@@ -1097,6 +1156,86 @@ namespace EasyLife.Services
             await db_create.CloseAsync();
 
             return Content;
+        }
+
+        /// <summary>
+        /// Patch die Häufigkeit zu den Zwecken. 
+        /// </summary>
+        public static async Task Patch_Reason(DateTime date)
+        {
+            if (DateTime.Compare(date, DateTime.Now) > 0)
+            {
+                return;
+            }
+
+            Init_Source();
+
+            await db_create.CreateTableAsync<Transaktion>();
+
+            List<Transaktion> transaktion_list = new List<Transaktion>(await db_create.Table<Transaktion>().ToListAsync());
+
+            await db_create.CloseAsync();
+
+            await db_create.CreateTableAsync<Zweck>();
+
+            List<Zweck> Reason_list = new List<Zweck>(await db_create.Table<Zweck>().ToListAsync());
+
+            List<Transaktion> transaktions_with_order_list = new List<Transaktion>();
+
+            List<Transaktion> transaktions_of_an_spezific_order = new List<Transaktion>();
+
+            List<Transaktion> last_transaktion_of_an_order_list = new List<Transaktion>();
+
+            foreach (Transaktion trans in transaktion_list)
+            {
+                if (String.IsNullOrEmpty(trans.Auftrags_id) == false)
+                {
+                    if (trans.Order_Visibility == true)
+                    {
+                        transaktions_with_order_list.Add(trans);
+                    }
+                }
+                else
+                {
+                    Reason_list.Where(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == trans.Zweck).First().Benutzerdefinierter_Prevalence = Reason_list.Where(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == trans.Zweck).First().Benutzerdefinierter_Prevalence + 1;
+                }
+            }
+
+            if (transaktions_with_order_list.Count() != 0)
+            {
+                string order_id = transaktions_with_order_list.First().Auftrags_id.Substring(0, transaktions_with_order_list.First().Auftrags_id.IndexOf("."));
+
+                foreach (Transaktion trans in transaktions_with_order_list)
+                {
+                    if (trans.Auftrags_id.Substring(0, trans.Auftrags_id.IndexOf(".")) == order_id)
+                    {
+                        transaktions_of_an_spezific_order.Add(trans);
+                    }
+                    else
+                    {
+                        last_transaktion_of_an_order_list.Add(transaktions_of_an_spezific_order.OrderBy(d => d.Datum).ToList().Last());
+
+                        transaktions_of_an_spezific_order.Clear();
+
+                        order_id = trans.Auftrags_id.Substring(0, trans.Auftrags_id.IndexOf("."));
+
+                        transaktions_of_an_spezific_order.Add(trans);
+                    }
+                }
+
+                last_transaktion_of_an_order_list.Add(transaktions_of_an_spezific_order.OrderBy(d => d.Datum).ToList().Last());
+
+                foreach (Transaktion trans in last_transaktion_of_an_order_list)
+                {
+                    Reason_list.Where(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == trans.Zweck).First().Benutzerdefinierter_Prevalence = Reason_list.Where(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == trans.Zweck).First().Benutzerdefinierter_Prevalence + 1;
+                }
+            }
+
+            foreach (Zweck reason in Reason_list)
+            {
+                await db_create.UpdateAsync(reason);
+            }
+            await db_create.CloseAsync();
         }
     }
 }

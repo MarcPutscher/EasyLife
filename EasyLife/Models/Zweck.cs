@@ -45,6 +45,19 @@ namespace EasyLife.Models
             }
         }
 
+        public int prevalence;
+        public int Benutzerdefinierter_Prevalence
+        {
+            get { return prevalence; }
+            set
+            {
+                if (Benutzerdefinierter_Prevalence == value)
+                    return;
+                prevalence = value; OnPropertyChanged(nameof(Benutzerdefinierter_Prevalence));
+            }
+        }
+
+
         public event PropertyChangingEventHandler PropertyChanging;
         void OnPropertyChanged(string name) => PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(name));
     }
