@@ -4,6 +4,7 @@ using MvvmHelpers;
 using MvvmHelpers.Commands;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Forms;
 using Command = MvvmHelpers.Commands.Command;
 using System;
@@ -64,6 +65,8 @@ namespace EasyLife.PageModels
             Change_Saldo_Date_Command = new AsyncCommand(Change_Saldo_Date_Methode);
 
             Period_Command = new AsyncCommand(Period_Popup);
+
+            ShowKronos_Command = new AsyncCommand(ShowKronos_);
 
             title = "Haushaltsbuch " + Current_Viewtime.Year + " " + Current_Viewtime.Month + "";
 
@@ -2969,5 +2972,22 @@ namespace EasyLife.PageModels
         public List<Transaktion> Transaktion_List_from_Load = new List<Transaktion>();
 
         public List<string> used_reasons_list = new List<string>();
+
+        public AsyncCommand ShowKronos_Command { get; }
+
+        public async Task ShowKronos_()
+        {
+            try
+            {
+                Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+                keyValuePairs.Add("Mein Name ist Kronos.", "Wie heißt du?");
+                keyValuePairs.Add("Du bist in der App EasyLife, auf der Homeseite und du befindest dich gerade bei mir. Kornos dem Appassistenten.", "Wo befinde ich mich gerade?");
+                await Shell.Current.ShowPopupAsync(new Assistant_Popup(keyValuePairs));
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+            }
+        }
     }
 }

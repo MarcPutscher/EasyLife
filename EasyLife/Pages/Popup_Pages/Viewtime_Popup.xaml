@@ -1,0 +1,66 @@
+﻿<xct:Popup
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="EasyLife.Pages.Viewtime_Popup"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:fontAwesome="clr-namespace:FontAwesome" 
+    xmlns:customecontrole="clr-namespace:EasyLife.CustomeControle"
+    IsLightDismissEnabled="False"
+    x:Name="ViewTime_Popup"
+    Color="Transparent"
+    HorizontalOptions="FillAndExpand"
+    VerticalOptions="Center">
+
+    <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="15" ColumnDefinitions="*,Auto" ColumnSpacing="5" Padding="10" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="Fill">
+        <ImageButton Grid.Row="0" Grid.Column="1" Clicked="CancelButton_Clicked" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="{DynamicResource Hintergrund_Cancel_Popup}" CornerRadius="50" Padding="0">
+            <ImageButton.Source>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.CircleXmark}" Color="{DynamicResource Vordergrund_Cancel_Popup}" Size="50"/>
+            </ImageButton.Source>
+        </ImageButton>
+        <Label Text="Zeitraum" TextColor="{DynamicResource Text_Titel_Popup}" FontSize="30" FontAttributes="Bold" HorizontalTextAlignment="Center" TextDecorations="Underline" Grid.Row="0" Grid.Column="0"/>
+        <Frame Padding="20" CornerRadius="20" BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" BorderColor="{DynamicResource Rand_Content_Popup}" VerticalOptions="Center" HorizontalOptions="Center" xct:ShadowEffect.Color="{DynamicResource Rand_Content_Popup}"  Grid.Row="1" Grid.ColumnSpan="2">
+            <StackLayout>
+                <StackLayout Orientation="Horizontal" Spacing="10">
+                    <Label Text="Jahr :" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" TextColor="{DynamicResource Text_Content_Popup}" FontSize="Medium" FontAttributes="Bold" />
+                    <customecontrole:CustomePicker 
+                        x:Name="YearPicker"
+                        Titel="Jahre"
+                        ItemColor="{DynamicResource Subtext_Content_Popup}"
+                        PlaceholderText="Jahr auswählen"
+                        PlaceholderColor="{DynamicResource Subtext_Content_Popup}"
+                        ItemChanged="Year_Changed_Methode"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Spacing="10">
+                    <Label Text="Gesamtes Jahr " FontAttributes="Bold" FontSize="Body" TextColor="{DynamicResource Text_Content_Popup}" HorizontalTextAlignment="Start" VerticalOptions="Center" HorizontalOptions="Center"/>
+                    <Switch x:Name="OptionSwitch" PropertyChanged="OptionSwitch_PropertyChanged">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="On">
+                                    <VisualState.Setters>
+                                        <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Popup}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Off">
+                                    <VisualState.Setters>
+                                        <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Popup}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Switch>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Spacing="10">
+                    <Label  x:Name="MonthLabel" Text="Monat :"  VerticalTextAlignment="Center" HorizontalTextAlignment="Start" TextColor="{DynamicResource Text_Content_Popup}" FontSize="Medium" FontAttributes="Bold"/>
+                    <customecontrole:CustomePicker 
+                        x:Name="MonthPicker"
+                        Titel="Monate"
+                        ItemColor="{DynamicResource Subtext_Content_Popup}"
+                        PlaceholderText="Monat auswählen"
+                        PlaceholderColor="{DynamicResource Subtext_Content_Popup}"
+                        ItemChanged="Month_Changed_Methode"/>
+                </StackLayout>
+            </StackLayout>
+        </Frame>
+        <Button x:Name="ReturnButton" Text="Anwenden" VerticalOptions="Center" HorizontalOptions="End" Grid.Row="2" Grid.Column="1" TextColor="{DynamicResource Text_Button_Popup}" BackgroundColor="{DynamicResource Hintertgrund_Button_Popup}" Clicked="Return_Methode" CornerRadius="30" xct:ShadowEffect.Color="{DynamicResource Rand_Button_Popup}" BorderColor="{DynamicResource Rand_Button_Popup}" BorderWidth="1" FontAttributes="Bold" />
+    </Grid>
+</xct:Popup>

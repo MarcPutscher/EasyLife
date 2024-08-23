@@ -182,6 +182,7 @@
         <ToolbarItem Order="Secondary" Text="Ansicht"  Command="{Binding GroupingOption_Command}"/>
         <ToolbarItem Order="Secondary" Text="Suchen"  Command="{Binding Set_Searchbar_Visibility_Command}"/>
         <ToolbarItem Order="Secondary" Text="Rechnen" Command="{Binding ShowCalculator_Command}"/>
+        <ToolbarItem Order="Secondary" Text="Assistent" Command="{Binding ShowKronos_Command}"/>
     </ContentPage.ToolbarItems>
 
     <StackLayout>

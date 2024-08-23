@@ -62,13 +62,19 @@
     <Compile Update="Pages\Add_Order_Page.xaml.cs">
       <DependentUpon>Add_Order_Page.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\Popup\MetaData_Popup.xaml.cs">
+    <Compile Update="Pages\Popup_Pages\Assistant_Popup.xaml.cs">
+      <DependentUpon>Assistant_Popup.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Popup_Pages\KronosOverlay_Popup.xaml.cs">
+      <DependentUpon>KronosOverlay_Popup.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Popup_Pages\MetaData_Popup.xaml.cs">
       <DependentUpon>MetaData_Popup.xaml</DependentUpon>
     </Compile>
     <Compile Update="Pages\Styling_Color_Page.xaml.cs">
       <DependentUpon>Styling_Color_Page.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\Popup\Viewtime_Popup.xaml.cs">
+    <Compile Update="Pages\Popup_Pages\Viewtime_Popup.xaml.cs">
       <DependentUpon>Viewtime_Popup.xaml</DependentUpon>
     </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
@@ -118,13 +124,16 @@
     <EmbeddedResource Update="Pages\Compare_Page.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Popup\Budget_Popup.xaml">
+    <EmbeddedResource Update="Pages\Pluto_Page.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Popup\CalculateListe_Popup.xaml">
+    <EmbeddedResource Update="Pages\Popup_Pages\Budget_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Popup\Change_Saldo_Date_Popup.xaml">
+    <EmbeddedResource Update="Pages\Popup_Pages\CalculateListe_Popup.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\Popup_Pages\Change_Saldo_Date_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\Edit_Item_Page.xaml">
@@ -136,19 +145,19 @@
     <EmbeddedResource Update="Pages\Edit_Order_Page.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Popup\CustomeAktionSheet_Popup.xaml">
+    <EmbeddedResource Update="Pages\Popup_Pages\CustomeAktionSheet_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Popup\CustomeAlert_Popup.xaml">
+    <EmbeddedResource Update="Pages\Popup_Pages\CustomeAlert_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Popup\CustomeColorSheet_Popup.xaml">
+    <EmbeddedResource Update="Pages\Popup_Pages\CustomeColorSheet_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Popup\CustomePromt_Popup.xaml">
+    <EmbeddedResource Update="Pages\Popup_Pages\CustomePromt_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Popup\Filter_Popup.xaml">
+    <EmbeddedResource Update="Pages\Popup_Pages\Filter_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\Master_Page.xaml">
@@ -163,13 +172,13 @@
     <EmbeddedResource Update="Pages\Styling_Color_Page.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Popup\Timespane_Popup.xaml">
+    <EmbeddedResource Update="Pages\Popup_Pages\Timespane_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\Trashcan_Page.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Popup\Viewtime_Popup.xaml">
+    <EmbeddedResource Update="Pages\Popup_Pages\Viewtime_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\Resources.resx">

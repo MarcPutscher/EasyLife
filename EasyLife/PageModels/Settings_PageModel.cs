@@ -16,6 +16,7 @@ using System.IO;
 using EasyLife.Models;
 using System.Text;
 using Xamarin.Forms.Internals;
+using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 
 namespace EasyLife.PageModels
 {
@@ -32,6 +33,8 @@ namespace EasyLife.PageModels
             Datanmanagment_Command = new AsyncCommand(Datanmanagment_Methode);
 
             Load_Metadata_Command = new AsyncCommand(Load_Metadata);
+
+            Load_KronosOverlay_Command = new AsyncCommand(Load_KronosOverlay);
 
             Last_Backup_Date = Preferences.Get("Last_Backup_Date", "");
 
@@ -1045,6 +1048,18 @@ namespace EasyLife.PageModels
                 await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist beim Erstellen der Metadaten ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
+
+        private async Task Load_KronosOverlay()
+        {
+            try
+            {
+                await Shell.Current.ShowPopupAsync(new KronosOverlay_Popup());
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist beim Erstellen der Metadaten ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+            }
+        }
         private async Task Notification_Methode()
         {
             try
@@ -1110,6 +1125,8 @@ namespace EasyLife.PageModels
         public AsyncCommand View_Appering_Command { get; }
         public AsyncCommand Datanmanagment_Command { get; }
         public AsyncCommand Load_Metadata_Command { get; }
+        public AsyncCommand Load_KronosOverlay_Command { get; }
+
 
         public string is_notification_enable;
         public string Is_Notification_Enable

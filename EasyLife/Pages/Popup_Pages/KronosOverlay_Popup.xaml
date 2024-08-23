@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xct:Popup
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="EasyLife.Pages.KronosOverlay_Popup"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+    xmlns:customrenderer="clr-namespace:EasyLife.CustomRenderer"
+    xmlns:fontAwesome="clr-namespace:FontAwesome" 
+    xmlns:model="clr-namespace:EasyLife.Models" 
+    IsLightDismissEnabled="False"
+    HorizontalOptions="FillAndExpand"
+    VerticalOptions="Fill"
+    Color="Black"
+    Size="380,700"
+    Opened="Popup_Opened">
+
+    <Frame Padding="20" CornerRadius="50" HasShadow="True" BorderColor="{DynamicResource Rand_Content_Popup}" BackgroundColor="{DynamicResource Hintergrund_Content_Popup}">
+        <Grid RowDefinitions="Auto,*" RowSpacing="5" ColumnSpacing="5" ColumnDefinitions="*,Auto">
+            <Label Grid.Row="0" Grid.Column="0" Text="Einstellungen von Kronos" TextDecorations="Underline" TextColor="{DynamicResource Text_Titel_Popup}" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,10,0,1"/>
+            <ImageButton Grid.Row="0" Grid.Column="1" Clicked="CancelButton_Clicked" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="{DynamicResource Hintergrund_Cancel_Popup}" CornerRadius="50" Padding="0">
+                <ImageButton.Source>
+                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.CircleXmark}" Color="{DynamicResource Vordergrund_Cancel_Popup}" Size="50"/>
+                </ImageButton.Source>
+            </ImageButton>
+            <Frame BackgroundColor="Transparent" Padding="0" HorizontalOptions="Fill" Grid.Row="1" Grid.ColumnSpan="2">
+                <ScrollView BackgroundColor="Transparent" HorizontalOptions="Fill" VerticalScrollBarVisibility="Never">
+                    <StackLayout Orientation="Vertical" Spacing="5" HorizontalOptions="Center" BackgroundColor="Transparent">
+                        <Label Text="Language" TextColor="{DynamicResource Subtext_Content_Popup}" HorizontalTextAlignment="Start" VerticalTextAlignment="Center" VerticalOptions="Center" HorizontalOptions="Fill" FontSize="Medium"/>
+                        <Picker x:Name="languagePicker" SelectedIndexChanged="languagePicker_SelectedIndexChanged" TextColor="{DynamicResource Text_Content_Popup}">
+                        </Picker>
+                        <Label Text="Volume" TextColor="{DynamicResource Subtext_Content_Popup}" HorizontalTextAlignment="Start" VerticalTextAlignment="Center" VerticalOptions="Center" HorizontalOptions="Fill" FontSize="Medium"/>
+                        <Slider x:Name="volumeSlider" BackgroundColor="Transparent" DragCompleted="volumeSlider_DragCompleted" Minimum="0" Maximum="1" WidthRequest="200" Scale="1" ThumbColor="Green"/>
+                        <Label Text="Pitch" TextColor="{DynamicResource Subtext_Content_Popup}" HorizontalTextAlignment="Start" VerticalTextAlignment="Center" VerticalOptions="Center" HorizontalOptions="Fill" FontSize="Medium"/>
+                        <Slider x:Name="pitchSlider" BackgroundColor="Transparent" DragCompleted="pitchSlider_DragCompleted" Minimum="0" Maximum="1" WidthRequest="200" Scale="1" ThumbColor="Green"/>
+                        <Frame BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" CornerRadius="30" BorderColor="{DynamicResource Rand_Content_Popup}"  Margin="5,5,5,5" Padding="0">
+                            <Button x:Name="voicetest" BackgroundColor="Transparent" TextColor="{DynamicResource Text_Content_Popup}" FontSize="20" FontAttributes="Italic" HorizontalOptions="Center" VerticalOptions="Center" Margin="5,0,5,0" />
+                        </Frame>
+                    </StackLayout>
+                </ScrollView>
+            </Frame>
+        </Grid>
+    </Frame>
+</xct:Popup>

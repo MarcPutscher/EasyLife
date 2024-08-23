@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xct:Popup
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="EasyLife.Pages.CalculateListe_Popup"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+    xmlns:model="clr-namespace:EasyLife.Models"
+    xmlns:fontAwesome="clr-namespace:FontAwesome" 
+    IsLightDismissEnabled="False"
+    Color="Transparent"
+    Size="400,500">
+
+    <Grid RowDefinitions="Auto,Auto" RowSpacing="10" ColumnDefinitions="Auto,*" ColumnSpacing="0" Padding="10" BackgroundColor="Transparent">
+        <ImageButton Grid.Row="0" Grid.Column="1" Clicked="CancelButton_Clicked" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="{DynamicResource Hintergrund_Cancel_Popup}" CornerRadius="50" Padding="0">
+            <ImageButton.Source>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.CircleXmark}" Color="{DynamicResource Vordergrund_Cancel_Popup}" Size="50"/>
+            </ImageButton.Source>
+        </ImageButton>
+        <Label Text="Summanden" Grid.Row="0" Grid.Column="0" TextColor="{DynamicResource Text_Titel_Popup}" FontSize="30" FontAttributes="Bold" HorizontalTextAlignment="Center" TextDecorations="Underline"/>
+        
+        <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.ColumnSpan="2">
+            <Frame Padding="20" CornerRadius="20" BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" BorderColor="{DynamicResource Rand_Content_Popup}" VerticalOptions="Center" HorizontalOptions="FillAndExpand" xct:ShadowEffect.Color="Blue">
+                <StackLayout Padding="0">
+                        <ListView
+                        CachingStrategy="RecycleElement"
+                        IsPullToRefreshEnabled="false"
+                        IsRefreshing="False"
+                        HasUnevenRows="True"
+                        x:Name="SumList"
+                        IsGroupingEnabled="false"
+                        SeparatorVisibility="Default"
+                        VerticalOptions="FillAndExpand">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="model:Transaktion">
+                                <ViewCell>
+                                    <SwipeView BackgroundColor="Transparent">
+                                        <SwipeView.LeftItems>
+                                            <SwipeItems Mode="Execute">
+                                                <SwipeItem Invoked="SwipeItem_Invoked" CommandParameter="{Binding .}" Text="Entfernen" BackgroundColor="Red" />
+                                            </SwipeItems>
+                                        </SwipeView.LeftItems>
+                                        <Grid ColumnDefinitions="*,10,Auto,10,Auto" RowDefinitions="Auto,Auto" RowSpacing="0" ColumnSpacing="0" Padding="5">
+                                            <Label Text="{Binding Zweck}" FontSize="Body" TextColor="{DynamicResource Text_Content_Popup}" VerticalTextAlignment="Center" Grid.Column="0" Grid.RowSpan="2" HorizontalOptions="Start"/>
+                                            <Label Text="{Binding Datumanzeige}" FontSize="Body" TextColor="{DynamicResource Text_Content_Popup}" VerticalTextAlignment="Center" Grid.Column="2"  Grid.RowSpan="2"  HorizontalOptions="Start"/>
+                                            <StackLayout Grid.Column="4" Grid.RowSpan="2"  Orientation="Horizontal" HorizontalOptions="End" VerticalOptions="Center">
+                                                <Label Text="{Binding Betrag}" FontSize="Body" TextColor="{DynamicResource Text_Content_Popup}" VerticalTextAlignment="Center" />
+                                                <Label Text="€" FontSize="Body" TextColor="{DynamicResource Text_Content_Popup}" VerticalTextAlignment="Center" />
+                                            </StackLayout>
+                                        </Grid>
+                                    </SwipeView>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Label x:Name="Empty" Text="Keine Summanden vorhanden." FontSize="Body" TextColor="{DynamicResource Subtext_Content_Popup}" VerticalTextAlignment="Center" HorizontalOptions="Center"/>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+    </Grid>
+</xct:Popup>

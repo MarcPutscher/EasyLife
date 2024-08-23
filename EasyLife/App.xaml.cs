@@ -1,8 +1,11 @@
-﻿using EasyLife.PageModels;
+﻿using EasyLife.Helpers;
+using EasyLife.PageModels;
 using EasyLife.Pages;
 using EasyLife.Services;
 using FreshMvvm;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -18,7 +21,6 @@ namespace EasyLife
             MainPage = new Master_Page();
 
             //Definiert die Farben in der App.
-
 
             //Popup
             dictionary["Vordergrund_Cancel_Popup"] = Preferences.Get("Vordergrund_Cancel_Popup", "#710117");
@@ -102,8 +104,15 @@ namespace EasyLife
             dictionary["Flyout_Iconcolor"] = Preferences.Get("Flyout_Iconcolor", Color.Black.ToHex());
         }
 
-        protected override void OnStart()
+        public static Assistant_Kronos Kronos;
+
+        protected async override void OnStart()
         {
+            base.OnStart();
+
+            IEnumerable<Locale> result = await TextToSpeech.GetLocalesAsync();
+
+            Kronos = new Assistant_Kronos(result.Single(x=>x.Name== Preferences.Get("Kronos_Language", "Deutsch (Deutschland)")), Preferences.Get("Kronos_Volume", 0.5F), Preferences.Get("Kronos_Pitch", 1F)); 
         }
 
         protected override void OnSleep()

@@ -79,6 +79,12 @@
             </Tab.FlyoutIcon>
             <ShellContent IsTabStop="True" ContentTemplate="{DataTemplate local:Settings_Page}" />
         </Tab>
+        <Tab Title="Pluto">
+            <Tab.FlyoutIcon>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.FaceBeamHandOverMouth}" />
+            </Tab.FlyoutIcon>
+            <ShellContent IsTabStop="True" ContentTemplate="{DataTemplate local:Pluto_Page}" />
+        </Tab>
     </FlyoutItem>
 
     <Shell.FlyoutFooter>

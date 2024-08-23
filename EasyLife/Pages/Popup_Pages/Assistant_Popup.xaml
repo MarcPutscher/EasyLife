@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xct:Popup
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="EasyLife.Pages.Assistant_Popup"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+    xmlns:fontAwesome="clr-namespace:FontAwesome" 
+    xmlns:model="clr-namespace:EasyLife.Models" 
+    xmlns:pages="clr-namespace:EasyLife.Pages" xmlns:customrenderer="clr-namespace:EasyLife.CustomRenderer" x:DataType="pages:Assistant_Popup"
+    IsLightDismissEnabled="False"
+    Color="Transparent"
+    Size="380,700"
+    HorizontalOptions="FillAndExpand"
+    VerticalOptions="Fill">
+
+    <Frame Padding="20" CornerRadius="50" HasShadow="True" BorderColor="{DynamicResource Rand_Content_Popup}" BackgroundColor="{DynamicResource Hintergrund_Content_Popup}">
+        <Grid RowDefinitions="Auto,*" RowSpacing="5" ColumnSpacing="5" ColumnDefinitions="*,Auto" BackgroundColor="Transparent">
+            <ImageButton Grid.Row="0" Grid.Column="1" Clicked="ImageButton_Clicked" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="{DynamicResource Hintergrund_Cancel_Popup}" CornerRadius="50" Padding="0">
+                <ImageButton.Source>
+                    <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.CircleXmark}" Color="{DynamicResource Vordergrund_Cancel_Popup}" Size="50"/>
+                </ImageButton.Source>
+            </ImageButton>
+            <customrenderer:AutoFontSizeLabel 
+                x:Name="answerLabel"
+                AutoSizeMaxTextSize="20"
+                AutoSizeMinTextSize="8"
+                AutoSizeStepGranularity="1"
+                HeightRequest="50"
+                HorizontalTextAlignment="Start"
+                VerticalTextAlignment="Center"
+                VerticalOptions="Center"
+                HorizontalOptions="Fill"
+                Grid.Column="0"  
+                Grid.Row="0"            
+                Padding="0"
+                TextColor="{DynamicResource Text_Titel_Popup}"
+                FontAttributes="None"/>
+            <StackLayout Grid.Row="1" Grid.Column="0" BackgroundColor="Transparent">
+                <ListView   IsPullToRefreshEnabled="false"
+                        IsRefreshing="False"
+                        HasUnevenRows="True"
+                        x:Name="OptionList"
+                        IsGroupingEnabled="false"
+                        SeparatorVisibility="Default"
+                        VerticalOptions="FillAndExpand"
+                        BackgroundColor="Transparent">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="model:AssistantDialogOption">
+                            <ViewCell>
+                                <Frame BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" CornerRadius="30" BorderColor="{DynamicResource Rand_Content_Popup}"  Margin="10,10,10,10" Padding="0">
+                                    <Button Text="{Binding Question}" Command="{Binding Speech_Solution}" CommandParameter="{Binding .}" Clicked="Button_Clicked" BackgroundColor="Transparent" TextColor="{DynamicResource Text_Content_Popup}" FontSize="20" FontAttributes="Italic" HorizontalOptions="Center" VerticalOptions="Center" Margin="5,0,5,0" />
+                                </Frame>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </Grid>
+    </Frame>
+</xct:Popup>

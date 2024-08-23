@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xct:Popup 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:Class="EasyLife.Pages.Filter_Popup"
+    xmlns:fontAwesome="clr-namespace:FontAwesome" 
+    IsLightDismissEnabled="False"
+    Color="Transparent"
+    Size="250,390"
+    VerticalOptions="Center"
+    HorizontalOptions="Center">
+
+    <Grid RowDefinitions="Auto,Auto" RowSpacing="15" ColumnDefinitions="Auto,Auto" ColumnSpacing="10" Padding="10" BackgroundColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center">
+        <ImageButton Grid.Row="0" Grid.Column="1" Clicked="CancelButton_Clicked" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="{DynamicResource Hintergrund_Cancel_Popup}" CornerRadius="50" Padding="0">
+            <ImageButton.Source>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.CircleXmark}" Color="{DynamicResource Vordergrund_Cancel_Popup}" Size="50"/>
+            </ImageButton.Source>
+        </ImageButton>
+        <Label Text="Suchfilter" TextColor="{DynamicResource Text_Titel_Popup}" FontSize="30" FontAttributes="Bold" HorizontalTextAlignment="Center" TextDecorations="Underline" Grid.Row="0" Grid.Column="0"/>
+
+        <Frame Padding="20" CornerRadius="20" BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" BorderColor="{DynamicResource Rand_Content_Popup}" VerticalOptions="Center" HorizontalOptions="Fill" xct:ShadowEffect.Color="{DynamicResource Rand_Content_Popup}" Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid ColumnDefinitions="Auto,Auto">
+                <Label Text="Betrag" TextColor="{DynamicResource Text_Content_Popup}" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start" Grid.Column="0" Grid.Row="0"/>
+                <Switch x:Name="BetragSwitch" Grid.Column="1" Grid.Row="0">
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="On">
+                                <VisualState.Setters>
+                                    <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Popup}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Off">
+                                <VisualState.Setters>
+                                    <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Popup}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateManager.VisualStateGroups>
+                </Switch>
+
+                <Label Text="Notiz" TextColor="{DynamicResource Text_Content_Popup}" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start" Grid.Column="0" Grid.Row="1"/>
+                <Switch x:Name="NotizSwitch" HorizontalOptions="End" Grid.Column="1" Grid.Row="1" >
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="On">
+                                <VisualState.Setters>
+                                    <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Popup}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Off">
+                                <VisualState.Setters>
+                                    <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Popup}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateManager.VisualStateGroups>
+                </Switch>
+
+                <Label Text="Zweck" TextColor="{DynamicResource Text_Content_Popup}" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start" Grid.Column="0" Grid.Row="2"/>
+                <Switch x:Name="ZweckSwitch" HorizontalOptions="End" Grid.Column="1" Grid.Row="2" >
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="On">
+                                <VisualState.Setters>
+                                    <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Popup}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Off">
+                                <VisualState.Setters>
+                                    <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Popup}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateManager.VisualStateGroups>
+                </Switch>
+
+                <Label Text="Datum" TextColor="{DynamicResource Text_Content_Popup}" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start" Grid.Column="0" Grid.Row="3"/>
+                <Switch x:Name="DatumSwitch" HorizontalOptions="End" Grid.Column="1" Grid.Row="3">
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="On">
+                                <VisualState.Setters>
+                                    <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Popup}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Off">
+                                <VisualState.Setters>
+                                    <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Popup}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateManager.VisualStateGroups>
+                </Switch>
+
+                <Label Text="Transaktions-ID" TextColor="{DynamicResource Text_Content_Popup}" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start" Grid.Column="0" Grid.Row="4"/>
+                <Switch x:Name="TransaktionsIDSwitch" HorizontalOptions="End" Grid.Column="1" Grid.Row="4" >
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="On">
+                                <VisualState.Setters>
+                                    <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Popup}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Off">
+                                <VisualState.Setters>
+                                    <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Popup}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateManager.VisualStateGroups>
+                </Switch>
+
+                <Label Text="Auftrags-ID" TextColor="{DynamicResource Text_Content_Popup}" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start" Grid.Column="0" Grid.Row="5"/>
+                <Switch x:Name="AuftragsIDSwitch" HorizontalOptions="End" Grid.Column="1" Grid.Row="5">
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="On">
+                                <VisualState.Setters>
+                                    <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Popup}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Off">
+                                <VisualState.Setters>
+                                    <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Popup}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateManager.VisualStateGroups>
+                </Switch>
+
+                <Frame BackgroundColor="Black" HorizontalOptions="Fill" HeightRequest="1" Padding="0" VerticalOptions="Center" Grid.Row="6"/>
+
+                <Label Text="Quersuche" TextColor="{DynamicResource Text_Content_Popup}" FontSize="Medium" VerticalTextAlignment="Center" HorizontalOptions="Start" Grid.Column="0" Grid.Row="7"/>
+                <Switch x:Name="QuersucheSwitch" HorizontalOptions="End" Grid.Column="1" Grid.Row="7">
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="On">
+                                <VisualState.Setters>
+                                    <Setter Property="ThumbColor" Value="{DynamicResource Aktiv_Schalter_Popup}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Off">
+                                <VisualState.Setters>
+                                    <Setter Property="ThumbColor" Value="{DynamicResource Deaktiv_Schalter_Popup}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateManager.VisualStateGroups>
+                </Switch>
+            </Grid>
+        </Frame>
+    </Grid>
+</xct:Popup>

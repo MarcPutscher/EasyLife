@@ -25,7 +25,11 @@
                 <SwipeItemView Command="{Binding Load_Metadata_Command}"/>
             </SwipeItems>
         </SwipeView.RightItems>
-
+        <SwipeView.LeftItems>
+            <SwipeItems Mode="Execute">
+                <SwipeItemView Command="{Binding Load_KronosOverlay_Command}"/>
+            </SwipeItems>
+        </SwipeView.LeftItems>
         <Grid RowDefinitions="*,Auto">
             <Frame BackgroundColor="Transparent" Padding="0" Grid.Row="0">
                 <ScrollView Orientation="Vertical" VerticalScrollBarVisibility="Never">

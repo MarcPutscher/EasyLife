@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                              xmlns:pagemodels="clr-namespace:EasyLife.PageModels"
+                 xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             x:Class="EasyLife.Pages.Pluto_Page">
+
+    <ContentPage.BindingContext>
+        <pagemodels:Pluto_PageModel/>
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding ViewIsAppearing_Command}" />
+    </ContentPage.Behaviors>
+
+    <ContentPage.Content>
+        <StackLayout>
+            <Picker ItemsSource="{Binding Languages}" SelectedItem="{Binding Selected_Language}"/>
+            <Entry Text="{Binding Input}"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+            <Button Text="Aufnahme" Command="{Binding Listen_Command}"/>
+            <Button Text="Aufnahme stoppen" Command="{Binding CancelListen_Command}"/>
+            <Button Text="Vorlesen" Command="{Binding Speech_Command}"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
