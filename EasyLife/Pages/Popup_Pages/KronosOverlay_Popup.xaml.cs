@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -12,6 +13,7 @@ namespace EasyLife.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class KronosOverlay_Popup : Popup
     {
+        public static DialogOption_Popup HomePopup; 
         public KronosOverlay_Popup()
         {
             InitializeComponent();
@@ -77,5 +79,11 @@ namespace EasyLife.Pages
         public IEnumerable<Locale> locale;
 
         public List<string> Languages = new List<string>();
+
+        private async void Home_Clicked(object sender, EventArgs e)
+        {
+            HomePopup = new DialogOption_Popup("Home");
+            await Shell.Current.ShowPopupAsync(HomePopup);
+        }
     }
 }

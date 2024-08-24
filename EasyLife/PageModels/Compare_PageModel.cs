@@ -840,7 +840,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Leere Bilanz", 350, 250, null, null, "Es kann keine PDF erstellt werden, wenn die Bilanz leer ist."));
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
 
@@ -890,8 +890,7 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Leere Bilanz", 350, 250, null, null, "Es kann keine PDF erstellt werden, wenn die Bilanz leer ist."));
-
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
                 return -1;
             }
         }

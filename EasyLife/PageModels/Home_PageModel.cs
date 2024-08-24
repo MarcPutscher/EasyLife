@@ -2980,8 +2980,12 @@ namespace EasyLife.PageModels
             try
             {
                 Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
-                keyValuePairs.Add("Mein Name ist Kronos.", "Wie heißt du?");
-                keyValuePairs.Add("Du bist in der App EasyLife, auf der Homeseite und du befindest dich gerade bei mir. Kornos dem Appassistenten.", "Wo befinde ich mich gerade?");
+                IEnumerable<AssistantDialogOption> asdiop = await AssistantDialogOptionService.Get_all_Dialogoption();
+                List<AssistantDialogOption> asdiopList = asdiop.Where(x => x.Groupe == "Home").ToList();
+                foreach(AssistantDialogOption asiop in asdiopList)
+                {
+                    keyValuePairs.Add(asiop.Answer, asiop.Question);
+                }
                 await Shell.Current.ShowPopupAsync(new Assistant_Popup(keyValuePairs));
             }
             catch (Exception ex)

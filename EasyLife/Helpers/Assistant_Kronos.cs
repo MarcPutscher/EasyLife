@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
+using iText.StyledXmlParser.Jsoup.Nodes;
+using Xamarin.Forms.PlatformConfiguration;
 
 namespace EasyLife.Helpers
 {
@@ -23,6 +25,12 @@ namespace EasyLife.Helpers
         {
             if (String.IsNullOrEmpty(input) == false)
             {
+                //SpeechSynthesizer synth = new SpeechSynthesizer();
+                //PromptBuilder builder = new PromptBuilder();
+                //builder.StartVoice(VoiceGender.Female, VoiceAge.Adult, 1);
+                //builder.AppendText(input);
+                //synth.Speak(builder);
+
                 await TextToSpeech.SpeakAsync(input,
                 new SpeechOptions
                 {
