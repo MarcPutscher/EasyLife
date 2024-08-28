@@ -1,7 +1,16 @@
-﻿using EasyLife.Models;
+﻿using EasyLife.Interfaces;
+using EasyLife.Models;
+using EasyLife.Pages;
+using EasyLife.Services;
+using MvvmHelpers.Commands;
+using SQLite;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Essentials;
@@ -13,7 +22,6 @@ namespace EasyLife.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class KronosOverlay_Popup : Popup
     {
-        public static DialogOption_Popup HomePopup; 
         public KronosOverlay_Popup()
         {
             InitializeComponent();
@@ -76,14 +84,108 @@ namespace EasyLife.Pages
             Preferences.Set("Kronos_Pitch", input);
         }
 
-        public IEnumerable<Locale> locale;
+        public async void Share_DialogOption_Methode(object sender, EventArgs e)
+        {
+            FileStream sourceStream = null;
+            FileStream destinationStream = null;
 
-        public List<string> Languages = new List<string>();
+            string destinationPath = DependencyService.Get<IAccessFile>().CreateFileDocuments("EasyLife_DialogOption.db");
+            string sourcePath = Path.Combine(FileSystem.AppDataDirectory, "EasyLife.db");
+
+            try
+            {
+                sourceStream = new FileStream(sourcePath, FileMode.Open, FileAccess.ReadWrite);
+
+                if(File.Exists(destinationPath))
+                {
+                    File.Delete(destinationPath);
+                }
+
+                destinationStream = new FileStream(destinationPath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+
+                await AssistantDialogOptionService.CloneTableToNewDB(destinationPath);
+
+                await Share.RequestAsync(new ShareFileRequest { Title = "DialogOptionen", File = new ShareFile(destinationPath) });
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist beim Senden der Dialogoptionen ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+            }
+            finally
+            {
+                sourceStream.Close();
+
+                destinationStream.Close();
+
+                File.Delete(destinationPath);
+            }
+        }
 
         private async void Home_Clicked(object sender, EventArgs e)
         {
-            HomePopup = new DialogOption_Popup("Home");
-            await Shell.Current.ShowPopupAsync(HomePopup);
+            dialogoption_popup = new DialogOption_Popup("Home");
+            await Shell.Current.ShowPopupAsync(dialogoption_popup);
         }
+
+        private async void Hinzufügen_Clicked(object sender, EventArgs e)
+        {
+            dialogoption_popup = new DialogOption_Popup("Hinzufügen");
+            await Shell.Current.ShowPopupAsync(dialogoption_popup);
+        }
+
+        private async void Auftrag_Hinzufügen_Clicked(object sender, EventArgs e)
+        {
+            dialogoption_popup = new DialogOption_Popup("Auftrag Hinzufügen");
+            await Shell.Current.ShowPopupAsync(dialogoption_popup);
+        }
+
+        private async void Berarbeiten_Clicked(object sender, EventArgs e)
+        {
+            dialogoption_popup = new DialogOption_Popup("Berarbeiten");
+            await Shell.Current.ShowPopupAsync(dialogoption_popup);
+        }
+
+        private async void Auftrag_Berarbeiten_Clicked(object sender, EventArgs e)
+        {
+            dialogoption_popup = new DialogOption_Popup("Auftrag Berarbeiten");
+            await Shell.Current.ShowPopupAsync(dialogoption_popup);
+        }
+
+        private async void Bilanz_Clicked(object sender, EventArgs e)
+        {
+            dialogoption_popup = new DialogOption_Popup("Bilanz");
+            await Shell.Current.ShowPopupAsync(dialogoption_popup);
+        }
+
+        private async void Vergleichen_Clicked(object sender, EventArgs e)
+        {
+            dialogoption_popup = new DialogOption_Popup("Vergleichen");
+            await Shell.Current.ShowPopupAsync(dialogoption_popup);
+        }
+
+        private async void Einstellungen_Clicked(object sender, EventArgs e)
+        {
+            dialogoption_popup = new DialogOption_Popup("Einstellungen");
+            await Shell.Current.ShowPopupAsync(dialogoption_popup);
+        }
+
+        private async void Styling_Clicked(object sender, EventArgs e)
+        {
+            dialogoption_popup = new DialogOption_Popup("Styling");
+            await Shell.Current.ShowPopupAsync(dialogoption_popup);
+        }
+
+        private async void Papierkorb_Clicked(object sender, EventArgs e)
+        {
+            dialogoption_popup = new DialogOption_Popup("Papierkorb");
+            await Shell.Current.ShowPopupAsync(dialogoption_popup);
+        }
+
+
+        public static DialogOption_Popup dialogoption_popup;
+
+        public IEnumerable<Locale> locale;
+
+        public List<string> Languages = new List<string>();
     }
 }

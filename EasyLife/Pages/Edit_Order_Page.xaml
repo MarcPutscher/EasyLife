@@ -7,6 +7,7 @@
              BackgroundColor ="{DynamicResource Hintergrund_Hinzufügen}"
              xmlns:pagemodels="clr-namespace:EasyLife.PageModels" 
              xmlns:customecontrole="clr-namespace:EasyLife.CustomeControle"
+                 xmlns:fontAwesome="clr-namespace:FontAwesome" 
              x:DataType="pagemodels:Edit_Order_PageModel"
              Shell.NavBarIsVisible="False">
 
@@ -36,6 +37,14 @@
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Order="Primary" Text="Einstellungen"  Command="{Binding Settings_Command}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Wrench}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
 
     <StackLayout VerticalOptions="Fill">
         <Grid RowDefinitions="5,Auto,5,Auto,5,Auto,Auto" Padding="5">

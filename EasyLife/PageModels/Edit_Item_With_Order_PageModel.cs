@@ -35,6 +35,8 @@ namespace EasyLife.PageModels
 
             ViewIsAppearing_Command = new AsyncCommand(ViewIsAppearing);
 
+            Settings_Command = new AsyncCommand(Settings_Methode);
+
             Zweck_Liste = new ObservableRangeCollection<string>();
 
             Virtuelle_Transaktion = null;
@@ -928,12 +930,29 @@ namespace EasyLife.PageModels
             }
         }
 
+        public async Task Settings_Methode()
+        {
+            try
+            {
+                var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Optionen", 350, new List<string>() { "Hilfe" }));
 
+                if ((string)result == "Hilfe")
+                {
+                    await App.Kronos.ShowKronos_Methode("Bearbeiten");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+            }
+        }
 
         public AsyncCommand Edit_Item_Command { get; }
         public AsyncCommand Edit_Order_Command { get; }
 
         public AsyncCommand ViewIsAppearing_Command { get; }
+
+        public AsyncCommand Settings_Command { get; }
 
         public string order_button_text;
         public string Order_Button_Text

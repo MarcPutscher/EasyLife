@@ -29,7 +29,6 @@ namespace EasyLife.Pages
             Routing.RegisterRoute(nameof(Balance_Page), typeof(Balance_Page));
             Routing.RegisterRoute(nameof(Styling_Color_Page), typeof(Styling_Color_Page));
             Routing.RegisterRoute(nameof(Compare_Page), typeof(Compare_Page));
-            Routing.RegisterRoute(nameof(Pluto_Page), typeof(Pluto_Page));
         }
     }
 }

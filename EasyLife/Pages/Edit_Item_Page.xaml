@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:pagemodels="clr-namespace:EasyLife.PageModels" 
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+            xmlns:fontAwesome="clr-namespace:FontAwesome" 
              xmlns:customecontrole="clr-namespace:EasyLife.CustomeControle"
              x:Class="EasyLife.Pages.Edit_Item_Page"
              Title="Transaktion bearbeiten"
@@ -49,6 +50,14 @@
                 Command="{Binding ViewIsAppearing_Command}" />
     </ContentPage.Behaviors>
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Order="Primary" Text="Einstellungen"  Command="{Binding Settings_Command}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Wrench}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+    
     <ScrollView Margin="20,0,20,0">
         <FlexLayout Direction="Column" 
                     JustifyContent="SpaceEvenly">

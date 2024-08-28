@@ -85,9 +85,9 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Papierkorb leeren" Priority="0" Order="Primary" Command="{Binding Empty_Command}">
+        <ToolbarItem Order="Primary" Text="Einstellungen"  Command="{Binding Settings_Command}">
             <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.TrashCan}" Color="Gray"/>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Wrench}" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>

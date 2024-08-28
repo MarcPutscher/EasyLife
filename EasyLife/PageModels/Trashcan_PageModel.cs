@@ -51,7 +51,7 @@ namespace EasyLife.PageModels
         public MvvmHelpers.Commands.Command ViewIsDisappearing_Command { get; }
 
         public AsyncCommand View_Appering_Command { get; }
-        public AsyncCommand Empty_Command { get; }
+        public AsyncCommand Settings_Command { get; }
 
         public bool isbusy = false;
         public bool IsBusy
@@ -140,7 +140,7 @@ namespace EasyLife.PageModels
             RefreshCommand = new AsyncCommand(Refresh);
             RemoveCommand = new AsyncCommand<Transaktion>(Remove);
             ReviveCommand = new AsyncCommand<Transaktion>(Revive);
-            Empty_Command = new AsyncCommand(Empty_Methode);
+            Settings_Command = new AsyncCommand(Settings_Methode);
             ViewIsDisappearing_Command = new MvvmHelpers.Commands.Command(ViewIsDisappearing_Methode);
             View_Appering_Command = new AsyncCommand(View_Appering_Methode);
         }
@@ -826,5 +826,27 @@ namespace EasyLife.PageModels
         {
             Is_Aktiv = false;
         }
+
+        public async Task Settings_Methode()
+        {
+            try
+            {
+                var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Optionen", 350, new List<string>() {"Papierkorb leeren", "Hilfe" }));
+
+                if ((string)result == "Papierkorb leeren")
+                {
+                    await Empty_Methode();
+                }
+                if ((string)result == "Hilfe")
+                {
+                    await App.Kronos.ShowKronos_Methode("Papierkorb");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+            }
+        }
+
     }
 }

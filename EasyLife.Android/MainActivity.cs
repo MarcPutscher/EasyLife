@@ -86,6 +86,15 @@ namespace EasyLife.Droid
                     }
                 }
             }
+
+            if(File.Exists(DependencyService.Get<IAccessFile>().CreateFileDocuments("EasyLife_DialogOption.db")))
+            {
+                await AssistantDialogOptionService.CloneTableToDB((DependencyService.Get<IAccessFile>().CreateFileDocuments("EasyLife_DialogOption.db")));
+            }
+            if (File.Exists(DependencyService.Get<IAccessFile>().CreateFileDownload("EasyLife_DialogOption.db")))
+            {
+                await AssistantDialogOptionService.CloneTableToDB((DependencyService.Get<IAccessFile>().CreateFileDownload("EasyLife_DialogOption.db")));
+            }
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
@@ -116,7 +125,7 @@ namespace EasyLife.Droid
 
     public class AccessFileImplement : IAccessFile
     {
-        public string CreateFile(string FileName)
+        public string CreateFileDocuments(string FileName)
         {
             //var DirectoryPath = Path.Combine(Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDownloads).AbsolutePath, "EasyLife Bilanzen");
 
@@ -128,6 +137,25 @@ namespace EasyLife.Droid
             }
 
             if(FileName != null)
+            {
+                return Path.Combine(DirectoryPath.ToString(), FileName);
+            }
+
+            return DirectoryPath.ToString();
+        }
+
+        public string CreateFileDownload(string FileName)
+        {
+            //var DirectoryPath = Path.Combine(Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDownloads).AbsolutePath, "EasyLife Bilanzen");
+
+            var DirectoryPath = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDownloads).AbsolutePath;
+
+            if (!Directory.Exists(DirectoryPath))
+            {
+                Directory.CreateDirectory(DirectoryPath);
+            }
+
+            if (FileName != null)
             {
                 return Path.Combine(DirectoryPath.ToString(), FileName);
             }

@@ -36,6 +36,7 @@
                 TextColor="{DynamicResource Text_Titel_Popup}"
                 FontAttributes="None"/>
             <StackLayout Grid.Row="1" Grid.Column="0" BackgroundColor="Transparent">
+                <Line BackgroundColor="Black" StrokeThickness="5" HorizontalOptions="FillAndExpand" VerticalOptions="Start" HeightRequest="3"/>
                 <ListView   IsPullToRefreshEnabled="false"
                         IsRefreshing="False"
                         HasUnevenRows="True"

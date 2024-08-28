@@ -11,7 +11,7 @@
     HorizontalOptions="FillAndExpand"
     VerticalOptions="Fill"
     Color="Black"
-    Size="380,700"
+    Size="380,500"
     Opened="Popup_Opened">
 
     <Frame Padding="20" CornerRadius="50" HasShadow="True" BorderColor="{DynamicResource Rand_Content_Popup}" BackgroundColor="{DynamicResource Hintergrund_Content_Popup}">

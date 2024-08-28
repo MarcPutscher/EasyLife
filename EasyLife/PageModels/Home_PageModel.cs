@@ -41,32 +41,28 @@ namespace EasyLife.PageModels
             ViewIsDisappearing_Command = new Command(ViewIsDisappearing_Methode);
             RemoveCommand = new AsyncCommand<Transaktion>(Remove);
             EditCommand = new AsyncCommand<Transaktion>(Edit);
-            GroupingOption_Command = new AsyncCommand(GroupingOption_Methode);
             Search_Command = new AsyncCommand(Search_Methode);
             Search_Command2 = new AsyncCommand(Search_Methode2);
             Delet_Suggestion = new AsyncCommand<Suggestion>(Delet_Suggestion_Methode);
             Select_Suggestion = new AsyncCommand<Suggestion>(Select_Suggestion_Methode);
             Clear_SearchText_Command = new AsyncCommand(Clear_SearchText_Methode);
-            Set_Searchbar_Visibility_Command = new AsyncCommand(Set_Searchbar_Visibility_MethodeAsync);
             The_Searchbar_is_Tapped = new AsyncCommand(The_Searchbar_is_Tapped_Methode);
+            Set_Searchbar_Visibility_Command = new AsyncCommand(Set_Searchbar_Visibility_MethodeAsync);
             Add_Catchphrase_To_Search_Command = new AsyncCommand(Add_Catchphrase_To_Search_Methode);
             Add_Command = new AsyncCommand(Add_Methode);
             Filter_Command = new AsyncCommand(Filter_Methode);
             Calculator_Addition_Command = new AsyncCommand<Transaktion>(Calculator_Addition_Methode);
             Calculator_Substraction_Command = new AsyncCommand<Transaktion>(Calculator_Substraction_Methode);
-            ShowCalculator_Command = new Command(ShowCalculator_Methode);
             Calculator_RemoveLast_Command = new AsyncCommand(Calculator_RemoveLast_Methode);
             Calculator_RemoveAll_Command = new AsyncCommand(Calculator_RemoveAll_Methode);
             ShowCalculator_List_Command = new AsyncCommand(ShowCalculator_List_Methode);
+            ShowCalculator_Command = new Command(ShowCalculator_Methode);
             Show_Letter_Saldo_Command = new Command(Show_Letter_Saldo_Methode);
             Load_on_demand_Command = new AsyncCommand<string>(Load_on_demand_Methode);
             Load_Ratio_Command = new AsyncCommand(Load_Ratio_Methode);
             Budget_Command = new AsyncCommand(Budget_Methode);
             Change_Saldo_Date_Command = new AsyncCommand(Change_Saldo_Date_Methode);
-
-            Period_Command = new AsyncCommand(Period_Popup);
-
-            ShowKronos_Command = new AsyncCommand(ShowKronos_);
+            Settings_Command = new AsyncCommand(Settings_Methode);
 
             title = "Haushaltsbuch " + Current_Viewtime.Year + " " + Current_Viewtime.Month + "";
 
@@ -2521,6 +2517,42 @@ namespace EasyLife.PageModels
             await ToastHelper.ShowToast(v);
         }
 
+        private async Task Settings_Methode()
+        {
+            try
+            {
+                var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Optionen", 350, new List<string>() { "Aktualisieren", "Zeitraum", "Ansicht", "Suchen" , "Rechnen", "Hilfe" }));
+
+                if ((string)result == "Aktualisieren")
+                {
+                    await Refresh();
+                }
+                if ((string)result == "Zeitraum")
+                {
+                    await Period_Popup();
+                }
+                if ((string)result == "Ansicht")
+                {
+                    await GroupingOption_Methode();
+                }
+                if ((string)result == "Suchen")
+                {
+                    await Set_Searchbar_Visibility_MethodeAsync();
+                }
+                if ((string)result == "Rechnen")
+                {
+                    ShowCalculator_Methode();
+                }
+                if ((string)result == "Hilfe")
+                {
+                    await App.Kronos.ShowKronos_Methode("Home");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+            }
+        }
 
 
         public ObservableRangeCollection<Suggestion> suggestions;
@@ -2608,6 +2640,8 @@ namespace EasyLife.PageModels
         public AsyncCommand Budget_Command { get; }
 
         public AsyncCommand Change_Saldo_Date_Command { get; }
+
+        public AsyncCommand Settings_Command { get; }
 
         public bool serchbar_visibility = false;
         public bool Serchbar_Visibility
@@ -2972,26 +3006,5 @@ namespace EasyLife.PageModels
         public List<Transaktion> Transaktion_List_from_Load = new List<Transaktion>();
 
         public List<string> used_reasons_list = new List<string>();
-
-        public AsyncCommand ShowKronos_Command { get; }
-
-        public async Task ShowKronos_()
-        {
-            try
-            {
-                Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
-                IEnumerable<AssistantDialogOption> asdiop = await AssistantDialogOptionService.Get_all_Dialogoption();
-                List<AssistantDialogOption> asdiopList = asdiop.Where(x => x.Groupe == "Home").ToList();
-                foreach(AssistantDialogOption asiop in asdiopList)
-                {
-                    keyValuePairs.Add(asiop.Answer, asiop.Question);
-                }
-                await Shell.Current.ShowPopupAsync(new Assistant_Popup(keyValuePairs));
-            }
-            catch (Exception ex)
-            {
-                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
-            }
-        }
     }
 }

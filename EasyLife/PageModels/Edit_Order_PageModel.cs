@@ -26,6 +26,8 @@ namespace EasyLife.PageModels
 
             ViewIsAppearing_Command = new AsyncCommand(ViewIsAppearing);
 
+            Settings_Command = new AsyncCommand(Settings_Methode);
+
             Kind_Source = new ObservableRangeCollection<string>() { "Tag", "Woche", "Monat", "Jahr" };
 
             Count_Source = new ObservableRangeCollection<string>(Enumerable.Range(1, 356).Select(n => n.ToString()).ToList());
@@ -861,6 +863,24 @@ namespace EasyLife.PageModels
             }
         }
 
+        public async Task Settings_Methode()
+        {
+            try
+            {
+                var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Optionen", 350, new List<string>() { "Hilfe" }));
+
+                if ((string)result == "Hilfe")
+                {
+                    await App.Kronos.ShowKronos_Methode("Auftrag Bearbeiten");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+            }
+        }
+
+
         public Auftrag Viertueller_Auftrag;
 
         public Transaktion transaktion;
@@ -1003,6 +1023,8 @@ namespace EasyLife.PageModels
         public AsyncCommand Return_Command { get; }
 
         public AsyncCommand ViewIsAppearing_Command { get; }
+
+        public AsyncCommand Settings_Command { get; }
 
         public bool onc_option_visibility = false;
         public bool Onc_Option_Visibility

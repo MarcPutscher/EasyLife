@@ -42,7 +42,7 @@ namespace EasyLife.Services
 
         public static string placeholder_path = Path.Combine(FileSystem.AppDataDirectory, "Placeholder.db");
 
-        public static string helper_path = Path.Combine(DependencyService.Get<IAccessFile>().CreateFile("EasyLife-HelperBackup.db"));
+        public static string helper_path = Path.Combine(DependencyService.Get<IAccessFile>().CreateFileDocuments("EasyLife-HelperBackup.db"));
 
         /// <summary>
         /// Erstellt eine Verbindung zur Datenbank her.
@@ -76,7 +76,7 @@ namespace EasyLife.Services
             {
                 //  Fast alle Dateiname in dem Ordner wo sich die Backups befinden her, die mit EasyLife-Backup- beginnen.
 
-                string[] files = Directory.GetFiles(DependencyService.Get<IAccessFile>().CreateFile(""), "EasyLife-Backup-*");
+                string[] files = Directory.GetFiles(DependencyService.Get<IAccessFile>().CreateFileDocuments(""), "EasyLife-Backup-*");
 
                 //  Löscht das älteste Backup wenn schon zwölf Backups vorhanden sind. 
 
@@ -152,7 +152,7 @@ namespace EasyLife.Services
 
             //  Setzt den Backuppfad für das Backup fest und speichert es in den Appsettings.
 
-            Preferences.Set("Create_Backup_Path", DependencyService.Get<IAccessFile>().CreateFile("EasyLife-Backup-" + backup_date + ".db"));
+            Preferences.Set("Create_Backup_Path", DependencyService.Get<IAccessFile>().CreateFileDocuments("EasyLife-Backup-" + backup_date + ".db"));
 
             Init_Source();
 
@@ -245,7 +245,7 @@ namespace EasyLife.Services
             //  Falls Backups vorhanden sind wird eine Fenster erstellt wo man sich das Backup aussuchen kann welches geladen werden soll.
             //  Falls nicht dann wird diese Funktion geschlossen.
 
-            string[] files = Directory.GetFiles(DependencyService.Get<IAccessFile>().CreateFile(null), "EasyLife-Backup-*");
+            string[] files = Directory.GetFiles(DependencyService.Get<IAccessFile>().CreateFileDocuments(null), "EasyLife-Backup-*");
 
             List<DateTime> Backup_dates = new List<DateTime>();
 

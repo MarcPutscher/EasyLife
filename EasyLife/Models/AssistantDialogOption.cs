@@ -130,14 +130,14 @@ namespace EasyLife.Models
         {
             await AssistantDialogOptionService.Edit_Dialogoption(this);
 
-            KronosOverlay_Popup.HomePopup?.Popup_Opened(null, null);
+            KronosOverlay_Popup.dialogoption_popup?.Popup_Opened(null, null);
         }
 
         private async void PerformDelete_Command()
         {
             await AssistantDialogOptionService.Remove_Dialogoption(this);
 
-            KronosOverlay_Popup.HomePopup?.Popup_Opened(null, null);
+            KronosOverlay_Popup.dialogoption_popup?.Popup_Opened(null, null);
         }
 
         public event PropertyChangingEventHandler PropertyChanging;

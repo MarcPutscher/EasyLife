@@ -1199,7 +1199,7 @@ namespace EasyLife.PageModels
                         reorder_string = "Neuordnung des Bilanzprofiles " + Preferences.Get("Blanceprofile", 0) + "";
                     }
 
-                    var result0 = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Einstellungen", 380, new List<string>() { "Bilanzprofil auswählen", "Neues Bilanzprofil erstellen", "Bilanzprofil löschen", reorder_string }));
+                    var result0 = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Einstellungen", 380, new List<string>() { "Bilanzprofil auswählen", "Neues Bilanzprofil erstellen", "Bilanzprofil löschen", reorder_string , "Hilfe"}));
 
                     if (result0 == null)
                     {
@@ -1239,6 +1239,11 @@ namespace EasyLife.PageModels
                         await Reorder_Balanceprofile_Methode();
 
                         await Load();
+                    }
+
+                    if ((string)result0 == "Hilfe")
+                    {
+                        await App.Kronos.ShowKronos_Methode("Vergleichen");
                     }
                 }
             }

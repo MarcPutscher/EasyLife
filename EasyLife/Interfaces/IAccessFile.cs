@@ -15,6 +15,8 @@ namespace EasyLife.Interfaces
         /// </summary>
         /// <param name="FileName">Dateiname der für den vollständigen Pfad bnötigt werden.</param>
         /// <returns></returns>
-        string CreateFile(string FileName);
+        string CreateFileDownload(string FileName);
+        string CreateFileDocuments(string FileName);
+
     }
 }

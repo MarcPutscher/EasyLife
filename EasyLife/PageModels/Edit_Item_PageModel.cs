@@ -22,6 +22,8 @@ namespace EasyLife.PageModels
 
         public AsyncCommand ViewIsAppearing_Command { get; }
 
+        public AsyncCommand Settings_Command { get; }
+
         public string TransaktionID { get; set; }
 
         public Transaktion Transaktion { get; set; }
@@ -178,6 +180,7 @@ namespace EasyLife.PageModels
             Edit_Item_Command = new AsyncCommand(Edit);
             Zweck_Liste = new ObservableRangeCollection<string>();
             ViewIsAppearing_Command = new AsyncCommand(ViewIsAppearing);
+            Settings_Command = new AsyncCommand(Settings_Methode);
         }
 
         async Task Edit()
@@ -317,6 +320,23 @@ namespace EasyLife.PageModels
         private async Task Notificater(string v)
         {
             await Shell.Current.DisplayToastAsync(v, 5000);
+        }
+
+        public async Task Settings_Methode()
+        {
+            try
+            {
+                var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Optionen", 350, new List<string>() { "Hilfe" }));
+
+                if ((string)result == "Hilfe")
+                {
+                    await App.Kronos.ShowKronos_Methode("Bearbeiten");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+            }
         }
 
         async Task Get_Zweck_Liste()

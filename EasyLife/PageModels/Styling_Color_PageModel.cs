@@ -42,6 +42,8 @@ namespace EasyLife.PageModels
 
             Choose_Command = new AsyncCommand<List<object>>(Choose_Methode);
 
+            Settings_Command = new AsyncCommand(Settings_Methode);
+
             Colorsname.AddRange(HomeView.Home_View_Item_List);
 
             Colorsname.AddRange(HinzufügenView.Hinzufügen_View_Item_List);
@@ -484,6 +486,24 @@ namespace EasyLife.PageModels
             OnMessageRaised?.Invoke(this, new StylingMessageEventArgs(message));
         }
 
+        public async Task Settings_Methode()
+        {
+            try
+            {
+                var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Optionen", 350, new List<string>() { "Hilfe" }));
+
+                if ((string)result == "Hilfe")
+                {
+                    await App.Kronos.ShowKronos_Methode("Styling");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+            }
+        }
+
+
         public string CurrentItem { get; set; }
 
         public StylingCell currentcell;
@@ -540,6 +560,8 @@ namespace EasyLife.PageModels
         public AsyncCommand View_IsAppering_Command { get; }
         public AsyncCommand<object> CurrentItemChangedCommand_Command { get; }
         public AsyncCommand<List<object>> Choose_Command { get; }
+
+        public AsyncCommand Settings_Command { get; }
 
         public EventHandler<StylingMessageEventArgs> OnMessageRaised;
     }

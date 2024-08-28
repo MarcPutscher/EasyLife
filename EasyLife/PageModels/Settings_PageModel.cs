@@ -36,6 +36,8 @@ namespace EasyLife.PageModels
 
             Load_KronosOverlay_Command = new AsyncCommand(Load_KronosOverlay);
 
+            Settings_Command = new AsyncCommand(Settings_Methode);
+
             Last_Backup_Date = Preferences.Get("Last_Backup_Date", "");
 
             Next_Backup_Date = Preferences.Get("Next_Backup_Date", "");
@@ -140,7 +142,7 @@ namespace EasyLife.PageModels
         {
             try
             {
-                string[] files = Directory.GetFiles(DependencyService.Get<IAccessFile>().CreateFile(null), "EasyLife-Backup-*");
+                string[] files = Directory.GetFiles(DependencyService.Get<IAccessFile>().CreateFileDocuments(null), "EasyLife-Backup-*");
 
                 if (files.Count() != 0)
                 {
@@ -269,7 +271,7 @@ namespace EasyLife.PageModels
         {
             try
             {
-                string[] files = Directory.GetFiles(DependencyService.Get<IAccessFile>().CreateFile(null), "EasyLife-Backup-*");
+                string[] files = Directory.GetFiles(DependencyService.Get<IAccessFile>().CreateFileDocuments(null), "EasyLife-Backup-*");
 
                 if (files.Count() != 0)
                 {
@@ -1120,13 +1122,30 @@ namespace EasyLife.PageModels
             }
         }
 
+        public async Task Settings_Methode()
+        {
+            try
+            {
+                var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Optionen", 350, new List<string>() { "Hilfe" }));
+
+                if ((string)result == "Hilfe")
+                {
+                    await App.Kronos.ShowKronos_Methode("Einstellungen");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+            }
+        }
+
         public AsyncCommand Styling_Color_Command { get; }
         public AsyncCommand Notification_Command { get; }
         public AsyncCommand View_Appering_Command { get; }
         public AsyncCommand Datanmanagment_Command { get; }
         public AsyncCommand Load_Metadata_Command { get; }
         public AsyncCommand Load_KronosOverlay_Command { get; }
-
+        public AsyncCommand Settings_Command { get; }
 
         public string is_notification_enable;
         public string Is_Notification_Enable

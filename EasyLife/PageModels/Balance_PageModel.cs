@@ -66,7 +66,7 @@ namespace EasyLife.PageModels
                     {
                         string pdf_filename = "Bilanz " + Current_Viewtime.Month + " " + Current_Viewtime.Year + ".pdf";
 
-                        string pdf_path = DependencyService.Get<IAccessFile>().CreateFile(pdf_filename);
+                        string pdf_path = DependencyService.Get<IAccessFile>().CreateFileDocuments(pdf_filename);
 
                         if (File.Exists(pdf_path) == true)
                         {
@@ -86,11 +86,11 @@ namespace EasyLife.PageModels
                                 {
                                     pdf_filename = "Bilanz " + Current_Viewtime.Month + " " + Current_Viewtime.Year + " (" + identifier + ").pdf";
 
-                                    if (File.Exists(DependencyService.Get<IAccessFile>().CreateFile(pdf_filename)) == false)
+                                    if (File.Exists(DependencyService.Get<IAccessFile>().CreateFileDocuments(pdf_filename)) == false)
                                     {
                                         indicator = true;
 
-                                        pdf_path = DependencyService.Get<IAccessFile>().CreateFile(pdf_filename);
+                                        pdf_path = DependencyService.Get<IAccessFile>().CreateFileDocuments(pdf_filename);
                                     }
 
                                     identifier++;
@@ -1014,7 +1014,7 @@ namespace EasyLife.PageModels
                         reorder_string = "Neuordnung des Bilanzprofiles " + Preferences.Get("Blanceprofile", 0) + "";
                     }
 
-                    var result0 = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Einstellungen", 380, new List<string>() { "Bilanzprofil auswählen", "Neues Bilanzprofil erstellen", "Bilanzprofil löschen", reorder_string }));
+                    var result0 = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Einstellungen", 380, new List<string>() { "Bilanzprofil auswählen", "Neues Bilanzprofil erstellen", "Bilanzprofil löschen", reorder_string , "Hilfe"}));
 
                     if (result0 == null)
                     {
@@ -1054,6 +1054,11 @@ namespace EasyLife.PageModels
                         await Reorder_Balanceprofile_Methode();
 
                         await Load();
+                    }
+
+                    if ((string)result0 == "Hilfe")
+                    {
+                        await App.Kronos.ShowKronos_Methode("Bilanz");
                     }
                 }
             }

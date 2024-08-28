@@ -23,7 +23,6 @@
                 </ImageButton.Source>
             </ImageButton>
             <Frame BackgroundColor="Transparent" Padding="0" HorizontalOptions="Fill" Grid.Row="1" Grid.ColumnSpan="2">
-                <ScrollView BackgroundColor="Transparent" HorizontalOptions="Fill" VerticalScrollBarVisibility="Never">
                     <StackLayout Orientation="Vertical" Spacing="5" HorizontalOptions="Center" BackgroundColor="Transparent">
                         <Label Text="Language" TextColor="{DynamicResource Subtext_Content_Popup}" HorizontalTextAlignment="Start" VerticalTextAlignment="Center" VerticalOptions="Center" HorizontalOptions="Fill" FontSize="Medium"/>
                         <Picker x:Name="languagePicker" SelectedIndexChanged="languagePicker_SelectedIndexChanged" TextColor="{DynamicResource Text_Content_Popup}">
@@ -35,17 +34,47 @@
                         <Frame BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" CornerRadius="30" BorderColor="{DynamicResource Rand_Content_Popup}"  Margin="5,5,5,5" Padding="0">
                             <Button x:Name="voicetest" BackgroundColor="Transparent" TextColor="{DynamicResource Text_Content_Popup}" FontSize="20" FontAttributes="Italic" HorizontalOptions="Center" VerticalOptions="Center" Margin="5,0,5,0" />
                         </Frame>
+                        <Line BackgroundColor="Black" StrokeThickness="5" HorizontalOptions="FillAndExpand" VerticalOptions="Start" HeightRequest="3"/>
+                        <Label Text="Einstellungen von Dialogoptionen" TextDecorations="Underline" TextColor="{DynamicResource Text_Titel_Popup}" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,10,0,1"/>
                         <ScrollView BackgroundColor="Transparent" HorizontalOptions="Fill" VerticalScrollBarVisibility="Never">
-                            <StackLayout Orientation="Vertical" Spacing="5" HorizontalOptions="Center" BackgroundColor="Transparent">
-                                <Line BackgroundColor="Black" StrokeThickness="5" HorizontalOptions="FillAndExpand" VerticalOptions="Start" HeightRequest="3"/>
-                                <Label Text="Einstellungen von Dialogoptionen" TextDecorations="Underline" TextColor="{DynamicResource Text_Titel_Popup}" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,10,0,1"/>
-                                <Frame BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" CornerRadius="30" BorderColor="{DynamicResource Rand_Content_Popup}"  Margin="5,5,5,5" Padding="0">
-                                    <Button x:Name="Home" Text="Home" BackgroundColor="Transparent" TextColor="{DynamicResource Text_Content_Popup}" Clicked="Home_Clicked" FontSize="20" FontAttributes="Italic" HorizontalOptions="Center" VerticalOptions="Center" Margin="5,0,5,0" />
-                                </Frame>
-                            </StackLayout>
-                        </ScrollView>
+                                <StackLayout Orientation="Vertical" Spacing="5" HorizontalOptions="Center" BackgroundColor="Transparent">
+                                    <Frame BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" CornerRadius="30" BorderColor="{DynamicResource Rand_Content_Popup}"  Margin="5,5,5,5" Padding="0">
+                                        <Button Text="Home" BackgroundColor="Transparent" TextColor="{DynamicResource Text_Content_Popup}" Clicked="Home_Clicked" FontSize="20" FontAttributes="Italic" HorizontalOptions="Center" VerticalOptions="Center" Margin="5,0,5,0" />
+                                    </Frame>
+                                    <Frame BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" CornerRadius="30" BorderColor="{DynamicResource Rand_Content_Popup}"  Margin="5,5,5,5" Padding="0">
+                                        <Button  Text="Hinzufügen" BackgroundColor="Transparent" TextColor="{DynamicResource Text_Content_Popup}" Clicked="Hinzufügen_Clicked" FontSize="20" FontAttributes="Italic" HorizontalOptions="Center" VerticalOptions="Center" Margin="5,0,5,0" />
+                                    </Frame>
+                                    <Frame BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" CornerRadius="30" BorderColor="{DynamicResource Rand_Content_Popup}"  Margin="5,5,5,5" Padding="0">
+                                        <Button  Text="Auftrag Hinzufügen" BackgroundColor="Transparent" TextColor="{DynamicResource Text_Content_Popup}" Clicked="Auftrag_Hinzufügen_Clicked" FontSize="20" FontAttributes="Italic" HorizontalOptions="Center" VerticalOptions="Center" Margin="5,0,5,0" />
+                                    </Frame>
+                                    <Frame BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" CornerRadius="30" BorderColor="{DynamicResource Rand_Content_Popup}"  Margin="5,5,5,5" Padding="0">
+                                        <Button  Text="Berarbeiten" BackgroundColor="Transparent" TextColor="{DynamicResource Text_Content_Popup}" Clicked="Berarbeiten_Clicked" FontSize="20" FontAttributes="Italic" HorizontalOptions="Center" VerticalOptions="Center" Margin="5,0,5,0" />
+                                    </Frame>
+                                    <Frame BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" CornerRadius="30" BorderColor="{DynamicResource Rand_Content_Popup}"  Margin="5,5,5,5" Padding="0">
+                                        <Button  Text="Auftrag Berarbeiten" BackgroundColor="Transparent" TextColor="{DynamicResource Text_Content_Popup}" Clicked="Auftrag_Berarbeiten_Clicked" FontSize="20" FontAttributes="Italic" HorizontalOptions="Center" VerticalOptions="Center" Margin="5,0,5,0" />
+                                    </Frame>
+                                    <Frame BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" CornerRadius="30" BorderColor="{DynamicResource Rand_Content_Popup}"  Margin="5,5,5,5" Padding="0">
+                                        <Button  Text="Bilanz" BackgroundColor="Transparent" TextColor="{DynamicResource Text_Content_Popup}" Clicked="Bilanz_Clicked" FontSize="20" FontAttributes="Italic" HorizontalOptions="Center" VerticalOptions="Center" Margin="5,0,5,0" />
+                                    </Frame>
+                                    <Frame BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" CornerRadius="30" BorderColor="{DynamicResource Rand_Content_Popup}"  Margin="5,5,5,5" Padding="0">
+                                        <Button  Text="Vergleichen" BackgroundColor="Transparent" TextColor="{DynamicResource Text_Content_Popup}" Clicked="Vergleichen_Clicked" FontSize="20" FontAttributes="Italic" HorizontalOptions="Center" VerticalOptions="Center" Margin="5,0,5,0" />
+                                    </Frame>
+                                    <Frame BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" CornerRadius="30" BorderColor="{DynamicResource Rand_Content_Popup}"  Margin="5,5,5,5" Padding="0">
+                                        <Button  Text="Einstellungen" BackgroundColor="Transparent" TextColor="{DynamicResource Text_Content_Popup}" Clicked="Einstellungen_Clicked" FontSize="20" FontAttributes="Italic" HorizontalOptions="Center" VerticalOptions="Center" Margin="5,0,5,0" />
+                                    </Frame>
+                                    <Frame BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" CornerRadius="30" BorderColor="{DynamicResource Rand_Content_Popup}"  Margin="5,5,5,5" Padding="0">
+                                        <Button  Text="Styling" BackgroundColor="Transparent" TextColor="{DynamicResource Text_Content_Popup}" Clicked="Styling_Clicked" FontSize="20" FontAttributes="Italic" HorizontalOptions="Center" VerticalOptions="Center" Margin="5,0,5,0" />
+                                    </Frame>
+                                    <Frame BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" CornerRadius="30" BorderColor="{DynamicResource Rand_Content_Popup}"  Margin="5,5,5,5" Padding="0">
+                                        <Button  Text="Papierkorb" BackgroundColor="Transparent" TextColor="{DynamicResource Text_Content_Popup}" Clicked="Papierkorb_Clicked" FontSize="20" FontAttributes="Italic" HorizontalOptions="Center" VerticalOptions="Center" Margin="5,0,5,0" />
+                                    </Frame>
+                                </StackLayout>
+                            </ScrollView>
+                        <Line BackgroundColor="Black" StrokeThickness="5" HorizontalOptions="FillAndExpand" VerticalOptions="Start" HeightRequest="3"/>
+                        <Frame BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" CornerRadius="30" BorderColor="{DynamicResource Rand_Content_Popup}"  Margin="5,5,5,5" Padding="0">
+                            <Button x:Name="shareButton" Text="Teilen" BackgroundColor="Transparent" TextColor="{DynamicResource Text_Content_Popup}" Clicked="Share_DialogOption_Methode"  FontSize="20" FontAttributes="Italic" HorizontalOptions="Center" VerticalOptions="Center" Margin="5,0,5,0" />
+                        </Frame>
                     </StackLayout>
-                </ScrollView>
             </Frame>
         </Grid>
     </Frame>

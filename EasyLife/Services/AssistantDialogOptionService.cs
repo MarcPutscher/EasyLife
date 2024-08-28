@@ -1,12 +1,15 @@
-﻿using EasyLife.Models;
+﻿using EasyLife.Interfaces;
+using EasyLife.Models;
 using SQLite;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace EasyLife.Services
 {
@@ -16,6 +19,8 @@ namespace EasyLife.Services
     public class AssistantDialogOptionService
     {
         public static SQLiteAsyncConnection db;
+        public static SQLiteAsyncConnection newdb;
+
 
         /// <summary>
         /// Erstellt eine Verbindung zur Datenbank her.
@@ -31,6 +36,71 @@ namespace EasyLife.Services
             db = new SQLiteAsyncConnection(databasePath);
 
             await db.CreateTableAsync<AssistantDialogOption>();
+        }
+
+        /// <summary>
+        /// Erstellt eine neue Datenbank.
+        /// </summary>
+        /// <returns></returns>
+        public static async Task NewInit(string path)
+        {
+            if (newdb != null)
+                return;;
+
+            newdb = new SQLiteAsyncConnection(path);
+
+            await newdb.CreateTableAsync<AssistantDialogOption>();
+        }
+
+        /// <summary>
+        /// Klont den Table von AssistentDialogOption auf eine neue Datenbank.
+        /// </summary>
+        /// <returns></returns>
+        public static async Task CloneTableToNewDB(string path)
+        {
+            IEnumerable<AssistantDialogOption> options = await Get_all_Dialogoption();
+
+            await NewInit(path);
+
+            IEnumerable<AssistantDialogOption> options1 = await newdb.Table<AssistantDialogOption>().ToListAsync();
+
+            foreach(AssistantDialogOption asop in options)
+            {
+                await newdb.InsertAsync(asop);
+            }
+            await newdb.CloseAsync();
+        }
+
+        /// <summary>
+        /// Klont den Table von AssistentDialogOption auf eine aktuelle Datenbank.
+        /// </summary>
+        /// <returns></returns>
+        public static async Task CloneTableToDB(string path)
+        {
+            try
+            {
+                await NewInit(path);
+
+                var dialogOptions = await newdb.Table<AssistantDialogOption>().ToListAsync();
+
+                dialogOptions.Reverse<AssistantDialogOption>();
+
+                await newdb.CloseAsync();
+
+                await Init();
+
+                await db.DeleteAllAsync<AssistantDialogOption>();
+
+                foreach (var dialogOption in dialogOptions)
+                {
+                    await db.InsertAsync(dialogOption);
+                }
+
+                File.Delete(path);
+            }
+            catch
+            {
+            }
         }
 
         /// <summary>

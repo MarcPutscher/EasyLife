@@ -8,6 +8,7 @@
              xmlns:control="http://xamarin.com/schemas/2014/forms" xmlns:colorpicker21="https://github.com/avaloniaui" 
              xmlns:helper="clr-namespace:EasyLife.Helpers"
              x:Class="EasyLife.Pages.Styling_Color_Page"
+                 xmlns:fontAwesome="clr-namespace:FontAwesome" 
              BackgroundColor="Black"
              Title="Benutzerdefinierte Farben">
 
@@ -26,6 +27,14 @@
             <cells:Template_Selector_for_Styling x:Key="templateSelector"></cells:Template_Selector_for_Styling>
         </ResourceDictionary>
     </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Order="Primary" Text="Einstellungen"  Command="{Binding Settings_Command}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Wrench}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
         <Grid RowDefinitions="*,Auto">

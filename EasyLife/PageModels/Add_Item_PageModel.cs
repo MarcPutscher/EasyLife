@@ -46,7 +46,7 @@ namespace EasyLife.PageModels
         {
             try
             {
-                var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Option für Zwecke", 350, new List<string>() { "Zweck hinzufügen", "Zweck entfernen", "Zweck wiederherstellen" }));
+                var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Option", 350, new List<string>() { "Zweck hinzufügen", "Zweck entfernen", "Zweck wiederherstellen", "Hilfe" }));
 
                 if ((string)result == "Zweck hinzufügen")
                 {
@@ -59,6 +59,10 @@ namespace EasyLife.PageModels
                 if((string)result == "Zweck wiederherstellen")
                 {
                     await Revive_Reason_Methode();
+                }
+                if ((string)result == "Hilfe")
+                {
+                    await App.Kronos.ShowKronos_Methode("Hinzufügen");
                 }
             }
             catch (Exception ex)
@@ -1740,9 +1744,6 @@ namespace EasyLife.PageModels
                 Fehler();
             }
         }
-
-
-
 
         public string TransaktionID { get; set; }
 

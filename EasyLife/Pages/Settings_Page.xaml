@@ -6,6 +6,7 @@
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
              xmlns:customrenderer="clr-namespace:EasyLife.CustomRenderer"
              x:DataType="pagemodels:Settings_PageModel"
+                 xmlns:fontAwesome="clr-namespace:FontAwesome" 
              BackgroundColor="Black"
              Title="Einstellungen">
 
@@ -18,6 +19,14 @@
                 EventName="Appearing"
                 Command="{Binding View_Appering_Command}"/>
     </ContentPage.Behaviors>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Order="Primary" Text="Einstellungen"  Command="{Binding Settings_Command}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Wrench}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
 
     <SwipeView BackgroundColor="Black" Margin="20,0,20,0">
         <SwipeView.RightItems>

@@ -8,6 +8,7 @@
     xmlns:pagemodels="clr-namespace:EasyLife.PageModels" 
     xmlns:customecontrole="clr-namespace:EasyLife.CustomeControle"
     x:DataType="pagemodels:Add_Order_PageModel"
+    xmlns:fontAwesome="clr-namespace:FontAwesome" 
     Shell.PresentationMode="Modal"
     Shell.NavBarIsVisible="False">
 
@@ -38,6 +39,14 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Order="Primary" Text="Einstellungen"  Command="{Binding Settings_Command}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Wrench}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+    
     <StackLayout>
         <StackLayout BackgroundColor="#1d0e21" HeightRequest="50">
             <Label Text="Auftrag erstellen" FontSize="Large" FontAttributes="Bold" TextColor="White" VerticalOptions="CenterAndExpand" Margin="10,0,0,0"/>

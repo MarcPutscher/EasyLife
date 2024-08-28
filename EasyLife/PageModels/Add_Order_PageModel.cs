@@ -27,6 +27,7 @@ namespace EasyLife.PageModels
             ViewIsAppearing_Command = new AsyncCommand(ViewIsAppearing);
             Kind_Source = new ObservableRangeCollection<string>() { "Tag", "Woche", "Monat", "Jahr" };
             Option_Source = new ObservableRangeCollection<string>() { "Einmalig", "Nach einer Anzahl" , "Bis zu einem Datum"};
+            Settings_Command = new AsyncCommand(Settings_Methode);
         }
 
         public async Task Return_Methode()
@@ -794,6 +795,22 @@ namespace EasyLife.PageModels
                 await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
             }
         }
+        public async Task Settings_Methode()
+        {
+            try
+            {
+                var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Optionen", 350, new List<string>() { "Hilfe" }));
+
+                if ((string)result == "Hilfe")
+                {
+                    await App.Kronos.ShowKronos_Methode("Auftrag Hinzufügen");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+            }
+        }
 
 
 
@@ -1413,5 +1430,7 @@ namespace EasyLife.PageModels
         public AsyncCommand Return_Command { get; }
 
         public AsyncCommand ViewIsAppearing_Command { get; }
+
+        public AsyncCommand Settings_Command { get; }
     }
 }
