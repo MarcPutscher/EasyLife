@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xct:Popup
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="EasyLife.Pages.New_Viewtime_Popup"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:fontAwesome="clr-namespace:FontAwesome" 
+    xmlns:customecontrole="clr-namespace:EasyLife.CustomeControle"
+    xmlns:model="clr-namespace:EasyLife.Models"
+    IsLightDismissEnabled="False"
+    x:Name="New_ViewTime_Popup"
+    Color="Transparent"
+    HorizontalOptions="FillAndExpand"
+    VerticalOptions="Center">
+
+    <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="15" ColumnDefinitions="*,Auto" ColumnSpacing="5" Padding="10" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="Fill">
+        <ImageButton Grid.Row="0" Grid.Column="1" Clicked="CancelButton_Clicked" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="{DynamicResource Hintergrund_Cancel_Popup}" CornerRadius="50" Padding="0">
+            <ImageButton.Source>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.CircleXmark}" Color="{DynamicResource Vordergrund_Cancel_Popup}" Size="50"/>
+            </ImageButton.Source>
+        </ImageButton>
+        <Label Text="Zeitraum" TextColor="{DynamicResource Text_Titel_Popup}" FontSize="30" FontAttributes="Bold" HorizontalTextAlignment="Center" TextDecorations="Underline" Grid.Row="0" Grid.Column="0"/>
+        <Frame Padding="20" CornerRadius="20" BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" BorderColor="{DynamicResource Rand_Content_Popup}" VerticalOptions="Center" HorizontalOptions="Center" xct:ShadowEffect.Color="{DynamicResource Rand_Content_Popup}"  Grid.Row="1" Grid.ColumnSpan="2">
+            <CollectionView BackgroundColor="Transparent" x:Name="YearCollectionView">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:Haushaltsbücher">
+                        <ViewCell>
+                            <Button Padding="20" CornerRadius="20" BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" BorderColor="{DynamicResource Rand_Content_Popup}" VerticalOptions="Center" HorizontalOptions="Center" xct:ShadowEffect.Color="{DynamicResource Rand_Content_Popup}"/>
+                        </ViewCell>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Frame>
+        <Button x:Name="ReturnButton" Text="Anwenden" VerticalOptions="Center" HorizontalOptions="End" Grid.Row="2" Grid.Column="1" TextColor="{DynamicResource Text_Button_Popup}" BackgroundColor="{DynamicResource Hintertgrund_Button_Popup}" Clicked="Return_Methode" CornerRadius="30" xct:ShadowEffect.Color="{DynamicResource Rand_Button_Popup}" BorderColor="{DynamicResource Rand_Button_Popup}" BorderWidth="1" FontAttributes="Bold" />
+    </Grid>
+</xct:Popup>
