@@ -2,13 +2,17 @@
 using MvvmHelpers;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.CommunityToolkit.UI.Views;
+using Xamarin.Essentials;
 using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 using Xamarin.Forms.Xaml;
+using static Xamarin.Forms.VisualStateManager;
 
 namespace EasyLife.Pages
 {
@@ -17,168 +21,118 @@ namespace EasyLife.Pages
     {
         public New_Viewtime_Popup(Viewtime viewtime, Haushaltsbücher haushaltsbucher)
         {
-            Current_Viewtime = viewtime;
-
-            Haushaltsbucher = haushaltsbucher;
-
+            Current_Viewtime = new Viewtime() { Year = viewtime.Year, Month = viewtime.Month };
+            Select_Viewtime = new Viewtime() { Year = viewtime.Year, Month = viewtime.Month };
             InitializeComponent();
 
-            Create_Picker_Year_Items();
-        }
+            MonthCollectionView.IsVisible = false;
 
-        private void Year_Changed_Methode(object sender, CustomeEventArgs.ItemChangedEventArgs e)
-        {
-            if (Month_Control_Visibility == true)
+            foreach(var item in haushaltsbucher.Time)
             {
-                if (String.IsNullOrWhiteSpace(Year) == false)
+                foreach (Months months in item.Value)
                 {
-                    Year = YearPicker.ItemText;
-
-                    All_Months = Haushaltsbucher.Time[Year];
-
-                    Month = null;
+                    months.new_viewtime_popup = this;
                 }
-                else
-                {
-                    Year = Current_Viewtime.Year.ToString();
-
-                    Month = null;
-                }
-            }
-            else
-            {
-                Year = YearPicker.ItemText;
-            }
-        }
-
-        private void Month_Changed_Methode(object sender, CustomeEventArgs.ItemChangedEventArgs e)
-        {
-            try
-            {
-                if (String.IsNullOrEmpty(MonthPicker.ItemText) == false)
-                {
-                    Month = MonthPicker.ItemText;
-                }
-                else
-                {
-                    if (Year == Current_Viewtime.Year.ToString())
-                    {
-                        Month = Current_Viewtime.Month;
-                    }
-                    else
-                    {
-                        Month = null;
-                    }
-                }
-            }
-            catch
-            {
-                Month = Current_Viewtime.Month;
-            }
-        }
-
-        public void Create_Picker_Year_Items()
-        {
-            if (String.IsNullOrEmpty(Current_Viewtime.Month) == true)
-            {
-                Month_Control_Visibility = false;
-                Switch_IsToggled = true;
-                Month = null;
-                New_ViewTime_Popup.Size = new Size(300, 280);
-            }
-            else
-            {
-                Month_Control_Visibility = true;
-                Switch_IsToggled = false;
-                Month = Current_Viewtime.Month;
-                New_ViewTime_Popup.Size = new Size(300, 320);
+                calendarItems.Add(new CalendarItem() { Year = item.Key, Months = item.Value , new_viewtime_popup = this});
             }
 
-            All_Years = Haushaltsbucher.Time.Keys.ToList();
+            YearCollectionView.ItemsSource = calendarItems;
 
-            Year = Current_Viewtime.Year.ToString();
+            if(calendarItems.SingleOrDefault<CalendarItem>(x=>x.Year ==Select_Viewtime.Year.ToString()) != null)
+            {
+                calendarItems.SingleOrDefault<CalendarItem>(x => x.Year == Select_Viewtime.Year.ToString()).PerformYearButton_Command();
+                Select_Viewtime.Month = Current_Viewtime.Month;
 
-            if (Month_Control_Visibility == true)
-            {
-                if (String.IsNullOrWhiteSpace(Year) == false)
-                {
-                    All_Months = Haushaltsbucher.Time[Year];
-                }
-            }
-            else
-            {
-                Current_Viewtime.Month = null;
+                calendarItems.SingleOrDefault<CalendarItem>(x => x.Year == Select_Viewtime.Year.ToString())?.Months.SingleOrDefault(y => y.Month == Select_Viewtime.Month)?.PerformMonthButton_Command();
             }
 
-            Month = Current_Viewtime.Month;
+            this.Size = new Size(DeviceDisplay.MainDisplayInfo.Width/DeviceDisplay.MainDisplayInfo.Density, 600);
         }
 
         public async void Return_Methode(object sender, EventArgs e)
         {
-            if (Month_Control_Visibility == true)
+            if (Select_Viewtime.Year == 0)
             {
-                if (String.IsNullOrWhiteSpace(Year) == true || Month == null)
-                {
-                    await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler!", 300, 300, null, null, "Es wurde kein Monat ausgewählt."));
-
-                    return;
-                }
-
-                Current_Viewtime.Month = Month;
-
-                Current_Viewtime.Year = int.Parse(Year);
-
-                Dismiss(Current_Viewtime);
-
+                await Shell.Current.DisplayAlert("Fehler!", "Es wurde kein Jahr ausgewählt.", "OK");
                 return;
+            }
+
+            if (Select_Viewtime.Month == null)
+            {
+                Select_Viewtime.Month = "";
+            }
+
+            Current_Viewtime.Month = Select_Viewtime.Month;
+            Current_Viewtime.Year = Select_Viewtime.Year;
+
+            Dismiss(Current_Viewtime);
+        }
+
+        public void YearCollection_Methode (CalendarItem item)
+        {
+            MonthCollectionView.IsVisible = !item.Months_Collection_is_Visibile;
+
+            if (item.Months_Collection_is_Visibile == true)
+            {
+                Select_Viewtime.Year = 0;
             }
             else
             {
-                if (String.IsNullOrWhiteSpace(Year) == true)
-                {
-                    await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler!", 300, 300, null, null, "Es wurde kein Jahr ausgewählt."));
-
-                    return;
-                }
-
-                Current_Viewtime.Year = int.Parse(Year);
-
-                Current_Viewtime.Month = "";
-
-                Month = Current_Viewtime.Month;
-
-                Dismiss(Current_Viewtime);
-
-                return;
+                Select_Viewtime.Year = int.Parse(item.Year);
             }
+
+            Select_Viewtime.Month = null;
+
+            MonthCollectionView.ItemsSource = item.Months;
+
+            YearCollectionView.ItemsSource = null;
+
+            foreach (CalendarItem ye in calendarItems.Where(x => x.Months_Collection_is_Visibile == true).ToList())
+            {
+                if (ye != item)
+                {
+                    ye.Months_Collection_is_Visibile = false;
+                    ye.Backgroundcolor = ye.ChangeBrightness(ye.Backgroundcolor, -0.2);
+                }
+            }
+
+            foreach (var item1 in calendarItems)
+            {
+                foreach (Months mo in item1.Months.Where(x => x.Months_Selected == true).ToList())
+                {
+                    mo.Months_Selected = false;
+                    mo.Backgroundcolor = mo.ChangeBrightness(mo.Backgroundcolor, -0.2);
+                }
+            }
+
+            YearCollectionView.ItemsSource = calendarItems;
+            MonthCollectionView.ItemsSource = null;
+            MonthCollectionView.ItemsSource = item.Months;
         }
 
-        private void OptionSwitch_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        public void MonthCollection_Methode(Months item)
         {
-            Switch_IsToggled = OptionSwitch.IsToggled;
-
-            if (Switch_IsToggled == false)
+            if(item.Months_Selected == false)
             {
-                Month_Control_Visibility = true;
-
-                if (String.IsNullOrWhiteSpace(Year) == false)
-                {
-                    All_Months = Haushaltsbucher.Time[Year];
-                }
-
-                Month = null;
+                Select_Viewtime.Month = null;
             }
             else
             {
-                Month_Control_Visibility = false;
-
-                Month = null;
+                Select_Viewtime.Month = item.Month;
             }
-        }
 
-        public void MonthCollection_Methode (List<string> months, bool visibility)
-        {
+            MonthCollectionView.ItemsSource = null;
 
+            foreach(Months mo in calendarItems.SingleOrDefault(x => x.Year == Select_Viewtime.Year.ToString()).Months.Where(x=>x.Months_Selected == true).ToList())
+            {
+                if(mo != item)
+                {
+                    mo.Months_Selected = false;
+                    mo.Backgroundcolor = mo.ChangeBrightness(mo.Backgroundcolor, -0.2);
+                }
+            }
+
+            MonthCollectionView.ItemsSource = calendarItems.SingleOrDefault(x => x.Year == Select_Viewtime.Year.ToString()).Months;
         }
 
         private void CancelButton_Clicked(object sender, EventArgs e)
@@ -186,106 +140,11 @@ namespace EasyLife.Pages
             Dismiss(null);
         }
 
-        public ObservableRangeCollection<Transaktion> List_of_all_transaktion = new ObservableRangeCollection<Transaktion>();
+        public ObservableRangeCollection<CalendarItem> calendarItems = new ObservableRangeCollection<CalendarItem>();
 
-        public Viewtime Current_Viewtime { get; set; }
+        private Viewtime Current_Viewtime = new Viewtime();
 
-        public Haushaltsbücher Haushaltsbucher { get; set; }
+        public Viewtime Select_Viewtime = new Viewtime();
 
-        string year;
-        public string Year
-        {
-            get { return year; }
-            set
-            {
-                if (year == value)
-                    return;
-                year = value;
-
-                if (year == "0")
-                {
-                    YearPicker.ItemText = null;
-                }
-                else
-                {
-                    YearPicker.ItemText = year;
-
-                }
-            }
-        }
-
-        string month;
-        public string Month
-        {
-            get { return month; }
-            set
-            {
-                if (month == value)
-                    return;
-                month = value;
-                MonthPicker.ItemText = month;
-            }
-        }
-
-        List<string> all_years;
-        public List<string> All_Years
-        {
-            get { return all_years; }
-            set
-            {
-                if (all_years == value)
-                    return;
-                all_years = value;
-                YearPicker.ItemSource = all_years;
-            }
-        }
-
-        List<string> all_months;
-        public List<string> All_Months
-        {
-            get { return all_months; }
-            set
-            {
-                if (all_months == value)
-                    return;
-                all_months = value;
-                MonthPicker.ItemSource = all_months;
-            }
-        }
-
-        public bool month_control_visibility;
-        public bool Month_Control_Visibility
-        {
-            get { return month_control_visibility; }
-            set
-            {
-                if (month_control_visibility == value)
-                    return;
-                month_control_visibility = value;
-                MonthLabel.IsVisible = month_control_visibility;
-                MonthPicker.IsVisible = month_control_visibility;
-            }
-        }
-
-        public bool switch_istoggled;
-        public bool Switch_IsToggled
-        {
-            get { return switch_istoggled; }
-            set
-            {
-                if (Switch_IsToggled == value)
-                    return;
-                switch_istoggled = value;
-                OptionSwitch.IsToggled = switch_istoggled;
-                if (Switch_IsToggled == false)
-                {
-                    New_ViewTime_Popup.Size = new Size(300, 320);
-                }
-                else
-                {
-                    New_ViewTime_Popup.Size = new Size(300, 280);
-                }
-            }
-        }
     }
 }

@@ -1702,7 +1702,7 @@ namespace EasyLife.PageModels
         {
             try
             {
-                var result = await Shell.Current.ShowPopupAsync(new Viewtime_Popup(Current_Viewtime, Haushaltsbucher));
+                var result = await Shell.Current.ShowPopupAsync(new New_Viewtime_Popup(Current_Viewtime, Haushaltsbucher));
 
                 if (result == null)
                 {

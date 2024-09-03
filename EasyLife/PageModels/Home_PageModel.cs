@@ -62,6 +62,7 @@ namespace EasyLife.PageModels
             Load_Ratio_Command = new AsyncCommand(Load_Ratio_Methode);
             Budget_Command = new AsyncCommand(Budget_Methode);
             Change_Saldo_Date_Command = new AsyncCommand(Change_Saldo_Date_Methode);
+            Title_Swiped_Command = new AsyncCommand<String>(Change_Month_Methode);
 
             Period_Command = new AsyncCommand(Period_Popup);
 
@@ -1748,7 +1749,7 @@ namespace EasyLife.PageModels
 
                     Haushaltsbücher Haushaltsbucher = new Haushaltsbücher(transaktionscontent.ToList());
 
-                    var result = await Shell.Current.ShowPopupAsync(new Viewtime_Popup(Current_Viewtime, Haushaltsbucher));
+                    var result = await Shell.Current.ShowPopupAsync(new New_Viewtime_Popup(Current_Viewtime, Haushaltsbucher));
 
                     if (result == null)
                     {
@@ -2513,6 +2514,125 @@ namespace EasyLife.PageModels
             }
         }
 
+        private async Task Change_Month_Methode(string input)
+        {
+            if (String.IsNullOrEmpty(input) == true)
+            { return; }
+
+            try
+            {
+                if (String.IsNullOrEmpty(Search_Text) == true)
+                {
+                    var transaktionscontent = await ContentService.Get_all_enabeled_Transaktion();
+
+                    Haushaltsbücher Haushaltsbucher = new Haushaltsbücher(transaktionscontent.ToList());
+
+                    string year = null;
+                    Months current_months = null;
+                    Months next_months = null;
+
+                    if(Current_Viewtime.Month == "")
+                    {
+                        year = Current_Viewtime.Year.ToString();
+
+                        if (input == "left")
+                        {
+                            if (Haushaltsbucher.Time.Keys.ElementAtOrDefault(Haushaltsbucher.Time.Keys.IndexOf(year) + 1) != null)
+                            {
+                                year = Haushaltsbucher.Time.Keys.ElementAtOrDefault(Haushaltsbucher.Time.Keys.IndexOf(year) + 1);
+                            }
+                        }
+                        if (input == "right")
+                        {
+                            if (Haushaltsbucher.Time.Keys.ElementAtOrDefault(Haushaltsbucher.Time.Keys.IndexOf(year) - 1) != null)
+                            {
+                                year = Haushaltsbucher.Time.Keys.ElementAtOrDefault(Haushaltsbucher.Time.Keys.IndexOf(year) - 1);
+                            }
+                        }
+
+                        if (String.IsNullOrEmpty(year) == false )
+                        {
+                            Current_Viewtime = new Viewtime() { Year = int.Parse(year), Month = "" };
+
+                            await Refresh();
+                        }
+                    }
+                    else
+                    {
+                        if (input == "left")
+                        {
+                            if (Haushaltsbucher.Time.Keys.ToList().SingleOrDefault(x => x == Current_Viewtime.Year.ToString()) != null)
+                            {
+                                year = Haushaltsbucher.Time.Keys.ToList().SingleOrDefault(x => x == Current_Viewtime.Year.ToString());
+
+                                if (Haushaltsbucher.Time[year].ToList().SingleOrDefault(x => x.Month == Current_Viewtime.Month) != null)
+                                {
+                                    current_months = Haushaltsbucher.Time[year].ToList().SingleOrDefault(x => x.Month == Current_Viewtime.Month);
+
+                                    if (Haushaltsbucher.Time[year].ElementAtOrDefault(Haushaltsbucher.Time[year].ToList().IndexOf(current_months) + 1) != null)
+                                    {
+                                        next_months = Haushaltsbucher.Time[year].ElementAtOrDefault(Haushaltsbucher.Time[year].ToList().IndexOf(current_months) + 1);
+                                    }
+                                    else
+                                    {
+                                        if (Haushaltsbucher.Time.Keys.ElementAtOrDefault(Haushaltsbucher.Time.Keys.IndexOf(year) + 1) != null)
+                                        {
+                                            year = Haushaltsbucher.Time.Keys.ElementAtOrDefault(Haushaltsbucher.Time.Keys.IndexOf(year) + 1);
+                                            next_months = Haushaltsbucher.Time[year].First();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (input == "right")
+                        {
+                            if (Haushaltsbucher.Time.Keys.ToList().SingleOrDefault(x => x == Current_Viewtime.Year.ToString()) != null)
+                            {
+                                year = Haushaltsbucher.Time.Keys.ToList().SingleOrDefault(x => x == Current_Viewtime.Year.ToString());
+
+                                if (Haushaltsbucher.Time[year].ToList().SingleOrDefault(x => x.Month == Current_Viewtime.Month) != null)
+                                {
+                                    current_months = Haushaltsbucher.Time[year].ToList().SingleOrDefault(x => x.Month == Current_Viewtime.Month);
+
+                                    if (Haushaltsbucher.Time[year].ElementAtOrDefault(Haushaltsbucher.Time[year].ToList().IndexOf(current_months) - 1) != null)
+                                    {
+                                        next_months = Haushaltsbucher.Time[year].ElementAtOrDefault(Haushaltsbucher.Time[year].ToList().IndexOf(current_months) - 1);
+                                    }
+                                    else
+                                    {
+                                        if (Haushaltsbucher.Time.Keys.ElementAtOrDefault(Haushaltsbucher.Time.Keys.IndexOf(year) - 1) != null)
+                                        {
+                                            year = Haushaltsbucher.Time.Keys.ElementAtOrDefault(Haushaltsbucher.Time.Keys.IndexOf(year) - 1);
+                                            next_months = Haushaltsbucher.Time[year].Last();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (String.IsNullOrEmpty(year) == false && next_months != null)
+                        {
+                            Current_Viewtime = new Viewtime() { Year = int.Parse(year), Month = next_months.Month };
+
+                            await Refresh();
+                        }
+                    }
+                }
+                else
+                {
+                    await Notificater("Während Sie suchen können Sie nicht die Zeit verändern.");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+
+                Current_Viewtime = new Viewtime() { Year = DateTime.Now.Year, Month = DateTime.Now.ToString("MMMM", new CultureInfo("de-DE")) };
+
+                await Refresh();
+            }
+        }
+
         private async Task Notificater(string v)
         {
             await ToastHelper.ShowToast(v);
@@ -2605,6 +2725,9 @@ namespace EasyLife.PageModels
         public AsyncCommand Budget_Command { get; }
 
         public AsyncCommand Change_Saldo_Date_Command { get; }
+
+        public AsyncCommand<string> Title_Swiped_Command { get; }
+
 
         public bool serchbar_visibility = false;
         public bool Serchbar_Visibility

@@ -104,6 +104,12 @@ namespace EasyLife.Models
         }
 
         int auftrags_option = 1;
+
+        /// <summary>
+        /// Option 1 = Einmaliger Auftrag |
+        /// Option 2 = Auftrag nach einer Anzahl |
+        /// Option 3 = Auftrag bis zu einem Datum
+        /// </summary>
         public int Auftrags_Option
         {
             get { return auftrags_option; }

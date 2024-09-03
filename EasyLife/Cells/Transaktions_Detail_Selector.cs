@@ -14,6 +14,9 @@ namespace EasyLife.Cells
 
         public DataTemplate Order_Option_3 { get; set; }
 
+        public DataTemplate No_Order_or_note { get; set; }
+
+
         /// <summary>
         /// Funktion die die Details einer Transaktion in der Haushaltsbuchliste nach einem bestimmten Muster auswählt.
         /// </summary>
@@ -24,6 +27,11 @@ namespace EasyLife.Cells
 
             if (transaktion.Auftrags_Option == 1)
             {
+                if (transaktion.Order_Visibility == false && transaktion.Notiz == null)
+                {
+                    return No_Order_or_note;
+                }
+
                 return Order_Option_1;
             }
             if (transaktion.Auftrags_Option == 2)
@@ -36,7 +44,7 @@ namespace EasyLife.Cells
             }
             else
             {
-                return Order_Option_1;
+                return No_Order_or_note;
             }
         }
     }

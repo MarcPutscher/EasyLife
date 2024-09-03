@@ -10,7 +10,7 @@ namespace EasyLife.Models
     {
         public readonly List<string> existing_months = new List<string>() { "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" };
 
-        public Dictionary<string, List<string>> Time = new Dictionary<string, List<string>>();
+        public Dictionary<string, List<Months>> Time = new Dictionary<string, List<Months>>();
 
         public Haushaltsbücher(List<Transaktion> transaktion)
         {
@@ -38,7 +38,7 @@ namespace EasyLife.Models
 
             foreach (string year in years_list)
             {
-                Time.Add(year, new List<string>());
+                Time.Add(year, new List<Months>());
             }
 
             Add_Month(transaktions);
@@ -46,15 +46,13 @@ namespace EasyLife.Models
 
         public void Add_Month(List<Transaktion> transaktions)
         {
-            List<string> months = new List<string>();
-
             foreach (Transaktion transaktion in transaktions)
             {
                 if (Time.Keys.ToList().Contains(transaktion.Datum.Year.ToString()) == true)
                 {
-                    if (Time[transaktion.Datum.Year.ToString()].Contains(transaktion.Datum.ToString("MMMM", new CultureInfo("de-DE"))) == false)
+                    if (Time[transaktion.Datum.Year.ToString()].SingleOrDefault(x=>x.Month == transaktion.Datum.ToString("MMMM", new CultureInfo("de-DE"))) == null)
                     {
-                        Time[transaktion.Datum.Year.ToString()].Add(transaktion.Datum.ToString("MMMM", new CultureInfo("de-DE")));
+                        Time[transaktion.Datum.Year.ToString()].Add(new Months() { Month = transaktion.Datum.ToString("MMMM", new CultureInfo("de-DE")) });
                     }
                 }
 
@@ -65,15 +63,15 @@ namespace EasyLife.Models
 
         public void Sort_Months()
         {
-            List<List<string>> months_list = Time.Values.ToList();
+            List<List<Months>> months_list = Time.Values.ToList();
 
             List<string> years = Time.Keys.ToList();
 
             int h = 0;
 
-            foreach (List<string> months in months_list)
+            foreach (List<Months> months in months_list)
             {
-                List<string> sortet_list_of_months = new List<string>();
+                List<Months> sortet_list_of_months = new List<Months>();
 
                 sortet_list_of_months.Clear();
 
@@ -81,11 +79,11 @@ namespace EasyLife.Models
 
                 months_in_int.Clear();
 
-                foreach (string month in months)
+                foreach (Months month in months)
                 {
                     int k = 0;
 
-                    while (month != existing_months[k])
+                    while (month.Month != existing_months[k])
                     {
                         k++;
                     }
@@ -97,7 +95,7 @@ namespace EasyLife.Models
 
                 foreach (int k in months_in_int)
                 {
-                    sortet_list_of_months.Add(existing_months[k]);
+                    sortet_list_of_months.Add(new Months() { Month = existing_months[k] });
                 }
 
                 Time[years[h]] = sortet_list_of_months;

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace EasyLife.Cells
@@ -11,6 +12,10 @@ namespace EasyLife.Cells
         public DataTemplate Einnahmen { get; set; }
 
         public DataTemplate Ausgaben { get; set; }
+
+        public DataTemplate Detail_Einnahmen { get; set; }
+
+        public DataTemplate Detail_Ausgaben { get; set; }
 
         public DataTemplate Laden { get; set; }
 
@@ -22,21 +27,43 @@ namespace EasyLife.Cells
         {
             var transaktion = (Transaktion)item;
 
-            if(double.Parse(transaktion.Betrag) > 0)
+            if (Preferences.Get("More_Detail", false) == false)
             {
-                return Einnahmen;
-            }
-            if(double.Parse(transaktion.Betrag) < 0)
-            {
-                return Ausgaben;
+                if (double.Parse(transaktion.Betrag) > 0)
+                {
+                    return Einnahmen;
+                }
+                if (double.Parse(transaktion.Betrag) < 0)
+                {
+                    return Ausgaben;
+                }
+                else
+                {
+                    if (transaktion.Auftrags_id == "Load")
+                    {
+                        return Laden;
+                    }
+                    return Einnahmen;
+                }
             }
             else
             {
-                if (transaktion.Auftrags_id == "Load")
+                if (double.Parse(transaktion.Betrag) > 0)
                 {
-                    return Laden;
+                    return Detail_Einnahmen;
                 }
-                return Einnahmen;
+                if (double.Parse(transaktion.Betrag) < 0)
+                {
+                    return Detail_Ausgaben;
+                }
+                else
+                {
+                    if (transaktion.Auftrags_id == "Load")
+                    {
+                        return Laden;
+                    }
+                    return Detail_Einnahmen;
+                }
             }
         }
     }

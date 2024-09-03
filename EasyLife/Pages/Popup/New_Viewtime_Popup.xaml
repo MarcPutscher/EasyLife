@@ -9,28 +9,45 @@
     xmlns:model="clr-namespace:EasyLife.Models"
     IsLightDismissEnabled="False"
     x:Name="New_ViewTime_Popup"
-    Color="Transparent"
-    HorizontalOptions="FillAndExpand"
-    VerticalOptions="Center">
+    Color="Transparent">
 
-    <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="15" ColumnDefinitions="*,Auto" ColumnSpacing="5" Padding="10" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="Fill">
-        <ImageButton Grid.Row="0" Grid.Column="1" Clicked="CancelButton_Clicked" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="{DynamicResource Hintergrund_Cancel_Popup}" CornerRadius="50" Padding="0">
+    <Grid RowDefinitions="*,Auto,Auto,Auto,Auto,*" RowSpacing="5" ColumnDefinitions="*,Auto" ColumnSpacing="5" Padding="0" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="Center">
+        <ImageButton Grid.Row="1" Grid.Column="1" Clicked="CancelButton_Clicked" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="{DynamicResource Hintergrund_Cancel_Popup}" CornerRadius="50" Padding="0">
             <ImageButton.Source>
                 <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.CircleXmark}" Color="{DynamicResource Vordergrund_Cancel_Popup}" Size="50"/>
             </ImageButton.Source>
         </ImageButton>
-        <Label Text="Zeitraum" TextColor="{DynamicResource Text_Titel_Popup}" FontSize="30" FontAttributes="Bold" HorizontalTextAlignment="Center" TextDecorations="Underline" Grid.Row="0" Grid.Column="0"/>
-        <Frame Padding="20" CornerRadius="20" BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" BorderColor="{DynamicResource Rand_Content_Popup}" VerticalOptions="Center" HorizontalOptions="Center" xct:ShadowEffect.Color="{DynamicResource Rand_Content_Popup}"  Grid.Row="1" Grid.ColumnSpan="2">
-            <CollectionView BackgroundColor="Transparent" x:Name="YearCollectionView">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="model:Haushaltsbücher">
-                        <ViewCell>
-                            <Button Padding="20" CornerRadius="20" BackgroundColor="{DynamicResource Hintergrund_Content_Popup}" BorderColor="{DynamicResource Rand_Content_Popup}" VerticalOptions="Center" HorizontalOptions="Center" xct:ShadowEffect.Color="{DynamicResource Rand_Content_Popup}"/>
-                        </ViewCell>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </Frame>
-        <Button x:Name="ReturnButton" Text="Anwenden" VerticalOptions="Center" HorizontalOptions="End" Grid.Row="2" Grid.Column="1" TextColor="{DynamicResource Text_Button_Popup}" BackgroundColor="{DynamicResource Hintertgrund_Button_Popup}" Clicked="Return_Methode" CornerRadius="30" xct:ShadowEffect.Color="{DynamicResource Rand_Button_Popup}" BorderColor="{DynamicResource Rand_Button_Popup}" BorderWidth="1" FontAttributes="Bold" />
+        <Label Text="Zeitraum" TextColor="{DynamicResource Text_Titel_Popup}" FontSize="30" FontAttributes="Bold" HorizontalTextAlignment="Center" TextDecorations="Underline" Grid.Row="1" Grid.Column="0"/>
+        <CollectionView BackgroundColor="Transparent" x:Name="YearCollectionView" VerticalScrollBarVisibility="Default" ItemSizingStrategy="MeasureAllItems" Grid.Row="2" Grid.ColumnSpan="2"  SelectionMode="Single" VerticalOptions="CenterAndExpand" HeightRequest="200" HorizontalOptions="CenterAndExpand">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="3" HorizontalItemSpacing="10" VerticalItemSpacing="10" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:CalendarItem">
+                    <Frame Padding="5" BackgroundColor="{Binding Backgroundcolor}"  CornerRadius="20"  BorderColor="{DynamicResource Rand_Content_Popup}"  xct:ShadowEffect.Color="{DynamicResource Rand_Button_Popup}" VerticalOptions="Center" HorizontalOptions="Center">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding YearButton_Command}"/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="{Binding Year}" FontSize="Large" FontAttributes="Bold" HorizontalTextAlignment="Center" TextColor="{DynamicResource Text_Content_Popup}" VerticalTextAlignment="Center" VerticalOptions="Center" HorizontalOptions="Center"/>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <CollectionView BackgroundColor="Transparent" x:Name="MonthCollectionView" ItemSizingStrategy="MeasureFirstItem" SelectionMode="Single" Grid.Row="3" Grid.ColumnSpan="2" VerticalOptions="CenterAndExpand" HeightRequest="200" HorizontalOptions="CenterAndExpand">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="3" HorizontalItemSpacing="10" VerticalItemSpacing="10"/>
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:Months">
+                    <Frame Padding="5" BackgroundColor="{Binding Backgroundcolor}"  CornerRadius="20"  BorderColor="{DynamicResource Rand_Content_Popup}"  xct:ShadowEffect.Color="{DynamicResource Rand_Button_Popup}" VerticalOptions="Center" HorizontalOptions="Center">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding MonthButton_Command}"/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="{Binding Month}" FontSize="Large" FontAttributes="Bold" HorizontalTextAlignment="Center" TextColor="{DynamicResource Subtext_Content_Popup}" VerticalTextAlignment="Center" VerticalOptions="Center" HorizontalOptions="Center"/>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Button Text="Anwenden" VerticalOptions="Center" HorizontalOptions="End" Grid.Row="4" Grid.Column="1" TextColor="{DynamicResource Text_Button_Popup}" BackgroundColor="{DynamicResource Hintertgrund_Button_Popup}" Clicked="Return_Methode" CornerRadius="30" xct:ShadowEffect.Color="{DynamicResource Rand_Button_Popup}" BorderColor="{DynamicResource Rand_Button_Popup}" BorderWidth="1" FontAttributes="Bold" />
     </Grid>
 </xct:Popup>

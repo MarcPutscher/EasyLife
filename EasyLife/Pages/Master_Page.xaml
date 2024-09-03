@@ -15,8 +15,6 @@
         </Frame>
     </Shell.FlyoutHeader>
 
-
-
     <Shell.ItemTemplate>
         <DataTemplate>
             <Grid ColumnDefinitions="10,50,*" Padding="10">

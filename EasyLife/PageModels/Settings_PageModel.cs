@@ -1200,5 +1200,20 @@ namespace EasyLife.PageModels
                 restored_backup_date = value; RaisePropertyChanged();
             }
         }
+
+        public bool more_detail_bool = Preferences.Get("More_Detail",false);
+        public bool More_Detail_Bool
+        {
+            get { return more_detail_bool; }
+            set
+            {
+                if (More_Detail_Bool == value)
+                {
+                    return;
+                }
+
+                more_detail_bool = value; RaisePropertyChanged(); Preferences.Set("More_Detail", value);
+            }
+        }
     }
 }

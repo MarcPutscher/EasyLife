@@ -143,11 +143,30 @@
                             FontAttributes="None"/>
                             <Label Text="{Binding Next_Backup_Date}" TextColor="Gold" FontSize="Medium" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
-
                         <Button Text="Datenmanagement" Padding="10" CornerRadius="30" Command="{Binding Datanmanagment_Command}" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Gray" TextColor="White" FontSize="Medium" BorderColor="White" BorderWidth="2"/>
 
                         <Label Text="Styling" TextDecorations="Underline" TextColor="Red" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,10,0,1"/>
                         <Button Text="Benutzerdefinierte Farben" Padding="10" CornerRadius="30" Command="{Binding Styling_Color_Command}" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Gray" TextColor="White" FontSize="Medium" BorderColor="White" BorderWidth="2"/>
+
+                        <Label Text="Erweiterte Einstellungen" TextDecorations="Underline" TextColor="Red" FontSize="Large" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,10,0,1"/>
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                            <customrenderer:AutoFontSizeLabel 
+                            AutoSizeMaxTextSize="20"
+                            AutoSizeMinTextSize="8"
+                            AutoSizeStepGranularity="1"
+                            HeightRequest="30"
+                            HorizontalTextAlignment="Start"
+                            VerticalTextAlignment="Center"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Fill"
+                            Grid.Column="0"                                
+                            MaxLines="1"
+                            Padding="0"
+                            Text="Mehr Details bei den Transaktionen :" 
+                            TextColor="White"
+                            FontAttributes="None"/>
+                            <CheckBox IsChecked="{Binding More_Detail_Bool}" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                        </Grid>
 
                     </StackLayout>
                 </ScrollView>

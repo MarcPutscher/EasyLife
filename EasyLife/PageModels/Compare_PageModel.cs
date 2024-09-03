@@ -546,7 +546,7 @@ namespace EasyLife.PageModels
         {
             try
             {
-                var result = await Shell.Current.ShowPopupAsync(new Viewtime_Popup(Item1_Viewtime, Haushaltsbucher));
+                var result = await Shell.Current.ShowPopupAsync(new New_Viewtime_Popup(Item1_Viewtime, Haushaltsbucher));
 
                 if (result == null)
                 {
@@ -582,7 +582,7 @@ namespace EasyLife.PageModels
         {
             try
             {
-                var result = await Shell.Current.ShowPopupAsync(new Viewtime_Popup(Item2_Viewtime, Haushaltsbucher));
+                var result = await Shell.Current.ShowPopupAsync(new New_Viewtime_Popup(Item2_Viewtime, Haushaltsbucher));
 
                 if (result == null)
                 {
