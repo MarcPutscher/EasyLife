@@ -27,7 +27,7 @@ namespace EasyLife.Cells
         {
             var transaktion = (Transaktion)item;
 
-            if (Preferences.Get("More_Detail", false) == false)
+            if (Preferences.Get("More_Detail_Transaktion", false) == false)
             {
                 if (double.Parse(transaktion.Betrag) > 0)
                 {

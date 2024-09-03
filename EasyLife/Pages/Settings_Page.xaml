@@ -165,9 +165,26 @@
                             Text="Mehr Details bei den Transaktionen :" 
                             TextColor="White"
                             FontAttributes="None"/>
-                            <CheckBox IsChecked="{Binding More_Detail_Bool}" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                            <CheckBox IsChecked="{Binding More_Detail_Transaktion_Bool}" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
                         </Grid>
-
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5" HorizontalOptions="Center" VerticalOptions="Center">
+                            <customrenderer:AutoFontSizeLabel 
+                            AutoSizeMaxTextSize="20"
+                            AutoSizeMinTextSize="8"
+                            AutoSizeStepGranularity="1"
+                            HeightRequest="30"
+                            HorizontalTextAlignment="Start"
+                            VerticalTextAlignment="Center"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Fill"
+                            Grid.Column="0"                                
+                            MaxLines="1"
+                            Padding="0"
+                            Text="Diagramme bei den Bilanzen :" 
+                            TextColor="White"
+                            FontAttributes="None"/>
+                            <CheckBox IsChecked="{Binding More_Detail_Chart_Bool}" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"/>
+                        </Grid>
                     </StackLayout>
                 </ScrollView>
             </Frame>

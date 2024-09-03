@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xct:Popup 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:Class="EasyLife.Pages.CustomeToolbar_Popup"
+    xmlns:fontAwesome="clr-namespace:FontAwesome" 
+    xmlns:models="clr-namespace:EasyLife.Models"
+    IsLightDismissEnabled="True"
+    Color="Transparent"
+    VerticalOptions="Start"
+    HorizontalOptions="End">
+
+
+    <xct:Popup.Content>
+        <StackLayout Padding="0,50,0,0" HorizontalOptions="Fill" VerticalOptions="Fill">
+            <ListView x:Name="toolbaritemlist" ItemSelected="ListView_ItemSelected" HorizontalOptions="End" VerticalOptions="Start">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Action_Button">
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal" Spacing="10" HeightRequest="50" HorizontalOptions="Fill"  Padding="0" Margin="0">
+                                <Image VerticalOptions="Center" HorizontalOptions="Center">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="FAS" Glyph="{Binding Description}"/>
+                                    </Image.Source>
+                                </Image>
+                                <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="Title" TextDecorations="Underline" HorizontalOptions="Start" VerticalOptions="Center" TextColor="{DynamicResource Text_Button_Popup}"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </xct:Popup.Content>
+</xct:Popup>

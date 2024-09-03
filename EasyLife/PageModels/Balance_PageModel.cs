@@ -2,6 +2,7 @@
 using EasyLife.Models;
 using EasyLife.Pages;
 using EasyLife.Services;
+using FontAwesome;
 using FreshMvvm;
 using iText.Kernel.Colors;
 using iText.Kernel.Pdf;
@@ -10,9 +11,12 @@ using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
+using iText.StyledXmlParser.Css.Util;
 using iText.StyledXmlParser.Jsoup.Nodes;
+using Microcharts;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -45,9 +49,8 @@ namespace EasyLife.PageModels
 
 
             Load_Command = new AsyncCommand(Load);
-            Period_Command = new AsyncCommand(Period_Popup);
-            Settings_Command = new AsyncCommand(Settings_Methode);
-            Create_PDF_Command = new AsyncCommand(Create_PDF_Methode);
+            Toolbar_Command = new AsyncCommand(Toolbar_Methode);
+            Change_Chart_2_Command = new AsyncCommand(Change_Chart_2_Methode);
         }
 
         private async Task Create_PDF_Methode()
@@ -1728,9 +1731,235 @@ namespace EasyLife.PageModels
             await Shell.Current.DisplayToastAsync(v, 5000);
         }
 
+        public async Task Toolbar_Methode()
+        {
+            Dictionary<Action_Button, Func<Task>> keyValuePairs = new Dictionary<Action_Button, Func<Task>>()
+            {
+                { new Action_Button(){Title = "Zeitraum", Description = FontAwesomeIcons.Clock} , Period_Popup},
+                { new Action_Button(){Title = "Bilanzprofil", Description = FontAwesomeIcons.Wrench} , Settings_Methode},
+                { new Action_Button(){Title = "Create_PDF", Description = FontAwesomeIcons.FilePdf} , Create_PDF_Methode},
+            };
+            string Chart = "Digramme";
+
+            if (Charts_State == true) { Chart = "Bilanz"; }
+
+            Dictionary<Action_Button, Func<string, Task>> keyValuePairs1 = new Dictionary<Action_Button, Func<string, Task>>()
+            {
+                { new Action_Button(){Title = Chart, Description = FontAwesomeIcons.ChartBar} , Show_Charts_Methode}
+            };
+
+            Action_Button action_Button;
+
+            if (Preferences.Get("More_Detail_Chart", false) == true)
+            {
+                action_Button = await Shell.Current.ShowPopupAsync(new CustomeToolbar_Popup(keyValuePairs.Keys.ToList().Concat(keyValuePairs1.Keys.ToList()).ToList(), 170)) as Action_Button;
+
+            }
+            else
+            {
+                action_Button = await Shell.Current.ShowPopupAsync(new CustomeToolbar_Popup(keyValuePairs.Keys.ToList(), 170)) as Action_Button;
+            }
+
+            if(action_Button != null)
+            {
+                if (keyValuePairs.ContainsKey((Action_Button)action_Button) == true)
+                {
+                    await keyValuePairs[(Action_Button)action_Button]();
+                }
+                if(keyValuePairs1.ContainsKey((Action_Button)action_Button) == true)
+                { 
+                    await keyValuePairs1[(Action_Button)action_Button]("0");
+                } 
+            }
+        }
+
+        private async Task Show_Charts_Methode(string input)
+        {
+            try
+            {
+                if (Bundles.Count() != 0)
+                {
+                    if (input == "0")
+                    {
+                        Charts_State = !Charts_State;
+                    }
+
+                    if (Charts_State == true)
+                    {
+                        Selected_Reason = null;
+
+                        double sum_chart_2 = 0;
+
+                        Reason_List.Clear();
+
+                        List<ChartEntry> list_entries_chart_1 = new List<ChartEntry>();
+
+                        List<ChartEntry> list_entries_chart_2 = new List<ChartEntry>();
+
+                        foreach (var bundle in Bundles)
+                        {
+                            if (bundle.Definition == 0)
+                            {
+                                foreach (Stackholder stack in bundle.StackholderSource)
+                                {
+                                    if (await ReasonService.Get_definition_of_specific_Reason(stack.Reason) == "Einnahmen")
+                                    {
+                                        list_entries_chart_1.Add(new ChartEntry(float.Parse(stack.Value, NumberStyles.Any, new CultureInfo("de-DE"))) { Label = stack.Reason + "(" + stack.Count + ")", ValueLabel = stack.Value + " €", Color = SKColors.Green, ValueLabelColor = SKColors.Green });
+                                    }
+                                    else
+                                    {
+                                        list_entries_chart_1.Add(new ChartEntry(float.Parse(stack.Value, NumberStyles.Any, new CultureInfo("de-DE"))) { Label = stack.Reason + "(" + stack.Count + ")", ValueLabel = stack.Value + " €", Color = SKColors.Red, ValueLabelColor = SKColors.Red });
+                                    }
+
+                                    if (String.IsNullOrEmpty(Selected_Reason))
+                                    {
+                                        Selected_Reason = stack.Reason;
+                                    }
+
+                                    if (!Reason_List.Contains(stack.Reason))
+                                    {
+                                        Reason_List.Add(stack.Reason);
+                                    }
+
+                                    if (stack.Reason == Selected_Reason)
+                                    {
+                                        foreach (Transaktion trans in stack.Detail)
+                                        {
+                                            if (double.Parse(trans.Betrag) > 0)
+                                            {
+                                                list_entries_chart_2.Add(new ChartEntry(float.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"))) { Label = trans.Datum.ToString("d.M.yy", new CultureInfo("de-DE")), ValueLabel = trans.Betrag + " €", Color = SKColors.Green, ValueLabelColor = SKColors.Black });
+                                            }
+                                            else
+                                            {
+                                                list_entries_chart_2.Add(new ChartEntry(float.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"))) { Label = trans.Datum.ToString("d.M.yy", new CultureInfo("de-DE")), ValueLabel = trans.Betrag + " €", Color = SKColors.Red, ValueLabelColor = SKColors.Black });
+                                            }
+
+                                            sum_chart_2 += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        Chart_1 = new BarChart { Entries = list_entries_chart_1.ToArray(), ValueLabelOrientation = Orientation.Vertical, LabelOrientation = Orientation.Vertical, LabelTextSize = 30, IsAnimated = true, LabelColor = SKColors.Black, BackgroundColor = SKColors.Transparent };
+
+                        Amount_of_Entries_Chart_1 = list_entries_chart_1.Count().ToString();
+
+                        Sum_of_Entries_Chart_1 = double.Parse(Total, NumberStyles.Any, new CultureInfo("de-DE")).ToString("F2").Replace(".", ",");
+
+                        Chart_2 = new RadarChart { Entries = list_entries_chart_2.ToArray(), LabelTextSize = 30, BorderLineColor = SKColors.Black, IsAnimated = true, LabelColor = SKColors.Black, BackgroundColor = SKColors.Transparent };
+
+                        Amount_of_Entries_Chart_2 = list_entries_chart_2.Count().ToString();
+
+                        Sum_of_Entries_Chart_2 = sum_chart_2.ToString("F2").Replace(".", ",");
+
+                        if (sum_chart_2 < 0)
+                        {
+                            Evaluating_of_Sum_of_Entries_Chart_2 = Xamarin.Forms.Color.Red;
+                        }
+                        if (sum_chart_2 > 0)
+                        {
+                            Evaluating_of_Sum_of_Entries_Chart_2 = Xamarin.Forms.Color.Green;
+                        }
+                        if (sum_chart_2 == 0)
+                        {
+                            Evaluating_of_Sum_of_Entries_Chart_2 = Xamarin.Forms.Color.DarkGray;
+                        }
+                    }
+                    else
+                    {
+                        await Load();
+                    }
+                }
+                else
+                {
+                    await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Leere Bilanz", 300, 250, null, null, "Es kann kein Diagramm erstellt werden, wenn die Bilanz leer ist."));
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+            }
+        }
+
+        private async Task Change_Chart_2_Methode()
+        {
+            try
+            {
+                if (Reason_List.Count() != 0)
+                {
+                    var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Zweck auswählen", 320, Reason_List));
+
+                    if (result == null)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        Selected_Reason = (string)result;
+
+                        double sum_chart_2 = 0;
+
+                        List<ChartEntry> list_entries_chart_2 = new List<ChartEntry>();
+
+                        foreach (var bundle in Bundles)
+                        {
+                            if (bundle.Definition == 0)
+                            {
+                                foreach (Stackholder stack in bundle.StackholderSource)
+                                {
+                                    if (stack.Reason == Selected_Reason)
+                                    {
+                                        foreach (Transaktion trans in stack.Detail)
+                                        {
+                                            if (double.Parse(trans.Betrag) > 0)
+                                            {
+                                                list_entries_chart_2.Add(new ChartEntry(float.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"))) { Label = trans.Datum.ToString("d.M.yy", new CultureInfo("de-DE")), ValueLabel = trans.Betrag + " €", Color = SKColors.Green, ValueLabelColor = SKColors.Black });
+                                            }
+                                            else
+                                            {
+                                                list_entries_chart_2.Add(new ChartEntry(float.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"))) { Label = trans.Datum.ToString("d.M.yy", new CultureInfo("de-DE")), ValueLabel = trans.Betrag + " €", Color = SKColors.Red, ValueLabelColor = SKColors.Black });
+                                            }
+
+                                            sum_chart_2 += double.Parse(trans.Betrag, NumberStyles.Any, new CultureInfo("de-DE"));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        Chart_2 = new RadarChart { Entries = list_entries_chart_2.ToArray(), LabelTextSize = 30, BorderLineColor = SKColors.Black, IsAnimated = true, LabelColor = SKColors.Black, BackgroundColor = SKColors.Transparent };
+
+                        Amount_of_Entries_Chart_2 = list_entries_chart_2.Count().ToString();
+
+                        Sum_of_Entries_Chart_2 = sum_chart_2.ToString("F2").Replace(".", ",");
+
+                        if (sum_chart_2 < 0)
+                        {
+                            Evaluating_of_Sum_of_Entries_Chart_2 = Xamarin.Forms.Color.Red;
+                        }
+                        if (sum_chart_2 > 0)
+                        {
+                            Evaluating_of_Sum_of_Entries_Chart_2 = Xamarin.Forms.Color.Green;
+                        }
+                        if (sum_chart_2 == 0)
+                        {
+                            Evaluating_of_Sum_of_Entries_Chart_2 = Xamarin.Forms.Color.DarkGray;
+                        }
+                    }
+                }
+                else
+                {
+                    await Notificater("Es gibt keine Zwecke zwischen denen man wählen kann.");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+            }
+        }
+
         public ObservableRangeCollection<StackholderBundle> Bundles { get; set; }
-
-
         public ObservableRangeCollection<Stackholder> stackholderbundel_outcome_account;
         public ObservableRangeCollection<Stackholder> Stackholderbundel_Outcome_Account
         {
@@ -1744,7 +1973,6 @@ namespace EasyLife.PageModels
                 stackholderbundel_outcome_account = value; RaisePropertyChanged();
             }
         }
-
         public ObservableRangeCollection<Stackholder> stackholderbundel_income_account;
         public ObservableRangeCollection<Stackholder> Stackholderbundel_Income_Account
         {
@@ -1758,7 +1986,6 @@ namespace EasyLife.PageModels
                 stackholderbundel_income_account = value; RaisePropertyChanged();
             }
         }
-
         public ObservableRangeCollection<Stackholder> stackholderbundel_outcome_cash;
         public ObservableRangeCollection<Stackholder> Stackholderbundel_Outcome_Cash
         {
@@ -1772,7 +1999,6 @@ namespace EasyLife.PageModels
                 stackholderbundel_outcome_cash = value; RaisePropertyChanged();
             }
         }
-
         public ObservableRangeCollection<Stackholder> stackholderbundel_income_cash;
         public ObservableRangeCollection<Stackholder> Stackholderbundel_Income_Cash
         {
@@ -1786,6 +2012,7 @@ namespace EasyLife.PageModels
                 stackholderbundel_income_cash = value; RaisePropertyChanged();
             }
         }
+
 
         public Balanceprofile balanceprofile;
         public Balanceprofile Bilanceprofile
@@ -1801,9 +2028,24 @@ namespace EasyLife.PageModels
             }
         }
 
+
         public List<Balanceprofile> Bilanceprofiles_List = new List<Balanceprofile>();
+        public List<string> reason_list = new List<string>();
+        public List<string> Reason_List
+        {
+            get { return reason_list; }
+            set
+            {
+                if (Reason_List == value)
+                {
+                    return;
+                }
+                reason_list = value; RaisePropertyChanged();
+            }
+        }
 
         public Haushaltsbücher Haushaltsbucher = null;
+
 
         public bool stackholder_bundle_visibility = false;
         public bool Stackholder_Bundle_Visibility
@@ -1820,7 +2062,6 @@ namespace EasyLife.PageModels
                 stackholder_bundle_visibility = value; RaisePropertyChanged();
             }
         }
-
         public bool stackholder_outcome_account_visibility = false;
         public bool Stackholder_Outcome_Account_Visibility
         {
@@ -1836,7 +2077,6 @@ namespace EasyLife.PageModels
                 stackholder_outcome_account_visibility = value; RaisePropertyChanged();
             }
         }
-
         public bool stackholder_income_account_visibility = false;
         public bool Stackholder_Income_Account_Visibility
         {
@@ -1852,7 +2092,6 @@ namespace EasyLife.PageModels
                 stackholder_income_account_visibility = value; RaisePropertyChanged();
             }
         }
-
         public bool stackholder_outcome_cash_visibility = false;
         public bool Stackholder_Outcome_Cash_Visibility
         {
@@ -1868,7 +2107,6 @@ namespace EasyLife.PageModels
                 stackholder_outcome_cash_visibility = value; RaisePropertyChanged();
             }
         }
-
         public bool stackholder_income_cash_visibility = false;
         public bool Stackholder_Income_Cash_Visibility
         {
@@ -1884,7 +2122,6 @@ namespace EasyLife.PageModels
                 stackholder_income_cash_visibility = value; RaisePropertyChanged();
             }
         }
-
         public bool kein_ergebnis_stackholder_Status = false;
         public bool Kein_Ergebnis_Stackholder_Status
         {
@@ -1898,6 +2135,20 @@ namespace EasyLife.PageModels
                 {
                     Title = "Bilanz";
                 }
+            }
+        }
+        public bool charts_state = false;
+        public bool Charts_State
+        {
+            get { return charts_state; }
+            set
+            {
+                if (Charts_State == value)
+                {
+                    return;
+                }
+
+                charts_state = value; RaisePropertyChanged();
             }
         }
 
@@ -1915,6 +2166,147 @@ namespace EasyLife.PageModels
                 title = value; RaisePropertyChanged();
             }
         }
+        public string total_outcome_accaount;
+        public string Total_Outcome_Account
+        {
+            get { return total_outcome_accaount; }
+            set
+            {
+                if (total_outcome_accaount == value)
+                {
+                    return;
+                }
+
+                total_outcome_accaount = value; RaisePropertyChanged();
+            }
+        }
+        public string total_income_accaount;
+        public string Total_Income_Account
+        {
+            get { return total_income_accaount; }
+            set
+            {
+                if (total_income_accaount == value)
+                {
+                    return;
+                }
+
+                total_income_accaount = value; RaisePropertyChanged();
+            }
+        }
+        public string total_outcome_cash;
+        public string Total_Outcome_Cash
+        {
+            get { return total_outcome_cash; }
+            set
+            {
+                if (total_outcome_cash == value)
+                {
+                    return;
+                }
+
+                total_outcome_cash = value; RaisePropertyChanged();
+            }
+        }
+        public string total_income_cash;
+        public string Total_Income_Cash
+        {
+            get { return total_income_cash; }
+            set
+            {
+                if (total_income_cash == value)
+                {
+                    return;
+                }
+
+                total_income_cash = value; RaisePropertyChanged();
+            }
+        }
+        public string total;
+        public string Total
+        {
+            get { return total; }
+            set
+            {
+                if (total == value)
+                {
+                    return;
+                }
+
+                total = value; RaisePropertyChanged();
+            }
+        }
+        public string amount_of_entries_chart_1;
+        public string Amount_of_Entries_Chart_1
+        {
+            get { return amount_of_entries_chart_1; }
+            set
+            {
+                if (Amount_of_Entries_Chart_1 == value)
+                {
+                    return;
+                }
+
+                amount_of_entries_chart_1 = value; RaisePropertyChanged();
+            }
+        }
+        public string sum_of_entries_chart_1;
+        public string Sum_of_Entries_Chart_1
+        {
+            get { return sum_of_entries_chart_1; }
+            set
+            {
+                if (Sum_of_Entries_Chart_1 == value)
+                {
+                    return;
+                }
+
+                sum_of_entries_chart_1 = value; RaisePropertyChanged();
+            }
+        }
+        public string amount_of_entries_chart_2;
+        public string Amount_of_Entries_Chart_2
+        {
+            get { return amount_of_entries_chart_2; }
+            set
+            {
+                if (Amount_of_Entries_Chart_2 == value)
+                {
+                    return;
+                }
+
+                amount_of_entries_chart_2 = value; RaisePropertyChanged();
+            }
+        }
+        public string sum_of_entries_chart_2;
+        public string Sum_of_Entries_Chart_2
+        {
+            get { return sum_of_entries_chart_2; }
+            set
+            {
+                if (Sum_of_Entries_Chart_2 == value)
+                {
+                    return;
+                }
+
+                sum_of_entries_chart_2 = value; RaisePropertyChanged();
+            }
+        }
+        public string selected_reason;
+        public string Selected_Reason
+        {
+            get { return selected_reason; }
+            set
+            {
+                if (Selected_Reason == value)
+                {
+                    return;
+                }
+
+                selected_reason = value; RaisePropertyChanged();
+            }
+        }
+
 
         public Viewtime current_viewtime = new Viewtime() { Year = DateTime.Now.Year, Month = DateTime.Now.ToString("MMMM", new CultureInfo("de-DE")) };
         public Viewtime Current_Viewtime
@@ -1932,11 +2324,9 @@ namespace EasyLife.PageModels
         }
 
         public AsyncCommand Load_Command { get; }
+        public AsyncCommand Toolbar_Command { get; }
+        public AsyncCommand Change_Chart_2_Command { get; }
 
-        public AsyncCommand Period_Command { get; }
-
-        public AsyncCommand Settings_Command { get; }
-        public AsyncCommand Create_PDF_Command { get; }
 
         public Xamarin.Forms.Color evaluating_of_totoal_outcome_account;
         public Xamarin.Forms.Color Evaluating_of_Totoal_Outcome_Account
@@ -1952,7 +2342,6 @@ namespace EasyLife.PageModels
                 evaluating_of_totoal_outcome_account = value; RaisePropertyChanged();
             }
         }
-
         public Xamarin.Forms.Color evaluating_of_totoal_income_account;
         public Xamarin.Forms.Color Evaluating_of_Totoal_Income_Account
         {
@@ -1967,7 +2356,6 @@ namespace EasyLife.PageModels
                 evaluating_of_totoal_income_account = value; RaisePropertyChanged();
             }
         }
-
         public Xamarin.Forms.Color evaluating_of_totoal_outcome_cash;
         public Xamarin.Forms.Color Evaluating_of_Totoal_Outcome_Cash
         {
@@ -1982,7 +2370,6 @@ namespace EasyLife.PageModels
                 evaluating_of_totoal_outcome_cash = value; RaisePropertyChanged();
             }
         }
-
         public Xamarin.Forms.Color evaluating_of_totoal_income_cash;
         public Xamarin.Forms.Color Evaluating_of_Totoal_Income_Cash
         {
@@ -1997,7 +2384,6 @@ namespace EasyLife.PageModels
                 evaluating_of_totoal_income_cash = value; RaisePropertyChanged();
             }
         }
-
         public Xamarin.Forms.Color evaluating_of_totoal;
         public Xamarin.Forms.Color Evaluating_of_Totoal
         {
@@ -2012,81 +2398,53 @@ namespace EasyLife.PageModels
                 evaluating_of_totoal = value; RaisePropertyChanged();
             }
         }
-
-        public string total_outcome_accaount;
-        public string Total_Outcome_Account
+        public Xamarin.Forms.Color evaluating_of_sum_of_entries_chart_2;
+        public Xamarin.Forms.Color Evaluating_of_Sum_of_Entries_Chart_2
         {
-            get { return total_outcome_accaount; }
+            get { return evaluating_of_sum_of_entries_chart_2; }
             set
             {
-                if (total_outcome_accaount == value)
+                if (Evaluating_of_Sum_of_Entries_Chart_2 == value)
                 {
                     return;
                 }
 
-                total_outcome_accaount = value; RaisePropertyChanged();
+                evaluating_of_sum_of_entries_chart_2 = value; RaisePropertyChanged();
             }
         }
 
-        public string total_income_accaount;
-        public string Total_Income_Account
+        public BarChart chart_1 = new BarChart() { Entries = null };
+        public BarChart Chart_1
         {
-            get { return total_income_accaount; }
+            get { return chart_1; }
             set
             {
-                if (total_income_accaount == value)
+                if (Chart_1 == value)
                 {
                     return;
                 }
 
-                total_income_accaount = value; RaisePropertyChanged();
+                chart_1 = value; RaisePropertyChanged();
             }
         }
 
-        public string total_outcome_cash;
-        public string Total_Outcome_Cash
+
+        public RadarChart chart_2 = new RadarChart() { Entries = null };
+        public RadarChart Chart_2
         {
-            get { return total_outcome_cash; }
+            get { return chart_2; }
             set
             {
-                if (total_outcome_cash == value)
+                if (Chart_2 == value)
                 {
                     return;
                 }
 
-                total_outcome_cash = value; RaisePropertyChanged();
+                chart_2 = value; RaisePropertyChanged();
             }
         }
 
-        public string total_income_cash;
-        public string Total_Income_Cash
-        {
-            get { return total_income_cash; }
-            set
-            {
-                if (total_income_cash == value)
-                {
-                    return;
-                }
 
-                total_income_cash = value; RaisePropertyChanged();
-            }
-        }
-
-        public string total;
-        public string Total
-        {
-            get { return total; }
-            set
-            {
-                if (total == value)
-                {
-                    return;
-                }
-
-                total = value; RaisePropertyChanged();
-            }
-        }
     }
 
     public class Stackholderhelper

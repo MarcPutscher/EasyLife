@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="EasyLife.Pages.CustomeAktionSheet_Popup"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
-    xmlns:model="clr-namespace:EasyLife.Pages" 
+    xmlns:model="clr-namespace:EasyLife.Models" 
     xmlns:fontAwesome="clr-namespace:FontAwesome" 
     x:Name="ActionSheet_Popup"
     IsLightDismissEnabled="False"

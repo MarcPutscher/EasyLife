@@ -327,11 +327,11 @@
     </Shell.TitleView>
     
     <ContentPage.ToolbarItems>
-        <ToolbarItem Order="Secondary" Text="Aktualisieren"  Command="{Binding RefreshCommand}"/>
-        <ToolbarItem Order="Secondary" Text="Zeitraum"  Command="{Binding Period_Command}"/>
-        <ToolbarItem Order="Secondary" Text="Ansicht"  Command="{Binding GroupingOption_Command}"/>
-        <ToolbarItem Order="Secondary" Text="Suchen"  Command="{Binding Set_Searchbar_Visibility_Command}"/>
-        <ToolbarItem Order="Secondary" Text="Rechnen" Command="{Binding ShowCalculator_Command}"/>
+        <ToolbarItem Order="Primary" Text="Optionen"  Command="{Binding Toolbar_Command}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.EllipsisVertical}" Size="Medium" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
     </ContentPage.ToolbarItems>
 
     <StackLayout>

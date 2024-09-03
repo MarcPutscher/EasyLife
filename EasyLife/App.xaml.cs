@@ -15,6 +15,8 @@ namespace EasyLife
         {
             InitializeComponent();
 
+            Sharpnado.Shades.Initializer.Initialize(loggerEnable: false);
+
             MainPage = new Master_Page();
 
             //Definiert die Farben in der App.

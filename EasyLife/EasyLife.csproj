@@ -29,10 +29,12 @@
     <PackageReference Include="itext7" Version="8.0.2" />
     <PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.2" />
     <PackageReference Include="itext7.bouncy-castle-fips-adapter" Version="8.0.2" />
+    <PackageReference Include="Microcharts.Forms" Version="0.9.5.9" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Plugin.LocalNotification" Version="10.1.8" />
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
     <PackageReference Include="Rg.Plugins.Popup" Version="2.1.0" />
+    <PackageReference Include="Sharpnado.Shadows" Version="1.2.1" />
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
     <PackageReference Include="System.Collections" Version="4.3.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
@@ -64,6 +66,9 @@
     </Compile>
     <Compile Update="Pages\Popup\MetaData_Popup.xaml.cs">
       <DependentUpon>MetaData_Popup.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Popup\CustomeToolbar_Popup.xaml.cs">
+      <DependentUpon>CustomeToolbar_Popup.xaml</DependentUpon>
     </Compile>
     <Compile Update="Pages\Styling_Color_Page.xaml.cs">
       <DependentUpon>Styling_Color_Page.xaml</DependentUpon>
@@ -161,6 +166,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\Popup\New_Viewtime_Popup.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\Popup\CustomeToolbar_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\Settings_Page.xaml">

@@ -23,6 +23,7 @@ using Xamarin.Forms.Internals;
 using System.ComponentModel;
 using static SQLite.SQLite3;
 using System.Transactions;
+using FontAwesome;
 
 namespace EasyLife.PageModels
 {
@@ -40,20 +41,20 @@ namespace EasyLife.PageModels
             ViewIsDisappearing_Command = new Command(ViewIsDisappearing_Methode);
             RemoveCommand = new AsyncCommand<Transaktion>(Remove);
             EditCommand = new AsyncCommand<Transaktion>(Edit);
-            GroupingOption_Command = new AsyncCommand(GroupingOption_Methode);
+            //GroupingOption_Command = new AsyncCommand(GroupingOption_Methode);
             Search_Command = new AsyncCommand(Search_Methode);
             Search_Command2 = new AsyncCommand(Search_Methode2);
             Delet_Suggestion = new AsyncCommand<Suggestion>(Delet_Suggestion_Methode);
             Select_Suggestion = new AsyncCommand<Suggestion>(Select_Suggestion_Methode);
             Clear_SearchText_Command = new AsyncCommand(Clear_SearchText_Methode);
-            Set_Searchbar_Visibility_Command = new AsyncCommand(Set_Searchbar_Visibility_MethodeAsync);
+            //Set_Searchbar_Visibility_Command = new AsyncCommand(Set_Searchbar_Visibility_MethodeAsync);
             The_Searchbar_is_Tapped = new AsyncCommand(The_Searchbar_is_Tapped_Methode);
             Add_Catchphrase_To_Search_Command = new AsyncCommand(Add_Catchphrase_To_Search_Methode);
             Add_Command = new AsyncCommand(Add_Methode);
             Filter_Command = new AsyncCommand(Filter_Methode);
             Calculator_Addition_Command = new AsyncCommand<Transaktion>(Calculator_Addition_Methode);
             Calculator_Substraction_Command = new AsyncCommand<Transaktion>(Calculator_Substraction_Methode);
-            ShowCalculator_Command = new Command(ShowCalculator_Methode);
+            //ShowCalculator_Command = new Command(ShowCalculator_Methode);
             Calculator_RemoveLast_Command = new AsyncCommand(Calculator_RemoveLast_Methode);
             Calculator_RemoveAll_Command = new AsyncCommand(Calculator_RemoveAll_Methode);
             ShowCalculator_List_Command = new AsyncCommand(ShowCalculator_List_Methode);
@@ -63,8 +64,9 @@ namespace EasyLife.PageModels
             Budget_Command = new AsyncCommand(Budget_Methode);
             Change_Saldo_Date_Command = new AsyncCommand(Change_Saldo_Date_Methode);
             Title_Swiped_Command = new AsyncCommand<String>(Change_Month_Methode);
+            Toolbar_Command = new AsyncCommand(Toolbar_Methode);
 
-            Period_Command = new AsyncCommand(Period_Popup);
+            //Period_Command = new AsyncCommand(Period_Popup);
 
             title = "Haushaltsbuch " + Current_Viewtime.Year + " " + Current_Viewtime.Month + "";
 
@@ -1798,7 +1800,7 @@ namespace EasyLife.PageModels
             }
         }
 
-        public void ShowCalculator_Methode()
+        public async Task ShowCalculator_Methode()
         {
             if (Normal_State == true)
             {
@@ -2633,6 +2635,30 @@ namespace EasyLife.PageModels
             }
         }
 
+        public async Task Toolbar_Methode()
+        {
+            Dictionary<Action_Button, Func<Task>> keyValuePairs = new Dictionary<Action_Button, Func<Task>>()
+            {
+                { new Action_Button(){Title = "Aktualisieren", Description = FontAwesomeIcons.ArrowsRotate} , Refresh},
+                { new Action_Button(){Title = "Zeitraum", Description = FontAwesomeIcons.Clock} , Period_Popup},
+                { new Action_Button(){Title = "Ansicht", Description = FontAwesomeIcons.Sort} , GroupingOption_Methode},
+                { new Action_Button(){Title = "Suchen", Description = FontAwesomeIcons.MagnifyingGlass} , Set_Searchbar_Visibility_MethodeAsync},
+                { new Action_Button(){Title = "Rechnen", Description = FontAwesomeIcons.Calculator} , ShowCalculator_Methode},
+
+            };
+
+            var action_Button = await Shell.Current.ShowPopupAsync(new CustomeToolbar_Popup(keyValuePairs.Keys.ToList(), 190)) as Action_Button;
+
+            if (action_Button != null)
+            {
+                if (keyValuePairs.ContainsKey((Action_Button)action_Button) == true)
+                {
+                    await keyValuePairs[(Action_Button)action_Button]();
+                }
+            }
+        }
+
+
         private async Task Notificater(string v)
         {
             await ToastHelper.ShowToast(v);
@@ -2728,6 +2754,7 @@ namespace EasyLife.PageModels
 
         public AsyncCommand<string> Title_Swiped_Command { get; }
 
+        public AsyncCommand Toolbar_Command { get; }
 
         public bool serchbar_visibility = false;
         public bool Serchbar_Visibility

@@ -1201,18 +1201,33 @@ namespace EasyLife.PageModels
             }
         }
 
-        public bool more_detail_bool = Preferences.Get("More_Detail",false);
-        public bool More_Detail_Bool
+        public bool more_detail_transaktion_bool = Preferences.Get("More_Detail_Transaltion",false);
+        public bool More_Detail_Transaktion_Bool
         {
-            get { return more_detail_bool; }
+            get { return more_detail_transaktion_bool; }
             set
             {
-                if (More_Detail_Bool == value)
+                if (More_Detail_Transaktion_Bool == value)
                 {
                     return;
                 }
 
-                more_detail_bool = value; RaisePropertyChanged(); Preferences.Set("More_Detail", value);
+                more_detail_transaktion_bool = value; RaisePropertyChanged(); Preferences.Set("More_Detail_Transaltion", value);
+            }
+        }
+
+        public bool more_detail_chart_bool = Preferences.Get("More_Detail_Chart", false);
+        public bool More_Detail_Chart_Bool
+        {
+            get { return more_detail_chart_bool; }
+            set
+            {
+                if (More_Detail_Chart_Bool == value)
+                {
+                    return;
+                }
+
+                more_detail_chart_bool = value; RaisePropertyChanged(); Preferences.Set("More_Detail_Chart", value);
             }
         }
     }
