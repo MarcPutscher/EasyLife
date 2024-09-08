@@ -1,8 +1,11 @@
-﻿using EasyLife.PageModels;
+﻿using EasyLife.Models;
+using EasyLife.PageModels;
 using EasyLife.Pages;
+using EasyLife.Pages.To_Do;
 using EasyLife.Services;
 using FreshMvvm;
 using System;
+using System.Collections.Generic;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -17,7 +20,7 @@ namespace EasyLife
 
             Sharpnado.Shades.Initializer.Initialize(loggerEnable: false);
 
-            MainPage = new Master_Page();
+            MainPage = new Start_Page();
 
             //Definiert die Farben in der App.
 

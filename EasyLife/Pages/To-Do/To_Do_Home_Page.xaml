@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:to_do="clr-namespace:EasyLife.Models" 
+             xmlns:to_do1="clr-namespace:EasyLife.PageModels.To_Do"
+             xmlns:ia="clr-namespace:IntelliAbb.Xamarin.Controls;assembly=IntelliAbb.Xamarin.Controls"
+             xmlns:fontAwesome="clr-namespace:FontAwesome" 
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+             xmlns:helpers="clr-namespace:EasyLife.Helpers" 
+             xmlns:pagemodels="clr-namespace:EasyLife.PageModels"
+             x:Class="EasyLife.Pages.To_Do.To_Do_Home_Page"
+             Shell.FlyoutBehavior="{Binding Flyoutbehavior}">
+
+    <ContentPage.BindingContext>
+        <pagemodels:To_Do_Home_PageModel/>
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding Refresh_Command}" />
+        <xct:EventToCommandBehavior
+                EventName="Disappearing"
+                Command="{Binding ViewIsDisappearing_Command}" />
+    </ContentPage.Behaviors>
+
+    <Shell.TitleView>
+        <StackLayout Padding="0" VerticalOptions="End" Orientation="Horizontal">
+            <Label Text="{x:Static fontAwesome:FontAwesomeIcons.Xmark}" FontFamily="FAS" FontSize="40" TextColor="Red" VerticalOptions="Center" IsVisible="{Binding Show_Tapbar}" HorizontalOptions="Start" >
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding Cancel_Command}"/>
+                </Label.GestureRecognizers>
+            </Label>
+            <Frame BackgroundColor="Transparent" Padding="10">
+                <Label Text="{Binding Title}"
+                           Opacity="1"
+                           FontAttributes="Bold"
+                           FontSize="20"
+                           TextColor="White"
+                           HorizontalOptions="Start"
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center"
+                       VerticalOptions="Center"/>
+            </Frame>
+        </StackLayout>
+    </Shell.TitleView>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{Binding Complete_ToolbarItem}" Command="{Binding Change_Complet_Command}" Order="Secondary"/>
+        <ToolbarItem Text="Elemente löschen" Command="{Binding Choose2_Command}" Order="Secondary"/>
+    </ContentPage.ToolbarItems>
+
+    <Grid BackgroundColor="White" Padding="0">
+        <StackLayout BackgroundColor="Transparent" Padding="0" IsVisible="{Binding Show_Empty_List ,Converter={helpers:InverseBoolConverter}}">
+            <Grid Padding="10,0,10,0">
+                <ListView ItemsSource="{Binding To_Do_Items}" VerticalScrollBarVisibility="Never" x:Name="to_do_Item_List" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" IsGroupingEnabled="True" VerticalOptions="Fill" GroupDisplayBinding="{Binding Key}" Margin="10,0,10,0">
+                    <ListView.GroupHeaderTemplate>
+                        <DataTemplate x:DataType="{x:Null}">
+                            <ViewCell Height = "30" >
+                                <StackLayout VerticalOptions="Start" Padding="1">
+                                    <Label Text = "{Binding Key}" TextColor="Gray" VerticalOptions="Center" HorizontalOptions="Start" FontSize="15" FontAttributes="Bold" Margin="30,10,0,0"/>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.GroupHeaderTemplate>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="to_do:To_Do_Item">
+                            <ViewCell>
+                                <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5" >
+                                    <SwipeView BackgroundColor="Transparent" Grid.Row="1" Grid.Column="1" Padding="0">
+                                        <SwipeView.RightItems>
+                                            <SwipeItems>
+                                                <SwipeItemView IsVisible="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Show_Select,Converter={helpers:InverseBoolConverter}}">
+                                                    <StackLayout Orientation="Horizontal">
+                                                        <Button CornerRadius="25" Padding="0" Margin="20,0,0,0" Text="{x:Static fontAwesome:FontAwesomeIcons.Copy}" BackgroundColor="CornflowerBlue" FontFamily="FAS" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"  TextColor="White" FontSize="30"
+                                                                Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Copy_Command}" CommandParameter="{Binding .}"/>
+                                                        <Button CornerRadius="25" Padding="0" Margin="10,0,0,0" Text="{x:Static fontAwesome:FontAwesomeIcons.TrashCan}" BackgroundColor="DarkRed" FontFamily="FAS" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"  TextColor="White" FontSize="30"
+                                                                Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Delet_Command}" CommandParameter="{Binding .}"/>
+                                                    </StackLayout>
+                                                </SwipeItemView>
+                                            </SwipeItems>
+                                        </SwipeView.RightItems>
+                                        <StackLayout Orientation="Horizontal" Padding="0" >
+                                            <Frame CornerRadius="5" BackgroundColor="{Binding Item_BackgroundColor}" Margin="0" Padding="0" HasShadow="True" HorizontalOptions="FillAndExpand">
+                                                <Grid ColumnDefinitions="Auto,5,*" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" Padding="0">
+                                                    <ia:Checkbox x:Name="Is_Done_Checkbox" IsChecked="{Binding Is_Done}"  IsVisible="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Show_Choose}" Grid.Column="0" Margin="20,10,10,10" HeightRequest="30" WidthRequest="30" Shape="Circle" FillColor="Transparent" CheckColor="Gray" OutlineColor="Black">
+                                                        <ia:Checkbox.GestureRecognizers>
+                                                            <TapGestureRecognizer Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Item_Choosed_Command}" CommandParameter="{Binding .}"/>
+                                                        </ia:Checkbox.GestureRecognizers>
+                                                        <ia:Checkbox.Triggers>
+                                                            <Trigger TargetType="ia:Checkbox" Property="IsChecked" Value="True">
+                                                                <Setter Property="OutlineColor" Value="DarkGray"/>
+                                                                <Setter Property="CheckColor" Value="LightGray"/>
+                                                            </Trigger>
+                                                        </ia:Checkbox.Triggers>
+                                                    </ia:Checkbox>
+                                                    <StackLayout Padding="0" Grid.Column="2" Margin="0,-10,0,-10" VerticalOptions="Center"  xct:TouchEffect.LongPressCommand="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Choose1_Command}" xct:TouchEffect.LongPressDuration="400" xct:TouchEffect.LongPressCommandParameter="{Binding .}">
+                                                        <Label Text="{Binding To_Do}" HorizontalTextAlignment="Start" FontSize="Medium" TextColor="Gray" VerticalTextAlignment="Center" HorizontalOptions="Start" VerticalOptions="Center">
+                                                            <Label.Triggers>
+                                                                <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference Is_Done_Checkbox}, Path=IsChecked}" Value="True">
+                                                                    <Setter Property="TextColor" Value="LightGray"/>
+                                                                </DataTrigger> 
+                                                            </Label.Triggers>
+                                                        </Label>
+                                                    </StackLayout>
+                                                </Grid>
+                                            </Frame>
+                                            <Grid Padding="0" IsVisible="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Show_Select}">
+                                                <ia:Checkbox IsChecked="{Binding Is_Select}" Margin="20,0,0,0" HorizontalOptions="End" HeightRequest="40" WidthRequest="40" Shape="Rectangle" FillColor="Transparent" CheckColor="White" OutlineColor="Black" >
+                                                    <ia:Checkbox.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Item_Selected_Command}" CommandParameter="{Binding .}"/>
+                                                    </ia:Checkbox.GestureRecognizers>
+                                                    <ia:Checkbox.Triggers>
+                                                        <Trigger TargetType="ia:Checkbox" Property="IsChecked" Value="true">
+                                                            <Setter Property="FillColor" Value="DodgerBlue"/>
+                                                            <Setter Property="OutlineColor" Value="DodgerBlue"/>
+                                                        </Trigger>
+                                                    </ia:Checkbox.Triggers>
+                                                </ia:Checkbox>
+                                            </Grid>
+                                        </StackLayout>
+                                    </SwipeView>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Label  VerticalOptions="End" HorizontalOptions="End" Text="+" IsVisible="{Binding Show_Tapbar , Converter={helpers:InverseBoolConverter}}"  TextColor="Black" BackgroundColor="LightGray" FontSize="80" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Margin="0,0,20,20" HeightRequest="100" WidthRequest="80">
+                    <Label.Clip>
+                        <EllipseGeometry Center="40,56" RadiusX="40" RadiusY="40" />
+                    </Label.Clip>
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Add_Command}"/>
+                    </Label.GestureRecognizers>
+                </Label>
+                <StackLayout IsVisible="{Binding Show_Tapbar}" HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand" Padding="0,5,0,5" BackgroundColor="White">
+                    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand" Orientation="Horizontal">
+                        <StackLayout Orientation="Vertical" IsVisible="{Binding Show_Move}"  IsEnabled="{Binding Some_Item_Select}" Margin="10,0,10,0">
+                            <Label Text="{x:Static fontAwesome:FontAwesomeIcons.Copy}" TextColor="{Binding Is_Activ_Color}" FontFamily="FAS" FontSize="20" VerticalTextAlignment="Center" HorizontalOptions="Center"/>
+                            <Label Text="Verschieben" FontSize="Small" TextColor="{Binding Is_Activ_Color}"/>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Move_Command}"/>
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                        <StackLayout Orientation="Vertical" Margin="10,0,10,0"  IsEnabled="{Binding Some_Item_Select}">
+                            <Label Text="{x:Static fontAwesome:FontAwesomeIcons.TrashCan}" TextColor="{Binding Is_Activ_Color}" FontFamily="FAS" FontSize="20" VerticalTextAlignment="Center" HorizontalOptions="Center"/>
+                            <Label Text="Löschen" FontSize="Small"  TextColor="{Binding Is_Activ_Color}"/>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Delet_Range_Command}"/>
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                        <StackLayout Orientation="Vertical" Margin="10,0,10,0" >
+                            <Label Text="{x:Static fontAwesome:FontAwesomeIcons.SquareCheck}" TextColor="Black" FontFamily="FAS" FontSize="20" VerticalTextAlignment="Center" HorizontalOptions="Center"/>
+                            <Label Text="Alle auswählen" FontSize="Small" TextColor="Black"/>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Select_All_Command}"/>
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                    </StackLayout>
+                </StackLayout>
+            </Grid>
+        </StackLayout>
+        <StackLayout  BackgroundColor="Transparent" Padding="0" IsVisible="{Binding Show_Empty_List}"  >
+            <Grid Padding="10,0,10,0" HorizontalOptions="Fill" VerticalOptions="FillAndExpand" >
+                <StackLayout Padding="0" VerticalOptions="Center" HorizontalOptions="Center">
+                    <Label Text="{x:Static fontAwesome:FontAwesomeIcons.Clipboard}" TextColor="Gray" FontFamily="FAS" FontSize="100" VerticalTextAlignment="Center" HorizontalOptions="Center"/>
+                    <Label Text="Keine To-Dos" FontSize="Small" HorizontalOptions="Center"/>
+                </StackLayout>
+                <Label  VerticalOptions="End" HorizontalOptions="End" Text="+" TextColor="Black" BackgroundColor="LightGray" FontSize="80" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Margin="0,0,20,20" HeightRequest="100" WidthRequest="80">
+                    <Label.Clip>
+                        <EllipseGeometry Center="40,56" RadiusX="40" RadiusY="40" />
+                    </Label.Clip>
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Add_Command}"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </Grid>
+        </StackLayout>
+    </Grid>
+</ContentPage>

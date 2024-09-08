@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:local="clr-namespace:EasyLife.Pages"
+       xmlns:local2="clr-namespace:EasyLife.Pages.To_Do"
+       xmlns:fontAwesome="clr-namespace:FontAwesome" 
+       xmlns:cells="clr-namespace:EasyLife.Cells" 
+       xmlns:models="clr-namespace:EasyLife.Models"
+       x:Class="EasyLife.Pages.Master_To_Do_Page"
+       BackgroundColor="{DynamicResource App_Backgroundcolor}"
+       Shell.TabBarIsVisible="False"
+       FlyoutBackgroundColor="{DynamicResource Flyout_Backgroundcolor}"
+       FlyoutWidth="300"
+       Shell.ItemTemplate="{StaticResource FlyoutTemplateSelector}">
+
+    <Shell.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="FlyoutItemTemplate">
+                <Grid ColumnDefinitions="10,50,*,50" Padding="10">
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroupList>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="{DynamicResource Flyout_Backgroundcolor}"/>
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Selected">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="LightGray"/>
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateGroupList>
+                    </VisualStateManager.VisualStateGroups>
+                    <Label Grid.Column="1" Text="{Binding FlyoutIcon.Glyph}" HeightRequest="40" TextColor="{DynamicResource Flyout_Iconcolor}" FontFamily="FAS" FontSize="30" VerticalTextAlignment="Center"/>
+                    <Label Grid.Column="2" Text="{Binding Title}" TextColor="{DynamicResource Flyout_Textcolor}" FontSize="Medium" FontAttributes="Bold" VerticalTextAlignment="Center"/>
+                    <Label Grid.Column="3" Text="{Binding ItemCount}" TextColor="SlateGray" FontSize="Large" FontAttributes="Bold" VerticalTextAlignment="Center"/>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="FlyoutHeaderTemplate">
+                    <Grid ColumnDefinitions="Auto,*" Padding="0" ColumnSpacing="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                        <Label HeightRequest="40" Padding="20,0,0,0" Text="{Binding Title}" TextColor="SlateGray" BackgroundColor="Transparent" FontSize="Medium" FontAttributes="Bold" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Grid.Column="0">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    <Label Text="Bearbeiten" TextColor="DodgerBlue" HorizontalOptions="FillAndExpand" Padding="0,0,20,0" VerticalOptions="FillAndExpand" VerticalTextAlignment="Center" HorizontalTextAlignment="End" BackgroundColor="Transparent" IsEnabled="True" Grid.Column="1">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Edit_Tapped"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                    </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="Spacer">
+                <StackLayout>
+                    <Line HeightRequest="5" BackgroundColor="LightGray" IsEnabled="False"/>
+                </StackLayout>
+            </DataTemplate>
+            <DataTemplate x:Key="New" >
+                <StackLayout IsEnabled="True">
+                    <Button Text="Neu" Clicked="New_Tapped" TextColor="DodgerBlue"  BackgroundColor="Transparent" BorderColor="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
+                </StackLayout>
+            </DataTemplate>
+            <DataTemplate x:Key="Items">
+                <ListView HeightRequest="{Binding Height}" SelectionMode="Single"  ItemsSource="{Binding Categorys}" VerticalScrollBarVisibility="Never" IsPullToRefreshEnabled="False">
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroupList>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="{DynamicResource Flyout_Backgroundcolor}"/>
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Selected">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="LightGray"/>
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateGroupList>
+                    </VisualStateManager.VisualStateGroups>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Category">
+                            <ViewCell>
+                                <Grid ColumnDefinitions="20,50,*,50" Padding="5">
+
+                                    <Label Grid.Column="1" Text="{x:Static fontAwesome:FontAwesomeIcons.ClipboardList}" HeightRequest="30" TextColor="{Binding Color}" FontFamily="FAS" FontSize="30" VerticalTextAlignment="Center"/>
+                                    <Label Grid.Column="2" Text="{Binding Title}" TextColor="{DynamicResource Flyout_Textcolor}" FontSize="Medium" FontAttributes="Bold" VerticalTextAlignment="Center"/>
+                                    <Label Grid.Column="3" Text="{Binding Count}" TextColor="{DynamicResource Flyout_Textcolor}" FontSize="Medium" FontAttributes="Bold" VerticalTextAlignment="Center"/>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </DataTemplate>
+            <DataTemplate x:Key="Item" >
+                    <Grid ColumnDefinitions="20,50,*,50" Padding="5">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroupList>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="{DynamicResource Flyout_Backgroundcolor}"/>
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="LightGray"/>
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateGroupList>
+                        </VisualStateManager.VisualStateGroups>
+                        <Label Grid.Column="1" Text="{x:Static fontAwesome:FontAwesomeIcons.ClipboardList}" HeightRequest="30" TextColor="{Binding Category.Color}" FontFamily="FAS" FontSize="30" VerticalTextAlignment="Center"/>
+                        <Label Grid.Column="2" Text="{Binding Category.Title}" TextColor="{DynamicResource Flyout_Textcolor}" FontSize="Medium" FontAttributes="Bold" VerticalTextAlignment="Center"/>
+                        <Label Grid.Column="3" Text="{Binding ItemCount}" TextColor="SlateGray" FontSize="Medium" FontAttributes="Bold" VerticalTextAlignment="Center"/>
+                    </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="Settings">
+                <Grid ColumnDefinitions="10,50,*,50" Padding="10">
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroupList>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="{DynamicResource Flyout_Backgroundcolor}"/>
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Selected">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="LightGray"/>
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateGroupList>
+                    </VisualStateManager.VisualStateGroups>
+                    <Label Grid.Column="1" Text="{Binding FlyoutIcon.Glyph}" HeightRequest="40" TextColor="{DynamicResource Flyout_Iconcolor}" FontFamily="FAS" FontSize="30" VerticalTextAlignment="Center"/>
+                    <Label Grid.Column="2" Text="{Binding Title}" TextColor="{DynamicResource Flyout_Textcolor}" FontSize="Medium" FontAttributes="Bold" VerticalTextAlignment="Center"/>
+                </Grid>
+            </DataTemplate>
+            <cells:FlyoutItemTemplateSelector x:Key="FlyoutTemplateSelector" NavigationItemTemplate="{StaticResource FlyoutItemTemplate}" NavigationHeaderTemplate="{StaticResource FlyoutHeaderTemplate}" NavigationSpaceTemplate="{StaticResource Spacer}" NavigationNewTemplate="{StaticResource New}" NavigationItemsTemplate="{StaticResource Items}" NavigationCategoryItemTemplate="{StaticResource Item}" NavigationSettingsTemplate="{StaticResource Settings}"/>
+        </ResourceDictionary>
+    </Shell.Resources>
+
+
+    <Shell.FlyoutHeader>
+        <Frame BackgroundColor="#1d0e21">
+            <Image Source="@drawable/ic_launcher"/>
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Tapped="Header_Tapped"/>
+            </Frame.GestureRecognizers>
+        </Frame>
+    </Shell.FlyoutHeader>
+
+
+    <Shell.FlyoutFooter>
+        <Frame BackgroundColor="{DynamicResource App_Backgroundcolor}" Padding="10">
+            <StackLayout>
+                <Label Text="Created by Marc Putscher" TextColor="Gray" FontSize="Medium" FontAttributes="Italic" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+            </StackLayout>
+        </Frame>
+    </Shell.FlyoutFooter>
+</Shell>

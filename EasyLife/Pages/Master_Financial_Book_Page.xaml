@@ -3,7 +3,7 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:EasyLife.Pages"
        xmlns:fontAwesome="clr-namespace:FontAwesome" 
-       x:Class="EasyLife.Pages.Master_Page"
+       x:Class="EasyLife.Pages.Master_Financial_Book_Page"
        BackgroundColor="{DynamicResource App_Backgroundcolor}"
        Shell.TabBarIsVisible="False"
        FlyoutBackgroundColor="{DynamicResource Flyout_Backgroundcolor}"
@@ -12,6 +12,9 @@
     <Shell.FlyoutHeader>
         <Frame BackgroundColor="#1d0e21">
             <Image Source="@drawable/ic_launcher"/>
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Tapped="Header_Tapped"/>
+            </Frame.GestureRecognizers>
         </Frame>
     </Shell.FlyoutHeader>
 

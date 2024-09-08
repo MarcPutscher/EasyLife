@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EasyLife.Pages.Start_Page"
+             xmlns:fontAwesome="clr-namespace:FontAwesome" xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             BackgroundColor="#1d0e21"
+             Appearing="Appearing_Methode">
+
+    <ContentPage.Content>
+        <Grid RowDefinitions="Auto,*" >
+            <Frame BackgroundColor="#1d0e21" Grid.Row="0">
+                <Image Source="@drawable/ic_launcher"/>
+            </Frame>
+            <StackLayout Spacing="50" HorizontalOptions="Center" Orientation="Horizontal" VerticalOptions="End" Grid.Row="1" Margin="0,0,0,50">
+                <StackLayout Orientation="Vertical" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid HeightRequest="100" WidthRequest="100" HorizontalOptions="Center" VerticalOptions="Center">
+                        <Polygon Fill="DarkBlue" Points="25,0 75,0 100,25 100,75 75,100 25,100 0,75 0,25" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        <Image HorizontalOptions="Center" VerticalOptions="Center"  HeightRequest="50" WidthRequest="50">
+                            <Image.Source>
+                                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Coins}" Color="Orange"/>
+                            </Image.Source>
+                        </Image>
+                    </Grid>
+                    <Label Text="Haushaltsbuch" FontAttributes="Italic" FontSize="25" HorizontalOptions="Start" VerticalOptions="Center" TextDecorations="Underline" TextColor="Silver"/>
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Financial_Book_Tapped"/>
+                    </StackLayout.GestureRecognizers>
+                </StackLayout>
+                <StackLayout Orientation="Vertical" HorizontalOptions="Fill" VerticalOptions="Center">
+                    <Grid HeightRequest="100" WidthRequest="100" HorizontalOptions="Center" VerticalOptions="Center">
+                        <Polygon Fill="DarkBlue" Points="25,0 75,0 100,25 100,75 75,100 25,100 0,75 0,25" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        <Image HorizontalOptions="Center" VerticalOptions="Center"  HeightRequest="50" WidthRequest="50">
+                            <Image.Source>
+                                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.ClipboardList}" Color="Orange"/>
+                            </Image.Source>
+                        </Image>
+                    </Grid>
+                    <Label Text="TO-DO" FontAttributes="Italic" FontSize="25" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" TextDecorations="Underline" TextColor="Silver"/>
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="To_Do_Tapped"/>
+                    </StackLayout.GestureRecognizers>
+                </StackLayout>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

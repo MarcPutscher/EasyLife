@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<extensions:Popup  xmlns:extensions="http://xamarin.com/schemas/2020/toolkit"
+                   xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EasyLife.Pages.To_Do.Add_Category_Popup"
+                   xmlns:fontAwesome="clr-namespace:FontAwesome"
+                   Opened="Appeared">
+
+    <StackLayout Padding="0">
+        <Label HorizontalOptions="Start" VerticalOptions="Center" Text="Neue To-Do Kategorie" FontSize="Medium" FontAttributes="Bold" TextColor="Black" Margin="30,10,0,10"/>
+        <Grid ColumnDefinitions="20,Auto,*,10" Padding="0">
+            <Label x:Name="icon" Text="{x:Static fontAwesome:FontAwesomeIcons.ClipboardList}" TextColor="Black" BackgroundColor="White" FontFamily="FAS" FontSize="30" HorizontalOptions="Start" Grid.Column="1" Margin="10,5,10,0">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                </Label.GestureRecognizers>
+            </Label>
+            <Entry x:Name="category_entry" VerticalOptions="Start" Margin="10,5,10,0" Placeholder="Kategoriename" TextChanged="category_entry_Changed" HeightRequest="50" HorizontalOptions="FillAndExpand" VerticalTextAlignment="Start" Grid.Column="2"/>
+        </Grid>
+        <Grid ColumnDefinitions="10,*,Auto,*,10" HorizontalOptions="Fill" VerticalOptions="Start" Padding="0" HeightRequest="70">
+            <Button  Text="Abbrechen" TextColor="DodgerBlue" BackgroundColor="White" HorizontalOptions="Fill" VerticalOptions="Center" FontSize="Medium" Clicked="Abord_Clicked" Grid.Column="1"/>
+            <Line HeightRequest="40" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Gray" WidthRequest="3" Grid.Column="2"/>
+            <Button x:Name="save_button" Text="OK" TextColor="DodgerBlue" BackgroundColor="White" HorizontalOptions="Fill" VerticalOptions="Center" IsEnabled="False" FontSize="Medium" Clicked="Save_Clicked" Grid.Column="3"/>
+        </Grid>
+    </StackLayout>
+</extensions:Popup>

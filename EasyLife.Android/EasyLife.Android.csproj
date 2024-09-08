@@ -71,6 +71,9 @@
     <PackageReference Include="FreshMvvm">
       <Version>4.0.1</Version>
     </PackageReference>
+    <PackageReference Include="IntelliAbb.Xamarin.Controls">
+      <Version>1.0.148</Version>
+    </PackageReference>
     <PackageReference Include="Microcharts.Forms">
       <Version>0.9.5.9</Version>
     </PackageReference>

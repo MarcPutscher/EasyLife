@@ -26,6 +26,7 @@
   <ItemGroup>
     <PackageReference Include="ColorPicker.Xamarin.Forms" Version="1.3.4.21" />
     <PackageReference Include="FreshMvvm" Version="4.0.1" />
+    <PackageReference Include="IntelliAbb.Xamarin.Controls" Version="1.0.148" />
     <PackageReference Include="itext7" Version="8.0.2" />
     <PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.2" />
     <PackageReference Include="itext7.bouncy-castle-fips-adapter" Version="8.0.2" />
@@ -52,17 +53,23 @@
     <Compile Update="CustomeControle\CustomePicker.xaml.cs">
       <DependentUpon>CustomePicker.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\Edit_Item_With_Order_Page.xaml.cs">
+    <Compile Update="Pages\Financial_Book\Edit_Item_With_Order_Page.xaml.cs">
       <DependentUpon>Edit_Item_With_Order_Page.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\Edit_Order_Page.xaml.cs">
+    <Compile Update="Pages\Financial_Book\Edit_Order_Page.xaml.cs">
       <DependentUpon>Edit_Order_Page.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\Home_Page.xaml.cs">
+    <Compile Update="Pages\Financial_Book\Home_Page.xaml.cs">
       <DependentUpon>Home_Page.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\Add_Order_Page.xaml.cs">
+    <Compile Update="Pages\Financial_Book\Add_Order_Page.xaml.cs">
       <DependentUpon>Add_Order_Page.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Master_To_Do_Page.xaml.cs">
+      <DependentUpon>Master_To_Do_Page.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Master_Financial_Book_Page.xaml.cs">
+      <DependentUpon>Master_Financial_Book_Page.xaml</DependentUpon>
     </Compile>
     <Compile Update="Pages\Popup\MetaData_Popup.xaml.cs">
       <DependentUpon>MetaData_Popup.xaml</DependentUpon>
@@ -70,8 +77,17 @@
     <Compile Update="Pages\Popup\CustomeToolbar_Popup.xaml.cs">
       <DependentUpon>CustomeToolbar_Popup.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\Styling_Color_Page.xaml.cs">
+    <Compile Update="Pages\Financial_Book\Styling_Color_Page.xaml.cs">
       <DependentUpon>Styling_Color_Page.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\To-Do\Add_To_Do_Popup.xaml.cs">
+      <DependentUpon>Add_To_Do_Popup.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\To-Do\To_Do_Home_Page.xaml.cs">
+      <DependentUpon>To_Do_Home_Page.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\To-Do\To_Do_CustomePromt_Popup.xaml.cs">
+      <DependentUpon>To_Do_CustomePromt_Popup.xaml</DependentUpon>
     </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -120,10 +136,19 @@
     <EmbeddedResource Update="CustomeControle\CustomePicker.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Balance_Page.xaml">
+    <EmbeddedResource Update="Pages\To-Do\Add_Category_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Compare_Page.xaml">
+    <EmbeddedResource Update="Pages\To-Do\Add_To_Do_Popup.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\To-Do\Category_Select_Popup.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\Financial_Book\Balance_Page.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\Financial_Book\Compare_Page.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\Popup\Budget_Popup.xaml">
@@ -135,13 +160,13 @@
     <EmbeddedResource Update="Pages\Popup\Change_Saldo_Date_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Edit_Item_Page.xaml">
+    <EmbeddedResource Update="Pages\Financial_Book\Edit_Item_Page.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Edit_Item_With_Order_Page.xaml">
+    <EmbeddedResource Update="Pages\Financial_Book\Edit_Item_With_Order_Page.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Edit_Order_Page.xaml">
+    <EmbeddedResource Update="Pages\Financial_Book\Edit_Order_Page.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\Popup\CustomeAktionSheet_Popup.xaml">
@@ -159,10 +184,10 @@
     <EmbeddedResource Update="Pages\Popup\Filter_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Master_Page.xaml">
+    <EmbeddedResource Update="Pages\Master_Financial_Book_Page.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Add_Order_Page.xaml">
+    <EmbeddedResource Update="Pages\Financial_Book\Add_Order_Page.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\Popup\New_Viewtime_Popup.xaml">
@@ -171,26 +196,47 @@
     <EmbeddedResource Update="Pages\Popup\CustomeToolbar_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Settings_Page.xaml">
+    <EmbeddedResource Update="Pages\Financial_Book\Settings_Page.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Styling_Color_Page.xaml">
+    <EmbeddedResource Update="Pages\Financial_Book\Styling_Color_Page.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\Popup\Timespane_Popup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Trashcan_Page.xaml">
+    <EmbeddedResource Update="Pages\Financial_Book\Trashcan_Page.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\Start_Page.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\To-Do\Change_Color_Popup.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\To-Do\Edit_Category_Page.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\To-Do\To_Do_Deleted_Page.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\To-Do\To_Do_Home_Page.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\To-Do\To_Do_CustomePromt_Popup.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\To-Do\To_Do_Settings_Page.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Add_Item_Page.xaml">
+    <EmbeddedResource Update="Pages\Financial_Book\Add_Item_Page.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Home_Page.xaml">
+    <EmbeddedResource Update="Pages\Financial_Book\Home_Page.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

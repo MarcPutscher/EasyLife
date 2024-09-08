@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<extensions:Popup  xmlns:extensions="http://xamarin.com/schemas/2020/toolkit"
+                   xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EasyLife.Pages.To_Do.To_Do_CustomePromt_Popup">
+
+    <StackLayout Padding="0">
+        <Label x:Name="promt_lable" VerticalOptions="Start" Margin="10,5,10,0" FontSize="Body" HorizontalOptions="Center" TextColor="Black"/>
+        <Grid ColumnDefinitions="10,*,Auto,*,10" HorizontalOptions="Fill" VerticalOptions="Start" Padding="0" HeightRequest="70">
+            <Button  Text="Abbrechen" TextColor="DodgerBlue" BackgroundColor="White" HorizontalOptions="Fill" VerticalOptions="Center" FontSize="Medium" Clicked="Abord_Clicked" Grid.Column="1"/>
+            <Line HeightRequest="40" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Gray" WidthRequest="3" Grid.Column="2"/>
+            <Button Text="Löschen" TextColor="DarkRed" BackgroundColor="White" HorizontalOptions="Fill" VerticalOptions="Center" FontSize="Medium" Clicked="Delet_Clicked" Grid.Column="3"/>
+        </Grid>
+    </StackLayout>
+</extensions:Popup>

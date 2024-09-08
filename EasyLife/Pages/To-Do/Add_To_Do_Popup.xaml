@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<extensions:Popup  xmlns:extensions="http://xamarin.com/schemas/2020/toolkit"
+                   xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                     x:Class="EasyLife.Pages.To_Do.Add_To_Do_Popup"
+                    xmlns:fontAwesome="clr-namespace:FontAwesome">
+
+
+    <StackLayout Padding="0">
+        <Grid ColumnDefinitions="10,*,50,10" Margin="0,5,0,5" RowDefinitions="Auto,*" HorizontalOptions="Fill" VerticalOptions="Start" IsVisible="false" Padding="0" HeightRequest="40" x:Name="Selected_Date">
+            <StackLayout  Grid.Column="1" Orientation="Horizontal">
+                <Label Text="{x:Static fontAwesome:FontAwesomeIcons.Clock}" TextColor="Gray" BackgroundColor="White" FontFamily="FAS" FontSize="30" HorizontalOptions="Start"/>
+                <Label x:Name="Select_Date_Label" TextColor="DodgerBlue" BackgroundColor="White" FontSize="Medium" HorizontalOptions="Start" VerticalOptions="Center"/>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Reminder_Clicked" />
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+            <Label Text="{x:Static fontAwesome:FontAwesomeIcons.Xmark}" TextColor="Black" BackgroundColor="White" FontFamily="FAS" FontSize="30" HorizontalOptions="End" VerticalOptions="Center"  Grid.Column="2">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Delet_Reminder_Clicked"/>
+                </Label.GestureRecognizers>
+            </Label>
+            <Line HeightRequest="2" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.ColumnSpan="4" BackgroundColor="Gray"/>
+        </Grid>
+        <Entry x:Name="to_do_entry" VerticalOptions="Start" Margin="10,5,10,0" HorizontalOptions="FillAndExpand" Placeholder="To-Do" TextChanged="to_do_entry_Changed" HeightRequest="50"/>
+        <Grid ColumnDefinitions="10,Auto,Auto,*,100,10" HorizontalOptions="Fill" VerticalOptions="Start" Padding="0" HeightRequest="70">
+            <Button Text="{x:Static fontAwesome:FontAwesomeIcons.Bell}" TextColor="Black" BackgroundColor="White" FontFamily="FAS" FontSize="30" HorizontalOptions="Start" Clicked="Reminder_Clicked" Grid.Column="1"/>
+            <Button x:Name="is_important_button" Text="!" TextColor="Black" BackgroundColor="White" FontFamily="FAS" FontSize="30" HorizontalOptions="Start" Clicked="Important_Clicked" Grid.Column="2"/>
+            <Button x:Name="save_button" Text="Speichern" TextColor="DodgerBlue" BackgroundColor="White" HorizontalOptions="End" VerticalOptions="Start" Clicked="Save_Clicked" IsEnabled="False" Grid.Column="4"/>
+        </Grid>
+        <DatePicker x:Name="datepicker" IsVisible="false" />
+        <TimePicker x:Name="timepicker" IsVisible="false"  />
+    </StackLayout>
+
+</extensions:Popup>
