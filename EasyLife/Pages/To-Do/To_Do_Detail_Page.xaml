@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:models="clr-namespace:EasyLife.Models"
+             xmlns:ia="clr-namespace:IntelliAbb.Xamarin.Controls;assembly=IntelliAbb.Xamarin.Controls"
+             x:Class="EasyLife.Pages.To_Do.To_Do_Detail_Page"
+             x:DataType="to_do:To_Do_Detail_PageModel"
+             xmlns:fontAwesome="clr-namespace:FontAwesome" 
+             xmlns:to_do="clr-namespace:EasyLife.PageModels" xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             >
+
+    <ContentPage.BindingContext>
+        <to_do:To_Do_Detail_PageModel/>
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding ViewAppearing_Command}" />   
+    </ContentPage.Behaviors>
+
+    <Shell.TitleView>
+        <StackLayout Padding="0" VerticalOptions="End" Orientation="Horizontal">
+            <Label Text="{x:Static fontAwesome:FontAwesomeIcons.Check}" FontFamily="FAS" FontSize="40" TextColor="Green" VerticalOptions="Center" HorizontalOptions="EndAndExpand" Margin="0,0,10,0" >
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding Save_Command}"/>
+                </Label.GestureRecognizers>
+            </Label>
+        </StackLayout>
+    </Shell.TitleView>
+
+    <StackLayout Padding="0">
+        <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Padding="0" BackgroundColor="White">
+            <StackLayout Orientation="Horizontal" Margin="20,10,0,0" Padding="0" Spacing="10">
+                <Label  Text="{x:Static fontAwesome:FontAwesomeIcons.ClipboardList}" Padding="0" TextColor="{Binding Selectet_Category.Color}" FontFamily="FAS" FontSize="30" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" HorizontalOptions="Start"/>
+                <Label TextColor="Black" VerticalOptions="Center" HorizontalOptions="Start" FontSize="Medium"  Text="{Binding Selectet_Category.Title}"/>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding Picker_Command}"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+            <Grid ColumnDefinitions="Auto,*" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" Padding="0">
+                <ia:Checkbox x:Name="Is_Done_Checkbox" IsChecked="{Binding To_do_Item.Is_Done}"  Grid.Column="0" Margin="20,10,0,10" HeightRequest="30" WidthRequest="30" Shape="Circle" FillColor="Transparent" CheckColor="Gray" OutlineColor="Black">
+                    <ia:Checkbox.Triggers>
+                        <Trigger TargetType="ia:Checkbox" Property="IsChecked" Value="True">
+                            <Setter Property="OutlineColor" Value="DarkGray"/>
+                            <Setter Property="CheckColor" Value="LightGray"/>
+                        </Trigger>
+                    </ia:Checkbox.Triggers>
+                </ia:Checkbox>
+                <StackLayout Padding="0" Grid.Column="1" Margin="0,-10,0,-10" VerticalOptions="Center" >
+                    <Entry Text="{Binding To_do_Item.To_Do}" Placeholder="To-Do" PlaceholderColor="DarkGray" HorizontalTextAlignment="Start" FontSize="Medium" TextColor="Black" VerticalTextAlignment="Center" HorizontalOptions="Fill" VerticalOptions="Center">
+                        <Entry.Triggers>
+                            <DataTrigger TargetType="Entry" Binding="{Binding Source={x:Reference Is_Done_Checkbox}, Path=IsChecked}" Value="True">
+                                <Setter Property="TextColor" Value="Gray"/>
+                            </DataTrigger>
+                        </Entry.Triggers>
+                        <Entry.Effects>
+                            <xct:RemoveBorderEffect/>
+                        </Entry.Effects>
+                    </Entry>
+                </StackLayout>
+            </Grid>
+            <Line HorizontalOptions="FillAndExpand" VerticalOptions="Center" HeightRequest="1" BackgroundColor="LightGray"/>
+            <StackLayout Orientation="Horizontal" Spacing="10" Padding="0">
+                <StackLayout Orientation="Horizontal" Spacing="10" Padding="0" Margin="20,0,0,0">
+                    <Label Text="{x:Static fontAwesome:FontAwesomeIcons.Bell}" TextColor="Gray" BackgroundColor="Transparent" FontFamily="FAS" FontSize="30" HorizontalOptions="Start"/>
+                    <Label x:Name="reminder"  Text="{Binding To_do_Item.PseudoDate}" TextColor="DodgerBlue" FontSize="Medium" VerticalOptions="Center" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start"/>
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Reminder_Command}"/>
+                    </StackLayout.GestureRecognizers>
+                </StackLayout>
+                <Label Text="{x:Static fontAwesome:FontAwesomeIcons.Xmark}" TextColor="Gray" BackgroundColor="Transparent" IsVisible="true" FontFamily="FAS" FontSize="30" HorizontalOptions="EndAndExpand" Margin="0,0,20,0">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Remove_Command}"/>
+                    </Label.GestureRecognizers>
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference reminder }, Path=Text}" Value="Erinnerung hinzufügen">
+                            <Setter Property="IsVisible" Value="false"/>
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+            </StackLayout>
+            <Line HorizontalOptions="FillAndExpand" VerticalOptions="Center" HeightRequest="1" BackgroundColor="LightGray"/>
+            <StackLayout Orientation="Horizontal" Spacing="10" Padding="0" Margin="20,0,0,0">
+                <Label  Text="!" TextColor="Gray" FontFamily="FAS" FontSize="30" HorizontalOptions="Start">
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference is_important_switch} , Path=IsToggled}" Value="True">
+                            <Setter Property="TextColor" Value="DarkRed"/>
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+                <Label Text="Als wichtig markieren" TextColor="Black" FontSize="Medium" VerticalOptions="Center" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start"/>
+                <Switch x:Name="is_important_switch" VerticalOptions="Center" HorizontalOptions="End" Margin="0,0,20,0" IsToggled="{Binding To_do_Item.Is_Important}" OnColor="DodgerBlue" ThumbColor="White" BackgroundColor="Transparent"/>
+            </StackLayout>
+            <Line HorizontalOptions="FillAndExpand" VerticalOptions="Center" HeightRequest="1" BackgroundColor="LightGray"/>
+            <StackLayout Orientation="Horizontal" Margin="20,0,0,0">
+                <Label Text="{x:Static fontAwesome:FontAwesomeIcons.AlignLeft}" TextColor="Gray" BackgroundColor="Transparent" FontFamily="FAS" FontSize="30" HorizontalOptions="Start"/>
+                <Entry Text="{Binding To_do_Item.Note}" TextColor="Black" Placeholder="Bemwerkung" PlaceholderColor="DarkGray" FontSize="Medium" VerticalOptions="Center" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start">
+                    <Entry.Effects>
+                        <xct:RemoveBorderEffect/>
+                    </Entry.Effects>
+                </Entry>
+            </StackLayout>
+        </StackLayout>
+        <Label x:Name="itemid_label" IsVisible="false" Text="{Binding To_do_Item.Id}"/>
+        <DatePicker x:Name="datepicker" IsVisible="false" IsEnabled="{Binding DatePicker_IsEnabled}" Date="{Binding DatePicker_Date}" MinimumDate="{Binding DatePicker_Minimumdate}"/>
+        <TimePicker x:Name="timepicker" IsVisible="false" IsEnabled="{Binding TimePicker_IsEnabled}" Time="{Binding TimePicker_Time}" />
+    </StackLayout>
+</ContentPage>

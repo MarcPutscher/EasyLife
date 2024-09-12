@@ -14,7 +14,11 @@
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
                 </Label.GestureRecognizers>
             </Label>
-            <Entry x:Name="category_entry" VerticalOptions="Start" Margin="10,5,10,0" Placeholder="Kategoriename" TextChanged="category_entry_Changed" HeightRequest="50" HorizontalOptions="FillAndExpand" VerticalTextAlignment="Start" Grid.Column="2"/>
+            <Entry x:Name="category_entry" VerticalOptions="Start" Margin="10,5,10,0" Placeholder="Kategoriename" TextChanged="category_entry_Changed" HeightRequest="50" HorizontalOptions="FillAndExpand" VerticalTextAlignment="Start" Grid.Column="2">
+                <Entry.Effects>
+                    <extensions:RemoveBorderEffect />
+                </Entry.Effects>
+            </Entry>
         </Grid>
         <Grid ColumnDefinitions="10,*,Auto,*,10" HorizontalOptions="Fill" VerticalOptions="Start" Padding="0" HeightRequest="70">
             <Button  Text="Abbrechen" TextColor="DodgerBlue" BackgroundColor="White" HorizontalOptions="Fill" VerticalOptions="Center" FontSize="Medium" Clicked="Abord_Clicked" Grid.Column="1"/>

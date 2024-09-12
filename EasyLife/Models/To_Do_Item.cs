@@ -50,7 +50,37 @@ namespace EasyLife.Models
                 if (Reminder == value)
                     return;
                 reminder = value; OnPropertyChanged(nameof(Reminder));
-                Datumanzeige = reminder.ToString("dddd, d.M.yyyy", new CultureInfo("de-DE"));
+                if(reminder == new DateTime())
+                {
+                    Datumanzeige = null;
+                    Timeanzeige = null;
+                }
+                else
+                {
+                    if(Time_Select == false)
+                    {
+                        Datumanzeige = reminder.ToString("dddd, d.M.yyyy", new CultureInfo("de-DE"));
+                        Timeanzeige = null;
+                        PseudoDate = reminder.ToString("dddd, d.M.yyyy", new CultureInfo("de-DE"));
+                    }
+                    else
+                    {
+                        Datumanzeige = reminder.ToString("dddd, d.M.yyyy", new CultureInfo("de-DE"));
+                        Timeanzeige = reminder.ToString("HH: mm", new CultureInfo("de-DE")) + "Uhr";
+                        PseudoDate = reminder.ToString("dddd, d.M.yyyy, HH:mm", new CultureInfo("de-DE")) + "Uhr";
+                    }
+                }
+            }
+        }
+        DateTime self_destruct_date = new DateTime();
+        public DateTime Self_Destruct_Date
+        {
+            get { return self_destruct_date; }
+            set
+            {
+                if (Self_Destruct_Date == value)
+                    return;
+                self_destruct_date = value; OnPropertyChanged(nameof(Self_Destruct_Date));
             }
         }
 
@@ -62,7 +92,42 @@ namespace EasyLife.Models
             {
                 if (Datumanzeige == value)
                     return;
-                datumanzeige = value; OnPropertyChanged(nameof(Datum));
+                datumanzeige = value; OnPropertyChanged(nameof(Datumanzeige));
+            }
+        }
+
+        string timeanzeige = null;
+        public string Timeanzeige
+        {
+            get { return timeanzeige; }
+            set
+            {
+                if (Timeanzeige == value)
+                    return;
+                timeanzeige = value; OnPropertyChanged(nameof(Timeanzeige));
+            }
+        }
+
+        string pseudodate = null;
+        public string PseudoDate
+        {
+            get { return pseudodate; }
+            set
+            {
+                if (PseudoDate == value)
+                    return;
+                pseudodate = value; OnPropertyChanged(nameof(PseudoDate));
+            }
+        }
+        string viewdate = null;
+        public string ViewDate
+        {
+            get { return viewdate; }
+            set
+            {
+                if (ViewDate == value)
+                    return;
+                viewdate = value; OnPropertyChanged(nameof(ViewDate));
             }
         }
 
@@ -87,6 +152,14 @@ namespace EasyLife.Models
                 if (Is_Removed == value)
                     return;
                 is_removed = value; OnPropertyChanged(nameof(Is_Removed));
+                if(is_removed == true)
+                {
+                    Self_Destruct_Date = DateTime.Today.AddDays(30);
+                }
+                else
+                {
+                    Self_Destruct_Date = new DateTime();
+                }
             }
         }
 
@@ -122,6 +195,17 @@ namespace EasyLife.Models
             }
         }
 
+        bool time_select = false;
+        public bool Time_Select
+        {
+            get { return time_select; }
+            set
+            {
+                if (Time_Select == value)
+                    return;
+                time_select = value; OnPropertyChanged(nameof(Time_Select));
+            }
+        }
         string note;
         public string Note
         {

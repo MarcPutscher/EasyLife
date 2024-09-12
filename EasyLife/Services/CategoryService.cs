@@ -63,6 +63,7 @@ namespace EasyLife.Services
                 }
             }
 
+
             if (is_init == true)
             {
                 return 2;
@@ -114,15 +115,14 @@ namespace EasyLife.Services
 
             try
             {
-                var to_Do_s = await db.Table<Category>().ToListAsync();
+                List<Category> cat = await db.Table<Category>().ToListAsync();
 
-                if(to_Do_s.Count == 0)
+                if (cat.Count == 0)
                 {
-                    await Add_Category(new Category() { Title="Sonstige", Color = new ColorToHexRgbaStringConverter().ConvertFrom(Color.Gray), Is_Select = false});
+                    await db.InsertAsync(new Category() { Title = "Sonstige", Color = Xamarin.Forms.Color.Gray.ToHex(), Is_Select = false });
+                    return new List<Category>(){ await db.Table<Category>().FirstAsync() };
                 }
-
-                //return to_Do_s.Reverse<Category>().ToList();
-                return to_Do_s.ToList();
+                return cat.ToList();
             }
             catch
             {
@@ -142,6 +142,29 @@ namespace EasyLife.Services
             foreach (var re in table)
             {
                 if (re.Title.ToUpper() == result.ToUpper())
+                {
+                    return re;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gibt ein spezifische Category zurück.
+        /// </summary>
+        /// <param name="result">Die ID die zum finden der spezifischen Category notwendig ist.</param>
+        /// <returns></returns>
+        public static async Task<Category> Get_specific_Category_from_ID(int result)
+        {
+            var table = await Get_all_Categorys();
+
+            foreach (var re in table)
+            {
+                if (re.Id == result)
                 {
                     return re;
                 }

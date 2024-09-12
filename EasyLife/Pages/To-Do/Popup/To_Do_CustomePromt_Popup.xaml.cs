@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -38,9 +39,16 @@ namespace EasyLife.Pages.To_Do
             this.VerticalOptions = new LayoutOptions(LayoutAlignment.End, true);
         }
 
-        private void Abord_Clicked(object sender, EventArgs e)
+        private async void Abord_Clicked(object sender, EventArgs e)
         {
-            Dismiss(null);
+            try
+            {
+                Dismiss(null);
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+            }
         }
         private async void Delet_Clicked(object sender, EventArgs e)
         {
@@ -91,11 +99,11 @@ namespace EasyLife.Pages.To_Do
 
                 Dismiss("Deleted");
             }
-            catch 
-            {
+            catch (Exception ex)
+            {       
+                await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
                 Dismiss(null);
             }
-
         }
     }
 }

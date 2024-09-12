@@ -115,5 +115,28 @@ namespace EasyLife.Services
                 return new List<To_Do_Item>();
             }
         }
+
+        /// <summary>
+        /// Gibt ein spezifisches To-Do zurück.
+        /// </summary>
+        /// <param name="result">Die ID die zum finden des spezifischen To-Do notwendig ist.</param>
+        /// <returns></returns>
+        public static async Task<To_Do_Item> Get_specific_To_Do_from_ID(int result)
+        {
+            var table = await Get_all_To_DOs();
+
+            foreach (var re in table)
+            {
+                if (re.Id == result)
+                {
+                    return re;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            return null;
+        }
     }
 }

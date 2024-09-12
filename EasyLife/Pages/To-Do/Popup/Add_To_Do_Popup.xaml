@@ -22,7 +22,11 @@
             </Label>
             <Line HeightRequest="2" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.ColumnSpan="4" BackgroundColor="Gray"/>
         </Grid>
-        <Entry x:Name="to_do_entry" VerticalOptions="Start" Margin="10,5,10,0" HorizontalOptions="FillAndExpand" Placeholder="To-Do" TextChanged="to_do_entry_Changed" HeightRequest="50"/>
+        <Entry x:Name="to_do_entry" VerticalOptions="Start" Margin="10,5,10,0" HorizontalOptions="FillAndExpand" Placeholder="To-Do" TextChanged="to_do_entry_Changed" HeightRequest="50">
+            <Entry.Effects>
+                <extensions:RemoveBorderEffect />
+            </Entry.Effects>
+        </Entry>
         <Grid ColumnDefinitions="10,Auto,Auto,*,100,10" HorizontalOptions="Fill" VerticalOptions="Start" Padding="0" HeightRequest="70">
             <Button Text="{x:Static fontAwesome:FontAwesomeIcons.Bell}" TextColor="Black" BackgroundColor="White" FontFamily="FAS" FontSize="30" HorizontalOptions="Start" Clicked="Reminder_Clicked" Grid.Column="1"/>
             <Button x:Name="is_important_button" Text="!" TextColor="Black" BackgroundColor="White" FontFamily="FAS" FontSize="30" HorizontalOptions="Start" Clicked="Important_Clicked" Grid.Column="2"/>

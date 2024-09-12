@@ -7,14 +7,14 @@
              xmlns:fontAwesome="clr-namespace:FontAwesome" 
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
              xmlns:helpers="clr-namespace:EasyLife.Helpers" 
-             xmlns:pagemodels="clr-namespace:EasyLife.PageModels"
+             xmlns:pagemodels="clr-namespace:EasyLife.PageModels" xmlns:cells="clr-namespace:EasyLife.Cells"
              x:Class="EasyLife.Pages.To_Do.To_Do_Home_Page"
              Shell.FlyoutBehavior="{Binding Flyoutbehavior}">
 
     <ContentPage.BindingContext>
         <pagemodels:To_Do_Home_PageModel/>
     </ContentPage.BindingContext>
-    
+
     <ContentPage.Behaviors>
         <xct:EventToCommandBehavior
                 EventName="Appearing"
@@ -23,7 +23,7 @@
                 EventName="Disappearing"
                 Command="{Binding ViewIsDisappearing_Command}" />
     </ContentPage.Behaviors>
-
+    
     <Shell.TitleView>
         <StackLayout Padding="0" VerticalOptions="End" Orientation="Horizontal">
             <Label Text="{x:Static fontAwesome:FontAwesomeIcons.Xmark}" FontFamily="FAS" FontSize="40" TextColor="Red" VerticalOptions="Center" IsVisible="{Binding Show_Tapbar}" HorizontalOptions="Start" >
@@ -50,10 +50,161 @@
         <ToolbarItem Text="Elemente löschen" Command="{Binding Choose2_Command}" Order="Secondary"/>
     </ContentPage.ToolbarItems>
 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:DataType="to_do:To_Do_Item" x:Key="Without_Time">
+                <ViewCell>
+                    <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5" >
+                        <SwipeView BackgroundColor="Transparent" Grid.Row="1" Grid.Column="1" Padding="0">
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItemView IsVisible="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Show_Select,Converter={helpers:InverseBoolConverter}}">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Button CornerRadius="25" Padding="0" Margin="20,0,0,0" Text="{x:Static fontAwesome:FontAwesomeIcons.Copy}" BackgroundColor="CornflowerBlue" FontFamily="FAS" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"  TextColor="White" FontSize="30"
+                                                                Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Move_Command}" CommandParameter="{Binding .}"/>
+                                            <Button CornerRadius="25" Padding="0" Margin="10,0,0,0" Text="{x:Static fontAwesome:FontAwesomeIcons.TrashCan}" BackgroundColor="DarkRed" FontFamily="FAS" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"  TextColor="White" FontSize="30"
+                                                                Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Delet_Command}" CommandParameter="{Binding .}"/>
+                                        </StackLayout>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <StackLayout Orientation="Horizontal" Padding="0" >
+                                <Frame CornerRadius="5" BackgroundColor="{Binding Item_BackgroundColor}" Margin="0" Padding="0" HasShadow="True" HorizontalOptions="FillAndExpand">
+                                    <Grid ColumnDefinitions="Auto,5,*" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" Padding="0">
+                                        <ia:Checkbox x:Name="Is_Done_Checkbox" IsChecked="{Binding Is_Done}"  IsVisible="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Show_Choose}" Grid.Column="0" Margin="20,10,10,10" HeightRequest="30" WidthRequest="30" Shape="Circle" FillColor="Transparent" CheckColor="Gray" OutlineColor="Black">
+                                            <ia:Checkbox.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Item_Choosed_Command}" CommandParameter="{Binding .}"/>
+                                            </ia:Checkbox.GestureRecognizers>
+                                            <ia:Checkbox.Triggers>
+                                                <Trigger TargetType="ia:Checkbox" Property="IsChecked" Value="True">
+                                                    <Setter Property="OutlineColor" Value="DarkGray"/>
+                                                    <Setter Property="CheckColor" Value="LightGray"/>
+                                                </Trigger>
+                                            </ia:Checkbox.Triggers>
+                                        </ia:Checkbox>
+                                        <StackLayout Padding="0" Grid.Column="2" Margin="0,-10,0,-10" Spacing="0" VerticalOptions="Center"  xct:TouchEffect.LongPressCommand="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Choose1_Command}" xct:TouchEffect.LongPressDuration="400" xct:TouchEffect.LongPressCommandParameter="{Binding .}"
+                                                                 xct:TouchEffect.Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Detail_Command}" xct:TouchEffect.CommandParameter="{Binding .}">
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label Text="!" FontSize="Medium" TextColor="Red" VerticalOptions="Center" IsVisible="{Binding Is_Important}" HorizontalOptions="Start" >
+                                                    <Label.Triggers>
+                                                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference Is_Done_Checkbox}, Path=IsChecked}" Value="True">
+                                                            <Setter Property="TextColor" Value="DarkRed"/>
+                                                        </DataTrigger>
+                                                    </Label.Triggers>
+                                                </Label>
+                                                <Label Text="{Binding To_Do}" HorizontalTextAlignment="Start" FontSize="Medium" TextColor="Black" VerticalTextAlignment="Center" HorizontalOptions="Start" VerticalOptions="Center">
+                                                    <Label.Triggers>
+                                                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference Is_Done_Checkbox}, Path=IsChecked}" Value="True">
+                                                            <Setter Property="TextColor" Value="Gray"/>
+                                                        </DataTrigger>
+                                                    </Label.Triggers>
+                                                </Label>
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </Grid>
+                                </Frame>
+                                <Grid Padding="0" IsVisible="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Show_Select}">
+                                    <ia:Checkbox IsChecked="{Binding Is_Select}" Margin="20,0,0,0" HorizontalOptions="End" HeightRequest="40" WidthRequest="40" Shape="Rectangle" FillColor="Transparent" CheckColor="White" OutlineColor="Black" >
+                                        <ia:Checkbox.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Item_Selected_Command}" CommandParameter="{Binding .}"/>
+                                        </ia:Checkbox.GestureRecognizers>
+                                        <ia:Checkbox.Triggers>
+                                            <Trigger TargetType="ia:Checkbox" Property="IsChecked" Value="true">
+                                                <Setter Property="FillColor" Value="DodgerBlue"/>
+                                                <Setter Property="OutlineColor" Value="DodgerBlue"/>
+                                            </Trigger>
+                                        </ia:Checkbox.Triggers>
+                                    </ia:Checkbox>
+                                </Grid>
+                            </StackLayout>
+                        </SwipeView>
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:DataType="to_do:To_Do_Item" x:Key="With_Time">
+                <ViewCell>
+                    <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5" >
+                        <SwipeView BackgroundColor="Transparent" Grid.Row="1" Grid.Column="1" Padding="0">
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItemView IsVisible="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Show_Select,Converter={helpers:InverseBoolConverter}}">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Button CornerRadius="25" Padding="0" Margin="20,0,0,0" Text="{x:Static fontAwesome:FontAwesomeIcons.Copy}" BackgroundColor="CornflowerBlue" FontFamily="FAS" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"  TextColor="White" FontSize="30"
+                                                                Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Move_Command}" CommandParameter="{Binding .}"/>
+                                            <Button CornerRadius="25" Padding="0" Margin="10,0,0,0" Text="{x:Static fontAwesome:FontAwesomeIcons.TrashCan}" BackgroundColor="DarkRed" FontFamily="FAS" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"  TextColor="White" FontSize="30"
+                                                                Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Delet_Command}" CommandParameter="{Binding .}"/>
+                                        </StackLayout>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <StackLayout Orientation="Horizontal" Padding="0" >
+                                <Frame CornerRadius="5" BackgroundColor="{Binding Item_BackgroundColor}" Margin="0" Padding="0" HasShadow="True" HorizontalOptions="FillAndExpand">
+                                    <Grid ColumnDefinitions="Auto,5,*" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" Padding="0">
+                                        <ia:Checkbox x:Name="Is_Done_Checkbox" IsChecked="{Binding Is_Done}"  IsVisible="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Show_Choose}" Grid.Column="0" Margin="20,10,10,10" HeightRequest="30" WidthRequest="30" Shape="Circle" FillColor="Transparent" CheckColor="Gray" OutlineColor="Black">
+                                            <ia:Checkbox.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Item_Choosed_Command}" CommandParameter="{Binding .}"/>
+                                            </ia:Checkbox.GestureRecognizers>
+                                            <ia:Checkbox.Triggers>
+                                                <Trigger TargetType="ia:Checkbox" Property="IsChecked" Value="True">
+                                                    <Setter Property="OutlineColor" Value="DarkGray"/>
+                                                    <Setter Property="CheckColor" Value="LightGray"/>
+                                                </Trigger>
+                                            </ia:Checkbox.Triggers>
+                                        </ia:Checkbox>
+                                        <StackLayout Padding="0" Grid.Column="2" Margin="0,-10,0,-10" Spacing="0" VerticalOptions="Center"  xct:TouchEffect.LongPressCommand="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Choose1_Command}" xct:TouchEffect.LongPressDuration="400" xct:TouchEffect.LongPressCommandParameter="{Binding .}"
+                                                                 xct:TouchEffect.Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Detail_Command}" xct:TouchEffect.CommandParameter="{Binding .}">
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label Text="!" FontSize="Medium" TextColor="Red" VerticalOptions="Center" IsVisible="{Binding Is_Important}" HorizontalOptions="Start" >
+                                                    <Label.Triggers>
+                                                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference Is_Done_Checkbox}, Path=IsChecked}" Value="True">
+                                                            <Setter Property="TextColor" Value="DarkRed"/>
+                                                        </DataTrigger>
+                                                    </Label.Triggers>
+                                                </Label>
+                                                <Label Text="{Binding To_Do}" HorizontalTextAlignment="Start" FontSize="Medium" TextColor="Black" VerticalTextAlignment="Center" HorizontalOptions="Start" VerticalOptions="Center">
+                                                    <Label.Triggers>
+                                                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference Is_Done_Checkbox}, Path=IsChecked}" Value="True">
+                                                            <Setter Property="TextColor" Value="Gray"/>
+                                                        </DataTrigger>
+                                                    </Label.Triggers>
+                                                </Label>
+                                            </StackLayout>
+                                            <Label Text="{Binding ViewDate}" HorizontalTextAlignment="Start" FontSize="Small" TextColor="Gray" VerticalTextAlignment="Center" HorizontalOptions="Start" VerticalOptions="Center">
+                                                <Label.Triggers>
+                                                    <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference Is_Done_Checkbox}, Path=IsChecked}" Value="True">
+                                                        <Setter Property="TextColor" Value="LightGray"/>
+                                                    </DataTrigger>
+                                                </Label.Triggers>
+                                            </Label>
+                                        </StackLayout>
+                                    </Grid>
+                                </Frame>
+                                <Grid Padding="0" IsVisible="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Show_Select}">
+                                    <ia:Checkbox IsChecked="{Binding Is_Select}" Margin="20,0,0,0" HorizontalOptions="End" HeightRequest="40" WidthRequest="40" Shape="Rectangle" FillColor="Transparent" CheckColor="White" OutlineColor="Black" >
+                                        <ia:Checkbox.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Item_Selected_Command}" CommandParameter="{Binding .}"/>
+                                        </ia:Checkbox.GestureRecognizers>
+                                        <ia:Checkbox.Triggers>
+                                            <Trigger TargetType="ia:Checkbox" Property="IsChecked" Value="true">
+                                                <Setter Property="FillColor" Value="DodgerBlue"/>
+                                                <Setter Property="OutlineColor" Value="DodgerBlue"/>
+                                            </Trigger>
+                                        </ia:Checkbox.Triggers>
+                                    </ia:Checkbox>
+                                </Grid>
+                            </StackLayout>
+                        </SwipeView>
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+            <cells:To_Do_Template_Selector x:Key="To_Do_Templates" To_Do_with_Time="{StaticResource With_Time}" To_Do_without_Time="{StaticResource Without_Time}"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <Grid BackgroundColor="White" Padding="0">
         <StackLayout BackgroundColor="Transparent" Padding="0" IsVisible="{Binding Show_Empty_List ,Converter={helpers:InverseBoolConverter}}">
             <Grid Padding="10,0,10,0">
-                <ListView ItemsSource="{Binding To_Do_Items}" VerticalScrollBarVisibility="Never" x:Name="to_do_Item_List" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" IsGroupingEnabled="True" VerticalOptions="Fill" GroupDisplayBinding="{Binding Key}" Margin="10,0,10,0">
+                <ListView ItemsSource="{Binding To_Do_Items}" VerticalScrollBarVisibility="Never" ItemTemplate="{StaticResource To_Do_Templates}" x:Name="to_do_Item_List" SeparatorVisibility="None"  HasUnevenRows="True" SelectionMode="None" IsGroupingEnabled="True" VerticalOptions="Fill" GroupDisplayBinding="{Binding Key}" Margin="10,0,10,0">
                     <ListView.GroupHeaderTemplate>
                         <DataTemplate x:DataType="{x:Null}">
                             <ViewCell Height = "30" >
@@ -63,71 +214,10 @@
                             </ViewCell>
                         </DataTemplate>
                     </ListView.GroupHeaderTemplate>
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="to_do:To_Do_Item">
-                            <ViewCell>
-                                <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5" >
-                                    <SwipeView BackgroundColor="Transparent" Grid.Row="1" Grid.Column="1" Padding="0">
-                                        <SwipeView.RightItems>
-                                            <SwipeItems>
-                                                <SwipeItemView IsVisible="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Show_Select,Converter={helpers:InverseBoolConverter}}">
-                                                    <StackLayout Orientation="Horizontal">
-                                                        <Button CornerRadius="25" Padding="0" Margin="20,0,0,0" Text="{x:Static fontAwesome:FontAwesomeIcons.Copy}" BackgroundColor="CornflowerBlue" FontFamily="FAS" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"  TextColor="White" FontSize="30"
-                                                                Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Copy_Command}" CommandParameter="{Binding .}"/>
-                                                        <Button CornerRadius="25" Padding="0" Margin="10,0,0,0" Text="{x:Static fontAwesome:FontAwesomeIcons.TrashCan}" BackgroundColor="DarkRed" FontFamily="FAS" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"  TextColor="White" FontSize="30"
-                                                                Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Delet_Command}" CommandParameter="{Binding .}"/>
-                                                    </StackLayout>
-                                                </SwipeItemView>
-                                            </SwipeItems>
-                                        </SwipeView.RightItems>
-                                        <StackLayout Orientation="Horizontal" Padding="0" >
-                                            <Frame CornerRadius="5" BackgroundColor="{Binding Item_BackgroundColor}" Margin="0" Padding="0" HasShadow="True" HorizontalOptions="FillAndExpand">
-                                                <Grid ColumnDefinitions="Auto,5,*" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" Padding="0">
-                                                    <ia:Checkbox x:Name="Is_Done_Checkbox" IsChecked="{Binding Is_Done}"  IsVisible="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Show_Choose}" Grid.Column="0" Margin="20,10,10,10" HeightRequest="30" WidthRequest="30" Shape="Circle" FillColor="Transparent" CheckColor="Gray" OutlineColor="Black">
-                                                        <ia:Checkbox.GestureRecognizers>
-                                                            <TapGestureRecognizer Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Item_Choosed_Command}" CommandParameter="{Binding .}"/>
-                                                        </ia:Checkbox.GestureRecognizers>
-                                                        <ia:Checkbox.Triggers>
-                                                            <Trigger TargetType="ia:Checkbox" Property="IsChecked" Value="True">
-                                                                <Setter Property="OutlineColor" Value="DarkGray"/>
-                                                                <Setter Property="CheckColor" Value="LightGray"/>
-                                                            </Trigger>
-                                                        </ia:Checkbox.Triggers>
-                                                    </ia:Checkbox>
-                                                    <StackLayout Padding="0" Grid.Column="2" Margin="0,-10,0,-10" VerticalOptions="Center"  xct:TouchEffect.LongPressCommand="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Choose1_Command}" xct:TouchEffect.LongPressDuration="400" xct:TouchEffect.LongPressCommandParameter="{Binding .}">
-                                                        <Label Text="{Binding To_Do}" HorizontalTextAlignment="Start" FontSize="Medium" TextColor="Gray" VerticalTextAlignment="Center" HorizontalOptions="Start" VerticalOptions="Center">
-                                                            <Label.Triggers>
-                                                                <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference Is_Done_Checkbox}, Path=IsChecked}" Value="True">
-                                                                    <Setter Property="TextColor" Value="LightGray"/>
-                                                                </DataTrigger> 
-                                                            </Label.Triggers>
-                                                        </Label>
-                                                    </StackLayout>
-                                                </Grid>
-                                            </Frame>
-                                            <Grid Padding="0" IsVisible="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Show_Select}">
-                                                <ia:Checkbox IsChecked="{Binding Is_Select}" Margin="20,0,0,0" HorizontalOptions="End" HeightRequest="40" WidthRequest="40" Shape="Rectangle" FillColor="Transparent" CheckColor="White" OutlineColor="Black" >
-                                                    <ia:Checkbox.GestureRecognizers>
-                                                        <TapGestureRecognizer Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Item_Selected_Command}" CommandParameter="{Binding .}"/>
-                                                    </ia:Checkbox.GestureRecognizers>
-                                                    <ia:Checkbox.Triggers>
-                                                        <Trigger TargetType="ia:Checkbox" Property="IsChecked" Value="true">
-                                                            <Setter Property="FillColor" Value="DodgerBlue"/>
-                                                            <Setter Property="OutlineColor" Value="DodgerBlue"/>
-                                                        </Trigger>
-                                                    </ia:Checkbox.Triggers>
-                                                </ia:Checkbox>
-                                            </Grid>
-                                        </StackLayout>
-                                    </SwipeView>
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
                 </ListView>
-                <Label  VerticalOptions="End" HorizontalOptions="End" Text="+" IsVisible="{Binding Show_Tapbar , Converter={helpers:InverseBoolConverter}}"  TextColor="Black" BackgroundColor="LightGray" FontSize="80" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Margin="0,0,20,20" HeightRequest="100" WidthRequest="80">
+                <Label  VerticalOptions="End" HorizontalOptions="End" Text="+" Padding="0" IsVisible="{Binding Show_Tapbar , Converter={helpers:InverseBoolConverter}}"  TextColor="Black" BackgroundColor="LightGray" FontSize="50" VerticalTextAlignment="Center"  HorizontalTextAlignment="Center" Margin="0,0,15,15" HeightRequest="70" WidthRequest="60">
                     <Label.Clip>
-                        <EllipseGeometry Center="40,56" RadiusX="40" RadiusY="40" />
+                        <EllipseGeometry Center="30,37" RadiusX="30" RadiusY="30" />
                     </Label.Clip>
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding Add_Command}"/>
@@ -139,7 +229,7 @@
                             <Label Text="{x:Static fontAwesome:FontAwesomeIcons.Copy}" TextColor="{Binding Is_Activ_Color}" FontFamily="FAS" FontSize="20" VerticalTextAlignment="Center" HorizontalOptions="Center"/>
                             <Label Text="Verschieben" FontSize="Small" TextColor="{Binding Is_Activ_Color}"/>
                             <StackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Move_Command}"/>
+                                <TapGestureRecognizer Command="{Binding Move_Range_Command}"/>
                             </StackLayout.GestureRecognizers>
                         </StackLayout>
                         <StackLayout Orientation="Vertical" Margin="10,0,10,0"  IsEnabled="{Binding Some_Item_Select}">
@@ -166,9 +256,9 @@
                     <Label Text="{x:Static fontAwesome:FontAwesomeIcons.Clipboard}" TextColor="Gray" FontFamily="FAS" FontSize="100" VerticalTextAlignment="Center" HorizontalOptions="Center"/>
                     <Label Text="Keine To-Dos" FontSize="Small" HorizontalOptions="Center"/>
                 </StackLayout>
-                <Label  VerticalOptions="End" HorizontalOptions="End" Text="+" TextColor="Black" BackgroundColor="LightGray" FontSize="80" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Margin="0,0,20,20" HeightRequest="100" WidthRequest="80">
+                <Label  VerticalOptions="End" HorizontalOptions="End" Text="+" Padding="0" IsVisible="{Binding Show_Tapbar , Converter={helpers:InverseBoolConverter}}"  TextColor="Black" BackgroundColor="LightGray" FontSize="50" VerticalTextAlignment="Center"  HorizontalTextAlignment="Center" Margin="0,0,15,15" HeightRequest="70" WidthRequest="60">
                     <Label.Clip>
-                        <EllipseGeometry Center="40,56" RadiusX="40" RadiusY="40" />
+                        <EllipseGeometry Center="30,37" RadiusX="30" RadiusY="30" />
                     </Label.Clip>
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding Add_Command}"/>

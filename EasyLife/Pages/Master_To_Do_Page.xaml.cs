@@ -1,8 +1,10 @@
-﻿using EasyLife.Models;
+﻿using Android.Webkit;
+using EasyLife.Models;
 using EasyLife.PageModels;
 using EasyLife.Pages.To_Do;
 using EasyLife.Services;
 using FontAwesome;
+using MvvmHelpers.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -26,53 +28,53 @@ namespace EasyLife.Pages
     public partial class Master_To_Do_Page : Shell
     {
         CustomeShellContent shellContent1 = new CustomeShellContent();
-        public static List<Category> categories = new List<Category>();
-        
-        public Master_To_Do_Page(List<Category> categories, List<To_Do_Item> result2)
+        public Master_To_Do_Page()
         {
+
             InitializeComponent();
 
             Routing.RegisterRoute(nameof(To_Do_Home_Page), typeof(To_Do_Home_Page));
-            Routing.RegisterRoute(nameof(To_Do_Settings_Page), typeof(To_Do_Settings_Page));
             Routing.RegisterRoute(nameof(Edit_Category_Page), typeof(Edit_Category_Page));
+            Routing.RegisterRoute(nameof(To_Do_Detail_Page), typeof(To_Do_Detail_Page));
 
-
-
-            CustomeShellContent shellContent = new CustomeShellContent() { Title = "Alle To-Dos", Option = 1, ItemCount = result2.Where(x=>x.Is_Removed == false).Count(),ClassId = "alle to-do", IsTabStop = false, IsEnabled = true, ContentTemplate = new DataTemplate(typeof(To_Do_Home_Page)) };
+            CustomeShellContent shellContent = new CustomeShellContent() { Title = "Alle To-Dos", Option = 1, ClassId = "alle to-do", IsTabStop = false, IsEnabled = true, ContentTemplate = new DataTemplate(typeof(To_Do_Home_Page)) };
             shellContent.FlyoutIcon = new FontImageSource() { FontFamily = "FAS", Glyph = FontAwesomeIcons.ClipboardList };
             this.Items.Add(shellContent);
 
-            List<To_Do_Item> result3 = result2.Where(x=>x.Is_Removed == true).ToList();
-            shellContent = new CustomeShellContent() { Title = "Zuletzt gelöscht", Option = 2 , ItemCount = result3.Count, IsTabStop = false, IsEnabled = true, ContentTemplate = new DataTemplate(typeof(To_Do_Deleted_Page)) };
+            shellContent = new CustomeShellContent() { Title = "Zuletzt gelöscht", Option = 2, IsTabStop = false, IsEnabled = true, ContentTemplate = new DataTemplate(typeof(To_Do_Deleted_Page)) };
             shellContent.FlyoutIcon = new FontImageSource() { FontFamily = "FAS", Glyph = FontAwesomeIcons.TrashCan };
-            this.Items.Add(shellContent);
-
-            shellContent = new CustomeShellContent() {IsEnabled = false, ContentTemplate = new DataTemplate(typeof(To_Do_Home_Page)), CustomeRoute = "Spacer" };
-            this.Items.Add(shellContent);
-
-            shellContent = new CustomeShellContent() { Title = "KATEGORIEN", CustomeRoute = "Header", IsEnabled = false, ContentTemplate = new DataTemplate(typeof(To_Do_Home_Page)) };
-            this.Items.Add(shellContent);
-
-            if(categories != null)
-            {
-                foreach (Category category in categories)
-                {
-                    List<To_Do_Item> result4 = result2.Where(x => x.CategoryID == category.Id && x.Is_Removed == false).ToList();
-                    shellContent = new CustomeShellContent() {Option = 3, Category = category,  ItemCount = result4.Count, IsTabStop = false, IsEnabled = true, ContentTemplate = new DataTemplate(typeof(To_Do_Home_Page)) , CustomeRoute = "Item" };
-                    this.Items.Add(shellContent);
-                }
-            }
-
-
-            shellContent = new CustomeShellContent() { IsEnabled = false, ContentTemplate = new DataTemplate(typeof(To_Do_Home_Page)), CustomeRoute ="New"};
             this.Items.Add(shellContent);
 
             shellContent = new CustomeShellContent() { IsEnabled = false, ContentTemplate = new DataTemplate(typeof(To_Do_Home_Page)), CustomeRoute = "Spacer" };
             this.Items.Add(shellContent);
 
-            shellContent = new CustomeShellContent() { Title = "Einstellungen", IsTabStop = false, IsEnabled = true, ContentTemplate = new DataTemplate(typeof(To_Do_Settings_Page)), CustomeRoute="Settings"};
-            shellContent.FlyoutIcon = new FontImageSource() { FontFamily = "FAS", Glyph = FontAwesomeIcons.Gear };
+            shellContent = new CustomeShellContent() { Title = "KATEGORIEN", CustomeRoute = "Header", IsEnabled = false, ContentTemplate = new DataTemplate(typeof(To_Do_Home_Page)) };
             this.Items.Add(shellContent);
+
+
+        }
+
+        public async Task Create_Missing_Flyoutitems()
+        {
+            if(this.Items.Count<=4)
+            {
+                List<Category> categories = await CategoryService.Get_all_Categorys();
+                List<To_Do_Item> to_dos = await To_DoService.Get_all_To_DOs();
+                CustomeShellContent shellContent = new CustomeShellContent() { Title = "Alle To-Dos", Option = 1, ClassId = "alle to-do", IsTabStop = false, IsEnabled = true, ContentTemplate = new DataTemplate(typeof(To_Do_Home_Page)) };
+
+                if (categories != null)
+                {
+                    foreach (Category category in categories)
+                    {
+                        List<To_Do_Item> result4 = to_dos.Where(x => x.CategoryID == category.Id && x.Is_Removed == false).ToList();
+                        shellContent = new CustomeShellContent() { Option = 3, Category = category, ItemCount = result4.Count, IsTabStop = false, IsEnabled = true, ContentTemplate = new DataTemplate(typeof(To_Do_Home_Page)), CustomeRoute = "Item" };
+                        this.Items.Add(shellContent);
+                    }
+                }
+
+                shellContent = new CustomeShellContent() { IsEnabled = false, ContentTemplate = new DataTemplate(typeof(To_Do_Home_Page)), CustomeRoute = "New" };
+                this.Items.Add(shellContent);
+            }
         }
 
         private void Header_Tapped(object sender, EventArgs e)
@@ -86,9 +88,6 @@ namespace EasyLife.Pages
         {
             try
             {
-                categories = await CategoryService.Get_all_Categorys();
-
-
                 await Shell.Current.GoToAsync(nameof(Edit_Category_Page));
             }
             catch { }
@@ -122,7 +121,7 @@ namespace EasyLife.Pages
             catch (Exception ex) { }
         }
 
-        public async void Update_FlyoutConten()
+        public async Task Update_FlyoutConten()
         {
             List<Category> categories = await CategoryService.Get_all_Categorys();
             List<To_Do_Item> result2 = await To_DoService.Get_all_To_DOs();
@@ -160,8 +159,9 @@ namespace EasyLife.Pages
             }
         }
 
-        public async void Update_FlyoutConten2()
+        public async Task Update_FlyoutConten2()
         {
+            List<Category> categories = await CategoryService.Get_all_Categorys();
             if(categories.Count != 0)
             {
                 List<Category> categories2 = await CategoryService.Get_all_Categorys();
@@ -185,7 +185,7 @@ namespace EasyLife.Pages
                     }
                 }
 
-                Update_FlyoutConten();
+                await Update_FlyoutConten();
             }
         }
 
@@ -197,7 +197,6 @@ namespace EasyLife.Pages
 
     public class CustomeShellContent : ShellContent,INotifyPropertyChanged
     {
-        //public ObservableCollection<Category> Categorys { get; set; }
 
         public int Option { get; set; }
 

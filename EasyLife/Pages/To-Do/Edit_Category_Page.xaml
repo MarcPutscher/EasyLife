@@ -27,7 +27,7 @@
                             <TapGestureRecognizer Command="{Binding Cancel_Command}"/>
                         </Label.GestureRecognizers>
                     </Label>
-                    <Frame BackgroundColor="Transparent" Padding="10">
+                    <Frame BackgroundColor="Transparent" Padding="10" HorizontalOptions="CenterAndExpand">
                         <Label Text="To-Do-Kategorien bearbeiten"
                            Opacity="1"
                            FontAttributes="Bold"
@@ -38,7 +38,7 @@
                            VerticalTextAlignment="Center"
                        VerticalOptions="Center"/>
                     </Frame>
-                    <Label Text="{x:Static fontAwesome:FontAwesomeIcons.Check}" FontFamily="FAS" FontSize="40" TextColor="DodgerBlue" VerticalOptions="Center" HorizontalOptions="EndAndExpand" Margin="0,0,20,0" >
+                    <Label Text="{x:Static fontAwesome:FontAwesomeIcons.Check}" FontFamily="FAS" FontSize="40" TextColor="Green" VerticalOptions="Center" HorizontalOptions="EndAndExpand" Margin="0,0,20,0" >
                         <Label.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding Save_Command}"/>
                         </Label.GestureRecognizers>
@@ -50,14 +50,22 @@
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="models:Category">
                             <ViewCell>
-                                <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5" >
+                                <Grid RowDefinitions="0,*,0" ColumnDefinitions="5,*,5" >
                                     <Frame CornerRadius="5" BackgroundColor="#e3f2ff" Margin="0" Padding="0" HasShadow="True" HorizontalOptions="FillAndExpand" Grid.Column="1" Grid.Row="1" >
                                         <Grid ColumnDefinitions="*,5,Auto" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" Padding="0">
-                                            <StackLayout Padding="0" Grid.Column="0" Margin="30,10,0,10" VerticalOptions="Center" Orientation="Horizontal" Spacing="30">
-                                                <Label  Text="{x:Static fontAwesome:FontAwesomeIcons.ClipboardList}" FontFamily="FAS" HorizontalTextAlignment="Center" FontSize="20" TextColor="{Binding Color}" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
-                                                <Entry Text="{Binding Title}" HorizontalTextAlignment="Start" FontSize="Medium" TextColor="Black" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="Center"/>
+                                            <StackLayout Padding="0" Grid.Column="0" Margin="30,5,0,5" VerticalOptions="Center" Orientation="Horizontal" Spacing="30">
+                                                <Label  Text="{x:Static fontAwesome:FontAwesomeIcons.ClipboardList}" FontFamily="FAS" HorizontalTextAlignment="Center" FontSize="30" TextColor="{Binding Color}" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center">
+                                                    <Label.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding Source={x:Reference category_Item_List}, Path=BindingContext.Change_Color_Command}" CommandParameter="{Binding .}" />
+                                                    </Label.GestureRecognizers>
+                                                </Label>
+                                                <Entry Text="{Binding Title}" HorizontalTextAlignment="Start" FontSize="Medium" TextColor="Black" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand" VerticalOptions="Center">
+                                                    <Entry.Effects>
+                                                        <xct:RemoveBorderEffect/>
+                                                    </Entry.Effects>
+                                                </Entry>
                                             </StackLayout>
-                                            <Label  Text="{x:Static fontAwesome:FontAwesomeIcons.Xmark}" FontFamily="FAS" HorizontalTextAlignment="Center" Margin="0,0,30,0" FontSize="20" Grid.Column="2" TextColor="Gray" VerticalTextAlignment="Center" HorizontalOptions="End" VerticalOptions="Center">
+                                            <Label  Text="{x:Static fontAwesome:FontAwesomeIcons.Xmark}" FontFamily="FAS" HorizontalTextAlignment="Center" Margin="0,0,30,0" FontSize="30" Grid.Column="2" TextColor="Gray" VerticalTextAlignment="Center" HorizontalOptions="End" VerticalOptions="Center">
                                                 <Label.GestureRecognizers>
                                                     <TapGestureRecognizer Command="{Binding Source={x:Reference category_Item_List}, Path=BindingContext.Item_Select_Command}" CommandParameter="{Binding .}"/>
                                                 </Label.GestureRecognizers>

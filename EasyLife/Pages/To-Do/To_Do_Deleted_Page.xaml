@@ -8,7 +8,7 @@
              xmlns:fontAwesome="clr-namespace:FontAwesome" 
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
              xmlns:helpers="clr-namespace:EasyLife.Helpers" 
-             xmlns:pagemodels="clr-namespace:EasyLife.PageModels"
+             xmlns:pagemodels="clr-namespace:EasyLife.PageModels" xmlns:cells="clr-namespace:EasyLife.Cells"
              Shell.FlyoutBehavior="{Binding Flyoutbehavior}">
     
     <ContentPage.BindingContext>
@@ -48,11 +48,136 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Elemente löschen" Command="{Binding Choose2_Command}" Order="Secondary"/>
     </ContentPage.ToolbarItems>
-    
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:DataType="to_do:To_Do_Item" x:Key="Without_Time">
+                <ViewCell>
+                    <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5">
+                        <SwipeView BackgroundColor="Transparent" Grid.Row="1" Grid.Column="1" Padding="0">
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItemView IsVisible="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Show_Select,Converter={helpers:InverseBoolConverter}}">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Button CornerRadius="25" Padding="0" Margin="10,0,0,0" Text="{x:Static fontAwesome:FontAwesomeIcons.TrashCan}" BackgroundColor="DarkRed" FontFamily="FAS" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"  TextColor="White" FontSize="30"
+                                                                Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Delet_Command}" CommandParameter="{Binding .}"/>
+                                        </StackLayout>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <StackLayout Orientation="Horizontal" Padding="0"  HeightRequest="48">
+                                <Frame x:Name="frame" CornerRadius="5" BackgroundColor="{Binding Item_BackgroundColor}" Margin="0" HasShadow="True" HorizontalOptions="FillAndExpand" Padding ="0" VerticalOptions="FillAndExpand" >
+                                    <Grid BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"  Padding="0">
+                                        <StackLayout VerticalOptions="Center" Padding="20,10,0,10" Spacing="0" xct:TouchEffect.LongPressCommand="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Choose1_Command}" xct:TouchEffect.LongPressDuration="400" xct:TouchEffect.LongPressCommandParameter="{Binding .}">
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label Text="!" FontSize="Medium" TextColor="Red" FontAttributes="Bold" VerticalOptions="Center" IsVisible="{Binding Is_Important}" HorizontalOptions="Start" >
+                                                    <Label.Triggers>
+                                                        <DataTrigger TargetType="Label" Binding="{Binding Is_Done}" Value="True">
+                                                            <Setter Property="TextColor" Value="DarkRed"/>
+                                                        </DataTrigger>
+                                                    </Label.Triggers>
+                                                </Label>
+                                                <Label Text="{Binding To_Do}" HorizontalTextAlignment="Start" FontSize="Medium" TextColor="Black" VerticalTextAlignment="Center" HorizontalOptions="Start" VerticalOptions="Center">
+                                                    <Label.Triggers>
+                                                        <DataTrigger TargetType="Label" Binding="{Binding Is_Done}" Value="True">
+                                                            <Setter Property="TextColor" Value="Gray"/>
+                                                        </DataTrigger>
+                                                    </Label.Triggers>
+                                                </Label>
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </Grid>
+                                </Frame>
+                                <Grid Padding="0" IsVisible="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Show_Select}">
+                                    <ia:Checkbox IsChecked="{Binding Is_Select}" Margin="20,0,0,0" HorizontalOptions="End" HeightRequest="40" WidthRequest="40" Shape="Rectangle" FillColor="Transparent" CheckColor="White" OutlineColor="Black" >
+                                        <ia:Checkbox.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Item_Selected_Command}" CommandParameter="{Binding .}"/>
+                                        </ia:Checkbox.GestureRecognizers>
+                                        <ia:Checkbox.Triggers>
+                                            <Trigger TargetType="ia:Checkbox" Property="IsChecked" Value="true">
+                                                <Setter Property="FillColor" Value="DodgerBlue"/>
+                                                <Setter Property="OutlineColor" Value="DodgerBlue"/>
+                                            </Trigger>
+                                        </ia:Checkbox.Triggers>
+                                    </ia:Checkbox>
+                                </Grid>
+                            </StackLayout>
+                        </SwipeView>
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:DataType="to_do:To_Do_Item" x:Key="With_Time">
+                <ViewCell>
+                    <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5">
+                        <SwipeView BackgroundColor="Transparent" Grid.Row="1" Grid.Column="1" Padding="0">
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItemView IsVisible="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Show_Select,Converter={helpers:InverseBoolConverter}}">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Button CornerRadius="25" Padding="0" Margin="10,0,0,0" Text="{x:Static fontAwesome:FontAwesomeIcons.TrashCan}" BackgroundColor="DarkRed" FontFamily="FAS" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"  TextColor="White" FontSize="30"
+                                                                Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Delet_Command}" CommandParameter="{Binding .}"/>
+                                        </StackLayout>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <StackLayout Orientation="Horizontal" Padding="0"  HeightRequest="48">
+                                <Frame x:Name="frame" CornerRadius="5" BackgroundColor="{Binding Item_BackgroundColor}" Margin="0" HasShadow="True" HorizontalOptions="FillAndExpand" Padding ="0" VerticalOptions="FillAndExpand">
+                                    <Grid BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"  Padding="0">
+                                        <StackLayout VerticalOptions="Center" Padding="20,10,0,10" Spacing="0" xct:TouchEffect.LongPressCommand="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Choose1_Command}" xct:TouchEffect.LongPressDuration="400" xct:TouchEffect.LongPressCommandParameter="{Binding .}">
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label Text="!" FontSize="Medium" TextColor="Red"  FontAttributes="Bold" VerticalOptions="Center" IsVisible="{Binding Is_Important}" HorizontalOptions="Start" >
+                                                    <Label.Triggers>
+                                                        <DataTrigger TargetType="Label" Binding="{Binding Is_Done}" Value="True">
+                                                            <Setter Property="TextColor" Value="DarkRed"/>
+                                                        </DataTrigger>
+                                                    </Label.Triggers>
+                                                </Label>
+                                                <Label Text="{Binding To_Do}" HorizontalTextAlignment="Start" FontSize="Medium" TextColor="Black" VerticalTextAlignment="Center" HorizontalOptions="Start" VerticalOptions="Center">
+                                                    <Label.Triggers>
+                                                        <DataTrigger TargetType="Label" Binding="{Binding Is_Done}" Value="True">
+                                                            <Setter Property="TextColor" Value="Gray"/>
+                                                        </DataTrigger>
+                                                    </Label.Triggers>
+                                                </Label>
+                                            </StackLayout>
+                                            <Label Text="{Binding ViewDate}" HorizontalTextAlignment="Start" FontSize="Small" TextColor="Gray" VerticalTextAlignment="Center" HorizontalOptions="Start" VerticalOptions="Center">
+                                                <Label.Triggers>
+                                                    <DataTrigger TargetType="Label" Binding="{Binding Is_Done}" Value="True">
+                                                        <Setter Property="TextColor" Value="LightGray"/>
+                                                    </DataTrigger>
+                                                </Label.Triggers>
+                                            </Label>
+                                        </StackLayout>
+                                    </Grid>
+                                </Frame>
+                                <Grid Padding="0" IsVisible="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Show_Select}">
+                                    <ia:Checkbox IsChecked="{Binding Is_Select}" Margin="20,0,0,0" HorizontalOptions="End" HeightRequest="40" WidthRequest="40" Shape="Rectangle" FillColor="Transparent" CheckColor="White" OutlineColor="Black" >
+                                        <ia:Checkbox.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Item_Selected_Command}" CommandParameter="{Binding .}"/>
+                                        </ia:Checkbox.GestureRecognizers>
+                                        <ia:Checkbox.Triggers>
+                                            <Trigger TargetType="ia:Checkbox" Property="IsChecked" Value="true">
+                                                <Setter Property="FillColor" Value="DodgerBlue"/>
+                                                <Setter Property="OutlineColor" Value="DodgerBlue"/>
+                                            </Trigger>
+                                        </ia:Checkbox.Triggers>
+                                    </ia:Checkbox>
+                                </Grid>
+                            </StackLayout>
+                        </SwipeView>
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+            <cells:To_Do_Template_Selector x:Key="To_Do_Templates" To_Do_with_Time="{StaticResource With_Time}" To_Do_without_Time="{StaticResource Without_Time}"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+
     <Grid BackgroundColor="White" Padding="0">
         <StackLayout BackgroundColor="Transparent" Padding="0" IsVisible="{Binding Show_Empty_List ,Converter={helpers:InverseBoolConverter}}">
+            <Label Text="To-Dos werden nach 30 Tagen dauerhaft gelöscht." VerticalOptions="Center" FontSize="12" Opacity="0.7"  HorizontalOptions="Start" Margin="30,5,0,0"/>
             <Grid Padding="10,0,10,0">
-                <ListView ItemsSource="{Binding To_Do_Items}" VerticalScrollBarVisibility="Never" x:Name="to_do_Item_List" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" IsGroupingEnabled="True" VerticalOptions="Fill" GroupDisplayBinding="{Binding Key}" Margin="10,0,10,0">
+                <ListView ItemsSource="{Binding To_Do_Items}" VerticalScrollBarVisibility="Never" x:Name="to_do_Item_List" ItemTemplate="{StaticResource To_Do_Templates}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" IsGroupingEnabled="True" VerticalOptions="Fill" GroupDisplayBinding="{Binding Key}" Margin="10,0,10,0">
                     <ListView.GroupHeaderTemplate>
                         <DataTemplate x:DataType="{x:Null}">
                             <ViewCell Height = "30" >
@@ -62,54 +187,6 @@
                             </ViewCell>
                         </DataTemplate>
                     </ListView.GroupHeaderTemplate>
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="to_do:To_Do_Item">
-                            <ViewCell>
-                                <Grid RowDefinitions="1,*,1" ColumnDefinitions="5,*,5" >
-                                    <SwipeView BackgroundColor="Transparent" Grid.Row="1" Grid.Column="1" Padding="0">
-                                        <SwipeView.RightItems>
-                                            <SwipeItems>
-                                                <SwipeItemView IsVisible="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Show_Select,Converter={helpers:InverseBoolConverter}}">
-                                                    <StackLayout Orientation="Horizontal">
-                                                        <Button CornerRadius="25" Padding="0" Margin="10,0,0,0" Text="{x:Static fontAwesome:FontAwesomeIcons.TrashCan}" BackgroundColor="DarkRed" FontFamily="FAS" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"  TextColor="White" FontSize="30"
-                                                                Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Delet_Command}" CommandParameter="{Binding .}"/>
-                                                    </StackLayout>
-                                                </SwipeItemView>
-                                            </SwipeItems>
-                                        </SwipeView.RightItems>
-                                        <StackLayout Orientation="Horizontal" Padding="0">
-                                            <Frame x:Name="frame" CornerRadius="5" BackgroundColor="{Binding Item_BackgroundColor}" Margin="0" HasShadow="True" HorizontalOptions="FillAndExpand" Padding ="0" VerticalOptions="FillAndExpand" >
-                                                <Grid BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"  Padding="0">
-                                                    <StackLayout VerticalOptions="Center" Padding="20,10,0,10"  xct:TouchEffect.LongPressCommand="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Choose1_Command}" xct:TouchEffect.LongPressDuration="400" xct:TouchEffect.LongPressCommandParameter="{Binding .}">
-                                                        <Label Text="{Binding To_Do}" HorizontalTextAlignment="Start" FontSize="Medium" TextColor="Gray" VerticalTextAlignment="Center" HorizontalOptions="Start" VerticalOptions="Center">
-                                                            <Label.Triggers>
-                                                                <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference frame}, Path=BackgroundColor}" Value="AliceBlue">
-                                                                    <Setter Property="TextColor" Value="LightGray"/>
-                                                                </DataTrigger>
-                                                            </Label.Triggers>
-                                                        </Label>
-                                                    </StackLayout>
-                                                </Grid>
-                                            </Frame>
-                                            <Grid Padding="0" IsVisible="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Show_Select}">
-                                                <ia:Checkbox IsChecked="{Binding Is_Select}" Margin="20,0,0,0" HorizontalOptions="End" HeightRequest="40" WidthRequest="40" Shape="Rectangle" FillColor="Transparent" CheckColor="White" OutlineColor="Black" >
-                                                    <ia:Checkbox.GestureRecognizers>
-                                                        <TapGestureRecognizer Command="{Binding Source={x:Reference to_do_Item_List}, Path=BindingContext.Item_Selected_Command}" CommandParameter="{Binding .}"/>
-                                                    </ia:Checkbox.GestureRecognizers>
-                                                    <ia:Checkbox.Triggers>
-                                                        <Trigger TargetType="ia:Checkbox" Property="IsChecked" Value="true">
-                                                            <Setter Property="FillColor" Value="DodgerBlue"/>
-                                                            <Setter Property="OutlineColor" Value="DodgerBlue"/>
-                                                        </Trigger>
-                                                    </ia:Checkbox.Triggers>
-                                                </ia:Checkbox>
-                                            </Grid>
-                                        </StackLayout>
-                                    </SwipeView>
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
                 </ListView>
                 <StackLayout IsVisible="{Binding Show_Tapbar}" HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand" Padding="0,5,0,5" BackgroundColor="White">
                     <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand" Orientation="Horizontal">

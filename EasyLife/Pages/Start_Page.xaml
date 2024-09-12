@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="EasyLife.Pages.Start_Page"
              xmlns:fontAwesome="clr-namespace:FontAwesome" xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-             BackgroundColor="#1d0e21"
-             Appearing="Appearing_Methode">
+             BackgroundColor="#1d0e21">
 
     <ContentPage.Content>
         <Grid RowDefinitions="Auto,*" >
@@ -31,7 +30,7 @@
                         <Polygon Fill="DarkBlue" Points="25,0 75,0 100,25 100,75 75,100 25,100 0,75 0,25" HorizontalOptions="Center" VerticalOptions="Center"/>
                         <Image HorizontalOptions="Center" VerticalOptions="Center"  HeightRequest="50" WidthRequest="50">
                             <Image.Source>
-                                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.ClipboardList}" Color="Orange"/>
+                                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.ListCheck}" Color="Orange"/>
                             </Image.Source>
                         </Image>
                     </Grid>

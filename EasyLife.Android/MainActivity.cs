@@ -28,6 +28,7 @@ using System.Linq;
 using EasyLife.PageModels;
 using System.Globalization;
 using System.Threading.Tasks;
+using Android.Webkit;
 
 [assembly: Dependency(typeof(CloseApplication))]
 [assembly: Dependency(typeof(AccessFileImplement))]

@@ -21,7 +21,6 @@ namespace EasyLife.Droid
         {
             base.OnCreate(savedInstanceState);
             StartActivity(typeof(MainActivity));
-            Thread.Sleep(50);
             Finish();
         }
     }
