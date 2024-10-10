@@ -14,7 +14,7 @@ using static SQLite.SQLite3;
 namespace EasyLife.Services
 {
     /// <summary>
-    /// Ist eine Serviceklasse für die Budgets.
+    /// Ist eine Serviceklasse für die Categories.
     /// </summary>
     public class CategoryService
     {

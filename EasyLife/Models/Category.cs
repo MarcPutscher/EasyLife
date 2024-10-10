@@ -71,7 +71,7 @@ namespace EasyLife.Models
             {
                 if (Is_Select == value)
                     return;
-                is_select = value; OnPropertyChanged(nameof(Count));
+                is_select = value; OnPropertyChanged(nameof(Is_Select));
             }
         }
 

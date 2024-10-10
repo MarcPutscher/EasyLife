@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EasyLife.Pages.Overtime.Overtime_Trash_Page"
+            xmlns:models="clr-namespace:EasyLife.Models" 
+             xmlns:ia="clr-namespace:IntelliAbb.Xamarin.Controls;assembly=IntelliAbb.Xamarin.Controls"
+             xmlns:fontAwesome="clr-namespace:FontAwesome" 
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+             xmlns:helpers="clr-namespace:EasyLife.Helpers" 
+             xmlns:cells="clr-namespace:EasyLife.Cells"
+             xmlns:pancacke="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+            Appearing="Page_Appearing"
+             BackgroundColor="#1A201F">
+
+    <Shell.TitleView>
+        <StackLayout Padding="0" VerticalOptions="End" Orientation="Horizontal">
+            <Frame BackgroundColor="Transparent" Padding="10">
+                <Label Text="Paperkorb"
+                           Opacity="1"
+                           FontAttributes="Bold"
+                           FontSize="20"
+                           TextColor="White"
+                           HorizontalOptions="Start"
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center"
+                       VerticalOptions="Center"/>
+            </Frame>
+        </StackLayout>
+    </Shell.TitleView>
+    
+    <ContentPage.Content>
+        <ListView Margin="30" x:Name="logpicker" BackgroundColor="Transparent" HorizontalOptions="Center" VerticalOptions="Start" IsGroupingEnabled="False" VerticalScrollBarVisibility="Never" SeparatorVisibility="None" IsPullToRefreshEnabled="False">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="models:OvertimeItem">
+                    <ViewCell>
+                        <SwipeView BackgroundColor="Transparent" Padding="0" >
+                            <SwipeView.RightItems>
+                                <SwipeItems Mode="Reveal">
+                                    <SwipeItemView  Invoked="Remove_Clicked" CommandParameter="{Binding .}">
+                                        <pancacke:PancakeView BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="1,0" Margin="10,0,0,0">
+                                            <pancacke:PancakeView.BackgroundGradientStops>
+                                                <pancacke:GradientStopCollection>
+                                                    <pancacke:GradientStop Color="Transparent" Offset="0"/>
+                                                    <pancacke:GradientStop Color="#95370D" Offset="0.6"/>
+                                                    <pancacke:GradientStop Color="#95370D" Offset="1"/>
+                                                </pancacke:GradientStopCollection>
+                                            </pancacke:PancakeView.BackgroundGradientStops>
+                                            <Label Text="Entfernen" TextColor="#C9B9B2" FontSize="Body" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        </pancacke:PancakeView>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <SwipeView.LeftItems>
+                                <SwipeItems Mode="Reveal">
+                                    <SwipeItemView  Invoked="Revive_Clicked" CommandParameter="{Binding .}">
+                                        <pancacke:PancakeView BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="1,0" Margin="0,0,10,0">
+                                            <pancacke:PancakeView.BackgroundGradientStops>
+                                                <pancacke:GradientStopCollection>
+                                                    <pancacke:GradientStop Color="Transparent" Offset="1"/>
+                                                    <pancacke:GradientStop Color="#00732F" Offset="0.4"/>
+                                                    <pancacke:GradientStop Color="#00732F" Offset="0"/>
+                                                </pancacke:GradientStopCollection>
+                                            </pancacke:PancakeView.BackgroundGradientStops>
+                                            <Label Text="Wiederherstellen" TextColor="#6E977F" FontSize="Body" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        </pancacke:PancakeView>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.LeftItems>
+                            <StackLayout Orientation="Horizontal" Spacing="0" HorizontalOptions="Center" >
+                                <Label Text="Am " FontSize="Body" TextColor="#00684E" FontAttributes="Bold" VerticalOptions="Center"/>
+                                <Label Text="{Binding Datumanzeige}" FontSize="Body" TextColor="#00684E" FontAttributes="Bold" VerticalOptions="Center"/>
+                                <Label Text="  |  " FontSize="Body" TextColor="#00684E" FontAttributes="Bold" VerticalOptions="Center"/>
+                                <Label Text="{Binding Time}" FontSize="Body" TextColor="#61887E" Scale="1.2" FontAttributes="Bold" VerticalOptions="Center"/>
+                                <Label Text="  Überminuten" FontSize="Body" TextColor="#00684E" FontAttributes="Bold" VerticalOptions="Center"/>
+                            </StackLayout>
+                        </SwipeView>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentPage.Content>
+
+
+</ContentPage>

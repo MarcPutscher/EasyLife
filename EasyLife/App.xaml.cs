@@ -89,6 +89,10 @@ namespace EasyLife
             {
                 StartPage = master_To_Do_Page;
             }
+            if (Preferences.Get("Start_Option", 0) == 3)
+            {
+                StartPage = new Master_Overtime_Page();
+            }
             if (Preferences.Get("Start_Option", 0) == 0)
             {
                 StartPage = new Start_Page();

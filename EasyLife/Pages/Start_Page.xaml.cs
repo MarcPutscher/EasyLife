@@ -32,5 +32,12 @@ namespace EasyLife.Pages
 
             App.Current.MainPage = App.master_To_Do_Page;
         }
+
+        private void Overtime_Tapped(object sender, EventArgs e)
+        {
+            Preferences.Set("Start_Option", 3);
+
+            App.Current.MainPage = new Master_Overtime_Page() ;
+        }
     }
 }

@@ -10,8 +10,8 @@
             <Frame BackgroundColor="#1d0e21" Grid.Row="0">
                 <Image Source="@drawable/ic_launcher"/>
             </Frame>
-            <StackLayout Spacing="50" HorizontalOptions="Center" Orientation="Horizontal" VerticalOptions="End" Grid.Row="1" Margin="0,0,0,50">
-                <StackLayout Orientation="Vertical" HorizontalOptions="Center" VerticalOptions="Center">
+            <Grid ColumnDefinitions="*,*" RowDefinitions="*,*" HorizontalOptions="Fill" VerticalOptions="End" Grid.Row="1" Margin="0,0,0,50" RowSpacing="20">
+                <StackLayout Orientation="Vertical" HorizontalOptions="Center" VerticalOptions="Center" Grid.Row="0" Grid.ColumnSpan="2">
                     <Grid HeightRequest="100" WidthRequest="100" HorizontalOptions="Center" VerticalOptions="Center">
                         <Polygon Fill="DarkBlue" Points="25,0 75,0 100,25 100,75 75,100 25,100 0,75 0,25" HorizontalOptions="Center" VerticalOptions="Center"/>
                         <Image HorizontalOptions="Center" VerticalOptions="Center"  HeightRequest="50" WidthRequest="50">
@@ -25,7 +25,21 @@
                         <TapGestureRecognizer Tapped="Financial_Book_Tapped"/>
                     </StackLayout.GestureRecognizers>
                 </StackLayout>
-                <StackLayout Orientation="Vertical" HorizontalOptions="Fill" VerticalOptions="Center">
+                <StackLayout Orientation="Vertical" HorizontalOptions="Center" VerticalOptions="Center" Grid.Row="1" Grid.Column="0">
+                    <Grid HeightRequest="100" WidthRequest="100" HorizontalOptions="Center" VerticalOptions="Center">
+                        <Polygon Fill="DarkBlue" Points="25,0 75,0 100,25 100,75 75,100 25,100 0,75 0,25" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        <Image HorizontalOptions="Center" VerticalOptions="Center"  HeightRequest="50" WidthRequest="50">
+                            <Image.Source>
+                                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Clock}" Color="Orange"/>
+                            </Image.Source>
+                        </Image>
+                    </Grid>
+                    <Label Text="Überminuten" FontAttributes="Italic" FontSize="25" HorizontalOptions="Start" VerticalOptions="Center" TextDecorations="Underline" TextColor="Silver"/>
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Overtime_Tapped"/>
+                    </StackLayout.GestureRecognizers>
+                </StackLayout>
+                <StackLayout Orientation="Vertical" VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="1" Grid.Column="1">
                     <Grid HeightRequest="100" WidthRequest="100" HorizontalOptions="Center" VerticalOptions="Center">
                         <Polygon Fill="DarkBlue" Points="25,0 75,0 100,25 100,75 75,100 25,100 0,75 0,25" HorizontalOptions="Center" VerticalOptions="Center"/>
                         <Image HorizontalOptions="Center" VerticalOptions="Center"  HeightRequest="50" WidthRequest="50">
@@ -39,7 +53,7 @@
                         <TapGestureRecognizer Tapped="To_Do_Tapped"/>
                     </StackLayout.GestureRecognizers>
                 </StackLayout>
-            </StackLayout>
+            </Grid>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

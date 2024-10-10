@@ -76,7 +76,7 @@ namespace EasyLife.Models
             {
                 if (Datumanzeige == value)
                     return;
-                datumanzeige = value; OnPropertyChanged(nameof(Datum));
+                datumanzeige = value; OnPropertyChanged(nameof(Datumanzeige));
             }
         }
 
