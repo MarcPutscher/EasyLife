@@ -17,10 +17,10 @@ using System.Drawing;
 using Plugin.LocalNotification;
 using System.Reactive;
 using EasyLife.Helpers;
-using EasyLife.PageModels.Edit_Item_With_Order_Submethods;
 using Xamarin.CommunityToolkit.Extensions;
+using EasyLife.PageModels.Financial_Book.Edit_Item_With_Order_Submethods;
 
-namespace EasyLife.PageModels
+namespace EasyLife.PageModels.Financial_Book
 {
     [QueryProperty(nameof(TransaktionID), nameof(TransaktionID))]
     [QueryProperty(nameof(OrderID), nameof(OrderID))]
@@ -118,14 +118,14 @@ namespace EasyLife.PageModels
                             Transaktion.Datum = Datum;
                             Transaktion.Notiz = Notiz;
                             Transaktion.Balance_Visibility = Show_Hide_Balance;
-                            Transaktion.Saldo_Visibility= Show_Hide_Saldo;
+                            Transaktion.Saldo_Visibility = Show_Hide_Saldo;
 
                             await ContentService.Edit_Transaktion(Transaktion);
                         }
 
                         if (Edit_Version == 2)
                         {
-                            var result_Edit_Version2 = await Edit_Item_With_Order_Submethods.Edit_Version2.Edit_Version2_Methode(Virtuelle_Transaktion,Virtueller_Auftrag,transaktion_list,Betrag,Zweck,Notiz,Datum,OrderId,Revive_Switch,Full_Order,Anzahl_an_Wiederholungen);
+                            var result_Edit_Version2 = await Edit_Version2.Edit_Version2_Methode(Virtuelle_Transaktion, Virtueller_Auftrag, transaktion_list, Betrag, Zweck, Notiz, Datum, OrderId, Revive_Switch, Full_Order, Anzahl_an_Wiederholungen);
 
                             if (result_Edit_Version2 == Errorhandler.Errors[0])
                             {
@@ -149,7 +149,7 @@ namespace EasyLife.PageModels
 
                         if (Edit_Version == 3)
                         {
-                            var result_Edit_Version3 = await Edit_Item_With_Order_Submethods.Edit_Version3.Edit_Version3_Methode(Virtuelle_Transaktion, Transaktion , Virtueller_Auftrag, transaktion_list, Betrag, Zweck, Notiz, Datum, OrderId, Revive_Switch, Full_Order, Anzahl_an_Wiederholungen);
+                            var result_Edit_Version3 = await Edit_Version3.Edit_Version3_Methode(Virtuelle_Transaktion, Transaktion, Virtueller_Auftrag, transaktion_list, Betrag, Zweck, Notiz, Datum, OrderId, Revive_Switch, Full_Order, Anzahl_an_Wiederholungen);
 
                             if (result_Edit_Version3 == Errorhandler.Errors[0])
                             {
@@ -195,10 +195,10 @@ namespace EasyLife.PageModels
                     }
 
                     List<Zweck> zwecks = await ReasonService.Get_Enable_ReasonList();
-                    Zweck zweck = zwecks.Where<Zweck>(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == previousReason).First();
+                    Zweck zweck = zwecks.Where(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == previousReason).First();
                     zweck.Benutzerdefinierter_Prevalence = zweck.Benutzerdefinierter_Prevalence - 1;
                     await ReasonService.Edit_Reason(zweck);
-                    zweck = zwecks.Where<Zweck>(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == Virtuelle_Transaktion.Zweck).First();
+                    zweck = zwecks.Where(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == Virtuelle_Transaktion.Zweck).First();
                     zweck.Benutzerdefinierter_Prevalence = zweck.Benutzerdefinierter_Prevalence + 1;
                     await ReasonService.Edit_Reason(zweck);
 
@@ -242,7 +242,7 @@ namespace EasyLife.PageModels
                 Datum = Transaktion.Datum;
                 Notiz = Transaktion.Notiz;
                 Show_Hide_Balance = Transaktion.Balance_Visibility;
-                Show_Hide_Saldo= Transaktion.Saldo_Visibility;
+                Show_Hide_Saldo = Transaktion.Saldo_Visibility;
 
                 Anzahl_an_Wiederholungen = Transaktion.Anzahl_an_Wiederholungen;
                 Art_an_Wiederholungen = Transaktion.Art_an_Wiederholungen;
@@ -338,7 +338,7 @@ namespace EasyLife.PageModels
             {
                 if (int.TryParse(TransaktionID, out var result1) == true)
                 {
-                    if(Virtuelle_Transaktion == null)
+                    if (Virtuelle_Transaktion == null)
                     {
                         Transaktion = await ContentService.Get_specific_Transaktion(result1);
 
@@ -394,7 +394,7 @@ namespace EasyLife.PageModels
                 if (int.TryParse(EditID, out var result3) == true)
                 {
                     Edit_Version = result3;
-                    if(result3 == 3)
+                    if (result3 == 3)
                     {
                         Order_Button_Text = "Neuer Auftrag";
                     }
@@ -484,7 +484,7 @@ namespace EasyLife.PageModels
 
                     Last_Order_Speziell = origin.Speziell;
 
-                    Last_Order_Option = origin.Option; 
+                    Last_Order_Option = origin.Option;
 
                     int count = 0;
 
@@ -532,10 +532,10 @@ namespace EasyLife.PageModels
                     }
                     if (origin.Option == 3)
                     {
-                       enddate = DateTime.ParseExact(origin.Anzahl_an_Wiederholungen, "dddd, d.M.yyyy", new CultureInfo("de-DE")).AddHours(12);
+                        enddate = DateTime.ParseExact(origin.Anzahl_an_Wiederholungen, "dddd, d.M.yyyy", new CultureInfo("de-DE")).AddHours(12);
                     }
 
-                    int Count = count+1;
+                    int Count = count + 1;
 
                     if (origin.Art_an_Wiederholungen == "Jeden Tag")
                     {

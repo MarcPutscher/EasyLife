@@ -1,7 +1,4 @@
-﻿using Android.Content;
-using Android.Views;
-using Android.Widget;
-using EasyLife.Models;
+﻿using EasyLife.Models;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -31,20 +28,20 @@ namespace EasyLife.Helpers
 
         public static async Task Show_To_Do_Toast(string input)
         {
-            var toast = Toast.MakeText(Android.App.Application.Context,input,0);
-            toast.SetGravity(GravityFlags.Center, 0,(int)Math.Round(DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density*0.95,0));
-            toast.Show();
-            //ToastOptions toastOptions = new ToastOptions()
-            //{
-            //    BackgroundColor = Color.Gray,
-            //    CornerRadius = 10,
-            //    MessageOptions = new MessageOptions()
-            //    { Message = input, Padding = 5 },
-            //    Duration = new TimeSpan(0, 0, 3)
+            //var toast = Toast.MakeText(Android.App.Application.Context,input,0);
+            //toast.SetGravity(GravityFlags.Center, 0,(int)Math.Round(DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density*0.95,0));
+            //toast.Show();
+            ToastOptions toastOptions = new ToastOptions()
+            {
+                BackgroundColor = Color.Gray,
+                CornerRadius = 10,
+                MessageOptions = new MessageOptions()
+                { Message = input, Padding = 5 },
+                Duration = new TimeSpan(0, 0, 3)
 
-            //};
+            };
 
-            //await Shell.Current.DisplayToastAsync(toastOptions);
+            await Shell.Current.DisplayToastAsync(toastOptions);
         }
 
     }

@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 
-namespace EasyLife.Services
+namespace EasyLife.Helpers
 {
     /// <summary>
     /// Ist eine Zwischenspeicherhilsklasse während der Bearbeitung von Transaktionen.

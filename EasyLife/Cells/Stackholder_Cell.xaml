@@ -6,7 +6,7 @@
     x:Class="EasyLife.Cells.Stackholder_Cell"
     x:DataType="models:StackholderBundle"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
-    xmlns:customrenderer="clr-namespace:EasyLife.CustomRenderer"
+    xmlns:customrenderer="clr-namespace:EasyLife.CustomElements"
     BackgroundColor="Transparent"
     Padding="0"
     HeightRequest="{Binding Height}"

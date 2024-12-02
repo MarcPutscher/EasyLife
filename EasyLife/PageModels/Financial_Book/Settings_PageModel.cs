@@ -17,7 +17,7 @@ using EasyLife.Models;
 using System.Text;
 using Xamarin.Forms.Internals;
 
-namespace EasyLife.PageModels
+namespace EasyLife.PageModels.Financial_Book
 {
     public class Settings_PageModel : FreshBasePageModel
     {
@@ -113,7 +113,7 @@ namespace EasyLife.PageModels
                 {
                     try
                     {
-                        BackupService.destinationStream = new System.IO.FileStream(Preferences.Get("Create_Backup_Path", ""), FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                        BackupService.destinationStream = new FileStream(Preferences.Get("Create_Backup_Path", ""), FileMode.OpenOrCreate, FileAccess.ReadWrite);
 
                         BackupService.helperStream.CopyTo(BackupService.destinationStream);
 
@@ -428,7 +428,7 @@ namespace EasyLife.PageModels
 
                                                                 string message = null;
 
-                                                                if (String.IsNullOrEmpty(item.Auftrags_id) == false)
+                                                                if (string.IsNullOrEmpty(item.Auftrags_id) == false)
                                                                 {
                                                                     if (item.Auftrags_Option == 1)
                                                                     {
@@ -1077,7 +1077,7 @@ namespace EasyLife.PageModels
 
                             resultstring = resultstring.Substring(3, -3 + resultstring.IndexOf("|"));
 
-                            Models.Notification notification = await NotificationService.Get_specific_Notification_with_Notification_ID(int.Parse(resultstring));
+                            Notification notification = await NotificationService.Get_specific_Notification_with_Notification_ID(int.Parse(resultstring));
 
                             DateTime time = (DateTime)list_of_pending_notification.Where(t => t.NotificationId == notification.Notification_ID).First().Schedule.NotifyTime;
 
@@ -1201,7 +1201,7 @@ namespace EasyLife.PageModels
             }
         }
 
-        public bool more_detail_transaktion_bool = Preferences.Get("More_Detail_Transaltion",false);
+        public bool more_detail_transaktion_bool = Preferences.Get("More_Detail_Transaltion", false);
         public bool More_Detail_Transaktion_Bool
         {
             get { return more_detail_transaktion_bool; }
@@ -1212,7 +1212,9 @@ namespace EasyLife.PageModels
                     return;
                 }
 
-                more_detail_transaktion_bool = value; RaisePropertyChanged(); Preferences.Set("More_Detail_Transaltion", value);
+                more_detail_transaktion_bool = value;
+                RaisePropertyChanged(); 
+                Preferences.Set("More_Detail_Transaltion", value);
             }
         }
 
@@ -1227,7 +1229,9 @@ namespace EasyLife.PageModels
                     return;
                 }
 
-                more_detail_chart_bool = value; RaisePropertyChanged(); Preferences.Set("More_Detail_Chart", value);
+                more_detail_chart_bool = value;
+                RaisePropertyChanged(); 
+                Preferences.Set("More_Detail_Chart", value);
             }
         }
     }

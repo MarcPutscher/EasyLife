@@ -16,7 +16,7 @@ using System.Reactive;
 using EasyLife.Helpers;
 using Xamarin.CommunityToolkit.Extensions;
 
-namespace EasyLife.PageModels
+namespace EasyLife.PageModels.Financial_Book
 {
     [QueryProperty(nameof(TransaktionID), nameof(TransaktionID))]
     [QueryProperty(nameof(OrderID), nameof(OrderID))]
@@ -52,11 +52,11 @@ namespace EasyLife.PageModels
                 {
                     await Add_Reason_Methode();
                 }
-                if((string)result == "Zweck entfernen")
+                if ((string)result == "Zweck entfernen")
                 {
                     await Remove_Reason_Methode();
                 }
-                if((string)result == "Zweck wiederherstellen")
+                if ((string)result == "Zweck wiederherstellen")
                 {
                     await Revive_Reason_Methode();
                 }
@@ -82,7 +82,7 @@ namespace EasyLife.PageModels
 
                 string reslutstring = (string)result;
 
-                if (String.IsNullOrWhiteSpace(reslutstring) == false)
+                if (string.IsNullOrWhiteSpace(reslutstring) == false)
                 {
 
 
@@ -95,7 +95,7 @@ namespace EasyLife.PageModels
                         return;
                     }
 
-                    if (String.IsNullOrEmpty((string)result2) == false)
+                    if (string.IsNullOrEmpty((string)result2) == false)
                     {
                         var result3 = await ReasonService.Add_Reason(reslutstring.Trim(), (string)result2);
 
@@ -140,7 +140,7 @@ namespace EasyLife.PageModels
                 {
                     var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Angezeigte Zwecke", 350, zwecke2));
 
-                    if (String.IsNullOrWhiteSpace((string)result) == false)
+                    if (string.IsNullOrWhiteSpace((string)result) == false)
                     {
                         if (result == null)
                         {
@@ -215,7 +215,7 @@ namespace EasyLife.PageModels
                     {
                         var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Entfernte Zwecke", 330, zwecke2));
 
-                        if (String.IsNullOrEmpty((string)result) == false)
+                        if (string.IsNullOrEmpty((string)result) == false)
                         {
                             if (result == null)
                             {
@@ -326,7 +326,7 @@ namespace EasyLife.PageModels
 
                 Zweck_IsEnable = false;
 
-                if (String.IsNullOrEmpty(Zweck) == false)
+                if (string.IsNullOrEmpty(Zweck) == false)
                 {
                     if (Zweck_Liste.Contains(Zweck) == true)
                     {
@@ -340,7 +340,7 @@ namespace EasyLife.PageModels
 
                 Zweck_Liste.AddRange(Entscheider_ob_Einnahme_oder_Ausgabe.Keys.ToArray());
 
-                if(Transaktion != null)
+                if (Transaktion != null)
                 {
                     if (Transaktion.Zweck != null)
                     {
@@ -377,7 +377,7 @@ namespace EasyLife.PageModels
 
                 if (double.TryParse(Betrag, NumberStyles.Any, new CultureInfo("de-DE"), out double result) == true)
                 {
-                    if (0>result || result>9999999)
+                    if (0 > result || result > 9999999)
                     {
                         Betrag = null;
 
@@ -401,7 +401,7 @@ namespace EasyLife.PageModels
                         result = -Math.Abs(result);
                     }
 
-                    if(result == 0)
+                    if (result == 0)
                     {
                         await Notificater("Es wurde kein Betrag eingegeben.");
                         return;
@@ -409,7 +409,7 @@ namespace EasyLife.PageModels
 
                     if (Virtueller_Auftrag == null)
                     {
-                        Transaktion transaktion = new Transaktion() { Betrag = result.ToString(new CultureInfo("de-DE")), Datum = Datum.Date, Zweck = Zweck, Notiz = Notiz, Auftrags_id = null, Anzahl_an_Wiederholungen = null, Art_an_Wiederholungen = null, Speziell = null, Order_Visibility = false, Content_Visibility = true , Balance_Visibility = Show_Hide_Balance , Saldo_Visibility = Show_Hide_Saldo};
+                        Transaktion transaktion = new Transaktion() { Betrag = result.ToString(new CultureInfo("de-DE")), Datum = Datum.Date, Zweck = Zweck, Notiz = Notiz, Auftrags_id = null, Anzahl_an_Wiederholungen = null, Art_an_Wiederholungen = null, Speziell = null, Order_Visibility = false, Content_Visibility = true, Balance_Visibility = Show_Hide_Balance, Saldo_Visibility = Show_Hide_Saldo };
 
                         await ContentService.Add_Transaktion(transaktion);
 
@@ -423,13 +423,13 @@ namespace EasyLife.PageModels
 
                         secondorder = new Auftrag() { Anzahl_an_Wiederholungen = Virtueller_Auftrag.Anzahl_an_Wiederholungen, Art_an_Wiederholungen = Virtueller_Auftrag.Art_an_Wiederholungen, Option = Virtueller_Auftrag.Option, Speziell = Virtueller_Auftrag.Speziell };
 
-                        Transaktion transaktion = new Transaktion() { Betrag = result.ToString(new CultureInfo("de-DE")), Datum = Datum.Date, Zweck = Zweck, Notiz = Notiz, Auftrags_id = Virtueller_Auftrag.Id.ToString() , Anzahl_an_Wiederholungen = Virtueller_Auftrag.Anzahl_an_Wiederholungen , Art_an_Wiederholungen = Virtueller_Auftrag.Art_an_Wiederholungen, Speziell = Virtueller_Auftrag.Speziell, Order_Visibility = true, Content_Visibility = true , Balance_Visibility = Show_Hide_Balance , Saldo_Visibility = Show_Hide_Saldo};
+                        Transaktion transaktion = new Transaktion() { Betrag = result.ToString(new CultureInfo("de-DE")), Datum = Datum.Date, Zweck = Zweck, Notiz = Notiz, Auftrags_id = Virtueller_Auftrag.Id.ToString(), Anzahl_an_Wiederholungen = Virtueller_Auftrag.Anzahl_an_Wiederholungen, Art_an_Wiederholungen = Virtueller_Auftrag.Art_an_Wiederholungen, Speziell = Virtueller_Auftrag.Speziell, Order_Visibility = true, Content_Visibility = true, Balance_Visibility = Show_Hide_Balance, Saldo_Visibility = Show_Hide_Saldo };
 
                         await OrderService.Add_Order(Virtueller_Auftrag);
 
                         bool result1 = await AddRange(transaktion, Virtueller_Auftrag);
 
-                        if(result1 == false)
+                        if (result1 == false)
                         {
                             ActivityIndicator_IsRunning = false;
 
@@ -448,7 +448,7 @@ namespace EasyLife.PageModels
 
                         Transaktion trans = await ContentService.Get_last_Transaktion();
 
-                        if(false == await NotificationHelper.RequestNotification(Virtueller_Auftrag,trans))
+                        if (false == await NotificationHelper.RequestNotification(Virtueller_Auftrag, trans))
                         {
                             await Notificater("Es konnte keine Benachrichtigung erstellt werden");
                         }
@@ -524,7 +524,7 @@ namespace EasyLife.PageModels
 
                                 Create_Second_Item = false;
                                 List<Zweck> zwecks0 = await ReasonService.Get_Enable_ReasonList();
-                                Zweck zweck0 = zwecks0.Where<Zweck>(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == Reason_of_Second_Item).First();
+                                Zweck zweck0 = zwecks0.Where(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == Reason_of_Second_Item).First();
                                 zweck0.Benutzerdefinierter_Prevalence = zweck0.Benutzerdefinierter_Prevalence + 1;
                                 await ReasonService.Edit_Reason(zweck0);
                                 Reason_of_Second_Item = null;
@@ -542,7 +542,7 @@ namespace EasyLife.PageModels
                     Datum = DateTime.Now;
 
                     List<Zweck> zwecks = await ReasonService.Get_Enable_ReasonList();
-                    Zweck zweck = zwecks.Where<Zweck>(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == Zweck).First();
+                    Zweck zweck = zwecks.Where(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == Zweck).First();
                     zweck.Benutzerdefinierter_Prevalence = zweck.Benutzerdefinierter_Prevalence + 1;
                     await ReasonService.Edit_Reason(zweck);
                     Zweck = null;
@@ -619,7 +619,7 @@ namespace EasyLife.PageModels
         {
             try
             {
-                if(Create_Second_Item == true)
+                if (Create_Second_Item == true)
                 {
                     var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("Zweiter Zweck", 400, Zweck_Liste.ToList()));
 
@@ -657,7 +657,7 @@ namespace EasyLife.PageModels
 
                 DateTime current_day = transaktion.Datum;
 
-                DateTime enddate = DateTime.Today.AddDays(+1).AddMilliseconds(-1) ;
+                DateTime enddate = DateTime.Today.AddDays(+1).AddMilliseconds(-1);
 
                 if (auftrag.Option == 1)
                 {
@@ -676,7 +676,7 @@ namespace EasyLife.PageModels
                     transaktion.Auftrags_Option = 3;
                 }
 
-                List<string> wiedrholungen = Enumerable.Repeat(auftrag.Id.ToString(), count+1).ToList();
+                List<string> wiedrholungen = Enumerable.Repeat(auftrag.Id.ToString(), count + 1).ToList();
 
                 List<string> Benutzerdefiniert = new List<string>() { "Tag", "Woche", "Monat", "Jahr" };
 
@@ -707,7 +707,7 @@ namespace EasyLife.PageModels
 
                 if (auftrag.Art_an_Wiederholungen == "Jeden Tag")
                 {
-                    if(auftrag.Option == 3)
+                    if (auftrag.Option == 3)
                     {
                         count = (enddate - current_day).Days;
 
@@ -737,7 +737,7 @@ namespace EasyLife.PageModels
                 {
                     if (auftrag.Option == 3)
                     {
-                        while(current_day<=enddate)
+                        while (current_day <= enddate)
                         {
                             current_day = current_day.AddDays(7);
                             count++;
@@ -902,7 +902,7 @@ namespace EasyLife.PageModels
 
                             wiedrholungen.Clear();
 
-                            wiedrholungen = Enumerable.Repeat(auftrag.Id.ToString(), (count+1) * Days_List.Count).ToList();
+                            wiedrholungen = Enumerable.Repeat(auftrag.Id.ToString(), (count + 1) * Days_List.Count).ToList();
 
                             DateTime trans_dateTime = Datum;
 
@@ -936,7 +936,7 @@ namespace EasyLife.PageModels
 
                                 while (indicator == false)
                                 {
-                                    dates.Add(sorted_date_List[follower2].AddDays(7*follower3));
+                                    dates.Add(sorted_date_List[follower2].AddDays(7 * follower3));
 
                                     if (dates[follower] > enddate)
                                     {
@@ -1028,7 +1028,7 @@ namespace EasyLife.PageModels
                             }
                             if (auftrag.Speziell == "derselbe Tag in jeder dritten Woche")
                             {
-                                h = 3; 
+                                h = 3;
                             }
                             if (auftrag.Speziell == "derselbe Tag in jeder vierten Woche")
                             {
@@ -1039,7 +1039,7 @@ namespace EasyLife.PageModels
                             {
                                 while (current_day < enddate)
                                 {
-                                    current_day = current_day.AddDays(7*h);
+                                    current_day = current_day.AddDays(7 * h);
                                     count++;
                                 }
 
@@ -1052,7 +1052,7 @@ namespace EasyLife.PageModels
 
                                 wiedrholungen.Clear();
 
-                                wiedrholungen = Enumerable.Repeat(auftrag.Id.ToString(), count+1).ToList();
+                                wiedrholungen = Enumerable.Repeat(auftrag.Id.ToString(), count + 1).ToList();
                             }
 
                             foreach (string st in wiedrholungen)
@@ -1065,7 +1065,7 @@ namespace EasyLife.PageModels
 
                                 await ContentService.Add_Transaktion(transaktion);
 
-                                current_week = transaktion.Datum.AddDays(7*h);
+                                current_week = transaktion.Datum.AddDays(7 * h);
 
                                 K++;
                             }
@@ -1149,7 +1149,7 @@ namespace EasyLife.PageModels
 
                             wiedrholungen.Clear();
 
-                            wiedrholungen = Enumerable.Repeat(auftrag.Id.ToString(), (count+1) * Month_List.Count).ToList();
+                            wiedrholungen = Enumerable.Repeat(auftrag.Id.ToString(), (count + 1) * Month_List.Count).ToList();
 
                             DateTime trans_dateTime = Datum;
 
@@ -1303,7 +1303,7 @@ namespace EasyLife.PageModels
 
                                 wiedrholungen.Clear();
 
-                                wiedrholungen = Enumerable.Repeat(auftrag.Id.ToString(), count+1).ToList();
+                                wiedrholungen = Enumerable.Repeat(auftrag.Id.ToString(), count + 1).ToList();
                             }
 
                             foreach (string st in wiedrholungen)
@@ -1316,7 +1316,7 @@ namespace EasyLife.PageModels
 
                                 await ContentService.Add_Transaktion(transaktion);
 
-                                current_year = transaktion.Datum.AddYears(1*h);
+                                current_year = transaktion.Datum.AddYears(1 * h);
 
                                 K++;
                             }
@@ -1355,7 +1355,7 @@ namespace EasyLife.PageModels
                     Betrag = null;
                 }
 
-                Transaktion = new Transaktion() { Betrag = Betrag, Datum = Datum, Zweck = Zweck, Notiz = Notiz , Balance_Visibility = Show_Hide_Balance , Saldo_Visibility = Show_Hide_Saldo};
+                Transaktion = new Transaktion() { Betrag = Betrag, Datum = Datum, Zweck = Zweck, Notiz = Notiz, Balance_Visibility = Show_Hide_Balance, Saldo_Visibility = Show_Hide_Saldo };
 
                 if (Transaktion.Zweck == null && Transaktion.Notiz == null && Transaktion.Betrag == null)
                 {
@@ -1652,7 +1652,7 @@ namespace EasyLife.PageModels
                                              "\nSpeziell = " + Virtueller_Auftrag.Speziell + "";
                     }
 
-                    if(placeholder == null && Virtueller_Auftrag.Speziell == null && Virtueller_Auftrag.Anzahl_an_Wiederholungen == null)
+                    if (placeholder == null && Virtueller_Auftrag.Speziell == null && Virtueller_Auftrag.Anzahl_an_Wiederholungen == null)
                     {
                         Is_Expended = false;
 
@@ -1704,7 +1704,7 @@ namespace EasyLife.PageModels
         {
             try
             {
-                if (String.IsNullOrEmpty(TransaktionID) == true)
+                if (string.IsNullOrEmpty(TransaktionID) == true)
                 {
                     Is_Expended = false;
 
@@ -1756,7 +1756,7 @@ namespace EasyLife.PageModels
             set
             {
                 orderid = value;
-                if (String.IsNullOrEmpty(value) == false)
+                if (string.IsNullOrEmpty(value) == false)
                 {
                     Return_from_Repeat_Customized();
                 }

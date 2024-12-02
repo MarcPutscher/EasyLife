@@ -139,6 +139,7 @@ namespace EasyLife.Droid
 
     public class CloseApplication : ICloseApplication
     {
+        [Obsolete]
         public void closeApplication()
         {
             var activity = (Activity)Forms.Context;

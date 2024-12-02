@@ -2,9 +2,9 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="EasyLife.Pages.Settings_Page"
-             xmlns:pagemodels="clr-namespace:EasyLife.PageModels" 
+             xmlns:pagemodels="clr-namespace:EasyLife.PageModels.Financial_Book" 
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
-             xmlns:customrenderer="clr-namespace:EasyLife.CustomRenderer"
+             xmlns:customrenderer="clr-namespace:EasyLife.CustomElements"
              x:DataType="pagemodels:Settings_PageModel"
              BackgroundColor="Black"
              Title="Einstellungen">

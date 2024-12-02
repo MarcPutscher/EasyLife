@@ -26,7 +26,7 @@ using ColorMine.ColorSpaces;
 using static SQLite.SQLite3;
 using EasyLife.CustomeEventArgs;
 
-namespace EasyLife.PageModels
+namespace EasyLife.PageModels.Financial_Book
 {
     public class Styling_Color_PageModel : FreshBasePageModel
     {
@@ -74,11 +74,11 @@ namespace EasyLife.PageModels
                 {
                     var result = await StylingService.Get_all_Stylingprofile();
 
-                    if(result.Count() != 0)
+                    if (result.Count() != 0)
                     {
                         Currentstylingprofile = result.First();
 
-                        Dictionary<string,string> colors = Stylingprofile_Konverter.Deserilize(Currentstylingprofile);
+                        Dictionary<string, string> colors = Stylingprofile_Konverter.Deserilize(Currentstylingprofile);
 
                         SelectedColor = Color.Black;
 
@@ -86,7 +86,7 @@ namespace EasyLife.PageModels
                         {
                             foreach (var color in colors)
                             {
-                                App.Current.Resources[color.Key] = color.Value;
+                                Application.Current.Resources[color.Key] = color.Value;
                                 Preferences.Set(color.Key, color.Value);
                             }
                         }
@@ -163,7 +163,7 @@ namespace EasyLife.PageModels
                         {
                             foreach (var color in colors)
                             {
-                                App.Current.Resources[color.Key] = color.Value;
+                                Application.Current.Resources[color.Key] = color.Value;
                                 Preferences.Set(color.Key, color.Value);
                             }
                         }
@@ -194,7 +194,7 @@ namespace EasyLife.PageModels
 
                     foreach (string name in Colorsname)
                     {
-                        colordict.Add(name, App.Current.Resources[name].ToString());
+                        colordict.Add(name, Application.Current.Resources[name].ToString());
                     }
 
                     Stylingprofile placeholder = new Stylingprofile() { Colors = Stylingprofile_Konverter.Serilize(colordict) };
@@ -305,7 +305,7 @@ namespace EasyLife.PageModels
                             {
                                 if (CurrentCell.Items.Contains(color.Key) == true)
                                 {
-                                    App.Current.Resources[color.Key] = color.Value;
+                                    Application.Current.Resources[color.Key] = color.Value;
                                     Preferences.Set(color.Key, color.Value);
                                 }
                             }
@@ -436,9 +436,9 @@ namespace EasyLife.PageModels
                     CurrentColorname = input1.Values.First();
                 }
 
-                SelectedColor = Color.FromHex(App.Current.Resources[CurrentColorname].ToString());
+                SelectedColor = Color.FromHex(Application.Current.Resources[CurrentColorname].ToString());
 
-                RaiseMessage(App.Current.Resources[CurrentColorname].ToString());
+                RaiseMessage(Application.Current.Resources[CurrentColorname].ToString());
 
                 ColorWheel_State = true;
 
@@ -454,7 +454,7 @@ namespace EasyLife.PageModels
 
                 if (CurrentColorname != null)
                 {
-                    App.Current.Resources[CurrentColorname] = SelectedColor.ToHex();
+                    Application.Current.Resources[CurrentColorname] = SelectedColor.ToHex();
 
                     Preferences.Set(CurrentColorname, SelectedColor.ToHex());
                 }

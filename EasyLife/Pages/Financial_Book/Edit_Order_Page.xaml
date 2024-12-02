@@ -5,7 +5,7 @@
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              Title="Auftrag bearbeiten"
              BackgroundColor ="{DynamicResource Hintergrund_Hinzufügen}"
-             xmlns:pagemodels="clr-namespace:EasyLife.PageModels" 
+             xmlns:pagemodels="clr-namespace:EasyLife.PageModels.Financial_Book" 
              xmlns:customecontrole="clr-namespace:EasyLife.CustomeControle"
              x:DataType="pagemodels:Edit_Order_PageModel"
              Shell.NavBarIsVisible="False">

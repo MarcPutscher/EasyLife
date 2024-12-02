@@ -23,7 +23,7 @@ using MvvmHelpers;
 using System.Transactions;
 using static iText.Svg.SvgConstants;
 
-namespace EasyLife.PageModels
+namespace EasyLife.PageModels.Financial_Book
 {
     class Compare_PageModel : FreshBasePageModel
     {
@@ -178,9 +178,9 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                return null;
-
                 await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+
+                return null;
             }
         }
 
@@ -243,9 +243,8 @@ namespace EasyLife.PageModels
             }
             catch (Exception ex)
             {
-                return null;
-
                 await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + ex.ToString() + ""));
+                return null;
             }
         }
 
@@ -522,7 +521,7 @@ namespace EasyLife.PageModels
 
                 h = 0;
 
-                while ( h < 4)
+                while (h < 4)
                 {
                     totalvalue1 += values[h].Value;
 
@@ -653,7 +652,7 @@ namespace EasyLife.PageModels
             {
                 if (result1.Count() != 0 || result2.Count() != 0)
                 {
-                    List<string> Titel = new List<string>() { "Ausgaben Konto", "Einnahmen Konto", "Barausgaben", "Bareinnahmen" , "Ausgaben Briefumschlag" , "Einnahmen Briefumschlag" };
+                    List<string> Titel = new List<string>() { "Ausgaben Konto", "Einnahmen Konto", "Barausgaben", "Bareinnahmen", "Ausgaben Briefumschlag", "Einnahmen Briefumschlag" };
 
                     List<string> DetailList1 = new List<string>();
 
@@ -696,7 +695,7 @@ namespace EasyLife.PageModels
                         {
                             int length1left = (int)Math.Round((length - Detail.Length) * 0.5, 0);
 
-                            int length1right = (length - Detail.Length) - length1left;
+                            int length1right = length - Detail.Length - length1left;
 
                             string whitspaceleft1 = "";
 
@@ -722,7 +721,7 @@ namespace EasyLife.PageModels
 
                             int length2left = (int)Math.Round((length - DetailList1[count].Length) * 0.5, 0);
 
-                            int length2right = (length - DetailList1[count].Length) - length1left;
+                            int length2right = length - DetailList1[count].Length - length1left;
 
                             string whitspaceleft2 = "";
 
@@ -764,7 +763,7 @@ namespace EasyLife.PageModels
                         {
                             int length1left = (int)Math.Round((length - Detail.Length) * 0.5, 0);
 
-                            int length1right = (length - Detail.Length) - length1left;
+                            int length1right = length - Detail.Length - length1left;
 
                             string whitspaceleft1 = "";
 
@@ -790,7 +789,7 @@ namespace EasyLife.PageModels
 
                             int length2left = (int)Math.Round((length - DetailList2[count].Length) * 0.5, 0);
 
-                            int length2right = (length - DetailList2[count].Length) - length1left;
+                            int length2right = length - DetailList2[count].Length - length1left;
 
                             string whitspaceleft2 = "";
 
@@ -838,7 +837,7 @@ namespace EasyLife.PageModels
 
                 Bilanceprofiles_List.AddRange(await BalanceService.Get_all_Balanceprofile());
             }
-            catch (Exception ex)
+            catch
             {
                 await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Leere Bilanz", 350, 250, null, null, "Es kann keine PDF erstellt werden, wenn die Bilanz leer ist."));
             }
@@ -888,7 +887,7 @@ namespace EasyLife.PageModels
                     return 1;
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Leere Bilanz", 350, 250, null, null, "Es kann keine PDF erstellt werden, wenn die Bilanz leer ist."));
 

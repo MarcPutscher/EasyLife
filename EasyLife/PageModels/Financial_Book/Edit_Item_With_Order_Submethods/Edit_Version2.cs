@@ -11,12 +11,12 @@ using System.Text;
 using System.Threading.Tasks;
 using static Xamarin.Forms.Internals.Profile;
 
-namespace EasyLife.PageModels.Edit_Item_With_Order_Submethods
+namespace EasyLife.PageModels.Financial_Book.Edit_Item_With_Order_Submethods
 {
 
     public class Edit_Version2
     {
-        public static async Task<string> Edit_Version2_Methode(Transaktion Virtuelle_Transaktion, Auftrag Virtueller_Auftrag , List<Transaktion> transaktion_list , string Betrag , string Zweck , string Notiz , DateTime Datum , int OrderId , bool Revive_Switch , int Full_Order , string Anzahl_an_Wiederholungen)
+        public static async Task<string> Edit_Version2_Methode(Transaktion Virtuelle_Transaktion, Auftrag Virtueller_Auftrag, List<Transaktion> transaktion_list, string Betrag, string Zweck, string Notiz, DateTime Datum, int OrderId, bool Revive_Switch, int Full_Order, string Anzahl_an_Wiederholungen)
         {
             Auftrag virtueller_auftrag = new Auftrag()
             {
@@ -1544,7 +1544,7 @@ namespace EasyLife.PageModels.Edit_Item_With_Order_Submethods
 
                     transaktion_list3 = transaktion_list3.OrderBy(d => d.Datum).ToList();
 
-                    if(false == await NotificationHelper.ModifyNotification(transaktion_list3.Last(),0))
+                    if (false == await NotificationHelper.ModifyNotification(transaktion_list3.Last(), 0))
                     {
                         return Errorhandler.Errors[1];
                     }

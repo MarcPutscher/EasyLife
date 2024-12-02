@@ -2,7 +2,7 @@
 using EasyLife.Cells.Styling;
 using EasyLife.CustomeEventArgs;
 using EasyLife.Helpers;
-using EasyLife.PageModels;
+using EasyLife.PageModels.Financial_Book;
 using EasyLife.Services;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Forms;
-using Xamarin.Forms.BehaviorsPack;
 using Xamarin.Forms.Xaml;
 
 namespace EasyLife.Pages

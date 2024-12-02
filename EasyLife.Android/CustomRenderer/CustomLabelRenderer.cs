@@ -6,7 +6,7 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using AndroidX.Core.Widget;
-using EasyLife.CustomRenderer;
+using EasyLife.CustomElements;
 using EasyLife.Droid.CustomRenderer;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ using System.Linq;
 using System.Text;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
-[assembly: ExportRenderer(typeof(AutoFontSizeLabel),typeof(CustomLabelRenderer))]
+[assembly: ExportRenderer(typeof(AutoFontSizeLabel), typeof(CustomLabelRenderer))]
 namespace EasyLife.Droid.CustomRenderer
 {
     public class CustomLabelRenderer : LabelRenderer

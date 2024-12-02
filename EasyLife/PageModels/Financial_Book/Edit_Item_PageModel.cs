@@ -13,7 +13,7 @@ using System.Configuration;
 using Xamarin.CommunityToolkit.Extensions;
 using EasyLife.Pages;
 
-namespace EasyLife.PageModels
+namespace EasyLife.PageModels.Financial_Book
 {
     [QueryProperty(nameof(TransaktionID), nameof(TransaktionID))]
     class Edit_Item_PageModel : FreshBasePageModel
@@ -240,10 +240,10 @@ namespace EasyLife.PageModels
 
                     Transaktion.Betrag = Betrag;
                     List<Zweck> zwecks = await ReasonService.Get_Enable_ReasonList();
-                    Zweck zweck = zwecks.Where<Zweck>(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == Transaktion.Zweck).First();
+                    Zweck zweck = zwecks.Where(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == Transaktion.Zweck).First();
                     zweck.Benutzerdefinierter_Prevalence = zweck.Benutzerdefinierter_Prevalence - 1;
                     await ReasonService.Edit_Reason(zweck);
-                    zweck = zwecks.Where<Zweck>(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == Zweck).First();
+                    zweck = zwecks.Where(zw => zw.Benutzerdefinierter_Zweck.Substring(0, zw.Benutzerdefinierter_Zweck.IndexOf(":")) == Zweck).First();
                     zweck.Benutzerdefinierter_Prevalence = zweck.Benutzerdefinierter_Prevalence + 1;
                     await ReasonService.Edit_Reason(zweck);
                     Transaktion.Zweck = Zweck;

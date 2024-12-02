@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EasyLife.PageModels.Edit_Item_With_Order_Submethods
+namespace EasyLife.PageModels.Financial_Book.Edit_Item_With_Order_Submethods
 {
     public class Errorhandler
     {
-        public static List<string> Errors = new List<string>() { "LogicError" , "NotificationError"};
+        public static List<string> Errors = new List<string>() { "LogicError", "NotificationError" };
     }
 }

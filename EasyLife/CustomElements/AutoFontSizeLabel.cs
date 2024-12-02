@@ -1,10 +1,9 @@
-﻿using EasyLife.CustomRenderer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Xamarin.Forms;
 
-namespace EasyLife.CustomRenderer
+namespace EasyLife.CustomElements
 {
     public class AutoFontSizeLabel : Label
     {
@@ -15,9 +14,9 @@ namespace EasyLife.CustomRenderer
         }
 
         public static readonly BindableProperty AutoSizeMaxTextSizeProperty = BindableProperty.Create(
-            nameof(AutoSizeMaxTextSize),      
-            typeof(int),     
-            typeof(AutoFontSizeLabel));      
+            nameof(AutoSizeMaxTextSize),
+            typeof(int),
+            typeof(AutoFontSizeLabel));
 
         public int AutoSizeMinTextSize
         {
@@ -26,9 +25,9 @@ namespace EasyLife.CustomRenderer
         }
 
         public static readonly BindableProperty AutoSizeMinTextSizeProperty = BindableProperty.Create(
-            nameof(AutoSizeMinTextSize),        
-            typeof(int),     
-            typeof(AutoFontSizeLabel));      
+            nameof(AutoSizeMinTextSize),
+            typeof(int),
+            typeof(AutoFontSizeLabel));
 
 
         public int AutoSizeStepGranularity
@@ -38,8 +37,8 @@ namespace EasyLife.CustomRenderer
         }
 
         public static readonly BindableProperty AutoSizeStepGranularityProperty = BindableProperty.Create(
-            nameof(AutoSizeStepGranularity),       
-            typeof(int),    
-            typeof(AutoFontSizeLabel));     
+            nameof(AutoSizeStepGranularity),
+            typeof(int),
+            typeof(AutoFontSizeLabel));
     }
 }

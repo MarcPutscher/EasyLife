@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace FontAwesome
+namespace EasyLife.Helpers
 {
     /// <summary>
     /// The unicode values for all FontAwesome v6.4.0 icons.

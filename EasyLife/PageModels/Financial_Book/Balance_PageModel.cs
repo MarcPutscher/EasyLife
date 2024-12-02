@@ -1,8 +1,8 @@
-﻿using EasyLife.Interfaces;
+﻿using EasyLife.Helpers;
+using EasyLife.Interfaces;
 using EasyLife.Models;
 using EasyLife.Pages;
 using EasyLife.Services;
-using FontAwesome;
 using FreshMvvm;
 using iText.Kernel.Colors;
 using iText.Kernel.Pdf;
@@ -34,7 +34,7 @@ using Cell = iText.Layout.Element.Cell;
 using Document = iText.Layout.Document;
 using TextAlignment = iText.Layout.Properties.TextAlignment;
 
-namespace EasyLife.PageModels
+namespace EasyLife.PageModels.Financial_Book
 {
     class Balance_PageModel : FreshBasePageModel
     {
@@ -109,10 +109,10 @@ namespace EasyLife.PageModels
 
                         Document doc = new Document(pdfDocument);
 
-                        Paragraph header = new Paragraph("Haushaltsbuchbilanz").SetTextAlignment((iText.Layout.Properties.TextAlignment?)TextAlignment.CENTER).SetFontSize(20);
+                        Paragraph header = new Paragraph("Haushaltsbuchbilanz").SetTextAlignment((TextAlignment?)TextAlignment.CENTER).SetFontSize(20);
                         doc.Add(header);
 
-                        Paragraph subheader = new Paragraph("vom " + Current_Viewtime.Month + " " + Current_Viewtime.Year + "").SetTextAlignment((iText.Layout.Properties.TextAlignment?)TextAlignment.CENTER).SetFontSize(15);
+                        Paragraph subheader = new Paragraph("vom " + Current_Viewtime.Month + " " + Current_Viewtime.Year + "").SetTextAlignment((TextAlignment?)TextAlignment.CENTER).SetFontSize(15);
                         doc.Add(subheader);
 
                         LineSeparator ls = new LineSeparator(new SolidLine());
@@ -121,17 +121,17 @@ namespace EasyLife.PageModels
                         Paragraph spacerow = new Paragraph("       ").SetHeight(20);
                         doc.Add(spacerow);
 
-                        Table table = new Table(new float[] { 300, 50, 120, 30 }).SetWidth(500).SetPadding(0).SetFontColor(ColorConstants.BLACK).SetFontSize(15).SetHorizontalAlignment(iText.Layout.Properties.HorizontalAlignment.CENTER);
+                        Table table = new Table(new float[] { 300, 50, 120, 30 }).SetWidth(500).SetPadding(0).SetFontColor(ColorConstants.BLACK).SetFontSize(15).SetHorizontalAlignment(HorizontalAlignment.CENTER);
 
                         Border borderbottomheader = new SolidBorder(ColorConstants.BLACK, 1);
 
-                        Cell cell1 = new Cell(1, 1).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderRight(Border.NO_BORDER).SetBorderBottom(borderbottomheader).SetBorderLeft(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("Zweck"));
+                        Cell cell1 = new Cell(1, 1).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetTextAlignment(TextAlignment.CENTER).SetStrokeWidth(0.5f).SetBorderRight(Border.NO_BORDER).SetBorderBottom(borderbottomheader).SetBorderLeft(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("Zweck"));
                         table.AddHeaderCell(cell1);
 
-                        Cell cell2 = new Cell(1, 1).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderBottom(borderbottomheader).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("Anzahl"));
+                        Cell cell2 = new Cell(1, 1).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetTextAlignment(TextAlignment.CENTER).SetStrokeWidth(1f).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderBottom(borderbottomheader).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("Anzahl"));
                         table.AddHeaderCell(cell2);
 
-                        Cell cell3 = new Cell(1, 1).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT).SetBold().SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderBottom(borderbottomheader).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("Summe"));
+                        Cell cell3 = new Cell(1, 1).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetTextAlignment(TextAlignment.RIGHT).SetStrokeWidth(2f).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderBottom(borderbottomheader).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("Summe"));
                         table.AddHeaderCell(cell3);
 
                         Cell cell4 = new Cell(1, 1).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderBottom(borderbottomheader);
@@ -147,7 +147,7 @@ namespace EasyLife.PageModels
                                 {
                                     if (stackholderbundle.Total_Sum == null)
                                     {
-                                        Cell cellsubsum = new Cell(1, 3).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT).SetBold().SetUnderline(2, -4).SetBorderBottom(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("" + stackholderbundle.Total_Text + " " + stackholderbundle.Sum + " €     "));
+                                        Cell cellsubsum = new Cell(1, 3).SetTextAlignment(TextAlignment.RIGHT).SetStrokeWidth(0.5f).SetUnderline(2, -4).SetBorderBottom(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("" + stackholderbundle.Total_Text + " " + stackholderbundle.Sum + " €     "));
                                         table.AddCell(cellsubsum);
 
                                         Cell cell_space = new Cell(1, 1).SetBorderBottom(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER);
@@ -160,7 +160,7 @@ namespace EasyLife.PageModels
                                     {
                                         if (follower == 0)
                                         {
-                                            Cell cellsubsum = new Cell(1, 3).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT).SetBold().SetUnderline(2, -3).SetUnderline(2, -6).SetBorderBottom(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("" + stackholderbundle.Total_Text + " " + stackholderbundle.Total_Sum + " €     "));
+                                            Cell cellsubsum = new Cell(1, 3).SetTextAlignment(TextAlignment.RIGHT).SetStrokeWidth(0.5f).SetUnderline(2, -3).SetUnderline(2, -6).SetBorderBottom(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("" + stackholderbundle.Total_Text + " " + stackholderbundle.Total_Sum + " €     "));
                                             table.AddCell(cellsubsum);
 
                                             Cell cell_space = new Cell(1, 1).SetBorderBottom(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER);
@@ -176,7 +176,7 @@ namespace EasyLife.PageModels
                                         }
                                         else
                                         {
-                                            Cell cellsubsum = new Cell(1, 3).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT).SetBold().SetUnderline(2, -3).SetUnderline(2, -6).SetBorderBottom(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("" + stackholderbundle.Total_Text + " " + stackholderbundle.Total_Sum + " €     "));
+                                            Cell cellsubsum = new Cell(1, 3).SetTextAlignment(TextAlignment.RIGHT).SetStrokeWidth(0.5f).SetUnderline(2, -3).SetUnderline(2, -6).SetBorderBottom(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("" + stackholderbundle.Total_Text + " " + stackholderbundle.Total_Sum + " €     "));
                                             table.AddCell(cellsubsum);
 
                                             Cell cell_space = new Cell(1, 1).SetBorderBottom(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER);
@@ -195,13 +195,13 @@ namespace EasyLife.PageModels
                                         Cell cell_spacerow = new Cell(1, 4).SetBorderBottom(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetHeight(5);
                                         table.AddCell(cell_spacerow);
 
-                                        Cell cell_1 = new Cell(1, 1).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderBottom(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("" + stackholder.Reason + ""));
+                                        Cell cell_1 = new Cell(1, 1).SetTextAlignment(TextAlignment.CENTER).SetStrokeWidth(0.5f).SetBorderBottom(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("" + stackholder.Reason + ""));
                                         table.AddCell(cell_1);
 
-                                        Cell cell_2 = new Cell(1, 1).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderBottom(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("" + stackholder.Count + ""));
+                                        Cell cell_2 = new Cell(1, 1).SetTextAlignment(TextAlignment.CENTER).SetStrokeWidth(0.5f).SetBorderBottom(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("" + stackholder.Count + ""));
                                         table.AddCell(cell_2);
 
-                                        Cell cell_3 = new Cell(1, 1).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT).SetBold().SetBorderBottom(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("" + stackholder.Value + " €     "));
+                                        Cell cell_3 = new Cell(1, 1).SetTextAlignment(TextAlignment.RIGHT).SetStrokeWidth(0.5f).SetBorderBottom(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("" + stackholder.Value + " €     "));
                                         table.AddCell(cell_3);
 
                                         Cell cell_4 = new Cell(1, 1).SetBorderBottom(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER);
@@ -213,9 +213,9 @@ namespace EasyLife.PageModels
 
                         doc.Add(table);
 
-                        Table table2 = new Table(new float[] { 300, 50, 120, 30 }).SetWidth(500).SetPadding(0).SetFontColor(ColorConstants.BLACK).SetFontSize(15).SetHorizontalAlignment(iText.Layout.Properties.HorizontalAlignment.CENTER);
+                        Table table2 = new Table(new float[] { 300, 50, 120, 30 }).SetWidth(500).SetPadding(0).SetFontColor(ColorConstants.BLACK).SetFontSize(15).SetHorizontalAlignment(HorizontalAlignment.CENTER);
 
-                        Cell cell0 = new Cell(1, 3).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT).SetBold().SetBorderBottom(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("Restgeld : " + Total + " €     "));
+                        Cell cell0 = new Cell(1, 3).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetTextAlignment(TextAlignment.RIGHT).SetStrokeWidth(0.5f).SetBorderBottom(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).Add(new Paragraph("Restgeld : " + Total + " €     "));
                         table2.AddHeaderCell(cell0);
 
                         Cell cell04 = new Cell(1, 1).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetBorderBottom(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER).SetBorderTop(Border.NO_BORDER).SetBorderLeft(Border.NO_BORDER);
@@ -234,7 +234,7 @@ namespace EasyLife.PageModels
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Leere Bilanz", 350, 250, null, null, "Es kann keine PDF erstellt werden, wenn die Bilanz leer ist."));
             }
@@ -246,19 +246,19 @@ namespace EasyLife.PageModels
             {
                 int result0 = await Check_for_existing_Balanceprofile();
 
-                if(result0 == 0)
+                if (result0 == 0)
                 {
                     await Add_to_Balanceprofile();
                 }
-                if(result0 == -1)
+                if (result0 == -1)
                 {
                     return;
                 }
-                if(result0 == 1)
+                if (result0 == 1)
                 {
                     await Add_to_Balanceprofile();
                 }
-                if(result0 == 2)
+                if (result0 == 2)
                 {
                     await Create_Balanceprofile();
                 }
@@ -455,12 +455,12 @@ namespace EasyLife.PageModels
 
                         double totalsum = 0;
 
-                        if (String.IsNullOrEmpty(bundles[1].Sum) == false)
+                        if (string.IsNullOrEmpty(bundles[1].Sum) == false)
                         {
                             totalsum += double.Parse(bundles[1].Sum, NumberStyles.Any, new CultureInfo("de-DE"));
                         }
 
-                        if (String.IsNullOrEmpty(bundles[3].Sum) == false)
+                        if (string.IsNullOrEmpty(bundles[3].Sum) == false)
                         {
                             totalsum += double.Parse(bundles[3].Sum, NumberStyles.Any, new CultureInfo("de-DE"));
                         }
@@ -501,12 +501,12 @@ namespace EasyLife.PageModels
 
                         double totalsum = 0;
 
-                        if (String.IsNullOrEmpty(bundles[6].Sum) == false)
+                        if (string.IsNullOrEmpty(bundles[6].Sum) == false)
                         {
                             totalsum += double.Parse(bundles[6].Sum, NumberStyles.Any, new CultureInfo("de-DE"));
                         }
 
-                        if (String.IsNullOrEmpty(bundles[8].Sum) == false)
+                        if (string.IsNullOrEmpty(bundles[8].Sum) == false)
                         {
                             totalsum += double.Parse(bundles[8].Sum, NumberStyles.Any, new CultureInfo("de-DE"));
                         }
@@ -547,12 +547,12 @@ namespace EasyLife.PageModels
 
                         double totalsum = 0;
 
-                        if (String.IsNullOrEmpty(bundles[11].Sum) == false)
+                        if (string.IsNullOrEmpty(bundles[11].Sum) == false)
                         {
                             totalsum += double.Parse(bundles[11].Sum, NumberStyles.Any, new CultureInfo("de-DE"));
                         }
 
-                        if (String.IsNullOrEmpty(bundles[13].Sum) == false)
+                        if (string.IsNullOrEmpty(bundles[13].Sum) == false)
                         {
                             totalsum += double.Parse(bundles[13].Sum, NumberStyles.Any, new CultureInfo("de-DE"));
                         }
@@ -613,7 +613,7 @@ namespace EasyLife.PageModels
                     {
                         if (double.TryParse(st, NumberStyles.Any, new CultureInfo("de-DE"), out double result) == true)
                         {
-                            if(g != 4 && g != 5)
+                            if (g != 4 && g != 5)
                             {
                                 total_value += result;
                             }
@@ -642,7 +642,7 @@ namespace EasyLife.PageModels
                     Title = "" + Current_Viewtime.Month + " " + Current_Viewtime.Year + "";
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Leere Bilanz", 350, 250, null, null, "Es kann keine PDF erstellt werden, wenn die Bilanz leer ist."));
             }
@@ -656,7 +656,7 @@ namespace EasyLife.PageModels
 
                 Bilanceprofiles_List.AddRange(await BalanceService.Get_all_Balanceprofile());
             }
-            catch (Exception ex)
+            catch
             {
                 await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Leere Bilanz", 350, 250, null, null, "Es kann keine PDF erstellt werden, wenn die Bilanz leer ist."));
             }
@@ -666,7 +666,7 @@ namespace EasyLife.PageModels
         {
             try
             {
-                if(Bilanceprofile != null)
+                if (Bilanceprofile != null)
                 {
                     return 0;
                 }
@@ -682,18 +682,18 @@ namespace EasyLife.PageModels
 
                         validate = true;
                     }
-                    catch 
+                    catch
                     {
                         validate = false;
                     }
 
-                    if(validate == false)
+                    if (validate == false)
                     {
                         await Get_BalanceprofileList();
 
                         placeholder = Bilanceprofiles_List.FirstOrDefault();
 
-                        if(placeholder == null)
+                        if (placeholder == null)
                         {
                             return 2;
                         }
@@ -706,7 +706,7 @@ namespace EasyLife.PageModels
                     return 1;
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Leere Bilanz", 350, 250, null, null, "Es kann keine PDF erstellt werden, wenn die Bilanz leer ist."));
 
@@ -871,7 +871,7 @@ namespace EasyLife.PageModels
                     {
                         if (initreasons.Contains(zw.Benutzerdefinierter_Zweck) == false)
                         {
-                            if(zw.Reason_Visibility == true)
+                            if (zw.Reason_Visibility == true)
                             {
                                 openreason.Add(zw.Benutzerdefinierter_Zweck);
                             }
@@ -983,7 +983,7 @@ namespace EasyLife.PageModels
                         }
                     }
 
-                    await BalanceService.Edit_Balanceprofile(Bilanceprofile); 
+                    await BalanceService.Edit_Balanceprofile(Bilanceprofile);
                 }
             }
             catch (Exception ex)
@@ -998,7 +998,7 @@ namespace EasyLife.PageModels
             {
                 bool indikator = false;
 
-                while(indikator == false)
+                while (indikator == false)
                 {
                     var result = await Check_for_existing_Balanceprofile();
 
@@ -1278,7 +1278,7 @@ namespace EasyLife.PageModels
 
                     while (indikator == false)
                     {
-                        var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("" + reason.Benutzerdefinierter_Zweck + " zuordnen", 400, new List<string>() { "Ausgaben Konto", "Einnahmen Konto", "Barausgaben", "Bareinnahmen", "Ausgaben Briefumschlag", "Einnahmen Briefumschlag" , "ignorieren" }));
+                        var result = await Shell.Current.ShowPopupAsync(new CustomeAktionSheet_Popup("" + reason.Benutzerdefinierter_Zweck + " zuordnen", 400, new List<string>() { "Ausgaben Konto", "Einnahmen Konto", "Barausgaben", "Bareinnahmen", "Ausgaben Briefumschlag", "Einnahmen Briefumschlag", "ignorieren" }));
 
                         if (result == null)
                         {
@@ -1334,7 +1334,7 @@ namespace EasyLife.PageModels
                             indikator = true;
                         }
 
-                        if((string)result == "Verwerfen")
+                        if ((string)result == "Verwerfen")
                         {
                             return;
                         }
@@ -1527,7 +1527,7 @@ namespace EasyLife.PageModels
                 {
                     return;
                 }
-                if(result0 == 2)
+                if (result0 == 2)
                 {
                     return;
                 }
@@ -1760,16 +1760,16 @@ namespace EasyLife.PageModels
                 action_Button = await Shell.Current.ShowPopupAsync(new CustomeToolbar_Popup(keyValuePairs.Keys.ToList(), 170)) as Action_Button;
             }
 
-            if(action_Button != null)
+            if (action_Button != null)
             {
-                if (keyValuePairs.ContainsKey((Action_Button)action_Button) == true)
+                if (keyValuePairs.ContainsKey(action_Button) == true)
                 {
-                    await keyValuePairs[(Action_Button)action_Button]();
+                    await keyValuePairs[action_Button]();
                 }
-                if(keyValuePairs1.ContainsKey((Action_Button)action_Button) == true)
-                { 
-                    await keyValuePairs1[(Action_Button)action_Button]("0");
-                } 
+                if (keyValuePairs1.ContainsKey(action_Button) == true)
+                {
+                    await keyValuePairs1[action_Button]("0");
+                }
             }
         }
 
@@ -1811,7 +1811,7 @@ namespace EasyLife.PageModels
                                         list_entries_chart_1.Add(new ChartEntry(float.Parse(stack.Value, NumberStyles.Any, new CultureInfo("de-DE"))) { Label = stack.Reason + "(" + stack.Count + ")", ValueLabel = stack.Value + " €", Color = SKColors.Red, ValueLabelColor = SKColors.Red });
                                     }
 
-                                    if (String.IsNullOrEmpty(Selected_Reason))
+                                    if (string.IsNullOrEmpty(Selected_Reason))
                                     {
                                         Selected_Reason = stack.Reason;
                                     }
@@ -2454,16 +2454,16 @@ namespace EasyLife.PageModels
         public string Option { get; set; }
 
         public string substring;
-        public string Substring 
+        public string Substring
         {
-            get 
+            get
             {
                 return substring = "" + Reason + " als " + Option + "";
             }
 
             set
             {
-                 substring = value;
+                substring = value;
             }
         }
 

@@ -4,9 +4,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     xmlns:model="clr-namespace:EasyLife.Models"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-    xmlns:pagemodels="clr-namespace:EasyLife.PageModels" 
+    xmlns:pagemodels="clr-namespace:EasyLife.PageModels.Financial_Book" 
     xmlns:cells="clr-namespace:EasyLife.Cells"
-    xmlns:fontAwesome="clr-namespace:FontAwesome" 
+    xmlns:fontAwesome="clr-namespace:EasyLife.Helpers" 
     x:Class="EasyLife.Pages.Home_Page"
     BackgroundColor="{DynamicResource Hintergrund_Home}"
     x:DataType="pagemodels:Home_PageModel">

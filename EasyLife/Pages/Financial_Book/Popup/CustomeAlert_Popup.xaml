@@ -5,7 +5,7 @@
     x:Class="EasyLife.Pages.CustomeAlert_Popup"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
     xmlns:model="clr-namespace:EasyLife.Pages" 
-    xmlns:fontAwesome="clr-namespace:FontAwesome" 
+    xmlns:fontAwesome="clr-namespace:EasyLife.Helpers" 
     x:Name="Alert_Popup"
     IsLightDismissEnabled="False"
     Color="Transparent">

@@ -14,7 +14,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Forms;
-using Xamarin.Forms.BehaviorsPack;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 using Command = MvvmHelpers.Commands.Command;
 

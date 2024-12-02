@@ -2,8 +2,8 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="EasyLife.Cells.Styling.PopupView"
-             xmlns:fontAwesome="clr-namespace:FontAwesome" 
-             xmlns:pagemodels="clr-namespace:EasyLife.PageModels"
+             xmlns:fontAwesome="clr-namespace:EasyLife.Helpers" 
+             xmlns:pagemodels="clr-namespace:EasyLife.PageModels.Financial_Book"
              BackgroundColor="Transparent">
 
     <ContentView.BindingContext>

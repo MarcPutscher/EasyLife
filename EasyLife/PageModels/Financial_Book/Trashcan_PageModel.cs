@@ -18,7 +18,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.PancakeView;
 using static iText.Svg.SvgConstants;
 
-namespace EasyLife.PageModels
+namespace EasyLife.PageModels.Financial_Book
 {
     /// <summary>
     /// Das ist eine Funktionsklasse für die Papierkorbseite.
@@ -185,7 +185,7 @@ namespace EasyLife.PageModels
 
                                 foreach (Transaktion transs in all)
                                 {
-                                    if (String.IsNullOrEmpty(transs.Auftrags_id) == false)
+                                    if (string.IsNullOrEmpty(transs.Auftrags_id) == false)
                                     {
                                         if (transs.Auftrags_id.Substring(0, transs.Auftrags_id.IndexOf(".")) == trans.Auftrags_id.Substring(0, trans.Auftrags_id.IndexOf(".")))
                                         {
@@ -306,7 +306,7 @@ namespace EasyLife.PageModels
                     }
                     if (item.Auftrags_Option == 2)
                     {
-                        message = new string[] { "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag entfernen?", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String+ "\nWird im Stand berechnet: " + item.Saldo_Visibility_String + "\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + "" };
+                        message = new string[] { "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag entfernen?", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird im Stand berechnet: " + item.Saldo_Visibility_String + "\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + "" };
                     }
                     if (item.Auftrags_Option == 3)
                     {
@@ -456,15 +456,15 @@ namespace EasyLife.PageModels
 
                     if (item.Auftrags_Option == 1)
                     {
-                        message = new string[]{ "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag wiederherstellen?","Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird im Stand berechnet: " + item.Saldo_Visibility_String + "\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + ""};
+                        message = new string[] { "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag wiederherstellen?", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird im Stand berechnet: " + item.Saldo_Visibility_String + "\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "" };
                     }
                     if (item.Auftrags_Option == 2)
                     {
-                        message = new string[] { "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag wiederherstellen?","Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird im Stand berechnet: " + item.Saldo_Visibility_String + "\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + ""};
+                        message = new string[] { "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag wiederherstellen?", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird im Stand berechnet: " + item.Saldo_Visibility_String + "\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nAnzahl an Wiederholungen: " + item.Anzahl_an_Wiederholungen + " Mal\nSpeziell: " + item.Speziell + "" };
                     }
                     if (item.Auftrags_Option == 3)
                     {
-                        message = new string[] { "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag wiederherstellen?","Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird im Stand berechnet: " + item.Saldo_Visibility_String + "\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + ""};
+                        message = new string[] { "Wollen Sie wirklich alle Transaktionen mit diesem Auftrag wiederherstellen?", "Zweck: " + item.Zweck + "\nBetrag: " + item.Betrag + " €\nDatum: " + item.Datumanzeige + "\nNotiz: " + item.Notiz + "\nWird in Bilanz angezeigt:" + item.Balance_Visibility_String + "\nWird im Stand berechnet: " + item.Saldo_Visibility_String + "\nID: " + item.Id + "\nAuftrags ID: " + item.Auftrags_id + "\nArt der Wiederholung: " + item.Art_an_Wiederholungen + "\nEnddatum: " + item.Anzahl_an_Wiederholungen + "\nSpeziell: " + item.Speziell + "" };
                     }
 
                     var value = await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Wiederherstellen", 350, 450, "Ja", "Nein", message));

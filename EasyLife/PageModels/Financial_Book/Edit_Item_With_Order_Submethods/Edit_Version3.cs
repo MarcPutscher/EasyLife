@@ -9,11 +9,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasyLife.PageModels.Edit_Item_With_Order_Submethods
+namespace EasyLife.PageModels.Financial_Book.Edit_Item_With_Order_Submethods
 {
     public class Edit_Version3
     {
-        public static async Task<string> Edit_Version3_Methode(Transaktion Virtuelle_Transaktion , Transaktion Transaktion, Auftrag Virtueller_Auftrag, List<Transaktion> transaktion_list, string Betrag, string Zweck, string Notiz, DateTime Datum, int OrderId, bool Revive_Switch, int Full_Order, string Anzahl_an_Wiederholungen)
+        public static async Task<string> Edit_Version3_Methode(Transaktion Virtuelle_Transaktion, Transaktion Transaktion, Auftrag Virtueller_Auftrag, List<Transaktion> transaktion_list, string Betrag, string Zweck, string Notiz, DateTime Datum, int OrderId, bool Revive_Switch, int Full_Order, string Anzahl_an_Wiederholungen)
         {
             Auftrag virtueller_auftrag = new Auftrag()
             {

@@ -1,5 +1,4 @@
-﻿using Android.Graphics.Drawables;
-using EasyLife.Models;
+﻿using EasyLife.Models;
 using EasyLife.Pages;
 using EasyLife.Pages.To_Do;
 using EasyLife.Services;
@@ -8,9 +7,7 @@ using MvvmHelpers;
 using MvvmHelpers.Commands;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Forms;

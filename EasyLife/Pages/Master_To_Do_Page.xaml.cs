@@ -1,26 +1,16 @@
-﻿using Android.Webkit;
+﻿using EasyLife.Helpers;
 using EasyLife.Models;
-using EasyLife.PageModels;
 using EasyLife.Pages.To_Do;
 using EasyLife.Services;
-using FontAwesome;
-using MvvmHelpers.Commands;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.Extensions;
-using Xamarin.CommunityToolkit.ObjectModel.Extensions;
 using Xamarin.Essentials;
 using Xamarin.Forms;
-using Xamarin.Forms.BehaviorsPack;
-using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 using Xamarin.Forms.Xaml;
-using static SQLite.SQLite3;
-using ShellItem = Xamarin.Forms.ShellItem;
 
 namespace EasyLife.Pages
 {
@@ -118,7 +108,7 @@ namespace EasyLife.Pages
                     }
                 }
             }
-            catch (Exception ex) { }
+            catch{ }
         }
 
         public async Task Update_FlyoutConten()

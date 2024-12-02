@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             xmlns:pagemodels="clr-namespace:EasyLife.PageModels"
+             xmlns:pagemodels="clr-namespace:EasyLife.PageModels.Financial_Book"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-             xmlns:fontAwesome="clr-namespace:FontAwesome" 
+             xmlns:fontAwesome="clr-namespace:EasyLife.Helpers" 
              x:Class="EasyLife.Cells.Styling.HinzufügenView">
 
     <ContentView.Resources>

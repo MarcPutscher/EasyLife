@@ -5,7 +5,7 @@
             xmlns:to_do="clr-namespace:EasyLife.Models" 
              xmlns:to_do1="clr-namespace:EasyLife.PageModels.To_Do"
              xmlns:ia="clr-namespace:IntelliAbb.Xamarin.Controls;assembly=IntelliAbb.Xamarin.Controls"
-             xmlns:fontAwesome="clr-namespace:FontAwesome" 
+             xmlns:fontAwesome="clr-namespace:EasyLife.Helpers" 
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
              xmlns:helpers="clr-namespace:EasyLife.Helpers" 
              xmlns:pagemodels="clr-namespace:EasyLife.PageModels" xmlns:cells="clr-namespace:EasyLife.Cells"

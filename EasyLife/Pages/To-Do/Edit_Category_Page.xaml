@@ -4,7 +4,7 @@
              xmlns:to_do="clr-namespace:EasyLife.PageModels" 
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="EasyLife.Pages.To_Do.Edit_Category_Page"
-            xmlns:fontAwesome="clr-namespace:FontAwesome" xmlns:models="clr-namespace:EasyLife.Models"
+            xmlns:fontAwesome="clr-namespace:EasyLife.Helpers" xmlns:models="clr-namespace:EasyLife.Models"
              Shell.FlyoutBehavior="Disabled"
              Shell.NavBarIsVisible="False">
     

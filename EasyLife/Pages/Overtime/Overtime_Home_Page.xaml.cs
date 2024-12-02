@@ -11,7 +11,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
-using Xamarin.Forms.BehaviorsPack;
 using Xamarin.Forms.Xaml;
 
 namespace EasyLife.Pages.Overtime

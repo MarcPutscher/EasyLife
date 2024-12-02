@@ -5,7 +5,7 @@
     x:Class="EasyLife.Pages.Add_Order_Page"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     BackgroundColor ="{DynamicResource Hintergrund_Hinzufügen}"
-    xmlns:pagemodels="clr-namespace:EasyLife.PageModels" 
+    xmlns:pagemodels="clr-namespace:EasyLife.PageModels.Financial_Book" 
     xmlns:customecontrole="clr-namespace:EasyLife.CustomeControle"
     x:DataType="pagemodels:Add_Order_PageModel"
     Shell.PresentationMode="Modal"

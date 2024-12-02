@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:models="clr-namespace:EasyLife.Models" 
              xmlns:ia="clr-namespace:IntelliAbb.Xamarin.Controls;assembly=IntelliAbb.Xamarin.Controls"
-             xmlns:fontAwesome="clr-namespace:FontAwesome" 
+             xmlns:fontAwesome="clr-namespace:EasyLife.Helpers" 
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
              xmlns:helpers="clr-namespace:EasyLife.Helpers" 
              xmlns:pancacke="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"

@@ -5,8 +5,9 @@
     x:Class="EasyLife.Cells.Outcome_Cell"
     xmlns:models="clr-namespace:EasyLife.Models"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
-    xmlns:customrenderer="clr-namespace:EasyLife.CustomRenderer" 
+    xmlns:customrenderer="clr-namespace:EasyLife.CustomElements" 
     xmlns:cells="clr-namespace:EasyLife.Cells" xmlns:Helpers="clr-namespace:EasyLife.Helpers"
+    xmlns:fontAwesome="clr-namespace:EasyLife.Helpers" 
     x:DataType="models:Transaktion"
     x:Name="Outcome"
     CornerRadius="20" 
@@ -167,12 +168,13 @@
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="No_Oder_or_note" x:DataType="{x:Null}">
+                <StackLayout Background="Transparent" WidthRequest="0" Padding="0" Margin="0" />
             </DataTemplate>
             <cells:Transaktions_Detail_Selector x:Key="Transaktions_Detail_Selector" Order_Option_1="{StaticResource Option_1}" Order_Option_2="{StaticResource Option_2}" Order_Option_3="{StaticResource Option_3}" No_Order_or_note="{StaticResource No_Oder_or_note}"/>
         </ResourceDictionary>
     </Frame.Resources>
 
-    <xct:Expander ContentTemplate="{StaticResource Transaktions_Detail_Selector}">
+    <xct:Expander ContentTemplate="{StaticResource Transaktions_Detail_Selector}" x:Name="expander">
         <xct:Expander.Header>
             <Grid ColumnDefinitions="10,*,Auto,10" RowDefinitions="*">
                 <Grid Grid.Column="2" ColumnDefinitions="*,Auto" HorizontalOptions="Fill">
@@ -208,6 +210,25 @@
                         Text="{Binding Pseudotext}" 
                         TextColor="{DynamicResource Text_Transaktion_Home}"
                         FontAttributes="Bold"/>
+                <Image Grid.Column="3" VerticalOptions="Start" HorizontalOptions="Center" Scale="2" Opacity="0.5" Margin="0,1,1,0">
+                    <Image.Triggers>
+                        <DataTrigger TargetType="Image" Binding="{Binding Source={x:Reference expander}, Path=IsExpanded}" Value="False" >
+                            <Setter Property="Source" Value="{FontImageSource Glyph={x:Static fontAwesome:FontAwesomeIcons.CircleChevronDown}, FontFamily=FAS, Color=Black}"/>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Image" Binding="{Binding Source={x:Reference expander}, Path=IsExpanded}" Value="True" >
+                            <Setter Property="Source" Value="{FontImageSource Glyph={x:Static fontAwesome:FontAwesomeIcons.CircleChevronUp}, FontFamily=FAS, Color=Black}"/>
+                        </DataTrigger>
+                        <MultiTrigger TargetType="Image">
+                            <MultiTrigger.Conditions>
+                                <BindingCondition Binding="{Binding Order_Visibility}" Value="False"/>
+                                <BindingCondition Binding="{Binding Notiz, Converter={xct:IsNullOrEmptyConverter}}" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.Setters>
+                                <Setter Property="IsVisible" Value="False"/>
+                            </MultiTrigger.Setters>
+                        </MultiTrigger>
+                    </Image.Triggers>
+                </Image>
             </Grid>
         </xct:Expander.Header>
     </xct:Expander>

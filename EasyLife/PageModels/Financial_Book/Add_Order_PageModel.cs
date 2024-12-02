@@ -1,6 +1,6 @@
-﻿using EasyLife.Models;
+﻿using EasyLife.Helpers;
+using EasyLife.Models;
 using EasyLife.Pages;
-using EasyLife.Services;
 using FreshMvvm;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ using Xamarin.Forms;
 using static Xamarin.Forms.Internals.Profile;
 using AsyncCommand = MvvmHelpers.Commands.AsyncCommand;
 
-namespace EasyLife.PageModels
+namespace EasyLife.PageModels.Financial_Book
 {
     [QueryProperty(nameof(TransaktionID), nameof(TransaktionID))]
     [QueryProperty(nameof(OrderID), nameof(OrderID))]
@@ -26,7 +26,7 @@ namespace EasyLife.PageModels
             Return_Command = new AsyncCommand(Return_Methode);
             ViewIsAppearing_Command = new AsyncCommand(ViewIsAppearing);
             Kind_Source = new ObservableRangeCollection<string>() { "Tag", "Woche", "Monat", "Jahr" };
-            Option_Source = new ObservableRangeCollection<string>() { "Einmalig", "Nach einer Anzahl" , "Bis zu einem Datum"};
+            Option_Source = new ObservableRangeCollection<string>() { "Einmalig", "Nach einer Anzahl", "Bis zu einem Datum" };
         }
 
         public async Task Return_Methode()
@@ -54,7 +54,7 @@ namespace EasyLife.PageModels
                     amount_text = Date.ToString("dddd, d.M.yyyy", new CultureInfo("de-DE"));
                     option = 3;
                 }
-                if(Option_Item == null)
+                if (Option_Item == null)
                 {
                     await Return_Zero();
                     return;
@@ -73,7 +73,7 @@ namespace EasyLife.PageModels
                         Sunday_Switch
                     };
 
-                    if(istoggledlist.Contains(true) == true)
+                    if (istoggledlist.Contains(true) == true)
                     {
                         List<string> Daylist = new List<string>();
 
@@ -119,7 +119,7 @@ namespace EasyLife.PageModels
                         }
                         catch { }
 
-                        auftrag = new Auftrag { Anzahl_an_Wiederholungen = amount_text, Art_an_Wiederholungen = "Benutzerdefiniert:" + Kind_Item + "", Speziell = Days , Option = option};
+                        auftrag = new Auftrag { Anzahl_an_Wiederholungen = amount_text, Art_an_Wiederholungen = "Benutzerdefiniert:" + Kind_Item + "", Speziell = Days, Option = option };
                     }
                     else
                     {
@@ -137,11 +137,11 @@ namespace EasyLife.PageModels
                         Ever_Fourth_Week_Switch
                     };
 
-                    if(istoggledlist.Contains(true) == true)
+                    if (istoggledlist.Contains(true) == true)
                     {
                         string week = null;
 
-                        if(Ever_Week_Switch == true)
+                        if (Ever_Week_Switch == true)
                         {
                             week = "derselbe Tag in jeder Woche";
                         }
@@ -158,7 +158,7 @@ namespace EasyLife.PageModels
                             week = "derselbe Tag in jeder vierten Woche";
                         }
 
-                        auftrag = new Auftrag { Anzahl_an_Wiederholungen = amount_text, Art_an_Wiederholungen = "Benutzerdefiniert:" + Kind_Item + "", Speziell = week , Option = option };
+                        auftrag = new Auftrag { Anzahl_an_Wiederholungen = amount_text, Art_an_Wiederholungen = "Benutzerdefiniert:" + Kind_Item + "", Speziell = week, Option = option };
                     }
                     else
                     {
@@ -250,7 +250,7 @@ namespace EasyLife.PageModels
                         }
                         catch { }
 
-                        auftrag = new Auftrag { Anzahl_an_Wiederholungen = amount_text, Art_an_Wiederholungen = "Benutzerdefiniert:" + Kind_Item + "", Speziell = Month , Option = option };
+                        auftrag = new Auftrag { Anzahl_an_Wiederholungen = amount_text, Art_an_Wiederholungen = "Benutzerdefiniert:" + Kind_Item + "", Speziell = Month, Option = option };
                     }
                     else
                     {
@@ -294,7 +294,7 @@ namespace EasyLife.PageModels
                             year = "derselbe Tag in jedem fünftem Jahr";
                         }
 
-                        auftrag = new Auftrag { Anzahl_an_Wiederholungen = amount_text, Art_an_Wiederholungen = "Benutzerdefiniert:" + Kind_Item + "", Speziell = year , Option = option };
+                        auftrag = new Auftrag { Anzahl_an_Wiederholungen = amount_text, Art_an_Wiederholungen = "Benutzerdefiniert:" + Kind_Item + "", Speziell = year, Option = option };
                     }
                     else
                     {
@@ -305,13 +305,13 @@ namespace EasyLife.PageModels
 
                 try
                 {
-                    if(String.IsNullOrEmpty(OrderID) == true && auftrag != null)
+                    if (string.IsNullOrEmpty(OrderID) == true && auftrag != null)
                     {
                         await PassingOrderService.Add_Order(auftrag);
 
                         OrderID = auftrag.Id.ToString();
                     }
-                    if(String.IsNullOrEmpty(OrderID) == false && auftrag != null)
+                    if (string.IsNullOrEmpty(OrderID) == false && auftrag != null)
                     {
                         auftrag.Id = int.Parse(OrderID);
                         await PassingOrderService.Edit_Order(auftrag);
@@ -319,7 +319,7 @@ namespace EasyLife.PageModels
                     await Shell.Current.GoToAsync($"..?TransaktionID={TransaktionID}&OrderID={OrderID}");
 
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     await Shell.Current.ShowPopupAsync(new CustomeAlert_Popup("Fehler", 380, 0, null, null, "Es ist ein Fehler aufgetretten.\nFehler:" + e.ToString() + ""));
                 }
@@ -337,10 +337,10 @@ namespace EasyLife.PageModels
         {
             try
             {
-                if(int.TryParse(TransaktionID, out var result1) == true)
+                if (int.TryParse(TransaktionID, out var result1) == true)
                 {
                     Transaktion transaktion = await PassingTransaktionService.Get_specific_Transaktion(result1);
-                    
+
                     Minimum_Date = transaktion.Datum.Date;
 
                     Date = transaktion.Datum.Date;
@@ -411,7 +411,7 @@ namespace EasyLife.PageModels
                                     Days = null;
                                 }
                                 Monday_Switch = true;
-                                if (String.IsNullOrEmpty(Days) == true)
+                                if (string.IsNullOrEmpty(Days) == true)
                                 {
                                     break;
                                 }
@@ -427,7 +427,7 @@ namespace EasyLife.PageModels
                                     Days = null;
                                 }
                                 Tuesday_Switch = true;
-                                if (String.IsNullOrEmpty(Days) == true)
+                                if (string.IsNullOrEmpty(Days) == true)
                                 {
                                     break;
                                 }
@@ -443,7 +443,7 @@ namespace EasyLife.PageModels
                                     Days = null;
                                 }
                                 Wednesday_Switch = true;
-                                if (String.IsNullOrEmpty(Days) == true)
+                                if (string.IsNullOrEmpty(Days) == true)
                                 {
                                     break;
                                 }
@@ -459,7 +459,7 @@ namespace EasyLife.PageModels
                                     Days = null;
                                 }
                                 Thursday_Switch = true;
-                                if (String.IsNullOrEmpty(Days) == true)
+                                if (string.IsNullOrEmpty(Days) == true)
                                 {
                                     break;
                                 }
@@ -475,7 +475,7 @@ namespace EasyLife.PageModels
                                     Days = null;
                                 }
                                 Friday_Switch = true;
-                                if (String.IsNullOrEmpty(Days) == true)
+                                if (string.IsNullOrEmpty(Days) == true)
                                 {
                                     break;
                                 }
@@ -491,7 +491,7 @@ namespace EasyLife.PageModels
                                     Days = null;
                                 }
                                 Saturday_Switch = true;
-                                if (String.IsNullOrEmpty(Days) == true)
+                                if (string.IsNullOrEmpty(Days) == true)
                                 {
                                     break;
                                 }
@@ -507,20 +507,20 @@ namespace EasyLife.PageModels
                                     Days = null;
                                 }
                                 Sunday_Switch = true;
-                                if (String.IsNullOrEmpty(Days) == true)
+                                if (string.IsNullOrEmpty(Days) == true)
                                 {
                                     break;
                                 }
                             }
                         }
                     }
-                    if(auftrag.Art_an_Wiederholungen == "Woche")
+                    if (auftrag.Art_an_Wiederholungen == "Woche")
                     {
                         Kind_Item = "Woche";
 
-                        if (String.IsNullOrEmpty(auftrag.Speziell) == false)
+                        if (string.IsNullOrEmpty(auftrag.Speziell) == false)
                         {
-                            if(auftrag.Speziell == "derselbe Tag in jeder Woche")
+                            if (auftrag.Speziell == "derselbe Tag in jeder Woche")
                             {
                                 Ever_Week_Switch = true;
                             }
@@ -564,7 +564,7 @@ namespace EasyLife.PageModels
                                     Months = null;
                                 }
                                 January_Switch = true;
-                                if (String.IsNullOrEmpty(Months) == true)
+                                if (string.IsNullOrEmpty(Months) == true)
                                 {
                                     break;
                                 }
@@ -580,7 +580,7 @@ namespace EasyLife.PageModels
                                     Months = null;
                                 }
                                 February_Switch = true;
-                                if (String.IsNullOrEmpty(Months) == true)
+                                if (string.IsNullOrEmpty(Months) == true)
                                 {
                                     break;
                                 }
@@ -596,7 +596,7 @@ namespace EasyLife.PageModels
                                     Months = null;
                                 }
                                 March_Switch = true;
-                                if (String.IsNullOrEmpty(Months) == true)
+                                if (string.IsNullOrEmpty(Months) == true)
                                 {
                                     break;
                                 }
@@ -612,7 +612,7 @@ namespace EasyLife.PageModels
                                     Months = null;
                                 }
                                 April_Switch = true;
-                                if (String.IsNullOrEmpty(Months) == true)
+                                if (string.IsNullOrEmpty(Months) == true)
                                 {
                                     break;
                                 }
@@ -628,7 +628,7 @@ namespace EasyLife.PageModels
                                     Months = null;
                                 }
                                 May_Switch = true;
-                                if (String.IsNullOrEmpty(Months) == true)
+                                if (string.IsNullOrEmpty(Months) == true)
                                 {
                                     break;
                                 }
@@ -644,7 +644,7 @@ namespace EasyLife.PageModels
                                     Months = null;
                                 }
                                 June_Switch = true;
-                                if (String.IsNullOrEmpty(Months) == true)
+                                if (string.IsNullOrEmpty(Months) == true)
                                 {
                                     break;
                                 }
@@ -660,7 +660,7 @@ namespace EasyLife.PageModels
                                     Months = null;
                                 }
                                 July_Switch = true;
-                                if (String.IsNullOrEmpty(Months) == true)
+                                if (string.IsNullOrEmpty(Months) == true)
                                 {
                                     break;
                                 }
@@ -676,7 +676,7 @@ namespace EasyLife.PageModels
                                     Months = null;
                                 }
                                 August_Switch = true;
-                                if (String.IsNullOrEmpty(Months) == true)
+                                if (string.IsNullOrEmpty(Months) == true)
                                 {
                                     break;
                                 }
@@ -692,7 +692,7 @@ namespace EasyLife.PageModels
                                     Months = null;
                                 }
                                 September_Switch = true;
-                                if (String.IsNullOrEmpty(Months) == true)
+                                if (string.IsNullOrEmpty(Months) == true)
                                 {
                                     break;
                                 }
@@ -708,7 +708,7 @@ namespace EasyLife.PageModels
                                     Months = null;
                                 }
                                 October_Switch = true;
-                                if (String.IsNullOrEmpty(Months) == true)
+                                if (string.IsNullOrEmpty(Months) == true)
                                 {
                                     break;
                                 }
@@ -724,7 +724,7 @@ namespace EasyLife.PageModels
                                     Months = null;
                                 }
                                 November_Switch = true;
-                                if (String.IsNullOrEmpty(Months) == true)
+                                if (string.IsNullOrEmpty(Months) == true)
                                 {
                                     break;
                                 }
@@ -740,7 +740,7 @@ namespace EasyLife.PageModels
                                     Months = null;
                                 }
                                 December_Switch = true;
-                                if (String.IsNullOrEmpty(Months) == true)
+                                if (string.IsNullOrEmpty(Months) == true)
                                 {
                                     break;
                                 }
@@ -751,7 +751,7 @@ namespace EasyLife.PageModels
                     {
                         Kind_Item = "Jahr";
 
-                        if (String.IsNullOrEmpty(auftrag.Speziell) == false)
+                        if (string.IsNullOrEmpty(auftrag.Speziell) == false)
                         {
                             if (auftrag.Speziell == "derselbe Tag in jedem Jahr")
                             {
@@ -923,7 +923,7 @@ namespace EasyLife.PageModels
                 if (Ever_Week_Switch == value)
                     return;
                 ever_week_switch = value; RaisePropertyChanged();
-                if(ever_week_switch == true)
+                if (ever_week_switch == true)
                 {
                     Ever_Second_Week_Switch = false;
                     Ever_Third_Week_Switch = false;
@@ -1359,7 +1359,7 @@ namespace EasyLife.PageModels
                 if (Option_Item == value)
                     return;
                 option_item = value; RaisePropertyChanged();
-                if( value == "Einmalig")
+                if (value == "Einmalig")
                 {
                     Date_Option_Visibility = false;
 
@@ -1367,7 +1367,7 @@ namespace EasyLife.PageModels
 
                     Onc_Option_Visibility = true;
                 }
-                if( value == "Nach einer Anzahl")
+                if (value == "Nach einer Anzahl")
                 {
                     Date_Option_Visibility = false;
 
@@ -1375,7 +1375,7 @@ namespace EasyLife.PageModels
 
                     Onc_Option_Visibility = false;
                 }
-                if( value == "Bis zu einem Datum")
+                if (value == "Bis zu einem Datum")
                 {
                     Date_Option_Visibility = true;
 
