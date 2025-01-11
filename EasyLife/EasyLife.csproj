@@ -43,7 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Cells\GroupeTotal_Cell.xaml.cs">
+    <Compile Update="Cells\Financial_Book\GroupeTotal_Cell.xaml.cs">
       <DependentUpon>GroupeTotal_Cell.xaml</DependentUpon>
     </Compile>
     <Compile Update="CustomeControle\CustomePicker.xaml.cs">
@@ -102,40 +102,40 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Cells\Detail_Income_Cell.xaml">
+    <EmbeddedResource Update="Cells\Financial_Book\Detail_Income_Cell.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Cells\Detail_Outcome_Cell.xaml">
+    <EmbeddedResource Update="Cells\Financial_Book\Detail_Outcome_Cell.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Cells\GroupeTotal_Cell.xaml">
+    <EmbeddedResource Update="Cells\Financial_Book\GroupeTotal_Cell.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Cells\Income_Cell.xaml">
+    <EmbeddedResource Update="Cells\Financial_Book\Income_Cell.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Cells\Outcome_Cell.xaml">
+    <EmbeddedResource Update="Cells\Financial_Book\Outcome_Cell.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Cells\Stackholder_Cell.xaml">
+    <EmbeddedResource Update="Cells\Financial_Book\Stackholder_Cell.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Cells\Styling\BilanzView.xaml">
+    <EmbeddedResource Update="Cells\Financial_Book\Styling\BilanzView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Cells\Styling\ErrorView.xaml">
+    <EmbeddedResource Update="Cells\Financial_Book\Styling\ErrorView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Cells\Styling\HinzufügenView.xaml">
+    <EmbeddedResource Update="Cells\Financial_Book\Styling\HinzufügenView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Cells\Styling\HomeView.xaml">
+    <EmbeddedResource Update="Cells\Financial_Book\Styling\HomeView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Cells\Styling\PopupView.xaml">
+    <EmbeddedResource Update="Cells\Financial_Book\Styling\PopupView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Cells\Total_Cell.xaml">
+    <EmbeddedResource Update="Cells\Financial_Book\Total_Cell.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="CustomeControle\CustomePicker.xaml">
