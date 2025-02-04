@@ -9,9 +9,10 @@ using System.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Text;
 using System.Threading.Tasks;
-
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using static Plugin.LocalNotification.NotificationRequestGeofence;
 
 namespace EasyLife.Pages.Overtime
 {
@@ -29,6 +30,13 @@ namespace EasyLife.Pages.Overtime
 
         public bool In_Change = false;
 
+        public bool In_Change2 = false;
+
+        public bool In_Change3 = false;
+
+
+        public int Steps = Preferences.Get("OvertimeSchrittweite", 1);
+
         public int Total_Overtime = 0;
 
         public Overtime_Home_Page()
@@ -37,8 +45,8 @@ namespace EasyLife.Pages.Overtime
 
             this.BindingContext = this;
 
-            List<int> minuts = Enumerable.Range(0,37).Select(y=> -y*5).Reverse().ToList();
-            minuts.AddRange(Enumerable.Range(1, 36).Select(y => y * 5).ToList());
+            List<int> minuts = Enumerable.Range(0,37).Select(y=> -y*5*Steps).Reverse().ToList();
+            minuts.AddRange(Enumerable.Range(1, 36).Select(y => y * 5*Steps).ToList());
             int position = 0;
             foreach (int i in minuts)
             {
@@ -84,7 +92,12 @@ namespace EasyLife.Pages.Overtime
             }
             daypicker.ItemsSource = day_data;
             daypicker.CurrentItem = day_data.FirstOrDefault(x => x.Data == DateTime.Today.Day);
+
+            //daypicker.PositionChanged += CheckIfDateIsTodayOrNot;
+            //monthpicker.PositionChanged += CheckIfDateIsTodayOrNot;
+            //yearpicker.PositionChanged += CheckIfDateIsTodayOrNot;
         }
+
 
         public async void Page_Appearing(object sender, EventArgs e)
         {
@@ -94,7 +107,7 @@ namespace EasyLife.Pages.Overtime
 
             Total_Overtime = logs.Sum(x =>x.Time);
 
-            totalovertimelabel.Text = Total_Overtime.ToString();
+            Change_TotalOvertime_String(Total_Overtime);
 
             logpicker.ItemsSource = logs.OrderByDescending(x=>x.Date);
 
@@ -102,8 +115,15 @@ namespace EasyLife.Pages.Overtime
             In_Change = false;
         }
 
+
         private async void timepicker_CurrentItemChanged(object sender, CurrentItemChangedEventArgs e)
         {
+            if(In_Change2)
+            {
+                In_Change2 = false;
+                return;
+            }
+
             Overtime_DataItem overtime_DataItem = (Overtime_DataItem)e.CurrentItem;
 
             if(In_Change == false)
@@ -134,11 +154,16 @@ namespace EasyLife.Pages.Overtime
                 changeovertimelabel.Text = overtime_DataItem.Data.ToString();
             }
 
-            totalovertimelabel.Text = (Total_Overtime + overtime_DataItem.Data).ToString();
+            Change_TotalOvertime_String((Total_Overtime + overtime_DataItem.Data));
         }
-
         private async void monthpicker_CurrentItemChanged(object sender, CurrentItemChangedEventArgs e)
         {
+            if (In_Change3)
+            {
+                In_Change3 = false;
+                return;
+            }
+
             Overtime_DataItem overtime_DataItem = (Overtime_DataItem)e.CurrentItem;
 
             if(overtime_DataItem.Data != 0)
@@ -174,7 +199,6 @@ namespace EasyLife.Pages.Overtime
                 await Task.Delay(500).ContinueWith((_) => Device.BeginInvokeOnMainThread(() =>
                     daypicker.ScrollTo(new_day)),
                     TaskScheduler.FromCurrentSynchronizationContext());
-            
             }
         }
 
@@ -210,7 +234,7 @@ namespace EasyLife.Pages.Overtime
 
                 Total_Overtime = logs.Sum(x => x.Time);
 
-                totalovertimelabel.Text = Total_Overtime.ToString();
+                Change_TotalOvertime_String(Total_Overtime);
 
                 logpicker.ItemsSource = logs.OrderByDescending(x => x.Date);
             }
@@ -226,7 +250,6 @@ namespace EasyLife.Pages.Overtime
                 timepicker.CurrentItem = time_data.FirstOrDefault(x => x.Data == 0);
             }
         }
-
         private async void Edit_Tapped(object sender, EventArgs e)
         {
             try
@@ -257,7 +280,7 @@ namespace EasyLife.Pages.Overtime
 
                 Total_Overtime = logs.Sum(x => x.Time);
 
-                totalovertimelabel.Text = Total_Overtime.ToString();
+                Change_TotalOvertime_String(Total_Overtime);
 
                 logpicker.ItemsSource = logs.OrderByDescending(x => x.Date);
 
@@ -277,8 +300,6 @@ namespace EasyLife.Pages.Overtime
                 timepicker.CurrentItem = time_data.FirstOrDefault(x => x.Data == 0);
             }
         }
-
-
         private async void Remove_Clicked(object sender, EventArgs e)
         {
             SwipeItemView swipeItemView = (SwipeItemView)sender;
@@ -291,12 +312,11 @@ namespace EasyLife.Pages.Overtime
             logs.Remove(overtimeItem);
 
             Total_Overtime = logs.Sum(x => x.Time);
-
-            totalovertimelabel.Text = Total_Overtime.ToString();
+           
+            Change_TotalOvertime_String(Total_Overtime);
 
             logpicker.ItemsSource = logs.OrderByDescending(x => x.Date);
         }
-
         private async void Change_Clicked(object sender, EventArgs e)
         {
             SwipeItemView swipeItemView = (SwipeItemView)sender;
@@ -354,6 +374,186 @@ namespace EasyLife.Pages.Overtime
             timepicker.CurrentItem = time_data.FirstOrDefault(x => x.Data == ChangingItem.Time);
 
             changeovertimelabel.Text = ChangingItem.Time.ToString();
+        }
+
+
+        private void Change_TotalOvertime_String(int inminutes)
+        {
+            int divident = Math.Abs(inminutes);
+
+            if(divident < 60)
+            {
+                totalovertimeHoureslabel.IsVisible = false;
+                totalovertimeHouresSymbollabel.IsVisible = false;
+
+                totalovertimeMinuteslabel.IsVisible = true;
+                totalovertimeMinutesSymbollabel.IsVisible = true;
+
+                totalovertimeMinuteslabel.Text = inminutes.ToString();
+
+                return;
+            }
+
+            int reminder;
+            int quotient = Math.DivRem(divident, 60,out reminder);
+
+
+            if(reminder != 0)
+            {
+                totalovertimeHoureslabel.IsVisible = true;
+                totalovertimeHouresSymbollabel.IsVisible = true;
+
+                totalovertimeMinuteslabel.IsVisible = true;
+                totalovertimeMinutesSymbollabel.IsVisible = true;
+
+                if (inminutes < 0)
+                {
+                    totalovertimeMinuteslabel.Text = reminder.ToString();
+                    totalovertimeHoureslabel.Text = (-quotient).ToString();
+                }
+                else
+                {
+                    totalovertimeMinuteslabel.Text = reminder.ToString();
+                    totalovertimeHoureslabel.Text = quotient.ToString();
+
+                }
+                return;
+            }
+
+            totalovertimeHoureslabel.IsVisible = true;
+            totalovertimeHouresSymbollabel.IsVisible = true;
+
+            totalovertimeMinuteslabel.IsVisible = false;
+            totalovertimeMinutesSymbollabel.IsVisible = false;
+
+            if (inminutes < 0)
+            {
+                totalovertimeHoureslabel.Text = (-quotient).ToString();
+            }
+            else
+            {
+                totalovertimeHoureslabel.Text = quotient.ToString();
+            }
+        }
+
+
+        private async void CheckIfDateIsTodayOrNot(object sender, PositionChangedEventArgs e)
+        {
+            if (In_Change3)
+            {
+                In_Change3 = false;
+                return;
+            }
+
+            if (yearpicker.CurrentItem == null)
+                return;
+            Overtime_DataItem year = (Overtime_DataItem)yearpicker.CurrentItem;
+
+            if (monthpicker.CurrentItem == null)
+                return;
+            Overtime_DataItem month = (Overtime_DataItem)monthpicker.CurrentItem;
+
+            if (daypicker.CurrentItem == null)
+                return;
+            Overtime_DataItem day = (Overtime_DataItem)daypicker.CurrentItem;
+
+
+            if (new DateTime(year.Data, month.Data, day.Data) != DateTime.Today.Date)
+            {
+                if(todaybutton.IsVisible == false)
+                {
+                    todaybutton.IsVisible = true;
+
+                    await todaybutton.TranslateTo(0, 50, 1);
+
+                    var a1 = todaybutton.TranslateTo(0, 0, 300);
+                    var a2 = todaybutton.FadeTo(1, 300);
+
+                    await Task.WhenAll(a1, a2);
+                }
+            }
+            else
+            {
+                if(todaybutton.IsVisible == true)
+                {
+                    var a1 = todaybutton.TranslateTo(0, 50, 300);
+                    var a2 = todaybutton.FadeTo(0, 300);
+
+                    await Task.WhenAll(a1, a2);
+
+                    todaybutton.IsVisible = false;
+                }
+            }
+        }
+        private async void ChangeDateToToday(object sender, EventArgs e)
+        {
+            In_Change3 = true;
+
+            yearpicker.CurrentItem = year_data.FirstOrDefault(x => x.Data == DateTime.Today.Year);
+
+            In_Change3 = true;
+
+            monthpicker.CurrentItem = month_data.FirstOrDefault(x => x.Data == DateTime.Today.Month);
+
+            In_Change3 = true;
+
+            List<int> days = Enumerable.Range(1, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month)).ToList();
+            int position = 0;
+            foreach (int i in days)
+            {
+                day_data.Add(new Overtime_DataItem() { Position = position, Data = i });
+                position++;
+            }
+            daypicker.ItemsSource = day_data;
+
+            In_Change3 = true;
+
+            daypicker.CurrentItem = day_data.FirstOrDefault(x => x.Data == DateTime.Today.Day);
+
+            In_Change3 = true;
+
+            if (todaybutton.IsVisible == true)
+            {
+
+                var a1 = todaybutton.TranslateTo(0, 50, 300);
+                var a2 = todaybutton.FadeTo(0, 300);
+
+                await Task.WhenAll(a1, a2);
+
+                todaybutton.IsVisible = false;
+            }
+
+            In_Change3 = true;
+        }
+        private void ChangeMinutesSteps(object sender, EventArgs e)
+        {
+            In_Change2 = true;
+
+            Steps++;
+
+            if (Steps == 13)
+                Steps = 1;
+
+            Preferences.Set("OvertimeSchrittweite", Steps);
+
+            List<int> minuts = Enumerable.Range(0, 37).Select(y => -y * 5*Steps).Reverse().ToList();
+            minuts.AddRange(Enumerable.Range(1, 36).Select(y => y * 5 * Steps).ToList());
+            int position = 0;
+            time_data.Clear();
+            foreach (int i in minuts)
+            {
+                time_data.Add(new Overtime_DataItem() { Position = position, Data = i });
+                position++;
+            }
+
+            timepicker.ItemsSource = time_data;
+
+            In_Change2 = true;
+
+            timepicker.CurrentItem = time_data.FirstOrDefault(x => x.Data == 0);
+
+            In_Change2 = true;
+
         }
     }
 }

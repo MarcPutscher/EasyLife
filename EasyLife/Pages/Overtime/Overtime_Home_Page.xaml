@@ -93,264 +93,270 @@
                 </pancacke:PancakeView>
                 <Label Text="Logbuch" TextColor="#499380" HorizontalOptions="Center" FontAttributes="Italic" TextDecorations="Underline" FontSize="Title"/>
             </Grid>
-            
-            <pancacke:PancakeView Grid.Row="1" CornerRadius="50" BackgroundColor="#6A847E">
-                <pancacke:PancakeView.Border>
-                    <pancacke:Border Color="#1A201F" Thickness="5" DashPattern="10" />
-                </pancacke:PancakeView.Border>
-                <Grid ColumnDefinitions="*,5,Auto"  HorizontalOptions="Center"  Margin="0,0,0,20" Padding="10">
-                    <Grid RowDefinitions="50,50,50" Grid.Column="2" HeightRequest="150" WidthRequest="90" >
-                        <CarouselView x:Name="timepicker" Grid.RowSpan="3" Grid.Row="0" HeightRequest="150" PeekAreaInsets="55" IsScrollAnimated="True" Loop="False" CurrentItemChanged="timepicker_CurrentItemChanged">
-                            <CarouselView.ItemsLayout>
-                                <LinearItemsLayout Orientation="Vertical" SnapPointsAlignment="Center" SnapPointsType="Mandatory"/>
-                            </CarouselView.ItemsLayout>
-                            <CarouselView.ItemTemplate>
-                                <DataTemplate x:DataType="models:Overtime_DataItem">
-                                    <Label Text="{Binding Data}" TextColor="Black" FontSize="30" VerticalOptions="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
-                                        <VisualStateManager.VisualStateGroups>
-                                            <VisualStateGroup x:Name="CommonStates">
-                                                <VisualState x:Name="CurrentItem">
-                                                    <VisualState.Setters>
-                                                        <Setter Property="Scale" Value="1.4"/>
-                                                        <Setter Property="FontAttributes" Value="Bold"/>
-                                                    </VisualState.Setters>
-                                                </VisualState>
-                                                <VisualState x:Name="PreviousItem">
-                                                    <VisualState.Setters>
-                                                        <Setter Property="Scale" Value="1"/>
-                                                        <Setter Property="FontAttributes" Value="None"/>
-                                                    </VisualState.Setters>
-                                                </VisualState>
-                                                <VisualState x:Name="NextItem">
-                                                    <VisualState.Setters>
-                                                        <Setter Property="Scale" Value="1"/>
-                                                        <Setter Property="FontAttributes" Value="None"/>
-                                                    </VisualState.Setters>
-                                                </VisualState>
-                                                <VisualState x:Name="DefaultState">
-                                                    <VisualState.Setters>
-                                                        <Setter Property="Scale" Value="1"/>
-                                                        <Setter Property="FontAttributes" Value="None"/>
-                                                    </VisualState.Setters>
-                                                </VisualState>
-                                            </VisualStateGroup>
-                                        </VisualStateManager.VisualStateGroups>
-                                    </Label>
-                                </DataTemplate>
-                            </CarouselView.ItemTemplate>
-                        </CarouselView>
 
-                        <pancacke:PancakeView  HorizontalOptions="Fill" VerticalOptions="End" CornerRadius="5" HeightRequest="60" Grid.Row="1" Grid.RowSpan="2" BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="0,1">
-                            <pancacke:PancakeView.BackgroundGradientStops>
-                                <pancacke:GradientStopCollection>
-                                    <pancacke:GradientStop Color="#1A201F" Offset="0"/>
-                                    <pancacke:GradientStop Color="Transparent" Offset="0.1"/>
-                                    <pancacke:GradientStop Color="#6A847E" Offset="1"/>
-                                </pancacke:GradientStopCollection>
-                            </pancacke:PancakeView.BackgroundGradientStops>
-                        </pancacke:PancakeView>
+            <Grid Grid.Row="1" RowDefinitions="Auto,*">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="End" Spacing="15" Margin="0,10,20,10">
+                    <Button x:Name="todaybutton" Text="{x:Static fontAwesome:FontAwesomeIcons.CalendarDay}" FontFamily="FAS" BackgroundColor="#39685C" Opacity="0" BorderColor="#0D2620" BorderWidth="5" TextColor="Black" Clicked="ChangeDateToToday" IsVisible="false" FontSize="30" CornerRadius="25" HeightRequest="50" WidthRequest="50" Padding="5" />
+                    <Button x:Name="stepchangebutton" Text="{x:Static fontAwesome:FontAwesomeIcons.ShoePrints}" FontFamily="FAS" BackgroundColor="#39685C" BorderColor="#0D2620" BorderWidth="5" TextColor="Black" Clicked="ChangeMinutesSteps"  FontSize="25" CornerRadius="25" HeightRequest="50" WidthRequest="50" Padding="5"/>
+                </StackLayout>
+                <pancacke:PancakeView Grid.Row="1" CornerRadius="50" BackgroundColor="#6A847E">
+                    <pancacke:PancakeView.Border>
+                        <pancacke:Border Color="#1A201F" Thickness="5" DashPattern="10" />
+                    </pancacke:PancakeView.Border>
+                    <Grid ColumnDefinitions="*,5,Auto"  HorizontalOptions="Center"  Margin="0,0,0,20" Padding="10">
+                        <Grid RowDefinitions="50,50,50" Grid.Column="2" HeightRequest="150" WidthRequest="110" >
+                            <CarouselView x:Name="timepicker" Grid.RowSpan="3" Grid.Row="0" HeightRequest="150" PeekAreaInsets="55" IsScrollAnimated="True" Loop="False" CurrentItemChanged="timepicker_CurrentItemChanged">
+                                <CarouselView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" SnapPointsAlignment="Center" SnapPointsType="Mandatory"/>
+                                </CarouselView.ItemsLayout>
+                                <CarouselView.ItemTemplate>
+                                    <DataTemplate x:DataType="models:Overtime_DataItem">
+                                        <Label Text="{Binding Data}" TextColor="Black" FontSize="30" VerticalOptions="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                                            <VisualStateManager.VisualStateGroups>
+                                                <VisualStateGroup x:Name="CommonStates">
+                                                    <VisualState x:Name="CurrentItem">
+                                                        <VisualState.Setters>
+                                                            <Setter Property="Scale" Value="1.4"/>
+                                                            <Setter Property="FontAttributes" Value="Bold"/>
+                                                        </VisualState.Setters>
+                                                    </VisualState>
+                                                    <VisualState x:Name="PreviousItem">
+                                                        <VisualState.Setters>
+                                                            <Setter Property="Scale" Value="1"/>
+                                                            <Setter Property="FontAttributes" Value="None"/>
+                                                        </VisualState.Setters>
+                                                    </VisualState>
+                                                    <VisualState x:Name="NextItem">
+                                                        <VisualState.Setters>
+                                                            <Setter Property="Scale" Value="1"/>
+                                                            <Setter Property="FontAttributes" Value="None"/>
+                                                        </VisualState.Setters>
+                                                    </VisualState>
+                                                    <VisualState x:Name="DefaultState">
+                                                        <VisualState.Setters>
+                                                            <Setter Property="Scale" Value="1"/>
+                                                            <Setter Property="FontAttributes" Value="None"/>
+                                                        </VisualState.Setters>
+                                                    </VisualState>
+                                                </VisualStateGroup>
+                                            </VisualStateManager.VisualStateGroups>
+                                        </Label>
+                                    </DataTemplate>
+                                </CarouselView.ItemTemplate>
+                            </CarouselView>
 
-                        <pancacke:PancakeView HorizontalOptions="Fill" VerticalOptions="Start" CornerRadius="5" HeightRequest="60" Grid.Row="0" Grid.RowSpan="2" BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="0,1">
-                            <pancacke:PancakeView.BackgroundGradientStops>
-                                <pancacke:GradientStopCollection>
-                                    <pancacke:GradientStop Color="#1A201F" Offset="1"/>
-                                    <pancacke:GradientStop Color="Transparent" Offset="0.9"/>
-                                    <pancacke:GradientStop Color="#6A847E" Offset="0"/>
-                                </pancacke:GradientStopCollection>
-                            </pancacke:PancakeView.BackgroundGradientStops>
-                        </pancacke:PancakeView>
+                            <pancacke:PancakeView  HorizontalOptions="Fill" VerticalOptions="End" CornerRadius="5" HeightRequest="60" Grid.Row="1" Grid.RowSpan="2" BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="0,1">
+                                <pancacke:PancakeView.BackgroundGradientStops>
+                                    <pancacke:GradientStopCollection>
+                                        <pancacke:GradientStop Color="#1A201F" Offset="0"/>
+                                        <pancacke:GradientStop Color="Transparent" Offset="0.1"/>
+                                        <pancacke:GradientStop Color="#6A847E" Offset="1"/>
+                                    </pancacke:GradientStopCollection>
+                                </pancacke:PancakeView.BackgroundGradientStops>
+                            </pancacke:PancakeView>
+
+                            <pancacke:PancakeView HorizontalOptions="Fill" VerticalOptions="Start" CornerRadius="5" HeightRequest="60" Grid.Row="0" Grid.RowSpan="2" BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="0,1">
+                                <pancacke:PancakeView.BackgroundGradientStops>
+                                    <pancacke:GradientStopCollection>
+                                        <pancacke:GradientStop Color="#1A201F" Offset="1"/>
+                                        <pancacke:GradientStop Color="Transparent" Offset="0.9"/>
+                                        <pancacke:GradientStop Color="#6A847E" Offset="0"/>
+                                    </pancacke:GradientStopCollection>
+                                </pancacke:PancakeView.BackgroundGradientStops>
+                            </pancacke:PancakeView>
+
+                        </Grid>
+
+                        <Rectangle Grid.Column="1" BackgroundColor="#0D2620" VerticalOptions="Fill" Margin="0,20,0,0" xct:CornerRadiusEffect.CornerRadius="5" />
+
+                        <StackLayout Orientation="Horizontal" Grid.Column="0" Spacing="5" HorizontalOptions="Center">
+                            <Grid RowDefinitions="50,50,50" HeightRequest="150" WidthRequest="100">
+                                <CarouselView x:Name="yearpicker" Grid.RowSpan="3" Grid.Row="0" HeightRequest="150" PeekAreaInsets="55" IsScrollAnimated="False" Loop="True">
+                                    <CarouselView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Vertical" SnapPointsAlignment="Center" SnapPointsType="Mandatory"/>
+                                    </CarouselView.ItemsLayout>
+                                    <CarouselView.ItemTemplate>
+                                        <DataTemplate x:DataType="models:Overtime_DataItem">
+                                            <Label Text="{Binding Data}" TextColor="Black" FontSize="30" VerticalOptions="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                                                <VisualStateManager.VisualStateGroups>
+                                                    <VisualStateGroup x:Name="CommonStates">
+                                                        <VisualState x:Name="CurrentItem">
+                                                            <VisualState.Setters>
+                                                                <Setter Property="Scale" Value="1.4"/>
+                                                                <Setter Property="FontAttributes" Value="Bold"/>
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                        <VisualState x:Name="PreviousItem">
+                                                            <VisualState.Setters>
+                                                                <Setter Property="Scale" Value="1"/>
+                                                                <Setter Property="FontAttributes" Value="None"/>
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                        <VisualState x:Name="NextItem">
+                                                            <VisualState.Setters>
+                                                                <Setter Property="Scale" Value="1"/>
+                                                                <Setter Property="FontAttributes" Value="None"/>
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                        <VisualState x:Name="DefaultState">
+                                                            <VisualState.Setters>
+                                                                <Setter Property="Scale" Value="1"/>
+                                                                <Setter Property="FontAttributes" Value="None"/>
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                    </VisualStateGroup>
+                                                </VisualStateManager.VisualStateGroups>
+                                            </Label>
+                                        </DataTemplate>
+                                    </CarouselView.ItemTemplate>
+                                </CarouselView>
+                                <pancacke:PancakeView  HorizontalOptions="Fill" VerticalOptions="End" CornerRadius="5" HeightRequest="60" Grid.Row="1" Grid.RowSpan="2" BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="0,1">
+                                    <pancacke:PancakeView.BackgroundGradientStops>
+                                        <pancacke:GradientStopCollection>
+                                            <pancacke:GradientStop Color="#1A201F" Offset="0"/>
+                                            <pancacke:GradientStop Color="Transparent" Offset="0.1"/>
+                                            <pancacke:GradientStop Color="#6A847E" Offset="1"/>
+                                        </pancacke:GradientStopCollection>
+                                    </pancacke:PancakeView.BackgroundGradientStops>
+                                </pancacke:PancakeView>
+
+                                <pancacke:PancakeView HorizontalOptions="Fill" VerticalOptions="Start" CornerRadius="5" HeightRequest="60" Grid.Row="0" Grid.RowSpan="2" BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="0,1">
+                                    <pancacke:PancakeView.BackgroundGradientStops>
+                                        <pancacke:GradientStopCollection>
+                                            <pancacke:GradientStop Color="#1A201F" Offset="1"/>
+                                            <pancacke:GradientStop Color="Transparent" Offset="0.9"/>
+                                            <pancacke:GradientStop Color="#6A847E" Offset="0"/>
+                                        </pancacke:GradientStopCollection>
+                                    </pancacke:PancakeView.BackgroundGradientStops>
+                                </pancacke:PancakeView>
+                            </Grid>
+
+                            <Grid RowDefinitions="50,50,50" HeightRequest="150" WidthRequest="80">
+                                <CarouselView x:Name="monthpicker" Grid.RowSpan="3" Grid.Row="0" HeightRequest="150" CurrentItemChanged="monthpicker_CurrentItemChanged" PeekAreaInsets="55" IsScrollAnimated="False" Loop="True">
+                                    <CarouselView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Vertical" SnapPointsAlignment="Center" SnapPointsType="Mandatory"/>
+                                    </CarouselView.ItemsLayout>
+                                    <CarouselView.ItemTemplate>
+                                        <DataTemplate x:DataType="models:Overtime_DataItem">
+                                            <Label Text="{Binding Data_String}" TextColor="Black" FontSize="30" VerticalOptions="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                                                <VisualStateManager.VisualStateGroups>
+                                                    <VisualStateGroup x:Name="CommonStates">
+                                                        <VisualState x:Name="CurrentItem">
+                                                            <VisualState.Setters>
+                                                                <Setter Property="Scale" Value="1.4"/>
+                                                                <Setter Property="FontAttributes" Value="Bold"/>
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                        <VisualState x:Name="PreviousItem">
+                                                            <VisualState.Setters>
+                                                                <Setter Property="Scale" Value="1"/>
+                                                                <Setter Property="FontAttributes" Value="None"/>
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                        <VisualState x:Name="NextItem">
+                                                            <VisualState.Setters>
+                                                                <Setter Property="Scale" Value="1"/>
+                                                                <Setter Property="FontAttributes" Value="None"/>
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                        <VisualState x:Name="DefaultState">
+                                                            <VisualState.Setters>
+                                                                <Setter Property="Scale" Value="1"/>
+                                                                <Setter Property="FontAttributes" Value="None"/>
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                    </VisualStateGroup>
+                                                </VisualStateManager.VisualStateGroups>
+                                            </Label>
+                                        </DataTemplate>
+                                    </CarouselView.ItemTemplate>
+                                </CarouselView>
+                                <pancacke:PancakeView  HorizontalOptions="Fill" VerticalOptions="End" CornerRadius="5" HeightRequest="60" Grid.Row="1" Grid.RowSpan="2" BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="0,1">
+                                    <pancacke:PancakeView.BackgroundGradientStops>
+                                        <pancacke:GradientStopCollection>
+                                            <pancacke:GradientStop Color="#1A201F" Offset="0"/>
+                                            <pancacke:GradientStop Color="Transparent" Offset="0.1"/>
+                                            <pancacke:GradientStop Color="#6A847E" Offset="1"/>
+                                        </pancacke:GradientStopCollection>
+                                    </pancacke:PancakeView.BackgroundGradientStops>
+                                </pancacke:PancakeView>
+
+                                <pancacke:PancakeView HorizontalOptions="Fill" VerticalOptions="Start" CornerRadius="5" HeightRequest="60" Grid.Row="0" Grid.RowSpan="2" BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="0,1">
+                                    <pancacke:PancakeView.BackgroundGradientStops>
+                                        <pancacke:GradientStopCollection>
+                                            <pancacke:GradientStop Color="#1A201F" Offset="1"/>
+                                            <pancacke:GradientStop Color="Transparent" Offset="0.9"/>
+                                            <pancacke:GradientStop Color="#6A847E" Offset="0"/>
+                                        </pancacke:GradientStopCollection>
+                                    </pancacke:PancakeView.BackgroundGradientStops>
+                                </pancacke:PancakeView>
+                            </Grid>
+
+                            <Grid RowDefinitions="50,50,50" HeightRequest="150" WidthRequest="50">
+                                <CarouselView x:Name="daypicker" Grid.RowSpan="3" Grid.Row="0" HeightRequest="150" PeekAreaInsets="55" IsScrollAnimated="False" Loop="True">
+                                    <CarouselView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Vertical" SnapPointsAlignment="Center" SnapPointsType="Mandatory"/>
+                                    </CarouselView.ItemsLayout>
+                                    <CarouselView.ItemTemplate>
+                                        <DataTemplate x:DataType="models:Overtime_DataItem">
+                                            <Label Text="{Binding Data}" TextColor="Black" FontSize="30" VerticalOptions="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
+                                                <VisualStateManager.VisualStateGroups>
+                                                    <VisualStateGroup x:Name="CommonStates">
+                                                        <VisualState x:Name="CurrentItem">
+                                                            <VisualState.Setters>
+                                                                <Setter Property="Scale" Value="1.4"/>
+                                                                <Setter Property="FontAttributes" Value="Bold"/>
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                        <VisualState x:Name="PreviousItem">
+                                                            <VisualState.Setters>
+                                                                <Setter Property="Scale" Value="1"/>
+                                                                <Setter Property="FontAttributes" Value="None"/>
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                        <VisualState x:Name="NextItem">
+                                                            <VisualState.Setters>
+                                                                <Setter Property="Scale" Value="1"/>
+                                                                <Setter Property="FontAttributes" Value="None"/>
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                        <VisualState x:Name="DefaultState">
+                                                            <VisualState.Setters>
+                                                                <Setter Property="Scale" Value="1"/>
+                                                                <Setter Property="FontAttributes" Value="None"/>
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                    </VisualStateGroup>
+                                                </VisualStateManager.VisualStateGroups>
+                                            </Label>
+                                        </DataTemplate>
+                                    </CarouselView.ItemTemplate>
+                                </CarouselView>
+                                <pancacke:PancakeView  HorizontalOptions="Fill" VerticalOptions="End" CornerRadius="5" HeightRequest="60" Grid.Row="1" Grid.RowSpan="2" BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="0,1">
+                                    <pancacke:PancakeView.BackgroundGradientStops>
+                                        <pancacke:GradientStopCollection>
+                                            <pancacke:GradientStop Color="#1A201F" Offset="0"/>
+                                            <pancacke:GradientStop Color="Transparent" Offset="0.1"/>
+                                            <pancacke:GradientStop Color="#6A847E" Offset="1"/>
+                                        </pancacke:GradientStopCollection>
+                                    </pancacke:PancakeView.BackgroundGradientStops>
+                                </pancacke:PancakeView>
+
+                                <pancacke:PancakeView HorizontalOptions="Fill" VerticalOptions="Start" CornerRadius="5" HeightRequest="60" Grid.Row="0" Grid.RowSpan="2" BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="0,1">
+                                    <pancacke:PancakeView.BackgroundGradientStops>
+                                        <pancacke:GradientStopCollection>
+                                            <pancacke:GradientStop Color="#1A201F" Offset="1"/>
+                                            <pancacke:GradientStop Color="Transparent" Offset="0.9"/>
+                                            <pancacke:GradientStop Color="#6A847E" Offset="0"/>
+                                        </pancacke:GradientStopCollection>
+                                    </pancacke:PancakeView.BackgroundGradientStops>
+                                </pancacke:PancakeView>
+                            </Grid>
+                        </StackLayout>
 
                     </Grid>
-
-                    <Rectangle Grid.Column="1" BackgroundColor="#0D2620" VerticalOptions="Fill" Margin="0,20,0,0" xct:CornerRadiusEffect.CornerRadius="5" />
-
-                    <StackLayout Orientation="Horizontal" Grid.Column="0" Spacing="5" HorizontalOptions="Center">
-                        <Grid RowDefinitions="50,50,50" HeightRequest="150" WidthRequest="100">
-                            <CarouselView x:Name="yearpicker" Grid.RowSpan="3" Grid.Row="0" HeightRequest="150" PeekAreaInsets="55" IsScrollAnimated="True" Loop="True">
-                                <CarouselView.ItemsLayout>
-                                    <LinearItemsLayout Orientation="Vertical" SnapPointsAlignment="Center" SnapPointsType="Mandatory"/>
-                                </CarouselView.ItemsLayout>
-                                <CarouselView.ItemTemplate>
-                                    <DataTemplate x:DataType="models:Overtime_DataItem">
-                                        <Label Text="{Binding Data}" TextColor="Black" FontSize="30" VerticalOptions="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
-                                            <VisualStateManager.VisualStateGroups>
-                                                <VisualStateGroup x:Name="CommonStates">
-                                                    <VisualState x:Name="CurrentItem">
-                                                        <VisualState.Setters>
-                                                            <Setter Property="Scale" Value="1.4"/>
-                                                            <Setter Property="FontAttributes" Value="Bold"/>
-                                                        </VisualState.Setters>
-                                                    </VisualState>
-                                                    <VisualState x:Name="PreviousItem">
-                                                        <VisualState.Setters>
-                                                            <Setter Property="Scale" Value="1"/>
-                                                            <Setter Property="FontAttributes" Value="None"/>
-                                                        </VisualState.Setters>
-                                                    </VisualState>
-                                                    <VisualState x:Name="NextItem">
-                                                        <VisualState.Setters>
-                                                            <Setter Property="Scale" Value="1"/>
-                                                            <Setter Property="FontAttributes" Value="None"/>
-                                                        </VisualState.Setters>
-                                                    </VisualState>
-                                                    <VisualState x:Name="DefaultState">
-                                                        <VisualState.Setters>
-                                                            <Setter Property="Scale" Value="1"/>
-                                                            <Setter Property="FontAttributes" Value="None"/>
-                                                        </VisualState.Setters>
-                                                    </VisualState>
-                                                </VisualStateGroup>
-                                            </VisualStateManager.VisualStateGroups>
-                                        </Label>
-                                    </DataTemplate>
-                                </CarouselView.ItemTemplate>
-                            </CarouselView>
-                            <pancacke:PancakeView  HorizontalOptions="Fill" VerticalOptions="End" CornerRadius="5" HeightRequest="60" Grid.Row="1" Grid.RowSpan="2" BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="0,1">
-                                <pancacke:PancakeView.BackgroundGradientStops>
-                                    <pancacke:GradientStopCollection>
-                                        <pancacke:GradientStop Color="#1A201F" Offset="0"/>
-                                        <pancacke:GradientStop Color="Transparent" Offset="0.1"/>
-                                        <pancacke:GradientStop Color="#6A847E" Offset="1"/>
-                                    </pancacke:GradientStopCollection>
-                                </pancacke:PancakeView.BackgroundGradientStops>
-                            </pancacke:PancakeView>
-
-                            <pancacke:PancakeView HorizontalOptions="Fill" VerticalOptions="Start" CornerRadius="5" HeightRequest="60" Grid.Row="0" Grid.RowSpan="2" BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="0,1">
-                                <pancacke:PancakeView.BackgroundGradientStops>
-                                    <pancacke:GradientStopCollection>
-                                        <pancacke:GradientStop Color="#1A201F" Offset="1"/>
-                                        <pancacke:GradientStop Color="Transparent" Offset="0.9"/>
-                                        <pancacke:GradientStop Color="#6A847E" Offset="0"/>
-                                    </pancacke:GradientStopCollection>
-                                </pancacke:PancakeView.BackgroundGradientStops>
-                            </pancacke:PancakeView>
-                        </Grid>
-
-                        <Grid RowDefinitions="50,50,50" HeightRequest="150" WidthRequest="80">
-                            <CarouselView x:Name="monthpicker" Grid.RowSpan="3" Grid.Row="0" HeightRequest="150" CurrentItemChanged="monthpicker_CurrentItemChanged" PeekAreaInsets="55" IsScrollAnimated="True" Loop="True">
-                                <CarouselView.ItemsLayout>
-                                    <LinearItemsLayout Orientation="Vertical" SnapPointsAlignment="Center" SnapPointsType="Mandatory"/>
-                                </CarouselView.ItemsLayout>
-                                <CarouselView.ItemTemplate>
-                                    <DataTemplate x:DataType="models:Overtime_DataItem">
-                                        <Label Text="{Binding Data_String}" TextColor="Black" FontSize="30" VerticalOptions="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
-                                            <VisualStateManager.VisualStateGroups>
-                                                <VisualStateGroup x:Name="CommonStates">
-                                                    <VisualState x:Name="CurrentItem">
-                                                        <VisualState.Setters>
-                                                            <Setter Property="Scale" Value="1.4"/>
-                                                            <Setter Property="FontAttributes" Value="Bold"/>
-                                                        </VisualState.Setters>
-                                                    </VisualState>
-                                                    <VisualState x:Name="PreviousItem">
-                                                        <VisualState.Setters>
-                                                            <Setter Property="Scale" Value="1"/>
-                                                            <Setter Property="FontAttributes" Value="None"/>
-                                                        </VisualState.Setters>
-                                                    </VisualState>
-                                                    <VisualState x:Name="NextItem">
-                                                        <VisualState.Setters>
-                                                            <Setter Property="Scale" Value="1"/>
-                                                            <Setter Property="FontAttributes" Value="None"/>
-                                                        </VisualState.Setters>
-                                                    </VisualState>
-                                                    <VisualState x:Name="DefaultState">
-                                                        <VisualState.Setters>
-                                                            <Setter Property="Scale" Value="1"/>
-                                                            <Setter Property="FontAttributes" Value="None"/>
-                                                        </VisualState.Setters>
-                                                    </VisualState>
-                                                </VisualStateGroup>
-                                            </VisualStateManager.VisualStateGroups>
-                                        </Label>
-                                    </DataTemplate>
-                                </CarouselView.ItemTemplate>
-                            </CarouselView>
-                            <pancacke:PancakeView  HorizontalOptions="Fill" VerticalOptions="End" CornerRadius="5" HeightRequest="60" Grid.Row="1" Grid.RowSpan="2" BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="0,1">
-                                <pancacke:PancakeView.BackgroundGradientStops>
-                                    <pancacke:GradientStopCollection>
-                                        <pancacke:GradientStop Color="#1A201F" Offset="0"/>
-                                        <pancacke:GradientStop Color="Transparent" Offset="0.1"/>
-                                        <pancacke:GradientStop Color="#6A847E" Offset="1"/>
-                                    </pancacke:GradientStopCollection>
-                                </pancacke:PancakeView.BackgroundGradientStops>
-                            </pancacke:PancakeView>
-
-                            <pancacke:PancakeView HorizontalOptions="Fill" VerticalOptions="Start" CornerRadius="5" HeightRequest="60" Grid.Row="0" Grid.RowSpan="2" BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="0,1">
-                                <pancacke:PancakeView.BackgroundGradientStops>
-                                    <pancacke:GradientStopCollection>
-                                        <pancacke:GradientStop Color="#1A201F" Offset="1"/>
-                                        <pancacke:GradientStop Color="Transparent" Offset="0.9"/>
-                                        <pancacke:GradientStop Color="#6A847E" Offset="0"/>
-                                    </pancacke:GradientStopCollection>
-                                </pancacke:PancakeView.BackgroundGradientStops>
-                            </pancacke:PancakeView>
-                        </Grid>
-
-                        <Grid RowDefinitions="50,50,50" HeightRequest="150" WidthRequest="50">
-                            <CarouselView x:Name="daypicker" Grid.RowSpan="3" Grid.Row="0" HeightRequest="150" PeekAreaInsets="55" IsScrollAnimated="False" Loop="True">
-                                <CarouselView.ItemsLayout>
-                                    <LinearItemsLayout Orientation="Vertical" SnapPointsAlignment="Center" SnapPointsType="Mandatory"/>
-                                </CarouselView.ItemsLayout>
-                                <CarouselView.ItemTemplate>
-                                    <DataTemplate x:DataType="models:Overtime_DataItem">
-                                        <Label Text="{Binding Data}" TextColor="Black" FontSize="30" VerticalOptions="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" HorizontalTextAlignment="Center">
-                                            <VisualStateManager.VisualStateGroups>
-                                                <VisualStateGroup x:Name="CommonStates">
-                                                    <VisualState x:Name="CurrentItem">
-                                                        <VisualState.Setters>
-                                                            <Setter Property="Scale" Value="1.4"/>
-                                                            <Setter Property="FontAttributes" Value="Bold"/>
-                                                        </VisualState.Setters>
-                                                    </VisualState>
-                                                    <VisualState x:Name="PreviousItem">
-                                                        <VisualState.Setters>
-                                                            <Setter Property="Scale" Value="1"/>
-                                                            <Setter Property="FontAttributes" Value="None"/>
-                                                        </VisualState.Setters>
-                                                    </VisualState>
-                                                    <VisualState x:Name="NextItem">
-                                                        <VisualState.Setters>
-                                                            <Setter Property="Scale" Value="1"/>
-                                                            <Setter Property="FontAttributes" Value="None"/>
-                                                        </VisualState.Setters>
-                                                    </VisualState>
-                                                    <VisualState x:Name="DefaultState">
-                                                        <VisualState.Setters>
-                                                            <Setter Property="Scale" Value="1"/>
-                                                            <Setter Property="FontAttributes" Value="None"/>
-                                                        </VisualState.Setters>
-                                                    </VisualState>
-                                                </VisualStateGroup>
-                                            </VisualStateManager.VisualStateGroups>
-                                        </Label>
-                                    </DataTemplate>
-                                </CarouselView.ItemTemplate>
-                            </CarouselView>
-                            <pancacke:PancakeView  HorizontalOptions="Fill" VerticalOptions="End" CornerRadius="5" HeightRequest="60" Grid.Row="1" Grid.RowSpan="2" BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="0,1">
-                                <pancacke:PancakeView.BackgroundGradientStops>
-                                    <pancacke:GradientStopCollection>
-                                        <pancacke:GradientStop Color="#1A201F" Offset="0"/>
-                                        <pancacke:GradientStop Color="Transparent" Offset="0.1"/>
-                                        <pancacke:GradientStop Color="#6A847E" Offset="1"/>
-                                    </pancacke:GradientStopCollection>
-                                </pancacke:PancakeView.BackgroundGradientStops>
-                            </pancacke:PancakeView>
-
-                            <pancacke:PancakeView HorizontalOptions="Fill" VerticalOptions="Start" CornerRadius="5" HeightRequest="60" Grid.Row="0" Grid.RowSpan="2" BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="0,1">
-                                <pancacke:PancakeView.BackgroundGradientStops>
-                                    <pancacke:GradientStopCollection>
-                                        <pancacke:GradientStop Color="#1A201F" Offset="1"/>
-                                        <pancacke:GradientStop Color="Transparent" Offset="0.9"/>
-                                        <pancacke:GradientStop Color="#6A847E" Offset="0"/>
-                                    </pancacke:GradientStopCollection>
-                                </pancacke:PancakeView.BackgroundGradientStops>
-                            </pancacke:PancakeView>
-                        </Grid>
-                    </StackLayout>
-                    
-                </Grid>
-            </pancacke:PancakeView>
+                </pancacke:PancakeView>
+            </Grid>
 
             <Grid Grid.Row="2" RowDefinitions="*,Auto,*">
                 <pancacke:PancakeView x:Name="futureovertimeview" VerticalOptions="Center" Margin="0,0,0,70" IsVisible="False" Opacity="0" HorizontalOptions="Center" BackgroundColor="#39685C" Grid.Row="1" Grid.Column="0" Padding="10,2,10,2" CornerRadius="10">
@@ -365,7 +371,6 @@
                         <Label Text=" Überminuten"  FontSize="20" TextColor="Black"  VerticalTextAlignment="Center" VerticalOptions="Center" HorizontalOptions="Start" HorizontalTextAlignment="Center"/>
                     </StackLayout>
                 </pancacke:PancakeView>
-                
                 <pancacke:PancakeView x:Name="changeovertimeview" VerticalOptions="Center" Margin="0,0,0,70" IsVisible="False" Opacity="0" HorizontalOptions="Center" BackgroundColor="#39685C" Grid.Row="1" Grid.Column="0" Padding="10,2,10,2" CornerRadius="10">
                     <pancacke:PancakeView.Border>
                         <pancacke:Border Color="#0D2620" Thickness="5"/>
@@ -385,8 +390,10 @@
                     </pancacke:PancakeView.Border>
                     <StackLayout Orientation="Horizontal" Spacing="0">
                         <Label Text="{x:Static fontAwesome:FontAwesomeIcons.Clock}" FontFamily="FAS" Margin="0,0,10,0" Padding="0"  FontSize="50" TextColor="#00130E"  FontAttributes="Bold" VerticalTextAlignment="Center" VerticalOptions="Center" HorizontalOptions="Start" HorizontalTextAlignment="Center"/>
-                        <Label x:Name="totalovertimelabel" FontSize="50" TextColor="#6A847E" FontAttributes="Bold"  VerticalTextAlignment="Center" VerticalOptions="CenterAndExpand" HorizontalOptions="Start" HorizontalTextAlignment="Center"/>
-                        <Label Text=" min"  FontSize="40" TextColor="Black"  VerticalTextAlignment="Center" VerticalOptions="CenterAndExpand" HorizontalOptions="Start" HorizontalTextAlignment="Center"/>
+                        <Label x:Name="totalovertimeHoureslabel" FontSize="50" TextColor="#6A847E" FontAttributes="Bold"  VerticalTextAlignment="Center" VerticalOptions="CenterAndExpand" HorizontalOptions="Start" HorizontalTextAlignment="Center" Margin="0,0,5,0"/>
+                        <Label x:Name="totalovertimeHouresSymbollabel" Text="h"  FontSize="40" TextColor="Black"  VerticalTextAlignment="Center" VerticalOptions="CenterAndExpand" HorizontalOptions="Start" HorizontalTextAlignment="Center" Margin="0,0,10,0"/>
+                        <Label x:Name="totalovertimeMinuteslabel" FontSize="50" TextColor="#6A847E" FontAttributes="Bold"  VerticalTextAlignment="Center" VerticalOptions="CenterAndExpand" HorizontalOptions="Start" HorizontalTextAlignment="Center" Margin="0,0,5,0"/>
+                        <Label x:Name="totalovertimeMinutesSymbollabel" Text="min"  FontSize="40" TextColor="Black"  VerticalTextAlignment="Center" VerticalOptions="CenterAndExpand" HorizontalOptions="Start" HorizontalTextAlignment="Center"/>
                     </StackLayout>
                 </pancacke:PancakeView>
             </Grid>
