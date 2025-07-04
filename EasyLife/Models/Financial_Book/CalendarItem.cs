@@ -56,7 +56,6 @@ namespace EasyLife.Models
 
         public void PerformYearButton_Command()
         {
-
             if (Months_Collection_is_Visibile == false)
             {
                 Backgroundcolor = ChangeBrightness(Backgroundcolor, +0.2);
@@ -78,6 +77,37 @@ namespace EasyLife.Models
             double B = (color.B + factor > 1) ? 1 : color.B + factor;
 
             return new Color(R, G, B);
+        }
+
+        private Command delete_Year_Command;
+        public ICommand Delete_Year_Command
+        {
+            get
+            {
+                if (delete_Year_Command == null)
+                {
+                    delete_Year_Command = new Command(Delete_Year_);
+                }
+
+                return delete_Year_Command;
+            }
+        }
+
+        private void Delete_Year_()
+        {
+
+            if (Months_Collection_is_Visibile == false)
+            {
+                Backgroundcolor = ChangeBrightness(Backgroundcolor, +0.2);
+            }
+            else
+            {
+                Backgroundcolor = ChangeBrightness(Backgroundcolor, -0.2);
+            }
+
+            new_viewtime_popup.DeleteTimespan_Methode(this);
+
+            Months_Collection_is_Visibile = !Months_Collection_is_Visibile;
         }
     }
 
@@ -141,6 +171,36 @@ namespace EasyLife.Models
             double B = (color.B + factor > 1) ? 1 : color.B + factor;
 
             return new Color(R, G, B);
+        }
+
+        private Command delete_Month_Command;
+        public ICommand Delete_Month_Command
+        {
+            get
+            {
+                if (delete_Month_Command == null)
+                {
+                    delete_Month_Command = new Command(Delete_Month_);
+                }
+
+                return delete_Month_Command;
+            }
+        }
+
+        private void Delete_Month_()
+        {
+            Months_Selected = !Months_Selected;
+
+            if (Months_Selected == true)
+            {
+                Backgroundcolor = ChangeBrightness(Backgroundcolor, +0.2);
+            }
+            else
+            {
+                Backgroundcolor = ChangeBrightness(Backgroundcolor, -0.2);
+            }
+
+            new_viewtime_popup.DeleteTimespan_Methode(this);
         }
     }
 }

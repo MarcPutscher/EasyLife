@@ -24,7 +24,7 @@
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:CalendarItem">
-                    <Frame Padding="5" BackgroundColor="{Binding Backgroundcolor}"  CornerRadius="20"  BorderColor="{DynamicResource Rand_Content_Popup}"  xct:ShadowEffect.Color="{DynamicResource Rand_Button_Popup}" VerticalOptions="Center" HorizontalOptions="Center">
+                    <Frame Padding="5" BackgroundColor="{Binding Backgroundcolor}" xct:TouchEffect.LongPressCommand="{Binding Delete_Year_Command}" CornerRadius="20"  BorderColor="{DynamicResource Rand_Content_Popup}"  xct:ShadowEffect.Color="{DynamicResource Rand_Button_Popup}" VerticalOptions="Center" HorizontalOptions="Center">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding YearButton_Command}"/>
                         </Frame.GestureRecognizers>
@@ -39,7 +39,7 @@
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:Months">
-                    <Frame Padding="5" BackgroundColor="{Binding Backgroundcolor}"  CornerRadius="20"  BorderColor="{DynamicResource Rand_Content_Popup}"  xct:ShadowEffect.Color="{DynamicResource Rand_Button_Popup}" VerticalOptions="Center" HorizontalOptions="Center">
+                    <Frame Padding="5" BackgroundColor="{Binding Backgroundcolor}" xct:TouchEffect.LongPressCommand="{Binding Delete_Month_Command}"  CornerRadius="20"  BorderColor="{DynamicResource Rand_Content_Popup}"  xct:ShadowEffect.Color="{DynamicResource Rand_Button_Popup}" VerticalOptions="Center" HorizontalOptions="Center">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding MonthButton_Command}"/>
                         </Frame.GestureRecognizers>

@@ -1,8 +1,11 @@
-﻿using EasyLife.Models;
+﻿using EasyLife.Helpers;
+using EasyLife.Models;
+using EasyLife.Services;
 using MvvmHelpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -138,6 +141,72 @@ namespace EasyLife.Pages
         private void CancelButton_Clicked(object sender, EventArgs e)
         {
             Dismiss(null);
+        }
+
+        internal async void DeleteTimespan_Methode(Object timespan)
+        {
+            if(timespan.GetType() != typeof(Months) || timespan.GetType() != typeof(CalendarItem))
+            {
+                if(timespan.GetType() == typeof(Months))
+                {
+                    Months month = (Months)timespan;
+                    var result = await Shell.Current.DisplayAlert("Monat löschen!", "Möchten Sie wirklich den Monat "+month.Month+" "+Select_Viewtime.Year+" löschen?", "Ja","Nein");
+                    if (result == false)
+                        return;
+                    await ToastHelper.ShowToast("Dies könnte einen Moment dauern.");
+
+                    var transaktionscontent = await ContentService.Get_all_enabeled_Transaktion();
+
+                    List<Transaktion> transaktions_to_remove = new List<Transaktion>();
+
+                    foreach (Transaktion transaction in transaktionscontent)
+                    {
+                        if (transaction != null)
+                        {
+                            if (transaction.Datum.ToString("MMMM", new CultureInfo("de-DE")) == month.Month && transaction.Datum.Year == Select_Viewtime.Year)
+                            {
+                                transaction.Content_Visibility = false;
+                                await ContentService.Edit_Transaktion(transaction);
+                            }
+                        }
+                    }
+                    calendarItems.SingleOrDefault(x => x.Year == Select_Viewtime.Year.ToString()).Months.Remove(month);
+
+                    MonthCollectionView.ItemsSource = null;
+                    MonthCollectionView.ItemsSource = calendarItems.SingleOrDefault(x => x.Year == Select_Viewtime.Year.ToString()).Months;
+                }
+                if (timespan.GetType() == typeof(CalendarItem))
+                {
+                    CalendarItem year = (CalendarItem)timespan;
+
+                    var result = await Shell.Current.DisplayAlert("Jahr löschen!", "Möchten Sie wirklich das Jahr " + year.Year + " löschen?", "Ja", "Nein");
+                    if (result == false)
+                        return;
+                    await ToastHelper.ShowToast("Dies könnte einen Moment dauern.");
+
+                    var transaktionscontent = await ContentService.Get_all_enabeled_Transaktion();
+
+                    List<Transaktion> transaktions_to_remove = new List<Transaktion>();
+
+                    foreach (Transaktion transaction in transaktionscontent)
+                    {
+                        if (transaction != null)
+                        {
+                            if (transaction.Datum.Year == int.Parse(year.Year))
+                            {
+                                transaction.Content_Visibility = false;
+                                await ContentService.Edit_Transaktion(transaction);
+                            }
+                        }
+                    }
+
+                    calendarItems.Remove(year);
+
+                    YearCollectionView.ItemsSource = calendarItems;
+
+                    MonthCollectionView.ItemsSource = null;
+                }
+            }
         }
 
         public ObservableRangeCollection<CalendarItem> calendarItems = new ObservableRangeCollection<CalendarItem>();
